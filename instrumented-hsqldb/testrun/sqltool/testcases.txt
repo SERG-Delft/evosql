@@ -1,0 +1,38 @@
+$Id: testcases.txt 4713 2011-11-06 23:41:51Z unsaved $
+
+This list is incomplete.
+It just takes more time than I am willing to dedicate to keep documenting ever
+new test script.
+If you want to know what a script for and it's not listed here, you'll have to
+open the script file and look at it.
+
+file              items/features tested
+-----------       ----------------------------
+dsv-trimming.sql  DSV import tests, including trimming of whitespace.
+lastval.sql       Test automatic ? variable.
+nullrep.sql       Test the null-representation token (default and custom).
+q-noarg*.sql      Test for success status \q exits.
+q-arg*.nsql       Tests for failure status "\q arg..." exits.
+noop.sql          Does nothing (exit status should be success).
+goodsqlonly.sql   Executes some successful SQL.
+badsqlonly.nsql   Executes some bad SQL.
+logic.sql         Conditional expression tests.
+nq-noarg*.sql     Test for success status \q exits, in nested script.
+nq-arg*.nsql      Tests for failure status "\q arg..." exits, in nested script.
+plcontrolflow.sql Test of PL control flow commands like if, foreach, etc.
+rawmode.sql       Test of raw input mode.
+dsv-constcols.sql *DSV_CONST_COLS usage.
+dsv-omits.sql     Test omitting of columns in DSV imports.
+dsv-prepare.sql   Test "* prepare" command.
+dsv-rejects.sql   Test import behavior when a reject file/report is in place.
+dsv-roundtrip.sql Exports and re-import data, verifying that is hasn't changed.
+subst.inter       Tests interactive commands :s...
+write.inter       Tests interactive command :w
+append.inter      Tests interactive commands :a...
+history.inter     Tests interactive recall/execute commands (plus :h, :b)
+comments.sql      Tests -- and /*...*/ comments.
+errhandling.sql   Handling errors which occur within blocks and nested scripts
+errhandling.nsql  Handling errors which occur within blocks and nested scripts
+adv-comments.sql  Advanced comments
+macro.inter       Macors (interactive buffer manipulation)
+macro.sql         Macros, main

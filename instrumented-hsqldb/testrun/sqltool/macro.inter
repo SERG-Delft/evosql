@@ -1,0 +1,37 @@
+/*
+ * $Id: macro.inter 5406 2014-10-13 20:53:18Z unsaved $
+ *
+ * Tests interactive macro commands /...
+ *
+ * This only tests the buffer macro commands /=:..., so that we can
+ * manipulate the buffer.
+ * The other macro commands don't need interactive mode.
+ */
+
+
+\c false
+
+\p hello
+/=greet: world
+/=
+/greet now;
+
+CREATE TABLE t(i int);
+INSERT INTO t VALUES(1);
+INSERT INTO t VALUES(2);
+INSERT INTO t VALUES(3);
+INSERT INTO t VALUES(4);
+INSERT INTO t VALUES(5);
+COMMIT;
+
+SELECT count(*) FROM t
+
+/=q: where
+
+/q i > 3;
+
+* if (*? != 2) \q Query returned *{?} rows, should have returned 2.
+
+/q i > 2
+:;
+* if (*? != 3) \q Query returned *{?} rows, should have returned 3.

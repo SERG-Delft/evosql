@@ -1,0 +1,79 @@
+-- schema TESTS WRT cascading
+
+/*u0*/SET SCHEMA information_schema;
+
+/*u0*/create user sa1 password "sa1" admin;
+/*u0*/create user sa2 password "sa2" admin;
+/*u0*/create user sa3 password "sa3" admin;
+
+/*u0*/create role r1;
+/*u0*/create role r2;
+/*u0*/create role r3;
+
+/*u0*/create schema s1 authorization sa1;
+/*u0*/create schema s2 authorization dba;
+/*u0*/create schema s3 authorization r1;
+
+-- These should have no effect on direct or indirect schema drops, since
+-- only DIRECT schema owners incur dependencies that prevent deletions.
+/*u0*/grant r1 to r2;
+/*u0*/grant r2 to sa2;
+
+/*e*/drop role r1;
+/*e*/drop user sa1;
+
+/*u0*/CREATE TABLE s1.t1(i int);
+/*u0*/CREATE TABLE s2.t2(i int);
+/*u0*/CREATE TABLE s3.t3(i int);
+
+-- Can't drop schemas which contain objects without CASCADE option
+/*e*/drop schema s1;
+/*e*/drop schema s2;
+/*e*/drop schema s3;
+/*e*/drop user sa1;
+
+/*c1*/SELECT * FROM schemata WHERE schema_name = 'S1';
+/*c1*/SELECT * FROM schemata WHERE schema_name = 'S2';
+/*c1*/SELECT * FROM schemata WHERE schema_name = 'S3';
+/*c1*/SELECT * FROM system_tables
+    WHERE table_schem = 'S1' AND table_name = 'T1';
+/*c1*/SELECT * FROM system_tables
+    WHERE table_schem = 'S2' AND table_name = 'T2';
+/*c1*/SELECT * FROM system_tables
+    WHERE table_schem = 'S3' AND table_name = 'T3';
+
+-- DROP USER... CASCADEs invoke DROP SCHEMA... CASCADEs.
+/*u0*/DROP USER sa3;
+/*u0*/DROP USER sa2;
+/*u0*/DROP USER sa1 CASCADE;
+/*e*/drop role r1;
+
+/*c0*/SELECT * FROM schemata WHERE schema_name = 'S1';
+/*c1*/SELECT * FROM schemata WHERE schema_name = 'S2';
+/*c1*/SELECT * FROM schemata WHERE schema_name = 'S3';
+/*c0*/SELECT * FROM system_tables
+    WHERE table_schem = 'S1' AND table_name = 'T1';
+/*c1*/SELECT * FROM system_tables
+    WHERE table_schem = 'S2' AND table_name = 'T2';
+/*c1*/SELECT * FROM system_tables
+    WHERE table_schem = 'S3' AND table_name = 'T3';
+
+/*u0*/drop role r1 CASCADE;
+/*c0*/SELECT * FROM schemata WHERE schema_name = 'S1';
+/*c1*/SELECT * FROM schemata WHERE schema_name = 'S2';
+/*c0*/SELECT * FROM schemata WHERE schema_name = 'S3';
+/*c0*/SELECT * FROM system_tables
+    WHERE table_schem = 'S1' AND table_name = 'T1';
+/*c1*/SELECT * FROM system_tables
+    WHERE table_schem = 'S2' AND table_name = 'T2';
+/*c0*/SELECT * FROM system_tables
+    WHERE table_schem = 'S3' AND table_name = 'T3';
+
+/*s*/DROP role r2 CASCADE;
+/*s*/DROP user sa2 CASCADE;
+/*s*/DROP user sa3 CASCADE;
+
+/*U0*/ Workaround for bug where DDL will not Commit
+/*s*/CREATE TABLE bug_workaround (i int);
+/*s*/INSERT INTO bug_workaround VALUES(1);
+/*u0*/SHUTDOWN;

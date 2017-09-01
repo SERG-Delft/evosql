@@ -1,0 +1,4 @@
+ANZEIGE FORMAT:
+Änderungszeit__ tu Modus  Dateigröße_  Besitzer___  Dateipfad
+    t = Tar entry type
+    u = '*' für UStar-kompatible entry

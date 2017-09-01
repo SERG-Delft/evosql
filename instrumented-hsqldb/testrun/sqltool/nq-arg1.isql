@@ -1,0 +1,10 @@
+/*
+ * $Id: nq-arg1.isql 610 2008-12-22 15:54:18Z unsaved $
+ *
+ * Simplest test of \q from nested script with args
+ */
+
+\q This should cause SqlTool to exit immediately with non-zero exit value.
+
+/* Following line causes the unit test to fail if the \q above didn't work.
+\q

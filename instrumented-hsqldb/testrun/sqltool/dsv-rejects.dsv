@@ -1,0 +1,14 @@
+targettable=t
+
+  i  |  r  |  d  |  t  |  v  |  b
+
+  31  |  3.124  |  2007-06-07  |  2006-05-06 12:30:04  |  a B  | true
+42 | 1.5 |  2007-07-08  |  2006-05-07 10:20  |  a string  | false
+
+# Letter in int field:
+5 | a |  2007-07-08  |  2006-05-07 10:20  |  a string  | false
+
+# No seconds in time field
+42 | 1.5 |  2007-07-08  |  2006-05-07 10:20  |  a string  | false
+
+42 | 1.5 |  2007-07-08  |  2006-05-07 10:20:0  |  a string  | false

@@ -1,0 +1,44 @@
+Sonderbefehle.
+Bei Filterzeichenketten wird die Groß/Kleinschreibung beachtet.
+Verwenden Sie "SCHEMANAME.", um auf ein Schema zu begrenzen.
+    \?                     Sonderbefehle Hilfe
+    \.                     Geben Sie reines SQL ein (Raw-SQL). Schließen Sie
+                           mit einer Leerzeile ab, die nur einen "." enthält
+    \=                     Commitet JDBC Transaktionen.
+    \! BEFEHL  [ARGE]      Führt externe Programme aus (stdin wird nicht
+                           unterstützt).
+    \a [true|false]        Commitet automatisch JDBC DML Befehle.
+    \b                     Speichert die nächste Ergebnismenge im Binärpuffer
+                          (keine Ausgabe).
+    \bd pfad/datei.bin     Speichert den Binärpuffer in Datei.
+    \bl pfad/datei.bin     Lädt Datei in den Binärpuffer
+    \bp                    Verwenden Sie ? in der nächsten SQL-Anweisung um
+                           den Binärpuffer hochzuladen.
+    \c [true|false]        Weiter nach Fehler oder Abbruch nach Fehler.
+    \d OBJEKTNAME [regx]   Beschreibt Spalten von Tabellen oder Views
+    \d{tvsiSanur*?} [Zeichenkette] Listet Objekte der spezifizierten Art:
+(Tbln/Views/Seqs/Indexe/SysTbln/Aliase/SchemaNamen/Benutzer/Rollenn/tbl-ähnlich)
+    \h [true|false]        Schaltet in den HTML-Ausgabe-Modus.
+    \i pfad/datei.sql      Befehle aus externer Datei ausführen/einbinden
+    \j [urlid]             Anzeige JDBC-Verbindung Details, oder zu 'urlid' zu
+                           verbinden
+    \j acct pwd jdbc:url   Herstellung der Verbindung zum JDBC-Datenquelle auf
+                           URL
+    \l LEVEL  Log-Meld.    Log-Meldung. (verfügbare Levels mit '\l?' anzeigen
+                           lassen.)
+    \m pfad/datei.dsv [*]  Importiert Datensätze aus einer DSV-Textdatei in
+                           eine Tabelle. (weitere Optionen '\m?').
+    \mq pfad/datei.csv     Ditto, aber mit traditionellen CSV doppelt zitiert.
+    \o [datei/pfad.html]   Leitet (oder stoppt dies) die Ausgabe der Abfrage in
+                           die angegebene Datei um.
+    \p [Eine Nachricht]    Gibt Nachricht auf stdout aus
+    \q [Abbruchmeldung]    Beendet das Programm (oder beenden Sie es mit
+                           STRG-Z oder STRG-D).
+    \t [true|false]        Gibt die Ausführungszeiten für alle SQL-Befehle aus.
+    \v [TRAN_ISO_LEVEL]    Zeigt/Setzt das Level der
+                           Verbindungs-Transaktion-Isolation.
+                           (connection transaction isolation)
+    \x {TABELLE|SELECT...} Exportiert Tabellen oder Abfragen in eine
+                           DSV-Textdatei (weitere Optionen: '\x?').
+    \xq {TABELLE|SEL...}   Ditto, aber mit traditionellen CSV doppelt zitiert.
+

@@ -1,0 +1,8 @@
+/*
+ * $Id: unsetvar.nsql 4428 2011-10-01 01:04:34Z unsaved $
+ *
+ * Invokes another script that defines variables.
+ * Then we test that we have access to the variables.
+ */
+
+\p *{unsetvar}

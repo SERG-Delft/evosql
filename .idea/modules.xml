@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/evaluation/evaluation.iml" filepath="$PROJECT_DIR$/evaluation/evaluation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/evosql.iml" filepath="$PROJECT_DIR$/evosql.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ga/ga.iml" filepath="$PROJECT_DIR$/ga/ga.iml" />
+      <module fileurl="file://$PROJECT_DIR$/instrumented-hsqldb/instrumented-hsqldb.iml" filepath="$PROJECT_DIR$/instrumented-hsqldb/instrumented-hsqldb.iml" />
+    </modules>
+  </component>
+</project>

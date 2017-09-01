@@ -1,0 +1,19 @@
+SYNTAX:
+    java -cp Pfad/zur/hsqldb.jar %{1}
+    (um diese Meldung anzuzeigen)
+ODER
+    java -cp Pfad/zur/hsqldb.jar %{1} --save  \
+    [--overwrite] tar/Pfad.tar DB-Wurzel-Pfad
+ODER
+    java -cp Pfad/zur/hsqldb.jar %{1} --list  \
+    tar/Pfad.tar [regex1...]
+ODER
+    java -cp path/to/hsqldb.jar %{1} --extract  \
+    [--overwrite] Datei/Pfad.tar[.gz] DB/Verz. [regex1...]
+    (entpackt die enthaltenen Dateien in die angegebene DB/das angegebene Verzeichnis).
+
+Bitte beachten: 
+#N.b. the db/base/path includes file base name, like in JDBC URLs, whereas
+#db/dir is a proper 'directory'.
+Der DB-Wurzel-Pfad beinhaltet auch das Wurzelverzeichnis der Datei,
+wie bei JDBC-URLs, wo das DB/Verz. eine normales Verzeichnis ist.

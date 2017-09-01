@@ -1,0 +1,14 @@
+defaultTasks 'runTests'
+
+task runTests << {
+    def params = ['NO_JVM_EXIT']
+    boolean verbose =
+            project.hasProperty('verbose') && project.property('verbose')
+    if (verbose) params << '-v'
+    if (project.hasProperty('norun') && project.property('norun'))
+        params << '-n'
+    if (project.hasProperty('scripts'))
+        params.addAll(project.property('scripts').split(','))
+    if (!verbose) System.console().writer().print('  ')
+    run(new File('runtests.groovy'), params as String[])
+}

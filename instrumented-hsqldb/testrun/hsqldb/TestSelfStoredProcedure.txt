@@ -1,0 +1,459 @@
+-- AUXILIAR TABLES + DECLARES
+DROP TABLE tt1 IF EXISTS;
+DROP TABLE tt2 IF EXISTS;
+DECLARE test_retval INT DEFAULT NULL;
+CREATE Cached TABLE tt1(
+   ID INTEGER NOT NULL PRIMARY KEY,
+   tt2ref INTEGER
+   );
+
+CREATE Cached TABLE tt2(
+   ID INTEGER NOT NULL PRIMARY KEY
+   );
+ALTER TABLE tt1 ADD CONSTRAINT fk2 FOREIGN KEY (tt2ref) REFERENCES tt2(ID);
+
+-- CREATE SIMPLE PROCEDURES - INVALID
+
+DROP PROCEDURE procedure_test IF EXISTS;
+
+-- Exception no body
+/*e*/CREATE PROCEDURE procedure_test() MODIFIES SQL DATA
+  BEGIN ATOMIC
+  END
+
+-- Exception no exists - in call + in drop
+/*e*/CREATE PROCEDURE procedure_test() MODIFIES SQL DATA
+  BEGIN ATOMIC
+  END
+-- Exception no body
+/*e*/DROP PROCEDURE procedure_test
+/*e*/call procedure_test()
+
+-- Exception invalid parameter - reserved word
+/*e*/CREATE PROCEDURE procedure_test(IN value INTEGER) MODIFIES SQL DATA
+  BEGIN ATOMIC
+  SET val = val + 1;
+  END
+-- Exception no body
+/*e*/DROP PROCEDURE procedure_test
+/*e*/call procedure_test()
+
+-- CREATE SIMPLE PROCEDURES
+
+-- Empty procedure
+CREATE PROCEDURE procedure_test() MODIFIES SQL DATA
+  BEGIN ATOMIC
+  DECLARE temp INT;
+  SET temp = 10;
+  END
+call procedure_test()
+DROP PROCEDURE procedure_test
+
+-- Empty procedure - IN parameter
+CREATE PROCEDURE procedure_test(IN val INTEGER) MODIFIES SQL DATA
+  BEGIN ATOMIC
+  DECLARE valu INT DEFAULT 1;
+  SET valu = val + 1;
+  END
+call procedure_test(20)
+DROP PROCEDURE procedure_test
+
+-- Empty procedure - INT parameter + OUT parameter
+CREATE PROCEDURE procedure_test(IN val INT, OUT retval INT) MODIFIES SQL DATA
+  BEGIN ATOMIC
+  SET retval = val + 1;
+  END
+CALL procedure_test(20, test_retval);
+/*r21*/CALL test_retval;
+DROP PROCEDURE procedure_test
+
+-- Empty procedure - INTOUT parameter
+CREATE PROCEDURE procedure_test(INOUT val INTEGER) MODIFIES SQL DATA
+  BEGIN ATOMIC
+  SET val = val + 1;
+  END
+SET test_retval=20;
+CALL procedure_test(test_retval);
+/*r21*/CALL test_retval;
+DROP PROCEDURE procedure_test
+
+-- PROCEDURES - BASIC SQL OPERATIONS
+
+-- simple procedure return select
+CREATE PROCEDURE procedure_test(OUT retval INT) MODIFIES SQL DATA
+  BEGIN ATOMIC
+  SELECT id INTO retval FROM tt2;
+  END
+INSERT INTO tt2(ID) VALUES(1);
+call procedure_test(test_retval)
+/*r1*/CALL test_retval;
+DROP PROCEDURE procedure_test
+
+-- simple procedure test insert
+CREATE PROCEDURE procedure_test(OUT retval INT) MODIFIES SQL DATA
+  BEGIN ATOMIC
+  DELETE FROM tt2;
+  INSERT INTO tt2(ID) VALUES(1);
+  INSERT INTO tt2(ID) VALUES(2);
+  SELECT COUNT(id) INTO retval FROM tt2;
+  END
+call procedure_test(test_retval)
+/*r2*/CALL test_retval;
+/*r2*/SELECT COUNT(*) FROM tt2;
+
+CREATE USER PUSER PASSWORD 'ab'
+GRANT CHANGE_AUTHORIZATION TO PUSER
+GRANT EXECUTE ON ROUTINE procedure_test TO puser
+SET SESSION AUTHORIZATION 'PUSER'
+
+CALL procedure_test(test_retval)
+/*r2*/CALL test_retval;
+
+CONNECT USER SA PASSWORD ''
+/*r2*/SELECT COUNT(*) FROM tt2;
+REVOKE EXECUTE ON ROUTINE procedure_test FROM puser CASCADE
+SET SESSION AUTHORIZATION 'PUSER'
+/*e*/CALL procedure_test(test_retval)
+CONNECT USER SA PASSWORD ''
+DROP PROCEDURE procedure_test
+
+-- PROCEDURES - VARIABLES
+
+-- simple procedure asignment
+CREATE PROCEDURE procedure_test(OUT retval INT) MODIFIES SQL DATA
+  BEGIN ATOMIC
+  DECLARE temp INT;
+  SET temp = 10;
+  SET retval = temp;
+  END
+call procedure_test(test_retval)
+/*r10*/CALL test_retval;
+DROP PROCEDURE procedure_test
+
+-- simple add
+CREATE PROCEDURE procedure_test(IN val INT, OUT retval INT) MODIFIES SQL DATA
+  BEGIN ATOMIC
+  DECLARE temp INT;
+  SET temp = 10;
+  SET retval = val + temp;
+  END
+call procedure_test(5, test_retval)
+/*r15*/CALL test_retval;
+DROP PROCEDURE procedure_test
+
+-- simple substract
+CREATE PROCEDURE procedure_test(IN val INT, OUT retval INT) MODIFIES SQL DATA
+  BEGIN ATOMIC
+  DECLARE temp INT;
+  SET temp = 1;
+  SET retval = val - temp;
+  END
+call procedure_test(5, test_retval)
+/*r4*/CALL test_retval;
+DROP PROCEDURE procedure_test
+
+-- simple multiply
+CREATE PROCEDURE procedure_test(IN val INT, OUT retval INT) MODIFIES SQL DATA
+  BEGIN ATOMIC
+  DECLARE temp INT;
+  SET temp = 25;
+  SET retval = val * temp;
+  END
+call procedure_test(5, test_retval)
+/*r125*/CALL test_retval;
+DROP PROCEDURE procedure_test
+
+-- simple division
+CREATE PROCEDURE procedure_test(IN val INT, OUT retval INT) MODIFIES SQL DATA
+  BEGIN ATOMIC
+  DECLARE temp INT;
+  SET temp = 5;
+  SET retval = val / temp;
+  END
+call procedure_test(22, test_retval)
+/*r4*/CALL test_retval;
+DROP PROCEDURE procedure_test
+
+-- PROCEDURES - CONDITIONS
+
+-- simple IF
+CREATE PROCEDURE procedure_test(IN val INT, OUT retval INT) MODIFIES SQL DATA
+  BEGIN ATOMIC
+  SET retval = 0;
+  IF val = 1 THEN SET retval = 21; END IF;
+  END
+call procedure_test(0, test_retval)
+/*r0*/CALL test_retval;
+call procedure_test(1, test_retval)
+/*r21*/CALL test_retval;
+call procedure_test(2, test_retval)
+/*r0*/CALL test_retval;
+call procedure_test(200, test_retval)
+/*r0*/CALL test_retval;
+call procedure_test(-23, test_retval)
+/*r0*/CALL test_retval;
+DROP PROCEDURE procedure_test
+
+-- simple IF/ELSE
+CREATE PROCEDURE procedure_test(IN val INT, OUT retval INT) MODIFIES SQL DATA
+  BEGIN ATOMIC
+  SET retval = 0;
+  IF val = 1 THEN SET retval = 21;
+  ELSE SET retval = 55;
+  END IF;
+  END
+call procedure_test(0, test_retval)
+/*r55*/CALL test_retval;
+call procedure_test(1, test_retval)
+/*r21*/CALL test_retval;
+call procedure_test(2, test_retval)
+/*r55*/CALL test_retval;
+call procedure_test(200, test_retval)
+/*r55*/CALL test_retval;
+call procedure_test(-23, test_retval)
+/*r55*/CALL test_retval;
+DROP PROCEDURE procedure_test
+
+-- simple IF/ELSEIF/ELSE
+CREATE PROCEDURE procedure_test(IN val INT, OUT retval INT) MODIFIES SQL DATA
+  BEGIN ATOMIC
+  DECLARE temp INT;
+  IF val = 1 THEN SET retval = 21;
+  ELSEIF val = 2 THEN SET retval = 55;
+  ELSE SET retval = 100;
+  END IF;
+  END
+call procedure_test(0, test_retval)
+/*r100*/CALL test_retval;
+call procedure_test(1, test_retval)
+/*r21*/CALL test_retval;
+call procedure_test(2, test_retval)
+/*r55*/CALL test_retval;
+call procedure_test(3, test_retval)
+/*r100*/CALL test_retval;
+call procedure_test(200, test_retval)
+/*r100*/CALL test_retval;
+call procedure_test(-23, test_retval)
+/*r100*/CALL test_retval;
+DROP PROCEDURE procedure_test
+
+-- simple CASE
+CREATE PROCEDURE procedure_test(IN val INT, OUT retval INT) MODIFIES SQL DATA
+  BEGIN ATOMIC
+  SET retval = 0;
+  CASE val
+    WHEN 1 THEN SET retval = 21;
+  END CASE;
+  END
+call procedure_test(0, test_retval)
+/*r0*/CALL test_retval;
+call procedure_test(1, test_retval)
+/*r21*/CALL test_retval;
+call procedure_test(2, test_retval)
+/*r0*/CALL test_retval;
+call procedure_test(200, test_retval)
+/*r0*/CALL test_retval;
+call procedure_test(-23, test_retval)
+/*r0*/CALL test_retval;
+DROP PROCEDURE procedure_test
+
+-- simple CASE - multivalue
+CREATE PROCEDURE procedure_test(IN val INT, OUT retval INT) MODIFIES SQL DATA
+  BEGIN ATOMIC
+  SET retval = 0;
+  CASE val
+    WHEN 1,2 THEN SET retval = 21;
+  END CASE;
+  END
+call procedure_test(0, test_retval)
+/*r0*/CALL test_retval;
+call procedure_test(1, test_retval)
+/*r21*/CALL test_retval;
+call procedure_test(2, test_retval)
+/*r21*/CALL test_retval;
+call procedure_test(3, test_retval)
+/*r0*/CALL test_retval;
+call procedure_test(200, test_retval)
+/*r0*/CALL test_retval;
+call procedure_test(-23, test_retval)
+/*r0*/CALL test_retval;
+DROP PROCEDURE procedure_test
+
+-- simple CASE - multivalue
+CREATE PROCEDURE procedure_test(IN val INT, OUT retval INT) MODIFIES SQL DATA
+  BEGIN ATOMIC
+  SET retval = 0;
+  CASE val
+    WHEN 1,2 THEN SET retval = 21;
+    WHEN IN (3, 4, 5) THEN SET retval = 55;
+  END CASE;
+  END
+call procedure_test(0, test_retval)
+/*r0*/CALL test_retval;
+call procedure_test(1, test_retval)
+/*r21*/CALL test_retval;
+call procedure_test(2, test_retval)
+/*r21*/CALL test_retval;
+call procedure_test(3, test_retval)
+/*r55*/CALL test_retval;
+call procedure_test(4, test_retval)
+/*r55*/CALL test_retval;
+call procedure_test(5, test_retval)
+/*r55*/CALL test_retval;
+call procedure_test(6, test_retval)
+/*r0*/CALL test_retval;
+call procedure_test(200, test_retval)
+/*r0*/CALL test_retval;
+call procedure_test(-23, test_retval)
+/*r0*/CALL test_retval;
+DROP PROCEDURE procedure_test
+
+-- simple CASE - multivalue (repeated)
+CREATE PROCEDURE procedure_test(IN val INT, OUT retval INT) MODIFIES SQL DATA
+  BEGIN ATOMIC
+  SET retval = 0;
+  CASE val
+    WHEN 1,2 THEN SET retval = 21;
+    WHEN IN (2, 3, 5) THEN SET retval = 55;
+  END CASE;
+  END
+call procedure_test(0, test_retval)
+/*r0*/CALL test_retval;
+call procedure_test(1, test_retval)
+/*r21*/CALL test_retval;
+call procedure_test(2, test_retval)
+/*r21*/CALL test_retval;
+call procedure_test(3, test_retval)
+/*r55*/CALL test_retval;
+call procedure_test(4, test_retval)
+/*r0*/CALL test_retval;
+call procedure_test(5, test_retval)
+/*r55*/CALL test_retval;
+call procedure_test(6, test_retval)
+/*r0*/CALL test_retval;
+call procedure_test(200, test_retval)
+/*r0*/CALL test_retval;
+call procedure_test(-23, test_retval)
+/*r0*/CALL test_retval;
+DROP PROCEDURE procedure_test
+
+-- simple CASE - multivalue & else
+CREATE PROCEDURE procedure_test(IN val INT, OUT retval INT) MODIFIES SQL DATA
+  BEGIN ATOMIC
+  CASE val
+    WHEN 1,2 THEN SET retval = 21;
+    WHEN IN (2, 3, 5) THEN SET retval = 55;
+    ELSE SET retval = 101;
+  END CASE;
+  END
+call procedure_test(0, test_retval)
+/*r101*/CALL test_retval;
+call procedure_test(1, test_retval)
+/*r21*/CALL test_retval;
+call procedure_test(2, test_retval)
+/*r21*/CALL test_retval;
+call procedure_test(3, test_retval)
+/*r55*/CALL test_retval;
+call procedure_test(4, test_retval)
+/*r101*/CALL test_retval;
+call procedure_test(5, test_retval)
+/*r55*/CALL test_retval;
+call procedure_test(6, test_retval)
+/*r101*/CALL test_retval;
+call procedure_test(200, test_retval)
+/*r101*/CALL test_retval;
+call procedure_test(-23, test_retval)
+/*r101*/CALL test_retval;
+DROP PROCEDURE procedure_test;
+
+-- PROCEDURES -- BUCLES
+
+-- simple WHILE
+CREATE PROCEDURE procedure_test(IN val INT, OUT retval INT) MODIFIES SQL DATA
+  BEGIN ATOMIC
+  DECLARE counter INT;
+  DECLARE temp INT;
+  SET counter = val;
+  SET temp = 0;
+  WHILE counter < 10 DO
+     SET temp = temp + counter;
+     SET counter = counter + 1;
+  END WHILE;
+  SET retval = temp;
+  END
+call procedure_test(0, test_retval)
+/*r45*/CALL test_retval;
+call procedure_test(5, test_retval)
+/*r35*/CALL test_retval;
+call procedure_test(10, test_retval)
+/*r0*/CALL test_retval;
+call procedure_test(100, test_retval)
+/*r0*/CALL test_retval;
+DROP PROCEDURE procedure_test;
+
+-- simple REPEAT
+CREATE PROCEDURE procedure_test(IN val INT, OUT retval INT) MODIFIES SQL DATA
+  BEGIN ATOMIC
+  DECLARE counter INT;
+  DECLARE temp INT;
+  SET counter = val;
+  SET temp = 0;
+  REPEAT
+     SET temp = temp + counter;
+     SET counter = counter + 1;
+  UNTIL counter >= 10
+  END REPEAT;
+  SET retval = temp;
+  END
+call procedure_test(0, test_retval)
+/*r45*/CALL test_retval;
+call procedure_test(5, test_retval)
+/*r35*/CALL test_retval;
+call procedure_test(10, test_retval)
+/*r10*/CALL test_retval;
+call procedure_test(100, test_retval)
+/*r100*/CALL test_retval;
+DROP PROCEDURE procedure_test;
+
+-- simple REPEAT with infinite loop
+CREATE PROCEDURE procedure_test(IN val INT, OUT retval INT) MODIFIES SQL DATA
+  BEGIN ATOMIC
+  DECLARE counter INT;
+  DECLARE temp INT;
+  SET counter = val;
+  SET temp = 0;
+  REPEAT
+     SET temp = temp + counter;
+     SET counter = counter + 1;
+  UNTIL counter < 10
+  END REPEAT;
+  SET retval = temp;
+  END
+call procedure_test(0, test_retval)
+/*r0*/CALL test_retval;
+call procedure_test(5, test_retval)
+/*r5*/CALL test_retval;
+-- infinite loop
+--/*e*/call procedure_test(10, test_retval)
+DROP PROCEDURE procedure_test;
+
+--
+CREATE PROCEDURE procedure_test(INOUT val INT) READS SQL DATA
+  DYNAMIC RESULT SETS 1
+  BEGIN ATOMIC
+   declare curs cursor for select table_schema, table_name from information_schema.tables where table_name='LOB_IDS' and table_schema='SYSTEM_LOBS';
+   select count(*) into val from information_schema.columns where table_name='LOB_IDS' and table_schema='SYSTEM_LOBS';
+   open curs;
+  END
+
+CREATE PROCEDURE test_proc(INOUT val_p INT, IN lastname_p VARCHAR(20))
+ MODIFIES SQL DATA
+ BEGIN ATOMIC
+  SET val_p = 0;
+  for_label: FOR SELECT * FROM customer WHERE lastname = lastname_p DO
+    IF  val_p > 0 THEN
+      DELETE FROM customer WHERE customer.id = id;
+    END IF;
+    SET val_p = val_p + 1;
+  END FOR for_label;
+ END

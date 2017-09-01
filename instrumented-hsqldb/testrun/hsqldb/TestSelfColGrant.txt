@@ -1,0 +1,65 @@
+-- $Id: TestSelfColGrant.txt 3459 2010-02-12 19:46:33Z fredt $
+-- Tests column-specific grants
+
+-- These two users are for sanity tests
+/*u0*/CREATE USER privd PASSWORD "privd";
+/*u0*/CREATE USER unprivd PASSWORD "unprivd";
+
+/*u0*/CREATE USER u1 PASSWORD "u1";
+/*u0*/GRANT CHANGE_AUTHORIZATION TO u1;
+/*u0*/GRANT CHANGE_AUTHORIZATION TO privd;
+/*u0*/GRANT CHANGE_AUTHORIZATION TO unprivd;
+/*u0*/CREATE TABLE multicol (openc int, closedc int, limitedc int);
+/*u1*/INSERT INTO multicol values (1, 2, 3);
+/*c1*/SELECT * from multicol;
+/*u0*/GRANT ALL ON multicol TO privd;
+/*u0*/GRANT SELECT(limitedc) ON multicol TO u1;
+/*u0*/GRANT SELECT(openc) ON multicol TO public;
+/*u0*/GRANT INSERT(openc) ON multicol TO public;
+/*u0*/GRANT UPDATE(openc) ON multicol TO public;
+
+
+-- Test col-specific SELECTs
+/*u0*/CONNECT USER u1 PASSWORD "u1";
+/*c1*/SELECT openc from multicol;
+/*c1*/SELECT limitedc from multicol;
+/*e*/SELECT closedc from multicol;
+/*e*/UPDATE multicol set limitedc = 4 where openc = 1;
+
+/*u0*/CONNECT USER privd PASSWORD "privd";
+/*c1*/SELECT openc from multicol;
+/*c1*/SELECT limitedc from multicol;
+/*c1*/SELECT closedc from multicol;
+/*u1*/UPDATE multicol set limitedc = 5 where openc = 1;
+/*u0*/CONNECT USER unprivd PASSWORD "unprivd";
+/*e*/SELECT limitedc from multicol;
+/*e*/SELECT closedc from multicol;
+/*e*/UPDATE multicol set limitedc = 6 where openc = 1;
+
+-- Test col-specific UPDATEs
+/*u0*/CONNECT USER u1 PASSWORD "u1";
+/*c1*/SELECT openc from multicol;
+/*e*/UPDATE multicol set limitedc = 7 where openc = 1;
+/*u0*/CONNECT USER SA PASSWORD "";
+/*u0*/GRANT update(limitedc) ON multicol TO u1;
+/*u0*/CONNECT USER u1 PASSWORD "u1";
+/*u1*/UPDATE multicol set limitedc = 7 where openc = 1;
+
+-- Test col-specific INSERTs
+/*u0*/CONNECT USER u1 PASSWORD "u1";
+/*e*/INSERT INTO multicol(limitedc) values(10);
+/*u0*/CONNECT USER SA PASSWORD "";
+/*u0*/GRANT insert(limitedc) ON multicol TO u1;
+/*u0*/CONNECT USER privd PASSWORD "privd";
+/*u1*/INSERT INTO multicol(limitedc) values(11);
+/*u0*/CONNECT USER unprivd PASSWORD "unprivd";
+/*e*/INSERT INTO multicol(limitedc) values(12);
+/*u0*/CONNECT USER u1 PASSWORD "u1";
+/*u1*/INSERT INTO multicol(limitedc) values(13);
+
+/*u0*/CONNECT USER SA PASSWORD "";
+/*u0*/DROP USER u1;
+/*u0*/DROP USER privd;
+/*u0*/DROP USER unprivd;
+/*u0*/DROP TABLE multicol;
+/*u0*/CHECKPOINT;

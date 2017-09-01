@@ -1,0 +1,430 @@
+System|ProcessNo|QueryNo|PathNo|Infeasible/Unsatisfiable|Notes
+alura|0|46|2|1|
+alura|0|51|11|1|
+alura|0|52|12|1|
+alura|0|60|9|1|
+alura|0|60|17|1|
+alura|0|60|22|1|
+alura|0|63|4|1|
+alura|0|63|11|0|Seems solvable, little time
+alura|0|63|13|1|INNER JOIN with IS NULL on id
+alura|0|63|14|0|Seems solvable, little time
+alura|0|63|15|0|Seems solvable, little time
+alura|0|63|16|0|Seems solvable, little time
+alura|0|63|17|0|Seems solvable, little time
+alura|0|63|18|0|Seems solvable, little time
+alura|0|63|19|1|LEFT join and INNER join combining two fields
+alura|0|63|22|0|Seems solvable, little time
+alura|0|63|30|1|LEFT join and INNER join combining two fields
+alura|0|63|32|0|Seems solvable, little time
+alura|0|63|36|0|Seems solvable, little time
+alura|0|63|37|0|Seems solvable, little time
+alura|0|63|38|0|Seems solvable, little time
+alura|0|63|39|0|Seems solvable, little time
+alura|0|63|41|0|Seems solvable, little time
+alura|0|63|43|0|Seems solvable, little time
+alura|0|63|44|0|Seems solvable, little time
+alura|0|63|46|0|Seems solvable, little time
+alura|0|63|47|0|Seems solvable, little time
+alura|0|63|48|0|Seems solvable, little time
+alura|0|63|49|0|Seems solvable, little time
+alura|0|63|50|0|Seems solvable, little time
+alura|0|63|51|0|Seems solvable, little time
+alura|0|63|52|0|Seems solvable, little time
+alura|0|63|53|0|Seems solvable, little time
+alura|0|63|56|0|Seems solvable, little time
+alura|0|63|59|0|Seems solvable, little time
+alura|0|63|61|0|Seems solvable, little time
+alura|0|63|63|0|Seems solvable, little time
+alura|0|63|69|1|LEFT join and INNER join combining two fields
+alura|0|63|75|0|Seems solvable, little time
+alura|0|63|77|0|Seems solvable, little time
+alura|0|63|79|0|Seems solvable, little time
+alura|0|63|82|0|Seems solvable, little time
+alura|0|63|83|0|Seems solvable, little time
+alura|0|63|87|0|Seems solvable, little time
+alura|0|63|89|0|Seems solvable, little time
+alura|1|21|4|1|
+alura|1|21|5|1|
+alura|1|32|4|1|
+alura|1|39|10|1|
+alura|1|47|2|1|
+alura|1|47|7|1|
+alura|2|33|4|0|
+alura|2|33|5|0|
+alura|2|37|2|1|
+alura|2|44|4|1|
+alura|2|44|10|1|
+alura|2|49|2|1|
+alura|2|58|17|1|
+alura|2|59|22|1|
+alura|2|60|9|1|
+alura|2|60|10|1|
+alura|2|62|1|0|Seems solvable, little time
+alura|2|62|2|0|Seems solvable, little time
+alura|2|62|3|0|Seems solvable, little time
+alura|2|62|4|0|Seems solvable, little time
+alura|2|62|6|0|Seems solvable, little time
+alura|2|62|9|0|Seems solvable, little time
+alura|2|62|11|0|Seems solvable, little time
+alura|2|62|12|0|Seems solvable, little time
+alura|2|62|14|0|Seems solvable, little time
+alura|2|62|15|0|Seems solvable, little time
+alura|2|62|17|0|Seems solvable, little time
+alura|2|62|18|0|Seems solvable, little time
+alura|2|62|20|0|Seems solvable, little time
+alura|2|62|22|0|Seems solvable, little time
+alura|2|62|23|0|Seems solvable, little time
+alura|2|62|25|0|Seems solvable, little time
+alura|2|62|26|0|Seems solvable, little time
+alura|2|62|28|0|Seems solvable, little time
+alura|2|62|29|0|Seems solvable, little time
+alura|2|62|31|0|Seems solvable, little time
+alura|2|62|32|0|Seems solvable, little time
+alura|2|62|34|0|Seems solvable, little time
+alura|2|62|35|0|Seems solvable, little time
+alura|2|62|37|0|Seems solvable, little time
+alura|2|62|39|0|Seems solvable, little time
+alura|2|62|40|0|Seems solvable, little time
+alura|2|62|42|0|Seems solvable, little time
+alura|2|62|43|0|Seems solvable, little time
+alura|2|62|45|0|Seems solvable, little time
+alura|2|62|47|0|Seems solvable, little time
+alura|2|62|49|0|Seems solvable, little time
+alura|2|62|50|0|Seems solvable, little time
+alura|3|29|5|1|
+alura|3|43|2|1|
+alura|3|47|2|1|
+alura|3|54|16|1|
+alura|3|60|10|1|
+alura|3|60|19|1|
+alura|3|60|24|1|
+alura|3|60|28|1|
+alura|3|62|1|0|Should be easy, but interesting that results are all the same
+alura|3|62|10|1|INNER JOIN with IS NULL on id
+alura|3|62|19|0|Should be easy, but interesting that results are all the same
+alura|3|62|20|0|Should be easy, but interesting that results are all the same
+alura|3|62|21|0|Should be easy, but interesting that results are all the same
+alura|3|62|22|0|Should be easy, but interesting that results are all the same
+alura|3|62|23|0|Should be easy, but interesting that results are all the same
+alura|3|62|24|0|Should be easy, but interesting that results are all the same
+alura|3|62|25|0|Should be easy, but interesting that results are all the same
+alura|3|62|26|0|Should be easy, but interesting that results are all the same
+alura|3|62|27|0|Should be easy, but interesting that results are all the same
+alura|3|62|28|0|Should be easy, but interesting that results are all the same
+alura|3|62|29|0|Should be easy, but interesting that results are all the same
+alura|3|62|30|0|Should be easy, but interesting that results are all the same
+alura|3|62|31|0|Should be easy, but interesting that results are all the same
+alura|3|62|32|0|Should be easy, but interesting that results are all the same
+alura|3|62|34|0|Should be easy, but interesting that results are all the same
+alura|3|62|35|0|Should be easy, but interesting that results are all the same
+alura|3|62|36|0|Should be easy, but interesting that results are all the same
+alura|3|62|37|0|Should be easy, but interesting that results are all the same
+alura|3|62|38|0|Should be easy, but interesting that results are all the same
+alura|3|62|39|0|Should be easy, but interesting that results are all the same
+alura|3|62|40|0|Should be easy, but interesting that results are all the same
+alura|3|62|41|0|Should be easy, but interesting that results are all the same
+alura|3|62|42|0|Should be easy, but interesting that results are all the same
+alura|3|62|43|0|Should be easy, but interesting that results are all the same
+alura|3|62|44|0|Should be easy, but interesting that results are all the same
+alura|3|62|45|0|Should be easy, but interesting that results are all the same
+alura|3|62|46|0|Should be easy, but interesting that results are all the same
+alura|3|62|47|0|Should be easy, but interesting that results are all the same
+alura|3|62|49|0|Should be easy, but interesting that results are all the same
+alura|3|62|50|0|Should be easy, but interesting that results are all the same
+alura|3|62|51|0|Should be easy, but interesting that results are all the same
+alura|3|62|52|0|Should be easy, but interesting that results are all the same
+alura|3|62|53|0|Should be easy, but interesting that results are all the same
+alura|3|62|54|0|Should be easy, but interesting that results are all the same
+alura|3|62|55|0|Should be easy, but interesting that results are all the same
+alura|3|62|56|0|Should be easy, but interesting that results are all the same
+alura|3|62|57|0|Should be easy, but interesting that results are all the same
+alura|3|62|58|0|Should be easy, but interesting that results are all the same
+alura|3|62|59|0|Should be easy, but interesting that results are all the same
+alura|3|62|61|0|Should be easy, but interesting that results are all the same
+erpnext|0|86|11|1|EXISTS with outer join
+erpnext|0|86|12|1|EXISTS with outer join
+erpnext|0|87|6|1|Contradictory predicates
+erpnext|0|87|8|1|Contradictory predicates
+erpnext|0|87|11|1|Contradictory predicates
+erpnext|0|87|13|1|Contradictory predicates
+erpnext|1|71|8|1|Impossible IS NULL
+erpnext|1|82|11|1|Impossible IS NULL
+erpnext|1|86|18|1|Contradictory predicates
+erpnext|2|82|2|1|Contradictory predicates
+erpnext|2|82|4|1|Contradictory predicates
+erpnext|2|85|4|1|Contradictory predicates
+erpnext|2|85|5|1|Contradictory predicates
+erpnext|2|85|6|1|Contradictory predicates
+erpnext|2|85|7|1|Contradictory predicates
+erpnext|2|85|8|1|Contradictory predicates
+erpnext|2|85|11|1|EXISTS with outer join
+erpnext|2|85|12|1|EXISTS with outer join
+erpnext|2|87|6|1|Contradictory predicates
+erpnext|2|87|8|1|Contradictory predicates
+erpnext|2|87|11|1|Contradictory predicates
+erpnext|2|87|13|1|Contradictory predicates
+erpnext|2|88|1|0|Seems easy, little time
+erpnext|2|88|2|0|Seems easy, little time
+erpnext|2|88|3|0|Seems easy, little time
+erpnext|2|88|4|0|Seems easy, little time
+erpnext|2|88|5|0|Seems easy, little time
+erpnext|2|88|6|0|Seems easy, little time
+erpnext|2|88|7|0|Seems easy, little time
+erpnext|2|88|8|0|Seems easy, little time
+erpnext|2|88|11|0|Seems easy, little time
+erpnext|2|88|12|0|Seems easy, little time
+erpnext|2|88|13|0|Seems easy, little time
+erpnext|2|88|15|0|Seems easy, little time
+erpnext|2|88|17|0|Seems easy, little time
+erpnext|2|88|18|0|Seems easy, little time
+erpnext|2|88|19|0|Seems easy, little time
+erpnext|2|88|20|0|Seems easy, little time
+erpnext|2|88|21|0|Seems easy, little time
+erpnext|2|88|22|0|Seems easy, little time
+erpnext|2|88|23|0|Seems easy, little time
+erpnext|2|88|24|0|Seems easy, little time
+erpnext|2|88|25|0|Seems easy, little time
+erpnext|2|88|26|0|Seems easy, little time
+erpnext|2|88|27|0|Seems easy, little time
+erpnext|2|88|28|0|Seems easy, little time
+erpnext|2|88|29|0|Seems easy, little time
+erpnext|2|88|30|0|Seems easy, little time
+erpnext|2|88|31|0|Seems easy, little time
+erpnext|2|88|32|0|Seems easy, little time
+erpnext|2|88|34|0|Seems easy, little time
+erpnext|2|88|35|0|Seems easy, little time
+erpnext|2|88|36|0|Seems easy, little time
+erpnext|2|88|37|0|Seems easy, little time
+erpnext|2|88|38|0|Seems easy, little time
+erpnext|2|88|39|0|Seems easy, little time
+erpnext|2|88|40|0|Seems easy, little time
+erpnext|2|88|41|0|Seems easy, little time
+erpnext|2|88|42|0|Seems easy, little time
+erpnext|2|88|43|0|Seems easy, little time
+erpnext|2|88|44|0|Seems easy, little time
+erpnext|2|88|45|0|Seems easy, little time
+erpnext|2|88|46|0|Seems easy, little time
+erpnext|2|88|48|0|Seems easy, little time
+erpnext|2|88|50|0|Seems easy, little time
+erpnext|2|88|51|0|Seems easy, little time
+erpnext|2|88|54|0|Seems easy, little time
+erpnext|2|88|55|0|Seems easy, little time
+erpnext|2|88|56|0|Seems easy, little time
+erpnext|2|88|57|0|Seems easy, little time
+erpnext|2|88|58|0|Seems easy, little time
+erpnext|2|88|59|0|Seems easy, little time
+erpnext|2|88|60|0|Seems easy, little time
+erpnext|2|88|61|0|Seems easy, little time
+erpnext|2|88|62|0|Seems easy, little time
+erpnext|3|56|5|1|Impossible IS NULL
+erpnext|3|73|8|1|Impossible IS NULL
+erpnext|3|84|13|0|Easily solved by hand
+erpnext|3|86|21|1|Impossible IS NULL
+erpnext|4|56|3|1|COUNT(*) = 0
+erpnext|4|82|11|1|Impossible IS NULL
+erpnext|4|86|11|1|EXISTS with outer join
+erpnext|4|86|12|1|EXISTS with outer join
+erpnext|4|87|31|1|Impossible IS NULL
+erpnext|5|58|6|1|Impossible IS NULL
+erpnext|5|82|11|1|Impossible IS NULL
+erpnext|5|87|31|1|Impossible IS NULL
+erpnext|6|62|4|1|Impossible IS NULL
+erpnext|6|80|9|1|Bad NULL syntax
+erpnext|6|82|11|1|Impossible IS NULL
+erpnext|6|85|18|1|Impossible IS NULL
+erpnext|6|86|18|0|Needs multiple INNER JOIN matches (with different id)
+erpnext|6|87|31|1|Impossible IS NULL
+erpnext|7|84|10|1|Contradictory predicates
+erpnext|7|84|13|1|Contradictory predicates
+erpnext|7|84|14|1|Contradictory predicates
+erpnext|7|85|12|1|Contradictory predicates
+erpnext|7|85|13|1|Bad NULL syntax
+erpnext|7|85|15|1|Bad NULL syntax
+erpnext|7|85|16|1|Bad NULL syntax
+erpnext|7|86|6|1|INNER JOIN with IS NULL on id
+erpnext|7|86|20|0|Needs multiple INNER JOIN matches (with different id)
+erpnext|7|87|31|1|Impossible IS NULL
+erpnext|8|86|21|1|Contradictory predicates
+erpnext|8|87|31|1|Impossible IS NULL
+erpnext|9|84|15|1|Impossible IS NULL
+erpnext|9|86|21|1|Contradictory predicates
+erpnext|10|87|2|0|Seems easy, little time
+erpnext|10|87|4|0|Seems easy, little time
+erpnext|10|87|6|0|Seems easy, little time
+erpnext|10|87|12|0|Seems easy, little time
+erpnext|10|87|13|0|Seems easy, little time
+erpnext|10|87|23|0|Seems easy, little time
+erpnext|10|87|35|0|Seems easy, little time
+erpnext|10|87|37|0|Seems easy, little time
+erpnext|10|87|40|0|Seems easy, little time
+erpnext|11|60|4|1|Contradictory predicates
+erpnext|11|70|1|1|Bad NULL syntax
+erpnext|11|70|3|1|Bad NULL syntax
+erpnext|11|70|4|1|Bad NULL syntax
+erpnext|11|70|5|1|Bad NULL syntax
+erpnext|11|82|11|1|Impossible IS NULL
+erpnext|11|84|1|0|Easily solved by hand
+erpnext|11|84|2|0|Easily solved by hand
+erpnext|11|84|3|0|Easily solved by hand
+erpnext|11|84|4|0|Easily solved by hand
+erpnext|11|84|5|0|Easily solved by hand
+erpnext|11|84|6|0|Easily solved by hand
+erpnext|11|84|8|0|Easily solved by hand
+erpnext|11|84|9|0|Easily solved by hand
+erpnext|11|84|10|0|Easily solved by hand
+erpnext|11|84|11|0|Easily solved by hand
+erpnext|11|84|12|0|Easily solved by hand
+erpnext|11|84|13|0|Easily solved by hand
+erpnext|11|84|14|0|Easily solved by hand
+erpnext|11|84|15|0|Easily solved by hand
+erpnext|11|86|21|1|Contradictory predicates
+erpnext|12|78|2|1|Contradictory predicates
+erpnext|12|78|5|1|Contradictory predicates
+erpnext|12|79|9|1|Impossible IS NULL
+erpnext|12|80|10|1|Impossible IS NULL
+erpnext|12|85|1|0|Easily solved by hand
+erpnext|12|85|2|0|Easily solved by hand
+erpnext|12|85|3|0|Easily solved by hand
+erpnext|12|85|5|0|Easily solved by hand
+erpnext|12|85|7|0|Easily solved by hand
+erpnext|12|85|8|0|Easily solved by hand
+erpnext|12|85|11|0|Easily solved by hand
+erpnext|12|85|12|0|Easily solved by hand
+erpnext|12|85|13|0|Easily solved by hand
+erpnext|12|85|18|0|Easily solved by hand
+erpnext|12|85|19|0|Easily solved by hand
+erpnext|12|86|21|1|Contradictory predicates
+erpnext|13|80|10|1|Impossible IS NULL
+erpnext|13|82|11|1|Impossible IS NULL
+erpnext|13|85|6|1|INNER JOIN with IS NULL on id
+erpnext|13|86|21|1|Contradictory predicates
+erpnext|14|86|12|0|Easily solved by hand
+erpnext|14|86|16|0|Easily solved by hand
+erpnext|14|86|20|1|LEFT JOIN with condition on the joined table
+erpnext|15|82|11|1|Impossible IS NULL
+erpnext|15|85|6|1|INNER JOIN with IS NULL on id
+erpnext|15|86|15|0|Easily solved by hand
+erpnext|15|86|20|1|LEFT JOIN with condition on the joined table
+erpnext|15|87|1|0|Seems easy, little time
+erpnext|15|87|2|0|Seems easy, little time
+erpnext|15|87|3|0|Seems easy, little time
+erpnext|15|87|4|0|Seems easy, little time
+erpnext|15|87|5|0|Seems easy, little time
+erpnext|15|87|6|0|Seems easy, little time
+erpnext|15|87|7|0|Seems easy, little time
+erpnext|15|87|9|0|Seems easy, little time
+erpnext|15|87|10|0|Seems easy, little time
+erpnext|15|87|12|0|Seems easy, little time
+erpnext|15|87|16|0|Seems easy, little time
+erpnext|15|87|17|0|Seems easy, little time
+erpnext|15|87|18|0|Seems easy, little time
+erpnext|15|87|20|0|Seems easy, little time
+erpnext|15|87|22|0|Seems easy, little time
+erpnext|15|87|24|0|Seems easy, little time
+erpnext|15|87|26|0|Seems easy, little time
+erpnext|15|87|27|0|Seems easy, little time
+erpnext|15|87|29|0|Seems easy, little time
+erpnext|15|87|30|0|Seems easy, little time
+erpnext|15|87|33|0|Seems easy, little time
+erpnext|15|87|37|0|Seems easy, little time
+erpnext|15|87|39|0|Seems easy, little time
+erpnext|15|87|43|0|Seems easy, little time
+erpnext|15|87|45|0|Seems easy, little time
+erpnext|15|87|46|0|Seems easy, little time
+erpnext|16|80|10|1|Impossible IS NULL
+erpnext|16|83|11|1|INNER JOIN with IS NULL on id
+erpnext|16|84|12|1|Bad NULL syntax
+erpnext|16|84|13|1|Bad NULL syntax
+erpnext|16|84|15|1|Bad NULL syntax
+erpnext|16|84|16|1|Bad NULL syntax
+erpnext|16|86|21|1|Contradictory predicates
+erpnext|16|87|2|0|Seems easy, little time
+erpnext|16|87|5|0|Seems easy, little time
+erpnext|16|87|7|0|Seems easy, little time
+erpnext|16|87|9|0|Seems easy, little time
+erpnext|16|87|12|0|Seems easy, little time
+erpnext|16|87|13|0|Seems easy, little time
+erpnext|16|87|14|0|Seems easy, little time
+erpnext|16|87|15|0|Seems easy, little time
+erpnext|16|87|17|0|Seems easy, little time
+erpnext|16|87|19|0|Seems easy, little time
+erpnext|16|87|24|0|Seems easy, little time
+erpnext|16|87|28|0|Seems easy, little time
+erpnext|16|87|30|0|Seems easy, little time
+erpnext|16|87|31|0|Seems easy, little time
+erpnext|16|87|35|0|Seems easy, little time
+erpnext|16|87|38|0|Seems easy, little time
+erpnext|16|87|41|0|Seems easy, little time
+erpnext|16|87|42|0|Seems easy, little time
+erpnext|16|87|44|0|Seems easy, little time
+erpnext|16|87|45|0|Seems easy, little time
+erpnext|17|86|12|0|Easily solved by hand
+erpnext|17|86|18|0|Easily solved by hand
+espocrm|0|2|5|1|Contradictory predicates
+espocrm|0|11|1|0|Seems easy, little time
+espocrm|0|11|3|0|Seems easy, little time
+espocrm|0|11|4|0|Seems easy, little time
+espocrm|0|11|5|0|Seems easy, little time
+espocrm|0|11|6|0|Seems easy, little time
+espocrm|0|11|8|0|Seems easy, little time
+espocrm|0|11|11|0|Seems easy, little time
+espocrm|0|11|12|0|Seems easy, little time
+espocrm|0|11|14|0|Seems easy, little time
+espocrm|0|11|17|0|Seems easy, little time
+espocrm|0|11|18|0|Seems easy, little time
+espocrm|0|11|21|0|Seems easy, little time
+espocrm|0|11|24|0|Seems easy, little time
+espocrm|0|11|25|0|Seems easy, little time
+espocrm|0|11|28|0|Seems easy, little time
+espocrm|0|11|31|1|Contradictory predicates
+espocrm|0|13|3|0|Seems easy, little time
+espocrm|0|13|8|0|Seems easy, little time
+espocrm|0|13|9|0|Seems easy, little time
+espocrm|0|13|11|0|Seems easy, little time
+espocrm|0|13|15|0|Seems easy, little time
+espocrm|0|13|17|0|Seems easy, little time
+espocrm|0|13|20|0|Seems easy, little time
+espocrm|0|13|27|0|Seems easy, little time
+espocrm|0|13|28|0|Seems easy, little time
+espocrm|0|13|31|0|Seems easy, little time
+espocrm|0|13|33|0|Seems easy, little time
+espocrm|1|2|5|1|Contradictory predicates
+espocrm|1|10|17|0|Seems easy, little time
+espocrm|1|10|18|0|Seems easy, little time
+espocrm|1|10|21|0|Seems easy, little time
+espocrm|1|10|24|0|Seems easy, little time
+espocrm|1|10|25|0|Seems easy, little time
+espocrm|1|11|12|0|Seems easy, little time
+espocrm|1|11|17|0|Seems easy, little time
+espocrm|1|11|18|0|Seems easy, little time
+espocrm|1|11|21|0|Seems easy, little time
+espocrm|1|11|24|0|Seems easy, little time
+espocrm|1|11|25|0|Seems easy, little time
+espocrm|1|13|7|0|Seems easy, little time
+espocrm|1|13|8|0|Seems easy, little time
+espocrm|1|13|16|0|Seems easy, little time
+espocrm|1|13|19|0|Seems easy, little time
+espocrm|1|13|28|0|Seems easy, little time
+espocrm|1|13|32|1|Contradictory predicates
+espocrm|1|13|34|0|Seems easy, little time
+espocrm|1|13|37|0|Seems easy, little time
+espocrm|2|3|5|1|Contradictory predicates
+espocrm|2|4|5|1|Contradictory predicates
+espocrm|2|9|17|1|Contradictory predicates
+suitecrm|0|87|6|1|Contradictory predicates
+suitecrm|0|87|10|1|Contradictory predicates
+suitecrm|0|93|12|1|Contradictory predicates
+suitecrm|1|12|1|1|Contradictory predicates
+suitecrm|1|12|3|1|Contradictory predicates
+suitecrm|1|92|15|0|Needs multiple INNER JOIN matches (with different id)
+suitecrm|2|80|6|1|Contradictory predicates
+suitecrm|2|80|8|1|Contradictory predicates
+suitecrm|2|87|10|0|Needs multiple INNER JOIN matches (with different id)
+suitecrm|2|88|3|1|INNER JOIN with IS NULL on id
+suitecrm|2|92|1|0|Easily solved by hand
+suitecrm|2|92|2|0|Easily solved by hand
+suitecrm|2|92|5|0|Easily solved by hand
+suitecrm|2|92|6|0|Easily solved by hand
+suitecrm|2|92|7|0|Easily solved by hand
+suitecrm|2|92|10|0|Easily solved by hand

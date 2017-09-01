@@ -1,0 +1,62 @@
+drop table testtrig12 if exists;
+drop table testtrig13 if exists;
+create cached table testtrig12(id integer, data2 varchar(20), updated date);
+create cached table testtrig13(id integer, data3 varchar(20), op varchar(10));
+create view viewinst (vid, vdata2, vdata3) as select id, data2, data3 from testtrig12 natural join testtrig13
+create trigger trigger2 instead of insert on viewinst
+ referencing new row as newrow
+ for each row
+ begin atomic
+ insert into testtrig12 values(newrow.vid, newrow.vdata2, current_date);
+ insert into testtrig13 values (newrow.vid, newrow.vdata3, 'inserted');
+ end
+
+create trigger trigger3 instead of delete on viewinst
+ referencing old row as oldrow
+ for each row
+ begin atomic
+ delete from testtrig12 where testtrig12.id = oldrow.vid;
+ delete from testtrig13 where testtrig13.id = oldrow.vid;
+ end
+
+create trigger trigger14 instead of update on viewinst
+ referencing old row as oldrow new row as newrow
+ for each row
+ begin atomic
+ update testtrig12 set data2 = newrow.vdata2, updated = current_date where testtrig12.id = oldrow.vid;
+ update testtrig13 set data3 = newrow.vdata3, op = 'updated' where testtrig13.id = oldrow.vid;
+ end
+
+insert into viewinst values (1, 'data2 value1', 'data3 value1')
+insert into viewinst values (2, 'data2 value2', 'data3 value2')
+
+/*r
+ 1,data2 value1,data3 value1,inserted
+ 2,data2 value2,data3 value2,inserted
+*/select id, data2, data3, op from testtrig12 natural join testtrig13 order by id
+
+/*r
+ 1,data3 value1,inserted
+ 2,data3 value2,inserted
+*/select * from testtrig13 order by id
+
+update viewinst set vdata2='data2 updated1', vdata3='data3 updated1' where vid=1
+
+/*r
+ 1,data2 updated1,data3 updated1,updated
+ 2,data2 value2,data3 value2,inserted
+*/select id, data2, data3, op from testtrig12 natural join testtrig13 order by id
+
+delete from viewinst
+/*c0*/select * from viewinst
+/*c0*/select * from testtrig12
+/*c0*/select * from testtrig13
+
+drop view V_TAB1 if exists;
+drop table TAB1 if exists;
+create table TAB1 (T1_ID bigint primary key, T1_NAME VARCHAR(10));
+create view V_TAB1 as select T.T1_ID as ID, T.T1_NAME as NAME from TAB1 T;
+create trigger TR_INS_V_T1 INSTEAD OF INSERT ON V_TAB1 referencing new row as NEWROW for each row insert into TAB1 (T1_ID, T1_NAME) values (NEWROW.ID, NEWROW.NAME);
+create trigger TR_UPD_V_T1 INSTEAD OF UPDATE ON V_TAB1 referencing new row as NEWROW for each row update TAB1 set T1_NAME = NEWROW.NAME where T1_ID = newrow.ID;
+insert into V_TAB1 (ID, NAME) values (1, 'Name 1');
+update V_TAB1 set NAME = 'Name 11' where ID = 1;

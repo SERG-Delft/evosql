@@ -1,0 +1,524 @@
+-- SIMPLE OUTER - NO NULLS
+-- SET PROPERTY "hsqldb.default_table_type" 'cached'
+drop table x if exists;
+drop table y if exists;
+create table x(a int, b int);
+create table y(a int, b int);
+insert into x values(2, 1);
+insert into x values(5, 1);
+insert into y values(1, 1);
+insert into y values(2, 1);
+insert into y values(3, 1);
+insert into y values(4, 1);
+
+/*r1*/ select count(*) from x inner join y on (x.a = y.a);
+/*r2*/ select count(*) from x left outer join y on (x.a = y.a);
+/*r1*/ select count(*) from y inner join x on (x.a = y.a);
+/*r4*/ select count(*) from y left outer join x on (x.a = y.a);
+
+create index idx1 on y(a);
+create index idx2 on x(a);
+
+/*r1*/ select count(*) from x inner join y on (x.a = y.a);
+/*r2*/ select count(*) from x left outer join y on (x.a = y.a);
+/*r1*/ select count(*) from y inner join x on (x.a = y.a);
+/*r4*/ select count(*) from y left outer join x on (x.a = y.a);
+
+--MULTIPLE OUTER -- GROUPED
+--OWNERS are possible account owners
+--ACCOUNTS are existing accounts, each with an owner id
+--CREDITS are account transactions
+drop table credits if exists;
+drop table accounts if exists;
+drop table owners if exists;
+
+create table owners(
+ id int not null primary key,
+ name varchar(100)
+ );
+create table accounts(
+ id int not null primary key,
+ accountname varchar(100),
+ accountnr int,
+ accounttype int,
+ ownerid int,
+ constraint fk_accounts foreign key (ownerid) references owners(id)
+ );
+create table credits(
+ id int,
+ accountid int,
+ amount float,
+ constraint fk_credits foreign key (accountid) references accounts(id) on update cascade
+ );
+
+
+insert into owners values(1,'John');
+insert into owners values(2,'Mary');
+insert into owners values(3,'Jane');
+
+insert into accounts values(1,'Bank',5101,0,1);
+insert into accounts values(2,'Cash',5202,0,1);
+insert into accounts values(3,'Giro',5303,0,2);
+insert into accounts values(4,'Invoice',7505,1,1);
+
+insert into credits values(1,1,1000);
+insert into credits values(2,1,2000);
+insert into credits values(3,2,100);
+insert into credits values(4,2,200);
+
+--outer join
+/*c7*/select own.*, ac.*, cred.* from owners own
+ left outer join accounts ac on own.id = ac.ownerid
+ left outer join credits cred on cred.accountid = ac.id
+
+--ACCOUNTS are outer joined with credits to show account balance
+/*c4*/select ac.accountname,ac.accountnr,sum(cred.amount) from accounts ac
+ left outer join credits cred on cred.accountid=ac.id
+ group by ac.accountnr,ac.accountname
+
+--like above but filtered with only one account type
+/*c3*/select ac.accountname,ac.accountnr,sum(cred.amount) from accounts ac
+ left outer join credits cred on cred.accountid=ac.id
+ where accounttype=0
+ group by ac.accountnr,ac.accountname
+
+--join like above but condition changed to return only one not-null item from cred table
+/*c4*/select ac.accountname,ac.accountnr, cred.amount from accounts ac
+ left outer join credits cred on cred.accountid=ac.id and amount=200
+
+--OWNER and ACCOUNT are inner joined then outer joined with credits to show balance
+/*c3*/select own.name, ac.accountname,ac.accountnr,sum(cred.amount) from owners own
+ inner join accounts ac on own.id = ac.ownerid
+ left outer join credits cred on cred.accountid = ac.id
+ where accounttype=0
+ group by own.name,ac.accountnr,ac.accountname
+
+--OWNER and ACCOUNT are outer joined then outer joined with credits to show balance
+/*c5*/select own.name, ac.accountname,ac.accountnr,sum(cred.amount) from owners own
+ left outer join accounts ac on own.id = ac.ownerid
+ left outer join credits cred on cred.accountid = ac.id
+ group by own.name,ac.accountnr,ac.accountname
+
+--ERROR when a condition column has not been defined in the join so far
+/*e*/select own.*, ac.*, cred.* from owners own
+ left outer join accounts ac on own.id = ac.ownerid and cred.accountid = 1
+ left outer join credits cred on cred.accountid = ac.id
+
+--from 1.8.1 functions and different conditions are accepted in outer joins
+/*r
+ Bank,5101,NULL
+ Cash,5202,200.0E0
+ Giro,5303,NULL
+ Invoice,7505,NULL
+*/select ac.accountname,ac.accountnr, cred.amount from accounts ac
+ left outer join credits cred on cred.accountid=ac.id and abs(amount) = 200
+
+/*r
+ Bank,5101,NULL
+ Cash,5202,100.0E0
+ Cash,5202,200.0E0
+ Giro,5303,NULL
+ Invoice,7505,NULL
+*/select ac.accountname,ac.accountnr, cred.amount from accounts ac
+ left outer join credits cred on cred.accountid=ac.id and abs(amount) in( 200, 100)
+
+
+--MULTIPLE OUTER
+--STUDENTS contains id's for students
+--TEACHERS contains id's for teachers
+--STUDENT_TEACHER links a teacher to a student
+DROP TABLE STUDENT IF EXISTS;
+DROP TABLE TEACHER IF EXISTS;
+DROP TABLE STUDENT_TEACHER IF EXISTS;
+CREATE TABLE STUDENT(STUDENT_ID BIGINT NOT NULL PRIMARY KEY);
+CREATE TABLE TEACHER(TEACHER_ID BIGINT NOT NULL PRIMARY KEY);
+CREATE TABLE STUDENT_TEACHER(STUDENT_ID BIGINT NOT NULL, TEACHER_ID BIGINT NOT NULL);
+
+INSERT INTO STUDENT VALUES (1);
+INSERT INTO STUDENT VALUES (2);
+INSERT INTO TEACHER VALUES (100);
+INSERT INTO STUDENT_TEACHER VALUES (1, 100);
+
+--show all students with their links to teachers, include students without a teacher
+/*c2*/SELECT S.STUDENT_ID, T.TEACHER_ID FROM STUDENT S
+  LEFT JOIN STUDENT_TEACHER MAP ON S.STUDENT_ID=MAP.STUDENT_ID
+  LEFT JOIN TEACHER T ON MAP.TEACHER_ID=T.TEACHER_ID
+
+--filter the above to show students for teacher_id 100
+/*c1*/SELECT S.STUDENT_ID, T.TEACHER_ID FROM STUDENT S
+  LEFT JOIN STUDENT_TEACHER MAP ON S.STUDENT_ID=MAP.STUDENT_ID
+  LEFT JOIN TEACHER T ON MAP.TEACHER_ID=T.TEACHER_ID
+  WHERE T.TEACHER_ID = 100;
+
+--filter the first query to show only students with no teacher
+/*c1*/SELECT S.STUDENT_ID, T.TEACHER_ID FROM STUDENT S
+  LEFT JOIN STUDENT_TEACHER MAP ON S.STUDENT_ID=MAP.STUDENT_ID
+  LEFT JOIN TEACHER T ON MAP.TEACHER_ID=T.TEACHER_ID
+  WHERE T.TEACHER_ID IS NULL;
+
+--show the result of nonsensical query
+--returns one row per STUDENT_ID with TEACHER_ID set to null in each row
+/*c2*/SELECT S.STUDENT_ID, T.TEACHER_ID FROM STUDENT S
+  LEFT JOIN STUDENT_TEACHER MAP ON S.STUDENT_ID=MAP.STUDENT_ID
+  LEFT JOIN TEACHER T ON MAP.TEACHER_ID=T.TEACHER_ID
+  AND T.TEACHER_ID IS NULL;
+
+--ANOTHER OUTER WITH AND
+create table BASE (ID integer)
+create table CHILD(ID integer, BASE_ID integer)
+insert into BASE values (1)
+insert into BASE values (2)
+insert into CHILD values (1,1)
+/*r
+ 1,1
+ 2,NULL
+*/select BASE.ID,CHILD.ID from BASE left join CHILD on CHILD.BASE_ID=BASE.ID
+/*r
+ 1,NULL
+ 2,NULL
+*/select BASE.ID,CHILD.ID from BASE left join CHILD on CHILD.BASE_ID=BASE.ID and CHILD.ID>1
+/*r
+ 1,NULL
+ 2,NULL
+*/select BASE.ID,CHILD.ID from BASE left join CHILD on CHILD.BASE_ID=BASE.ID and CHILD.ID<>1
+
+--bug #736327
+create table emp(company_id varchar(10),id varchar(20),supervisor_id varchar(20), primary key (company_id,id));
+insert into emp values ('01','1000',null);
+insert into emp values ('01','1001','1000');
+/*c2*/select e.id,e.supervisor_id from emp e left join emp s on
+ e.company_id = s.company_id and e.supervisor_id = s.id;
+--
+--bug #676083
+--
+DROP TABLE T_BOSS IF EXISTS;
+DROP TABLE T_EMPLOYEE IF EXISTS;
+CREATE TABLE T_BOSS (FIRST VARCHAR(10),LAST VARCHAR(10));
+CREATE TABLE T_EMPLOYEE (FIRST VARCHAR(10),LAST VARCHAR(10));
+INSERT INTO T_BOSS VALUES ('Ludovic','ANCIAUX');
+INSERT INTO T_EMPLOYEE VALUES ('Ludovic','ANCIAUX');
+INSERT INTO T_EMPLOYEE VALUES ('Bill','GATES');
+/*rBill,GATES,NULL,NULL*/SELECT * FROM T_EMPLOYEE LEFT JOIN T_BOSS
+ ON T_EMPLOYEE.FIRST = T_BOSS.FIRST WHERE T_BOSS.FIRST IS Null;
+--
+--bug #674025
+--
+CREATE TABLE boss (id INTEGER PRIMARY KEY, name VARCHAR(10), UNIQUE(name));
+CREATE TABLE employee (id INTEGER PRIMARY KEY, name VARCHAR(10), bossid INTEGER,
+ FOREIGN KEY(bossid) REFERENCES boss (id), UNIQUE(name));
+INSERT INTO boss (id, name) VALUES (1, 'phb');
+INSERT INTO employee (id, name, bossid) VALUES (2,'dilbert', 1);
+INSERT INTO employee (id, name, bossid) VALUES (3, 'wally', null);
+/*c2*/SELECT * FROM employee e LEFT JOIN boss b ON (b.id=e.bossid);
+/*c2*/SELECT * FROM employee e LEFT JOIN boss b ON (b.id=e.bossid AND e.name='dilbert');
+/*c2*/SELECT * FROM employee e LEFT JOIN boss b ON (b.id=e.bossid AND b.name='dilbert');
+
+--bug #959678
+
+CREATE CACHED TABLE propertyvalue (
+ id INT, name CHAR(36), value VARCHAR(255));
+INSERT INTO propertyvalue VALUES (1, 'title', 'Foo');
+INSERT INTO propertyvalue VALUES (2, 'title', 'Bar');
+/*r
+ 2,2,Bar
+*/ SELECT * FROM
+ (SELECT id FROM propertyvalue WHERE name = 'title') AS id
+ LEFT JOIN
+ (SELECT id, value FROM propertyvalue WHERE name = 'title') AS title
+ ON id.id = title.id
+ WHERE title.value != 'Foo'
+
+--bug #1018584
+
+drop table a if exists;
+drop table b if exists;
+create table a (aid int, id int);
+create table b (bid int, aid int);
+insert into a (aid,id) values (1,1);
+insert into a (aid,id) values (2,1);
+insert into a (aid,id) values (3,2);
+insert into a (aid,id) values (4,2);
+insert into b (bid,aid) values (1,1);
+insert into b (bid,aid) values (2,1);
+/*c0*/select * from b left outer join a on b.aId = a.aId where Id =10;
+create index idx_test on a (ID);
+/*c0*/select * from b left outer join a on b.aId = a.aId where Id =10;
+/*c2*/select * from b left outer join a on b.aId = a.aId and Id =10;
+
+--bug #1027143
+
+drop table testc if exists;
+drop table testb if exists;
+drop table testa if exists;
+create table testa (oid int, name varchar(20));
+create table testb (oid int, name varchar(20), a_oid int);
+
+insert into testa (oid, name) values(1, 'first');
+insert into testa (oid, name) values(2, 'second');
+insert into testa (oid, name) values(3, 'third');
+insert into testa (oid, name) values(4, 'fourth');
+insert into testb (oid, name, a_oid) values(21,'first', 1);
+insert into testb (oid, name, a_oid) values(22,'second', null);
+insert into testb (oid, name, a_oid) values(23,'third', 2);
+insert into testb (oid, name, a_oid) values(24,'fourth', null);
+insert into testb (oid, name, a_oid) values(25,'fifth', 3);
+insert into testb (oid, name, a_oid) values(26,'sixth', null);
+
+/*r
+ 1,first,21,first,1
+ 2,second,23,third,2
+ 3,third,25,fifth,3
+ 4,fourth,NULL,NULL,NULL
+*/ select * from testa a LEFT OUTER JOIN testb b ON a.oid = b.a_oid
+
+create index idx3 on testb(a_oid)
+
+/*r
+ 1,first,21,first,1
+ 2,second,23,third,2
+ 3,third,25,fifth,3
+ 4,fourth,NULL,NULL,NULL
+*/ select * from testa a LEFT OUTER JOIN testb b ON a.oid = b.a_oid
+
+-- tests with OR in LEFT outer join condition
+drop table a if exists;
+drop table b if exists;
+create table a (a1 varchar(10), a2 integer);
+create table b (b1 varchar(10), b2 integer);
+insert into a values(null,12);
+insert into a values('a',22);
+insert into a values('b','32');
+
+insert into b values(null,14);
+insert into b values('a',14);
+insert into b values('c',15);
+
+-- should return 3 rows:
+/*r
+ NULL,12,NULL,14
+ a,22,a,14
+ b,32,NULL,NULL
+*/select * from a left outer join b on ((a.a1=b.b1) or (a.a1
+ is null and b.b1 is null)) order by a1
+-- should return 2 rows:
+/*r
+ NULL,12,NULL,14
+ a,22,a,14
+*/select * from a left outer join b on (1=1) where
+ ((a.a1=b.b1) or (a.a1 is null and b.b1 is null)) order by a1
+-- should return 1 row:
+/*r
+ a,22,a,14
+*/select * from a left outer join b on (1=1) where a.a1=b.b1 order by a1
+-- should return 3 rows:
+/*r
+ NULL,12,NULL,NULL
+ a,22,a,14
+ b,32,NULL,NULL
+*/select * from a left outer join b on a.a1=b.b1 where (1=1) order by a1
+/*r
+ NULL,12,NULL,NULL
+ a,22,a,14
+ b,32,NULL,NULL
+*/select * from a left outer join b on a.a1=b.b1 order by a1
+-- add an index and retest
+create index idxa on a(a2);
+/*r
+ NULL,12,NULL,NULL
+ a,22,a,14
+ b,32,NULL,NULL
+*/select * from a left outer join b on a.a1=b.b1 order by a1
+
+-- tests with OR in RIGHT join condition
+drop table a if exists;
+drop table b if exists;
+create table a (a1 varchar(10), a2 integer);
+insert into a values(null,12);
+insert into a values('a',22);
+insert into a values('b','32');
+
+create table b (b1 varchar(10), b2 integer);
+insert into b values(null,13);
+insert into b values('a',14);
+insert into b values('c',15);
+
+-- should return 3 rows:
+/*r
+ NULL,NULL,c,15
+ NULL,12,NULL,13
+ a,22,a,14
+*/select * from a right outer join b on ((a.a1=b.b1) or (a.a1
+ is null and b.b1 is null)) order by a1, a2
+-- should return 2 rows:
+/*r
+ NULL,12,NULL,13
+ a,22,a,14
+*/select * from a right outer join b on (1=1) where
+ ((a.a1=b.b1) or (a.a1 is null and b.b1 is null)) order by a1
+-- should return 1 row:
+/*r
+ a,22,a,14
+*/select * from a right outer join b on (1=1) where a.a1=b.b1 order by a1
+-- should return 3 rows:
+/*r
+ NULL,NULL,NULL,13
+ NULL,NULL,c,15
+ a,22,a,14
+*/select * from a right outer join b on a.a1=b.b1 where (1=1) order by a1
+/*r
+ NULL,NULL,NULL,13
+ NULL,NULL,c,15
+ a,22,a,14
+*/select * from a right outer join b on a.a1=b.b1 order by a1
+-- add an index and retest
+create index idxa on a(a2);
+/*r
+ NULL,NULL,NULL,13
+ NULL,NULL,c,15
+ a,22,a,14
+*/select * from a right outer join b on a.a1=b.b1 order by a1
+/*r
+ NULL,NULL
+ NULL,NULL
+ a,22
+*/select a.* from a right outer join b on a.a1=b.b1 order by a1
+/*r
+ NULL,13
+ c,15
+ a,14
+*/select b.* from a right outer join b on a.a1=b.b1 order by a1
+
+---
+CREATE TABLE names (name VARCHAR(20) PRIMARY KEY);
+CREATE TABLE params (name VARCHAR(20) PRIMARY KEY, value VARCHAR(20) NOT NULL);
+INSERT INTO names VALUES ('name1');
+INSERT INTO names VALUES ('name2');
+INSERT INTO params (name, value) VALUES ('name1', 'value1');
+/*r
+ name1,NULL
+ name2,NULL
+*/SELECT n.name, p.value FROM names n LEFT OUTER JOIN params p ON n.name = p.name AND p.value <> 'value1';
+/*r
+ name1,NULL
+ name2,NULL
+*/SELECT n.name, p.value FROM names n LEFT JOIN params p ON n.name = p.name AND p.value = 'value3';
+---
+CREATE MEMORY TABLE SUPER(PK INTEGER PRIMARY KEY,ASS CHARACTER(3))
+CREATE MEMORY TABLE ASSOCIATED(PK CHARACTER(3),I INTEGER)
+CREATE MEMORY TABLE SUB(PK INTEGER PRIMARY KEY,ASS CHARACTER(3))
+
+insert into sub values(1, 'mee')
+insert into super values(1, 'mee')
+insert into associated values('mee', 10)
+insert into associated values('you', 20)
+/*r
+ 1,mee,mee
+ NULL,NULL,you
+*/select sub.pk, sub.ass, a.pk
+  from Sub sub inner join Super super on sub.pk=super.pk
+  right outer join Associated a on super.ass=a.pk order by 3
+/*r
+ 1,mee,mee
+ NULL,NULL,you
+*/select sub.pk, sub.ass, a.pk
+  from Sub sub inner join Super super on sub.pk=super.pk
+  full outer join Associated a on super.ass=a.pk order by 3
+---
+CREATE TABLE bremsen_dl_fzg
+ ( bremsen_dl_id integer not null
+ , lfd_nr integer not null
+ , bremse_dl_fzgtyp char(1)
+ , bremse_dl_art char(1)
+ , bremse_dl_verf char(1)
+ , bremse_dl_bauart varchar(4)
+ , bremse_dl_typ char(1)
+ , ort_bedienung varchar(4)
+ , loesigkeit char(1)
+ , beschreibung varchar(30)
+ , bremse_dl_gew_id integer
+ , uhrzeit_ende timestamp not null
+ );
+ALTER TABLE bremsen_dl_fzg add constraint pk_bremsen_dl_fzg primary key
+ ( bremsen_dl_id , lfd_nr );
+ALTER TABLE bremsen_dl_fzg add constraint chk_bremsen_dl_fzg check
+ (
+ ( bremse_dl_fzgtyp is null or bremse_dl_fzgtyp in ( 'W', 'T', 't') )
+ and
+ ( bremse_dl_art is null or bremse_dl_art in ( 'B', 'F') )
+ and
+ ( bremse_dl_verf is null or bremse_dl_verf in ( 'D', 'H', 'M', 'W') )
+ and
+ ( bremse_dl_bauart is null or bremse_dl_bauart in ( 'ALaH', 'ALaT',
+ 'H2Lw', 'H3Lw') )
+ and
+ ( bremse_dl_typ is null or bremse_dl_typ in ( 'D', 'B', 'S', 'H', 'K',
+ 'F') )
+ and
+ ( ort_bedienung is null or ort_bedienung in ( 'BO', 'ST', 'BOST') )
+ and
+ ( loesigkeit is null or loesigkeit in ( 'e', 'm', 'M') )
+ );
+
+CREATE TABLE bremsen_dl_gewichte
+ ( bremse_dl_gew_id integer not null
+ , lfd_nr integer not null
+ , bremse_stellung varchar(2)
+ , gewicht_brutto float
+ , gewicht_bremse float
+ , uhrzeit_ende timestamp not null
+ );
+ALTER TABLE bremsen_dl_gewichte add constraint pk_bremsen_dl_gewichte
+ primary key
+ ( bremse_dl_gew_id , lfd_nr );
+ ALTER TABLE bremsen_dl_gewichte add constraint chk_bremsen_dl_gewichte
+ check
+ (
+ ( bremse_stellung is null or bremse_stellung in ( 'G', 'GE', 'P', 'PE',
+ 'R') )
+ );
+
+CREATE VIEW lok_bremse_lfdnr1_view
+ ( bremsen_dl_id, bremse_dl_gew_id, bremse_dl_art, bremse_dl_verf, bremse_dl_bauart,
+ bremse_dl_typ, ort_bedienung, loesigkeit, beschreibung, gewicht_bremse_g,
+ gewicht_bremse_p, gewicht_bremse_r)
+ as select br.bremsen_dl_id, br.bremse_dl_gew_id, br.bremse_dl_art, br.bremse_dl_verf,
+ br.bremse_dl_bauart, br.bremse_dl_typ, br.ort_bedienung, br.loesigkeit,
+ br.beschreibung, gew_g.gewicht_bremse, gew_p.gewicht_bremse, gew_r.gewicht_bremse
+ from bremsen_dl_fzg br
+ left join bremsen_dl_gewichte gew_g on
+ br.bremse_dl_gew_id = gew_g.bremse_dl_gew_id
+ and gew_g.bremse_stellung = 'G'
+ and gew_g.gewicht_bremse IS NOT NULL
+ left join bremsen_dl_gewichte gew_p on
+ br.bremse_dl_gew_id = gew_p.bremse_dl_gew_id
+ and gew_p.bremse_stellung = 'P'
+ and gew_p.gewicht_bremse IS NOT NULL
+ left join bremsen_dl_gewichte gew_r on
+ br.bremse_dl_gew_id = gew_r.bremse_dl_gew_id
+ and gew_r.bremse_stellung = 'R'
+ and gew_r.gewicht_bremse IS NOT NULL
+ where br.lfd_nr = 1
+ AND br.bremse_dl_bauart IN( 'ALaH','H2Lw');
+
+-- check for use of index in execution plan
+CREATE CACHED TABLE article (
+ id INTEGER IDENTITY,
+ name VARCHAR(50));
+
+CREATE CACHED TABLE salesorder_row (
+ id INTEGER IDENTITY,
+ salesorder_id INTEGER,
+ article_id INTEGER,
+ needed DECIMAL(10,2),
+ CONSTRAINT fk_salesorder_row_article FOREIGN KEY (article_id) REFERENCES
+ article (id) ON DELETE CASCADE);
+
+CREATE INDEX idx_salesorder_row_article ON salesorder_row (article_id);
+CREATE INDEX idx_salesorder_row_salesorder ON salesorder_row
+ (salesorder_id);
+
+EXPLAIN PLAN FOR
+ SELECT article.name, salesorder_row.needed
+ FROM salesorder_row
+ LEFT JOIN article ON salesorder_row.article_id = article.id
+ WHERE (salesorder_row.salesorder_id = 1234)

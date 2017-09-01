@@ -1,0 +1,34 @@
+EDIT BUFFER AND HISTORY COMMANDS.  Not available for non-interactive use.
+    :?                Edit buffer / history Help
+    :b                List current contents of edit Buffer
+    :h                Show History of previous commands (plus buffer contents)
+    :X  (integer X)   Load command #X from Command history into the Edit buffer
+    :-Y  (integer -Y) Same an editY means Y commands back
+    :/regex/          Same as :-Y, except it means latest command in history
+                      matching the given regular expression
+The remaining edit/execute commands all operate on the Edit Buffer by default,
+but will also operate on any command from history if you interpose a command
+identifier right after the colon, like ":/blue/;" to re-execute the last
+command you ran which contains "blue", or ":w -3 /tmp/output.txt" to append
+the third command 'back' to a file.
+    :;                Execute edit buffer content (special, PL, or SQL command)
+    :a[text]          Enter append mode with a copy of the buffer contents
+    :aAPPENDAGE;      Append to buffer contents then executes resulting command
+    :s/from regex/to/ Substitute match of "from regex" with "to"
+    :s/from/to/[igm;] One or multiple Substitutions with specified options
+                from:  Standard regexp.  See 'perlre' man page or
+                       Java API spec for java.util.regex.Pattern.
+                to:    If empty, from's will be deleted (e.g. ":s/x//").
+                [igm;] Options work exactly as in Perl or java.util.regex,
+                       except ';' means to execute after substitution,
+                       'g' means Global (multiple) substitutions,
+                       and option 's' is always on.
+                /:     Can actually be any character which occurs in
+                       neither "to" string nor "from" string.
+                SUBSTITUTION MODE SWITCHES:
+                       i:  case Insensitive
+                       g:  Global (substitute ALL occurrences of "from" string)
+                       m:  ^ and $ match line breaks (like Perl m option)
+                       ;:  execute immediately after substitution
+    :w file/path.sql  Append current buffer contents to the specified file
+

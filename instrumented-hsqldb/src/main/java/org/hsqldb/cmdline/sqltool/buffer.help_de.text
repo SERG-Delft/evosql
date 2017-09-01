@@ -1,0 +1,39 @@
+EDITIER-PUFFER UND VERLAUFSBEFEHLE.  Nur während der interaktiven Benutzung vorhanden.
+    :?                Editier-Puffer/Verlauf - Hilfe
+    :h                Zeigt Befehlsverlauf (sowie Editier-Pufferinhalt) an
+    :b                Zeigt den aktuellen Inhalt des Editier-Puffer an
+    :X  (Ganzzahl X)  Lädt Befehl Nr. X aus dem Verlauf in den Editier-Puffer
+    :-Y (Ganzzahl -Y) Wie :X, nur geht -Y entsprechend Y Befehle zurück
+Die restlichen Editier/Verlaufsbefehle arbeiten standardmäßig alle im
+Editier-Puffer, sie können aber auch auf jeden Befehl im Verlaufsspeicher
+angewendet werden, wenn Sie nach dem Doppelpunkt ein Muster angeben, welches
+auf den gesuchten Befehl zutrifft; wie z.B.: ":blau;" um den letzten Befehl der
+"blau" enthielt nochmal auszuführen.
+Oder "w -3 /tmp/befehl.txt" um den drittletzten Befehl an die Datei befehl.txt
+anzuhängen.
+    :;                 Führt den Editier-Pufferinhalt aus (Spezial, PL oder
+                       SQL-Befehl)
+    :w datei/pfad.sql  Aktuellen Editier-Pufferinhalt an Datei anhängen.
+    :a[text]           In den Anhängemodus wechseln mit einer Kopie des
+                       Pufferinhaltes.
+    :s/von regex/zu/   Ersetzt alle Übereinstimmungen "von regex" mit  "zu".
+    :s/von/zu/[igm;]   Ein oder Mehrfachersetzung mit mehreren Optionen.
+                von:   Regulärer Ausdruck.
+                       Siehe auch 'perlre'-Manpage oder Java API Spezifikation
+                       für java.util.regex.Pattern!
+                zu:    Wenn leer - dann werden alle "von"`s gelöscht
+                       (z.b. ":s/x//").
+                [igm;] Diese Optionen arbeiten genau wie in Perl oder
+                       java.util.regex ausgenommen ';', bedeutet nach der
+                       Ersetzung ausführen.
+                       Die Option 'g' bedeutet das alle (Global) Treffer
+                       ersetzt werden; 's' ist ist immer aktiv.
+                /:     Kann beliebiges Zeichen sein,
+                       welches weder im "von" noch "zu" Begriff vorkommt.
+                SUBSTITUTIONS-SCHALTER:
+                       i:  ignoriert Groß/Kleinschreibung
+                       g:  Global (alle Treffer ersetzen)
+                       m:  ^ und $ bezeieht sich auf den Zeilenanfang und Ende
+                           (siehe Perl 'm' Option)
+                       ;:  Ausführung nach der Ersetzung
+

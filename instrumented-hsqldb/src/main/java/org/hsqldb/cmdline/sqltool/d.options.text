@@ -1,0 +1,23 @@
+\dX [parameter...] where X is one of the following.
+    a:  list Aliases
+    c:  list Catalogs
+    i:  list Indexes (for some databases, must specify literal target table)
+    n:  list schema Names
+    r:  list Roles
+    s:  list Sequences
+    S:  list System tables
+    t:  list Tables
+    u:  list Users
+    v:  list Views
+    *:  list table-like objects
+In most cases, 'parameter...' is a case-specific SUBSTRING to narrow matches.
+The following details apply to those commands which list schema objects.
+By default, objects in all schemas will be listed (excepting some exclusions
+for system schemas or system objects), with filtering if specified.
+If a filter param is supplied and begins with a dot, then the search is
+narrowed to the session's current schema.
+If the filter param contains a dot in any other position, then the characters
+before the dot specify a literal and case-sensitive schema name.
+Some or all of these dot filters will not work if your database doesn't support
+schemas according to the SQL specifications.
+

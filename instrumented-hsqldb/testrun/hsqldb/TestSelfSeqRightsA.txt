@@ -1,0 +1,104 @@
+-- $Id: TestSelfSeqRightsA.txt 610 2008-12-22 15:54:18Z unsaved $
+-- Test Grants/Revokes for Sequences (not ALTER/CREATE/DROP rights, as
+-- tested in the general schema object test scripts).
+-- We are not testing TABLE rights here.  We know that if the table of the
+-- query is not accessible for any reason, the "next value" won't succeed,
+-- so the test setup just grants ALL on the tables used.
+-- Also not testing the numerical values of the sequences.
+-- We're just testing if a "next value for" returns a row successfully.
+-- (some other test file should test the values returned).
+
+-- Remember that unlike 1-to-1-dependent objects like table indexes,
+-- schemas of indexes do not default to that of the table.
+-- (One reason being, in future we may permit a single query of a table in
+-- one schema and sequence(s) in other schema(s)).
+
+-- Setup
+SET WRITE_DELAY 0;
+/*s*/DROP user blaine;
+CREATE user blaine password "b";
+/*u0*/GRANT CHANGE_AUTHORIZATION TO blaine;
+/*s*/DROP SCHEMA bsch CASCADE;
+-- Remove public schema objects.  The CASCADE above takes care of the rest.
+DROP TABLE pt IF EXISTS;
+/*s*/DROP SEQUENCE bs1;
+/*s*/DROP SEQUENCE bs2;
+/*s*/DROP SEQUENCE bs3;
+/*s*/DROP SEQUENCE bs4;
+/*s*/DROP SEQUENCE bs5;
+
+-- We create objects using default schemas and explicit schemas, just to
+-- exercise schema resolution.
+CREATE SCHEMA bsch AUTHORIZATION blaine;
+CREATE TABLE public.pt(i int);
+CREATE TABLE bsch.bt(i int);
+INSERT INTO pt VALUES(1);
+INSERT INTO bsch.bt VALUES(1);
+
+SET SCHEMA bsch;
+CREATE SEQUENCE public.ps1;
+CREATE SEQUENCE public.ps3;
+SET SCHEMA public;
+CREATE SEQUENCE ps2;
+CREATE SEQUENCE ps4;
+CREATE SEQUENCE ps5;
+CREATE SEQUENCE ps6;
+CREATE SEQUENCE ps7;
+CREATE SEQUENCE ps8;
+CREATE SEQUENCE ps9;
+CREATE SEQUENCE bsch.bs1;
+CREATE SEQUENCE bsch.bs3;
+SET SCHEMA bsch;
+CREATE SEQUENCE bs2;
+CREATE SEQUENCE bs4;
+CREATE SEQUENCE bs5;
+GRANT ALL ON public.pt TO blaine;
+GRANT ALL ON bsch.bt TO blaine;
+
+-- Set perms with various permutations of conditions
+-- bs* have enough permissions for blaine by virtue of schema ownerhip.
+-- ps1,2,5,6 have enough permissions by virtue of grants to pub or blaine.
+-- ps3,4,7,8 do not
+/*u0*/GRANT ALL ON SEQUENCE public.ps1 TO public;
+/*u0*/GRANT USAGE ON SEQUENCE public.ps2 TO public;
+/*e*/GRANT SELECT ON SEQUENCE public.ps3 TO public;
+/*e*/GRANT INSERT ON SEQUENCE public.ps4 TO public;
+/*u0*/GRANT ALL ON SEQUENCE public.ps5 TO public;
+/*u0*/GRANT USAGE ON SEQUENCE public.ps6 TO public;
+/*e*/GRANT EXECUTE ON SEQUENCE public.ps7 TO public;
+/*e*/GRANT UPDATE ON SEQUENCE public.ps8 TO public;
+SET SCHEMA public;
+
+/*U*/These two are just workarounds for a DELAY 0 BUG:
+UPDATE public.pt SET i = 1;
+COMMIT;
+
+CONNECT USER blaine PASSWORD "b";
+-- Following is default, but just to eliminate any ambiguity...
+SET SCHEMA public;
+-- By virtue of PUBLIC grants
+/*e*/SELECT i, next value for ps9 FROM pt;
+/*e*/SELECT i, next value for public.ps9 FROM public.pt;
+/*e*/SELECT i, next value for ps9 FROM public.pt;
+/*c1*/SELECT i, next value for ps1 FROM pt;
+SET SCHEMA bsch;
+/*c1*/SELECT i, next value for public.ps2 FROM public.pt;
+-- Don't own
+/*e*/GRANT ALL ON SEQUENCE public.ps2 TO PUBLIC;
+/*u0*/GRANT ALL ON SEQUENCE bsch.bs5 TO PUBLIC;
+-- By virtue of schema ownership
+/*c1*/SELECT i, next value for bs2 FROM bt;
+SET SCHEMA public;
+/*c1*/SELECT i, next value for bsch.bs1 FROM bsch.bt;
+-- Enough schema specification testing.  Just use defauls Session schema for
+-- here on in
+/*c1*/SELECT i FROM pt;
+/*e*/SELECT i, next value for ps3 FROM pt;
+/*e*/SELECT i, next value for ps4 FROM pt;
+/*c1*/SELECT i, next value for ps5 FROM pt;
+/*c1*/SELECT i, next value for ps6 FROM pt;
+/*e*/SELECT i, next value for ps7 FROM pt;
+/*e*/SELECT i, next value for ps8 FROM pt;
+
+CONNECT USER sa PASSWORD "";
+SHUTDOWN IMMEDIATELY;

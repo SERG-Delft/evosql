@@ -1,0 +1,33 @@
+-- $Id: TestSelfSeqRightsB.txt 610 2008-12-22 15:54:18Z unsaved $
+-- Test .log persistence of Sequence rights
+
+CONNECT USER blaine PASSWORD "b";
+-- Following is default, but just to eliminate any ambiguity...
+SET SCHEMA public;
+-- By virtue of PUBLIC grants
+/*c1*/SELECT * FROM pt;
+/*e*/SELECT i, next value for ps9 FROM pt;
+/*e*/SELECT i, next value for public.ps9 FROM public.pt;
+/*e*/SELECT i, next value for ps9 FROM public.pt;
+/*c1*/SELECT i, next value for ps1 FROM pt;
+SET SCHEMA bsch;
+/*c1*/SELECT i, next value for public.ps2 FROM public.pt;
+-- Don't own
+/*e*/GRANT ALL ON SEQUENCE public.ps2 TO PUBLIC;
+/*u0*/GRANT ALL ON SEQUENCE bsch.bs5 TO PUBLIC;
+-- By virtue of schema ownership
+/*c1*/SELECT i, next value for bs2 FROM bt;
+SET SCHEMA public;
+/*c1*/SELECT i, next value for bsch.bs1 FROM bsch.bt;
+-- Enough schema specification testing.  Just use defauls Session schema for
+-- here on in
+/*c1*/SELECT i FROM pt;
+/*e*/SELECT i, next value for ps3 FROM pt;
+/*e*/SELECT i, next value for ps4 FROM pt;
+/*c1*/SELECT i, next value for ps5 FROM pt;
+/*c1*/SELECT i, next value for ps6 FROM pt;
+/*e*/SELECT i, next value for ps7 FROM pt;
+/*e*/SELECT i, next value for ps8 FROM pt;
+
+CONNECT USER sa PASSWORD "";
+SHUTDOWN;

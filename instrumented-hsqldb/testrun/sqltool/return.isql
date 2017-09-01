@@ -1,0 +1,11 @@
+/**
+ * The return statement below should abort this script immediately without
+ * triggering any error handling.
+ */
+
+* VAR=*{VAR} two
+
+* return
+
+\q return did not cause nested script ireturn.sql to return
+* VAR=*{VAR} three

@@ -1,0 +1,13 @@
+/*
+ * $Id: errhandlingn.isql 5406 2014-10-13 20:53:18Z unsaved $
+ *
+ * Errors out in a nested block
+ */
+
+* if (1)
+    *if (2) \q Forced error
+    worse;
+* end if 
+
+\p Returned from bad block.  Should not have.
+\q

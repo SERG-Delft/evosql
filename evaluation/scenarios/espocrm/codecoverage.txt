@@ -1,0 +1,444 @@
+
+
+Code Coverage Report 
+  2017-02-12 13:57:39
+
+ Summary: 
+  Classes: 36.72% (94/256)
+  Methods: 38.18% (817/2140)
+  Lines:   48.46% (6602/13623)
+
+Installer
+  Methods:  57.14% (16/28)   Lines:  49.38% ( 79/160)
+SystemHelper
+  Methods:  11.11% ( 2/18)   Lines:   5.84% (  9/154)
+\Composer\Autoload::ClassLoader
+  Methods:  14.29% ( 3/21)   Lines:  30.16% ( 38/126)
+\Composer\Semver::Semver
+  Methods:  16.67% ( 1/ 6)   Lines:  27.27% (  6/ 22)
+\Composer\Semver::VersionParser
+  Methods:  30.00% ( 3/10)   Lines:  22.43% ( 48/214)
+\Composer\Semver\Constraint::Constraint
+  Methods:  62.50% ( 5/ 8)   Lines:  58.70% ( 27/ 46)
+\Doctrine\Common::EventManager
+  Methods:  14.29% ( 1/ 7)   Lines:   5.00% (  1/ 20)
+\Doctrine\DBAL::Configuration
+  Methods:  33.33% ( 2/ 6)   Lines:  30.77% (  4/ 13)
+\Doctrine\DBAL::Connection
+  Methods:  15.00% ( 9/60)   Lines:  11.83% ( 40/338)
+\Doctrine\DBAL::DriverManager
+  Methods:  66.67% ( 2/ 3)   Lines:  57.14% ( 16/ 28)
+\Doctrine\DBAL\Driver::PDOConnection
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% (  4/  4)
+\Doctrine\DBAL\Driver::PDOStatement
+  Methods: 100.00% ( 2/ 2)   Lines:  50.00% (  3/  6)
+\Doctrine\DBAL\Driver\PDOMySql::Driver
+  Methods:  66.67% ( 4/ 6)   Lines:  77.27% ( 17/ 22)
+\Doctrine\DBAL\Platforms::AbstractPlatform
+  Methods:  16.48% (30/182)   Lines:  26.57% (140/527)
+\Doctrine\DBAL\Platforms::MySqlPlatform
+  Methods:  38.18% (21/55)   Lines:  33.04% ( 75/227)
+\Doctrine\DBAL\Platforms\Keywords::KeywordList
+  Methods:  50.00% ( 2/ 4)   Lines: 100.00% (  5/  5)
+\Doctrine\DBAL\Platforms\Keywords::MySQLKeywords
+  Methods:  50.00% ( 1/ 2)   Lines:  50.00% (  1/  2)
+\Doctrine\DBAL\Query\Expression::ExpressionBuilder
+  Methods:   5.88% ( 1/17)   Lines:  11.11% (  2/ 18)
+\Doctrine\DBAL\Schema::AbstractAsset
+  Methods:  75.00% ( 9/12)   Lines:  72.97% ( 27/ 37)
+\Doctrine\DBAL\Schema::AbstractSchemaManager
+  Methods:  26.56% (17/64)   Lines:  39.24% ( 93/237)
+\Doctrine\DBAL\Schema::Column
+  Methods:  61.11% (22/36)   Lines: 100.00% ( 45/ 45)
+\Doctrine\DBAL\Schema::Comparator
+  Methods:  44.44% ( 4/ 9)   Lines:  37.08% ( 66/178)
+\Doctrine\DBAL\Schema::Identifier
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% (  2/  2)
+\Doctrine\DBAL\Schema::Index
+  Methods:  68.75% (11/16)   Lines:  80.70% ( 46/ 57)
+\Doctrine\DBAL\Schema::MySqlSchemaManager
+  Methods:  50.00% ( 4/ 8)   Lines:  64.84% ( 59/ 91)
+\Doctrine\DBAL\Schema::Schema
+  Methods:  30.43% ( 7/23)   Lines:  28.57% ( 24/ 84)
+\Doctrine\DBAL\Schema::SchemaConfig
+  Methods:  62.50% ( 5/ 8)   Lines:  58.33% (  7/ 12)
+\Doctrine\DBAL\Schema::SchemaDiff
+  Methods:  75.00% ( 3/ 4)   Lines:  63.64% ( 21/ 33)
+\Doctrine\DBAL\Schema::Table
+  Methods:  50.00% (20/40)   Lines:  89.01% ( 81/ 91)
+\Doctrine\DBAL\Schema::TableDiff
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% (  9/  9)
+\Doctrine\DBAL\Types::ArrayType
+  Methods:  20.00% ( 1/ 5)   Lines: 100.00% (  1/  1)
+\Doctrine\DBAL\Types::BooleanType
+  Methods:  20.00% ( 1/ 5)   Lines: 100.00% (  1/  1)
+\Doctrine\DBAL\Types::DateTimeType
+  Methods:  50.00% ( 2/ 4)   Lines: 100.00% (  2/  2)
+\Doctrine\DBAL\Types::DateType
+  Methods:  50.00% ( 2/ 4)   Lines: 100.00% (  2/  2)
+\Doctrine\DBAL\Types::FloatType
+  Methods:  66.67% ( 2/ 3)   Lines: 100.00% (  2/  2)
+\Doctrine\DBAL\Types::GuidType
+  Methods:  33.33% ( 1/ 3)   Lines: 100.00% (  1/  1)
+\Doctrine\DBAL\Types::IntegerType
+  Methods:  25.00% ( 1/ 4)   Lines: 100.00% (  1/  1)
+\Doctrine\DBAL\Types::JsonArrayType
+  Methods:  40.00% ( 2/ 5)   Lines: 100.00% (  2/  2)
+\Doctrine\DBAL\Types::ObjectType
+  Methods:  40.00% ( 2/ 5)   Lines: 100.00% (  2/  2)
+\Doctrine\DBAL\Types::SimpleArrayType
+  Methods:  20.00% ( 1/ 5)   Lines: 100.00% (  1/  1)
+\Doctrine\DBAL\Types::StringType
+  Methods:  33.33% ( 1/ 3)   Lines: 100.00% (  1/  1)
+\Doctrine\DBAL\Types::TextType
+  Methods:  66.67% ( 2/ 3)   Lines: 100.00% (  2/  2)
+\Doctrine\DBAL\Types::Type
+  Methods:  50.00% ( 9/18)   Lines:  65.52% ( 19/ 29)
+\Espo\Core::Acl
+  Methods:  44.44% ( 8/18)   Lines:  50.00% ( 10/ 20)
+\Espo\Core::AclManager
+  Methods:  55.00% (11/20)   Lines:  45.45% ( 45/ 99)
+\Espo\Core::Application
+  Methods:  21.74% ( 5/23)   Lines:  13.51% ( 15/111)
+\Espo\Core::Container
+  Methods:  75.00% (27/36)   Lines:  75.20% ( 94/125)
+\Espo\Core::ControllerManager
+  Methods:  50.00% ( 2/ 4)   Lines:  65.00% ( 26/ 40)
+\Espo\Core::DataManager
+  Methods: 100.00% ( 7/ 7)   Lines:  82.14% ( 23/ 28)
+\Espo\Core::HookManager
+  Methods: 100.00% ( 9/ 9)   Lines:  93.06% ( 67/ 72)
+\Espo\Core::SelectManagerFactory
+  Methods: 100.00% ( 2/ 2)   Lines:  94.74% ( 18/ 19)
+\Espo\Core::ServiceFactory
+  Methods:  75.00% ( 6/ 8)   Lines:  71.43% ( 20/ 28)
+\Espo\Core\Acl::Base
+  Methods:  41.18% ( 7/17)   Lines:  16.16% ( 16/ 99)
+\Espo\Core\Acl::Table
+  Methods:  84.00% (21/25)   Lines:  80.55% (265/329)
+\Espo\Core\AclPortal::Base
+  Methods:  16.67% ( 1/ 6)   Lines:   8.70% (  4/ 46)
+\Espo\Core\AclPortal::Table
+  Methods: 100.00% ( 8/ 8)   Lines:  89.74% ( 35/ 39)
+\Espo\Core\Controllers::Base
+  Methods:  30.77% ( 4/13)   Lines:  60.87% ( 14/ 23)
+\Espo\Core\Controllers::Record
+  Methods:   4.76% ( 1/21)   Lines:   1.35% (  3/223)
+\Espo\Core\Entities::Person
+  Methods: 100.00% ( 2/ 2)   Lines:  91.67% ( 11/ 12)
+\Espo\Core\FileStorage::Manager
+  Methods:  14.29% ( 1/ 7)   Lines:  12.00% (  3/ 25)
+\Espo\Core\Formula::AttributeFetcher
+  Methods:  25.00% ( 1/ 4)   Lines:   5.26% (  1/ 19)
+\Espo\Core\Formula::Evaluator
+  Methods:  50.00% ( 1/ 2)   Lines:  41.67% (  5/ 12)
+\Espo\Core\Formula::Formula
+  Methods:  50.00% ( 1/ 2)   Lines:  40.00% (  2/  5)
+\Espo\Core\Formula::FunctionFactory
+  Methods:  50.00% ( 1/ 2)   Lines:  13.79% (  4/ 29)
+\Espo\Core\Formula::Manager
+  Methods:  50.00% ( 1/ 2)   Lines:  75.00% (  3/  4)
+\Espo\Core\Hooks::Base
+  Methods:  73.33% (11/15)   Lines:  70.00% ( 14/ 20)
+\Espo\Core\Loaders::Base
+  Methods: 100.00% ( 2/ 2)   Lines: 100.00% (  3/  3)
+\Espo\Core\Loaders::EmailFilterManager
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% (  3/  3)
+\Espo\Core\Loaders::EntityManager
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% ( 16/ 16)
+\Espo\Core\Loaders::FormulaManager
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% (  4/  4)
+\Espo\Core\Notificators::Base
+  Methods:  40.00% ( 4/10)   Lines:  24.14% (  7/ 29)
+\Espo\Core\ORM::Entity
+  Methods:  20.00% ( 2/10)   Lines:  71.05% ( 27/ 38)
+\Espo\Core\ORM::EntityManager
+  Methods: 100.00% (10/10)   Lines: 100.00% ( 24/ 24)
+\Espo\Core\ORM::Repository
+  Methods: 100.00% ( 7/ 7)   Lines: 100.00% ( 13/ 13)
+\Espo\Core\ORM::RepositoryFactory
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% (  5/  5)
+\Espo\Core\ORM\Repositories::RDB
+  Methods:  91.67% (22/24)   Lines:  69.91% (158/226)
+\Espo\Core\Portal::AclManager
+  Methods:  29.17% ( 7/24)   Lines:  82.93% ( 34/ 41)
+\Espo\Core\Portal::Application
+  Methods:  40.00% ( 2/ 5)   Lines:  70.00% ( 14/ 20)
+\Espo\Core\Portal::Container
+  Methods:  75.00% ( 6/ 8)   Lines:  97.92% ( 47/ 48)
+\Espo\Core\Portal\Utils::Language
+  Methods: 100.00% ( 1/ 1)   Lines:  50.00% (  2/  4)
+\Espo\Core\SelectManagers::Base
+  Methods:  41.27% (26/63)   Lines:  23.32% (184/789)
+\Espo\Core\Services::Base
+  Methods: 100.00% (10/10)   Lines: 100.00% ( 15/ 15)
+\Espo\Core\Upgrades::ActionManager
+  Methods:  77.78% ( 7/ 9)   Lines:  86.36% ( 19/ 22)
+\Espo\Core\Upgrades::Base
+  Methods:  75.00% ( 6/ 8)   Lines:  85.71% ( 12/ 14)
+\Espo\Core\Upgrades\Actions::Base
+  Methods:  84.44% (38/45)   Lines:  73.12% (136/186)
+\Espo\Core\Upgrades\Actions\Base::Delete
+  Methods: 100.00% ( 2/ 2)   Lines:  93.33% ( 14/ 15)
+\Espo\Core\Upgrades\Actions\Base::Install
+  Methods:  33.33% ( 1/ 3)   Lines:  81.48% ( 22/ 27)
+\Espo\Core\Upgrades\Actions\Base::Uninstall
+  Methods:  66.67% ( 6/ 9)   Lines:  88.89% ( 40/ 45)
+\Espo\Core\Upgrades\Actions\Base::Upload
+  Methods: 100.00% ( 1/ 1)   Lines:  94.44% ( 17/ 18)
+\Espo\Core\Upgrades\Actions\Extension::Delete
+  Methods: 100.00% ( 2/ 2)   Lines:  88.89% (  8/  9)
+\Espo\Core\Upgrades\Actions\Extension::Install
+  Methods:  53.85% ( 7/13)   Lines:  53.33% ( 32/ 60)
+\Espo\Core\Upgrades\Actions\Extension::Uninstall
+  Methods: 100.00% ( 3/ 3)   Lines:  92.86% ( 13/ 14)
+\Espo\Core\Upgrades\Actions\Upgrade::Delete
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% (  1/  1)
+\Espo\Core\Upgrades\Actions\Upgrade::Install
+  Methods: 100.00% ( 2/ 2)   Lines: 100.00% (  7/  7)
+\Espo\Core\Upgrades\Actions\Upgrade::Uninstall
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% (  1/  1)
+\Espo\Core\Utils::Auth
+  Methods:  72.73% ( 8/11)   Lines:  46.25% ( 37/ 80)
+\Espo\Core\Utils::Autoload
+  Methods: 100.00% ( 9/ 9)   Lines:  80.00% ( 28/ 35)
+\Espo\Core\Utils::Config
+  Methods:  60.00% ( 9/15)   Lines:  60.00% ( 48/ 80)
+\Espo\Core\Utils::Crypt
+  Methods:  33.33% ( 2/ 6)   Lines:  13.79% (  4/ 29)
+\Espo\Core\Utils::EmailFilterManager
+  Methods:  25.00% ( 1/ 4)   Lines:  12.50% (  2/ 16)
+\Espo\Core\Utils::FieldManager
+  Methods:  20.00% ( 6/30)   Lines:  10.68% ( 25/234)
+\Espo\Core\Utils::Json
+  Methods: 100.00% ( 5/ 5)   Lines:  65.52% ( 19/ 29)
+\Espo\Core\Utils::Language
+  Methods:  10.00% ( 2/20)   Lines:  10.92% ( 13/119)
+\Espo\Core\Utils::Metadata
+  Methods:  64.00% (16/25)   Lines:  42.11% ( 64/152)
+\Espo\Core\Utils::Module
+  Methods:  71.43% ( 5/ 7)   Lines:  80.95% ( 17/ 21)
+\Espo\Core\Utils::PasswordHash
+  Methods: 100.00% ( 6/ 6)   Lines:  93.75% ( 15/ 16)
+\Espo\Core\Utils::Util
+  Methods:  80.00% (20/25)   Lines:  74.52% (117/157)
+\Espo\Core\Utils\Authentication::Base
+  Methods:  60.00% ( 3/ 5)   Lines:  80.00% (  8/ 10)
+\Espo\Core\Utils\Authentication::Espo
+  Methods: 100.00% ( 1/ 1)   Lines:  85.71% (  6/  7)
+\Espo\Core\Utils\Database::Converter
+  Methods:  75.00% ( 3/ 4)   Lines:  87.50% (  7/  8)
+\Espo\Core\Utils\Database\DBAL\Driver\PDOMySql::Driver
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% (  1/  1)
+\Espo\Core\Utils\Database\DBAL\FieldTypes::BoolType
+  Methods: 100.00% ( 2/ 2)   Lines: 100.00% (  2/  2)
+\Espo\Core\Utils\Database\DBAL\FieldTypes::IntType
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% (  1/  1)
+\Espo\Core\Utils\Database\DBAL\FieldTypes::JsonArrayType
+  Methods: 100.00% ( 2/ 2)   Lines: 100.00% (  2/  2)
+\Espo\Core\Utils\Database\DBAL\FieldTypes::JsonObjectType
+  Methods: 100.00% ( 2/ 2)   Lines: 100.00% (  2/  2)
+\Espo\Core\Utils\Database\DBAL\FieldTypes::PasswordType
+  Methods: 100.00% ( 2/ 2)   Lines: 100.00% (  2/  2)
+\Espo\Core\Utils\Database\DBAL\FieldTypes::VarcharType
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% (  1/  1)
+\Espo\Core\Utils\Database\DBAL\Platforms::MySqlPlatform
+  Methods:  46.15% ( 6/13)   Lines:  32.52% ( 40/123)
+\Espo\Core\Utils\Database\DBAL\Schema::Column
+  Methods:  66.67% ( 2/ 3)   Lines:  94.44% ( 17/ 18)
+\Espo\Core\Utils\Database\DBAL\Schema::Comparator
+  Methods: 100.00% ( 1/ 1)   Lines:  62.16% ( 23/ 37)
+\Espo\Core\Utils\Database\DBAL\Schema::Schema
+  Methods: 100.00% ( 1/ 1)   Lines:  80.00% (  4/  5)
+\Espo\Core\Utils\Database\DBAL\Schema::Table
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% (  3/  3)
+\Espo\Core\Utils\Database\Orm::Base
+  Methods:  87.50% (14/16)   Lines:  84.62% ( 44/ 52)
+\Espo\Core\Utils\Database\Orm::Converter
+  Methods:  92.86% (13/14)   Lines:  96.85% (123/127)
+\Espo\Core\Utils\Database\Orm::RelationManager
+  Methods:  87.50% ( 7/ 8)   Lines:  92.31% ( 36/ 39)
+\Espo\Core\Utils\Database\Orm\Fields::AttachmentMultiple
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% (  5/  5)
+\Espo\Core\Utils\Database\Orm\Fields::Base
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% (  7/  7)
+\Espo\Core\Utils\Database\Orm\Fields::Currency
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% ( 21/ 21)
+\Espo\Core\Utils\Database\Orm\Fields::Email
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% ( 11/ 11)
+\Espo\Core\Utils\Database\Orm\Fields::Link
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% ( 10/ 10)
+\Espo\Core\Utils\Database\Orm\Fields::LinkMultiple
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% (  8/  8)
+\Espo\Core\Utils\Database\Orm\Fields::LinkParent
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% (  9/  9)
+\Espo\Core\Utils\Database\Orm\Fields::PersonName
+  Methods: 100.00% ( 2/ 2)   Lines: 100.00% ( 28/ 28)
+\Espo\Core\Utils\Database\Orm\Fields::Phone
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% ( 11/ 11)
+\Espo\Core\Utils\Database\Orm\Relations::Attachments
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% (  5/  5)
+\Espo\Core\Utils\Database\Orm\Relations::Base
+  Methods:  66.67% ( 8/12)   Lines:  89.80% ( 44/ 49)
+\Espo\Core\Utils\Database\Orm\Relations::BelongsTo
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% ( 18/ 18)
+\Espo\Core\Utils\Database\Orm\Relations::BelongsToParent
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% ( 12/ 12)
+\Espo\Core\Utils\Database\Orm\Relations::EmailEmailAddress
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% (  6/  6)
+\Espo\Core\Utils\Database\Orm\Relations::EntityTeam
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% (  7/  7)
+\Espo\Core\Utils\Database\Orm\Relations::EntityUser
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% (  7/  7)
+\Espo\Core\Utils\Database\Orm\Relations::HasChildren
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% ( 10/ 10)
+\Espo\Core\Utils\Database\Orm\Relations::HasMany
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% ( 12/ 12)
+\Espo\Core\Utils\Database\Orm\Relations::HasOne
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% ( 11/ 11)
+\Espo\Core\Utils\Database\Orm\Relations::ManyMany
+  Methods: 100.00% ( 3/ 3)   Lines: 100.00% ( 23/ 23)
+\Espo\Core\Utils\Database\Schema::BaseRebuildActions
+  Methods:  62.50% ( 5/ 8)   Lines:  76.92% ( 10/ 13)
+\Espo\Core\Utils\Database\Schema::Converter
+  Methods:  90.00% ( 9/10)   Lines:  84.08% (132/157)
+\Espo\Core\Utils\Database\Schema::Schema
+  Methods:  88.24% (15/17)   Lines:  92.77% ( 77/ 83)
+\Espo\Core\Utils\Database\Schema\rebuildActions::AddSystemUser
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% (  8/  8)
+\Espo\Core\Utils\Database\Schema\rebuildActions::Currency
+  Methods:  50.00% ( 1/ 2)   Lines:  92.86% ( 13/ 14)
+\Espo\Core\Utils\File::ClassParser
+  Methods: 100.00% ( 7/ 7)   Lines:  93.33% ( 42/ 45)
+\Espo\Core\Utils\File::FileUnifier
+  Methods:  80.00% ( 4/ 5)   Lines:  85.71% ( 24/ 28)
+\Espo\Core\Utils\File::Manager
+  Methods:  75.00% (27/36)   Lines:  76.41% (217/284)
+\Espo\Core\Utils\File::Permission
+  Methods:  40.00% (10/25)   Lines:  29.65% ( 51/172)
+\Espo\Core\Utils\File::Unifier
+  Methods: 100.00% ( 7/ 7)   Lines:  74.14% ( 43/ 58)
+\Espo\Core\Utils\File::ZipArchive
+  Methods:  75.00% ( 3/ 4)   Lines:  75.00% ( 12/ 16)
+\Espo\Core\Utils\Log\Monolog::Logger
+  Methods: 100.00% ( 1/ 1)   Lines:  80.00% (  4/  5)
+\Espo\Core\Utils\Log\Monolog\Handler::RotatingFileHandler
+  Methods:  66.67% ( 4/ 6)   Lines:  73.68% ( 28/ 38)
+\Espo\Core\Utils\Log\Monolog\Handler::StreamHandler
+  Methods:  40.00% ( 2/ 5)   Lines:  17.39% (  4/ 23)
+\Espo\Core\Utils\Metadata::Helper
+  Methods:  83.33% ( 5/ 6)   Lines:  73.17% ( 30/ 41)
+\Espo\Core\Utils\Metadata::OrmMetadata
+  Methods:  80.00% ( 4/ 5)   Lines:  80.95% ( 17/ 21)
+\Espo\Entities::Email
+  Methods:   7.69% ( 1/13)   Lines:  80.00% (  4/  5)
+\Espo\Entities::EmailAddress
+  Methods: 100.00% ( 1/ 1)   Lines:  80.00% (  4/  5)
+\Espo\Entities::Note
+  Methods:  33.33% ( 1/ 3)   Lines: 100.00% (  4/  4)
+\Espo\Entities::PhoneNumber
+  Methods: 100.00% ( 1/ 1)   Lines:  75.00% (  3/  4)
+\Espo\Entities::Portal
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% (  1/  1)
+\Espo\Entities::User
+  Methods:  40.00% ( 2/ 5)   Lines:  16.67% (  2/ 12)
+\Espo\Hooks\Common::AssignmentEmailNotification
+  Methods: 100.00% ( 1/ 1)   Lines:  26.32% (  5/ 19)
+\Espo\Hooks\Common::CurrencyConverted
+  Methods:  75.00% ( 3/ 4)   Lines:  32.14% (  9/ 28)
+\Espo\Hooks\Common::Formula
+  Methods:  75.00% ( 3/ 4)   Lines:  64.71% ( 11/ 17)
+\Espo\Hooks\Common::NextNumber
+  Methods:  80.00% ( 4/ 5)   Lines:  42.42% ( 14/ 33)
+\Espo\Hooks\Common::Notifications
+  Methods:  71.43% ( 5/ 7)   Lines:  97.14% ( 34/ 35)
+\Espo\Hooks\Common::Stream
+  Methods:  91.67% (11/12)   Lines:  60.11% (113/188)
+\Espo\Hooks\Note::Mentions
+  Methods:  33.33% ( 2/ 6)   Lines:  66.67% (  4/  6)
+\Espo\Hooks\Note::Notifications
+  Methods:  83.33% ( 5/ 6)   Lines:  46.67% ( 35/ 75)
+\Espo\Modules\Crm\Repositories::Account
+  Methods:  33.33% ( 1/ 3)   Lines:  75.00% (  3/  4)
+\Espo\Modules\Crm\Services::Account
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% (  1/  1)
+\Espo\Notificators::Email
+  Methods:  50.00% ( 2/ 4)   Lines:  10.34% (  9/ 87)
+\Espo\ORM::Entity
+  Methods:  78.95% (30/38)   Lines:  83.78% (124/148)
+\Espo\ORM::EntityCollection
+  Methods:  47.62% (10/21)   Lines:  38.10% ( 32/ 84)
+\Espo\ORM::EntityFactory
+  Methods: 100.00% ( 2/ 2)   Lines:  81.82% (  9/ 11)
+\Espo\ORM::EntityManager
+  Methods:  81.25% (13/16)   Lines:  85.94% ( 55/ 64)
+\Espo\ORM::Metadata
+  Methods: 100.00% ( 2/ 2)   Lines:  80.00% (  4/  5)
+\Espo\ORM::Repository
+  Methods:  10.00% ( 1/10)   Lines:  75.00% (  6/  8)
+\Espo\ORM::RepositoryFactory
+  Methods:  50.00% ( 2/ 4)   Lines:  72.73% (  8/ 11)
+\Espo\ORM\DB::Mapper
+  Methods:  62.50% (20/32)   Lines:  43.47% (193/444)
+\Espo\ORM\DB::MysqlMapper
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% (  1/  1)
+\Espo\ORM\DB\Query::Base
+  Methods:  85.71% (24/28)   Lines:  61.90% (325/525)
+\Espo\ORM\DB\Query::Mysql
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% (  5/  5)
+\Espo\ORM\Repositories::RDB
+  Methods:  55.56% (25/45)   Lines:  54.98% (116/211)
+\Espo\Repositories::Email
+  Methods:  33.33% ( 4/12)   Lines:  45.16% ( 42/ 93)
+\Espo\Repositories::EmailAddress
+  Methods:  55.56% ( 5/ 9)   Lines:  36.31% ( 65/179)
+\Espo\Repositories::PhoneNumber
+  Methods:  42.86% ( 3/ 7)   Lines:  69.17% ( 92/133)
+\Espo\Repositories::Portal
+  Methods:  66.67% ( 2/ 3)   Lines: 100.00% (  8/  8)
+\Espo\Repositories::Preferences
+  Methods:  43.75% ( 7/16)   Lines:  48.00% ( 48/100)
+\Espo\Repositories::User
+  Methods:  50.00% ( 1/ 2)   Lines:  50.00% ( 24/ 48)
+\Espo\SelectManagers::Email
+  Methods:  20.69% ( 6/29)   Lines:  90.48% ( 38/ 42)
+\Espo\Services::Email
+  Methods:   9.09% ( 4/44)   Lines:  66.67% ( 32/ 48)
+\Espo\Services::Notification
+  Methods:  28.57% ( 2/ 7)   Lines:  20.63% ( 26/126)
+\Espo\Services::Record
+  Methods:  37.50% (27/72)   Lines: 100.00% (112/112)
+\Espo\Services::Stream
+  Methods:  26.67% ( 8/30)   Lines:  12.17% ( 69/567)
+\Monolog::ErrorHandler
+  Methods:  60.00% ( 6/10)   Lines:  37.00% ( 37/100)
+\Monolog::Logger
+  Methods:  23.68% ( 9/38)   Lines:  26.32% ( 25/ 95)
+\Monolog\Handler::AbstractHandler
+  Methods:  21.43% ( 3/14)   Lines:  19.35% (  6/ 31)
+\Monolog\Handler::StreamHandler
+  Methods:  12.50% ( 1/ 8)   Lines:  12.96% (  7/ 54)
+\Slim::Environment
+  Methods:  62.50% ( 5/ 8)   Lines:  87.72% ( 50/ 57)
+\Slim::Middleware
+  Methods:  40.00% ( 2/ 5)   Lines:  66.67% (  4/  6)
+\Slim::Slim
+  Methods:  12.12% ( 8/66)   Lines: 100.00% ( 46/ 46)
+\Slim\Helper::Set
+  Methods:  39.13% ( 9/23)   Lines: 100.00% ( 22/ 22)
+\Slim\Http::Headers
+  Methods: 100.00% ( 2/ 2)   Lines:  92.86% ( 13/ 14)
+\Slim\Http::Request
+  Methods:  10.00% ( 4/40)   Lines:   6.54% (  7/107)
+\Slim\Http::Util
+  Methods:   9.09% ( 1/11)   Lines:   6.25% (  8/128)
+\Slim\Middleware::Flash
+  Methods:   7.14% ( 1/14)   Lines:   9.09% (  3/ 33)
+\Slim\Middleware::MethodOverride
+  Methods:  50.00% ( 1/ 2)   Lines: 100.00% (  2/  2)
+\tests\integration\Core::DataLoader
+  Methods:  60.00% ( 6/10)   Lines:  50.00% ( 30/ 60)
+\tests\integration\Core::Tester
+  Methods:  87.50% (14/16)   Lines:  87.60% (106/121)
+\tests\integration\Core::Utils
+  Methods:  80.00% ( 4/ 5)   Lines:  46.81% ( 22/ 47)

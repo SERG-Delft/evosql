@@ -1,0 +1,31 @@
+SPECIAL COMMANDS
+Filter substrings are case-sensitive!  Use "SCHEMANAME." to narrow to schema.
+    \?                   Special command Help
+    \.                   Enter raw SQL.  End with line containing only "."
+    \=                   Commit JDBC session
+    \! COMMAND [ARGS]    Execute external program (no support for stdin)
+    \a [true|false]      Auto-commit JDBC DML commands (for current conn)
+    \b                   save next result to Binary buffer (no display)
+    \bd file/path.bin    Dump Binary buffer to file
+    \bl file/path.bin    Load file into Binary buffer
+    \bp                  use ? in next SQL statement to upload Binary buffer
+    \c [true|false]      Continue upon errors (a.o.t. abort upon error)
+    \d OBJECTNAME [regx] Describe table or view columns
+    \d{tvsiSanur*?} [substr]  List objects of specified type:
+  (Tbls/Views/Seqs/Indexes/SysTbls/Aliases/schemaNames/Users/Roles/table-like)
+    \h [true|false]      enable or disable HTML output mode
+    \i file/path.sql     Include/execute commands from external file
+    \j [urlid]           display Jdbc connection details, or connect to 'urlid'
+    \j acct [pwd] jdbc:url     Establish connection to Jdbc data source at URL
+    \l LEVEL  A Message  Log message.  (list available levels with \l?)
+    \m file/path.dsv [*] iMport DSV text file records into a table (opts \m?)
+    \mq  f/path.csv [*]  Ditto, but with traditional CSV double-quoting
+    \o [file/path.html]  tee (or stop teeing) query Output to specified file
+    \oc                  stop teeing query Output and write Closing HTML
+    \p[r] [A Message]    Print string to stdout (r = Raw HTML when in \h mode)
+    \q [abort message]   Quit (or you can end input with Ctrl-Z or Ctrl-D)
+    \t [true|false]      report execution Times for all SQL commands
+    \v [TRAN_ISO_LVL]    view/set the connection transaction isolation leVel
+    \x {TABLE|SELECT...} eXport table or query to DSV text file (options \x?)
+    \xq {TABLE|SEL...}   Ditto, but with traditional CSV double-quoting.
+

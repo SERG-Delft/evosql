@@ -1,0 +1,4 @@
+LISTING FORMAT:
+modification_time__ tu mode  file_size_  owner___  filepath
+    t = Tar entry type
+    u = '*' for UStar-compliant entry

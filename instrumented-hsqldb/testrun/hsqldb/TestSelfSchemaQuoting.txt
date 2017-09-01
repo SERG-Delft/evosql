@@ -1,0 +1,41 @@
+-- Tests quoted schema names
+
+/*u0*/SET SCHEMA information_schema;
+/*u0*/CREATE SCHEMA sChEmA1 authorization sa;
+/*c1*/select * from schemata
+    where schema_owner = 'SA' AND schema_name = 'SCHEMA1';
+
+/*u0*/CREATE SCHEMA dEfAuLt1 authorization sa;
+/*c1*/select * from schemata
+    where schema_name = 'DEFAULT1';
+
+/*u0*/SET INITIAL SCHEMA "DEFAULT1";
+/*c1*/SELECT * FROM system_users
+    WHERE user_name = 'SA' AND initial_schema = 'DEFAULT1';
+
+/*u0*/SET INITIAL SCHEMA DEFAULT;
+/*c1*/SELECT * FROM system_users
+    WHERE user_name = 'SA' AND initial_schema IS NULL;
+
+/*u0*/CREATE SCHEMA "mIxEdCaSe" AUTHORIZATION sa;
+/*c1*/select * from schemata where schema_name = 'mIxEdCaSe';
+/*u0*/CREATE TABLE "mIxEdCaSe".t1(i int);
+/*e*/DROP TABLE mIxEdCaSe.t1;
+/*u0*/DROP TABLE "mIxEdCaSe".t1;
+/*e*/DROP SCHEMA mIxEdCaSe;
+/*u0*/DROP SCHEMA "mIxEdCaSe";
+
+/*u0*/CREATE USER u1 PASSWORD "u1";
+/*u0*/CREATE SCHEMA "oThErMiXeD" authorization u1;
+/*u0*/CREATE TABLE "oThErMiXeD".t2(i int);
+/*e*/DROP SCHEMA oThErMiXeD CASCADE;
+/*u0*/DROP SCHEMA "oThErMiXeD" CASCADE;
+
+/*s*/DROP USER u1 CASCADE;
+/*s*/DROP USER u1;
+/*s*/DROP SCHEMA schema1 CASCADE;
+
+/*U0*/ Workaround for bug where DDL will not Commit
+/*s*/CREATE TABLE bug_workaround (i int);
+/*s*/INSERT INTO bug_workaround VALUES(1);
+/*u0*/SHUTDOWN;

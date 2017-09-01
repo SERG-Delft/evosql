@@ -1,0 +1,23 @@
+SqlFile processor v. %{1}.
+Distribution is permitted under the terms of the HSQLDB license.
+(c) 2004-2011 Blaine Simpson and the HSQL Development Group.
+
+    \q    to Quit.
+    \?    lists Special Commands.
+    :?    lists Edit-Buffer/History commands.
+    *?    lists PL commands.
+    /?    displays help on how to set and use macros (incl. functions).
+
+SPECIAL Commands begin with '\' and execute when you hit ENTER.
+EDIT-BUFFER / HISTORY Commands begin with ':' and execute when you hit ENTER.
+PROCEDURAL LANGUAGE commands begin with '*' and end when you hit ENTER.
+MACRO executions and definitions begin with '/' and end when you hit ENTER.
+All other lines comprise SQL Statements (or comments).
+  SQL Statements are terminated by either unquoted ';' (which executes the
+  statement), or a blank line (which moves the statement into the edit buffer
+  without executing).
+After turning on variable expansion with command "*" (or any other PL
+command), PL variables may be used in most commands like so:  *{PLVARNAME}.
+Be aware when using regular expressions on commands, that the regex.s
+operate only on the command text after the * or \ prefix, if any.
+

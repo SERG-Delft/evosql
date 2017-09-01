@@ -1,0 +1,36 @@
+-- $Id: TestSelfSeqRightsC.txt 610 2008-12-22 15:54:18Z unsaved $
+-- Test .script persistence of Sequence rights
+
+CONNECT USER blaine PASSWORD "b";
+-- Following is default, but just to eliminate any ambiguity...
+SET SCHEMA public;
+-- By virtue of PUBLIC grants
+/*e*/SELECT i, next value for ps9 FROM pt;
+/*e*/SELECT i, next value for public.ps9 FROM public.pt;
+/*e*/SELECT i, next value for ps9 FROM public.pt;
+/*c1*/SELECT i, next value for ps1 FROM pt;
+SET SCHEMA bsch;
+/*c1*/SELECT i, next value for public.ps2 FROM public.pt;
+-- Don't own
+/*e*/GRANT ALL ON SEQUENCE public.ps2 TO PUBLIC;
+/*u0*/GRANT ALL ON SEQUENCE bsch.bs5 TO PUBLIC;
+-- By virtue of schema ownership
+/*c1*/SELECT i, next value for bs2 FROM bt;
+SET SCHEMA public;
+/*c1*/SELECT i, next value for bsch.bs1 FROM bsch.bt;
+-- Enough schema specification testing.  Just use defauls Session schema for
+-- here on in
+/*c1*/SELECT i FROM pt;
+/*e*/SELECT i, next value for ps3 FROM pt;
+/*e*/SELECT i, next value for ps4 FROM pt;
+/*c1*/SELECT i, next value for ps5 FROM pt;
+/*c1*/SELECT i, next value for ps6 FROM pt;
+/*e*/SELECT i, next value for ps7 FROM pt;
+/*e*/SELECT i, next value for ps8 FROM pt;
+
+-- Test REVOKES
+-- Can't revoke on objects you don't own
+/*e*/REVOKE ALL ON SEQUENCE public.ps6 FROM public RESTRICT;
+/*u0*/REVOKE ALL ON SEQUENCE bsch.bs1 FROM public RESTRICT;
+CONNECT USER sa PASSWORD "";
+/*u0*/REVOKE USAGE ON SEQUENCE public.ps6 FROM BLAINE RESTRICT;

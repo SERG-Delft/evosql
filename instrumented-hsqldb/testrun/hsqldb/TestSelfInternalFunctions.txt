@@ -1,0 +1,16 @@
+/*rXXX*/call trim('   XXX   ');
+/*rXXX*/call trim(FROM '   XXX   ');
+/*rXXX*/call trim(BOTH FROM '   XXX   ');
+/*rXXX*/call trim(BOTH ' ' FROM '   XXX   ');
+/*e*/call trim(BOTH FROM);
+/*rXXX*/call substring( ' XXX  ' from 2 for 3);
+/*rXXX*/call substring( ' XXX' from 2);
+/*rXXXX*/call overlay( 'YYY' placing 'XXXX' from 1 for 3);
+/*rYXXYY*/call overlay( 'YYYYYY' placing 'XX' from 2 for 3);
+/*rXYY*/call overlay( 'YYY' placing 'X' from 1);
+/*rYXY*/call overlay( 'YYY' placing 'X' from 2);
+/*r0109090405*/call overlay( x'0102030405' placing x'0909' from 2);
+call current_timestamp;
+call current_timestamp(1);
+call current_time;
+call current_time(6);

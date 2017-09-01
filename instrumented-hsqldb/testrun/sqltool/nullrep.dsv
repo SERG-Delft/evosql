@@ -1,0 +1,8 @@
+targettable=t
+
+# Following (header) line has intentional trailing whitespace.
+id|  i  |  r  |  d  |  t  |  v  |  b   
+
+# Following line has intentional trailing whitespace (and mixed case).
+wspaces|  [null]  |  [null]  |  [null]  |  [null]  |  [null]  |  [null]  
+nospaces|[null]|[null]|[null]|[null]|[null]|[null]

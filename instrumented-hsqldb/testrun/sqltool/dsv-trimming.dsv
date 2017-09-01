@@ -1,0 +1,7 @@
+targettable=t
+
+# Following (header) line has intentional trailing whitespace.
+  i  |  r  |  d  |  t  |  v  |  b   
+
+# Following line has intentional trailing whitespace (and mixed case).
+  31  |  3.124  |  2007-06-07  |  2006-05-06 12:30:04  |  a B  |  tRUe  

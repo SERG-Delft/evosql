@@ -1,0 +1,21 @@
+/*s*/DROP USER owner1;
+/*s*/DROP ROLE r1;
+/*s*/DROP SCHEMA schema_a;
+/*s*/DROP SCHEMA schema_b;
+/*s*/DROP SCHEMA schema_c;
+/*s*/DROP SCHEMA schema_z;
+
+-- Test basic ability to create schemas owned by individual DBAs,
+-- non-privileged users, and roles.
+/*u0*/CREATE USER owner1 password "pwerd";
+/*u0*/CREATE USER adminowner1 password "pwerd";
+/*u0*/CREATE ROLE r1;
+/*u0*/GRANT r1 TO owner1;
+/*u0*/CREATE SCHEMA schema_a AUTHORIZATION owner1;
+/*u0*/CREATE SCHEMA schema_b AUTHORIZATION r1;
+/*u0*/CREATE SCHEMA schema_c AUTHORIZATION adminowner1;
+/*e*/CREATE SCHEMA schema_z AUTHORIZATION nosuchowner;
+/*u0*/DROP SCHEMA schema_c;
+/*u0*/DROP USER adminowner1;
+
+/*u0*/ SHUTDOWN IMMEDIATELY;

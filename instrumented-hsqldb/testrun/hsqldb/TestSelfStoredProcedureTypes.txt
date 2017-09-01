@@ -1,0 +1,253 @@
+-- PARAMETERS IN
+
+-- Type SMALLINT
+DROP PROCEDURE procedure_test IF EXISTS;
+CREATE PROCEDURE procedure_test(IN val SMALLINT) MODIFIES SQL DATA
+  BEGIN ATOMIC
+  DECLARE valu INT;
+  SET valu = val;
+  END
+call procedure_test(0);
+call procedure_test(5);
+call procedure_test(-5);
+/*e*/call procedure_test(40000);
+/*e*/call procedure_test(-40000);
+/*e*/call procedure_test('a');
+/*e*/call procedure_test({ts '2010-01-01 10:00:00'});
+DROP PROCEDURE procedure_test;
+
+-- Type INT
+CREATE PROCEDURE procedure_test(IN val INT) MODIFIES SQL DATA
+  BEGIN ATOMIC
+  DECLARE valu INT;
+  SET valu = val;
+  END
+call procedure_test(0);
+call procedure_test(5);
+call procedure_test(-5);
+call procedure_test(40000);
+call procedure_test(-40000);
+/*e*/call procedure_test(123456789012345);
+/*e*/call procedure_test(-123456789012345);
+/*e*/call procedure_test('a');
+/*e*/call procedure_test({ts '2010-01-01 10:00:00'});
+DROP PROCEDURE procedure_test;
+
+CREATE PROCEDURE procedure_test(IN val INTEGER) MODIFIES SQL DATA
+  BEGIN ATOMIC
+  DECLARE valu INT;
+  SET valu = val;
+  END
+call procedure_test(0);
+call procedure_test(5);
+call procedure_test(-5);
+call procedure_test(40000);
+call procedure_test(-40000);
+/*e*/call procedure_test(123456789012345);
+/*e*/call procedure_test(-123456789012345);
+/*e*/call procedure_test('a');
+/*e*/call procedure_test({ts '2010-01-01 10:00:00'});
+DROP PROCEDURE procedure_test;
+
+-- Type BIGINT
+CREATE PROCEDURE procedure_test(IN val BIGINT) MODIFIES SQL DATA
+  BEGIN ATOMIC
+  DECLARE valu BIGINT;
+  SET valu = val;
+  END
+call procedure_test(0);
+call procedure_test(5);
+call procedure_test(-5);
+call procedure_test(40000);
+call procedure_test(-40000);
+call procedure_test(123456789012345);
+call procedure_test(-123456789012345);
+/*e*/call procedure_test(12345678901234567890123456789012345678790);
+/*e*/call procedure_test(-12345678901234567890123456789012345678790);
+/*e*/call procedure_test('a');
+/*e*/call procedure_test({ts '2010-01-01 10:00:00'});
+DROP PROCEDURE procedure_test;
+
+-- Type DECIMAL
+CREATE PROCEDURE procedure_test(IN val DECIMAL) MODIFIES SQL DATA
+  BEGIN ATOMIC
+  DECLARE valu DECIMAL;
+  SET valu = val;
+  END
+call procedure_test(0);
+call procedure_test(5);
+call procedure_test(-5);
+call procedure_test(40000);
+call procedure_test(-40000);
+call procedure_test(123456789012345);
+call procedure_test(-123456789012345);
+call procedure_test(1.034);
+call procedure_test(-1.3E24);
+/*e*/call procedure_test(1.04324324423E352);
+/*e*/call procedure_test('a');
+/*e*/call procedure_test({ts '2010-01-01 10:00:00'});
+DROP PROCEDURE procedure_test;
+
+CREATE PROCEDURE procedure_test(IN val NUMERIC) MODIFIES SQL DATA
+  BEGIN ATOMIC
+  DECLARE valu DECIMAL;
+  SET valu = val;
+  END
+call procedure_test(0);
+call procedure_test(5);
+call procedure_test(-5);
+call procedure_test(40000);
+call procedure_test(-40000);
+call procedure_test(123456789012345);
+call procedure_test(-123456789012345);
+call procedure_test(1.034);
+call procedure_test(-1.3E24);
+call procedure_test(1.0E35);
+/*e*/call procedure_test('a');
+/*e*/call procedure_test({ts '2010-01-01 10:00:00'});
+DROP PROCEDURE procedure_test;
+
+-- Type DOUBLE
+CREATE PROCEDURE procedure_test(IN val FLOAT) MODIFIES SQL DATA
+  BEGIN ATOMIC
+  DECLARE valu DECIMAL;
+  SET valu = val;
+  END
+call procedure_test(0);
+call procedure_test(5);
+call procedure_test(-5);
+call procedure_test(40000);
+call procedure_test(-40000);
+call procedure_test(123456789012345);
+call procedure_test(-123456789012345);
+call procedure_test(1.034);
+call procedure_test(-1.3E24);
+call procedure_test(1.04324324423E42);
+/*e*/call procedure_test('a');
+/*e*/call procedure_test({ts '2010-01-01 10:00:00'});
+DROP PROCEDURE procedure_test;
+
+CREATE PROCEDURE procedure_test(IN val DOUBLE) MODIFIES SQL DATA
+  BEGIN ATOMIC
+  DECLARE valu DECIMAL;
+  SET valu = val;
+  END
+call procedure_test(0);
+call procedure_test(5);
+call procedure_test(-5);
+call procedure_test(40000);
+call procedure_test(-40000);
+call procedure_test(123456789012345);
+call procedure_test(-123456789012345);
+call procedure_test(1.034);
+call procedure_test(-1.3E24);
+call procedure_test(1.04324324423E11);
+/*e*/call procedure_test('a');
+/*e*/call procedure_test({ts '2010-01-01 10:00:00'});
+DROP PROCEDURE procedure_test;
+
+-- Type CHAR
+CREATE PROCEDURE procedure_test(IN val CHAR(1)) MODIFIES SQL DATA
+  BEGIN ATOMIC
+  DECLARE valu VARCHAR(10);
+  SET valu = val;
+  END
+call procedure_test('a');
+/*e*/call procedure_test(5);
+/*e*/call procedure_test(-5);
+call procedure_test('');
+/*e*/call procedure_test('ab');
+/*e*/call procedure_test({ts '2010-01-01 10:00:00'});
+DROP PROCEDURE procedure_test;
+
+-- Type CHAR
+CREATE PROCEDURE procedure_test(IN val CHAR(10)) MODIFIES SQL DATA
+  BEGIN ATOMIC
+  DECLARE valu VARCHAR(10);
+  SET valu = val;
+  END
+call procedure_test('0123456789');
+/*e*/call procedure_test(5);
+/*e*/call procedure_test(-5);
+call procedure_test('');
+call procedure_test('ab');
+/*e*/call procedure_test('0123456789a');
+/*e*/call procedure_test({ts '2010-01-01 10:00:00'});
+DROP PROCEDURE procedure_test;
+
+-- Type VARCHAR
+CREATE PROCEDURE procedure_test(IN val VARCHAR(1)) MODIFIES SQL DATA
+  BEGIN ATOMIC
+  DECLARE valu VARCHAR(10);
+  SET valu = val;
+  END
+call procedure_test('a');
+/*e*/call procedure_test(5);
+/*e*/call procedure_test(-5);
+call procedure_test('');
+/*e*/call procedure_test('ab');
+/*e*/call procedure_test({ts '2010-01-01 10:00:00'});
+DROP PROCEDURE procedure_test;
+
+CREATE PROCEDURE procedure_test(IN val VARCHAR(10)) MODIFIES SQL DATA
+  BEGIN ATOMIC
+  DECLARE valu VARCHAR(10);
+  SET valu = val;
+  END
+call procedure_test('a');
+call procedure_test('0123456789');
+/*e*/call procedure_test(5);
+/*e*/call procedure_test(-5);
+call procedure_test('');
+call procedure_test('ab');
+/*e*/call procedure_test('0123456789a');
+/*e*/call procedure_test({ts '2010-01-01 10:00:00'});
+DROP PROCEDURE procedure_test;
+
+-- Type DATE
+CREATE PROCEDURE procedure_test(IN val DATE) MODIFIES SQL DATA
+  BEGIN ATOMIC
+  DECLARE valu DATE;
+  SET valu = val;
+  END
+call procedure_test({d '2010-01-01'});
+/*e*/call procedure_test('a');
+/*e*/call procedure_test(5);
+/*e*/call procedure_test(-5);
+/*e*/call procedure_test('');
+/*e*/call procedure_test('ab');
+/*e*/call procedure_test({t '10:00:00'});
+call procedure_test({ts '2010-01-01 10:00:00'});
+DROP PROCEDURE procedure_test;
+
+-- Type TIME
+CREATE PROCEDURE procedure_test(IN val TIME) MODIFIES SQL DATA
+  BEGIN ATOMIC
+  DECLARE valu TIME;
+  SET valu = val;
+  END
+call procedure_test({t '10:00:00'});
+/*e*/call procedure_test('a');
+/*e*/call procedure_test(5);
+/*e*/call procedure_test(-5);
+/*e*/call procedure_test('');
+/*e*/call procedure_test('ab');
+/*e*/call procedure_test({d '2010-01-01'});
+/*e*/call procedure_test({ts '2010-01-01 10:00:00'});
+DROP PROCEDURE procedure_test;
+
+-- Type TIMESTAMP
+CREATE PROCEDURE procedure_test(IN val TIMESTAMP) MODIFIES SQL DATA
+  BEGIN ATOMIC
+  DECLARE valu TIMESTAMP;
+  SET valu = val;
+  END
+call procedure_test({ts '2010-01-01 10:00:00'});
+/*e*/call procedure_test('a');
+/*e*/call procedure_test(5);
+/*e*/call procedure_test(-5);
+/*e*/call procedure_test('');
+/*e*/call procedure_test('ab');
+call procedure_test({d '2010-01-01'});
+/*e*/call procedure_test({t '10:00:00'});
+DROP PROCEDURE procedure_test;

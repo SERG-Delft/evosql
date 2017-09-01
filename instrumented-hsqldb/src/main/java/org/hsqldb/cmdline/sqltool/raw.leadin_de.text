@@ -1,0 +1,6 @@
+Geben Sie reines SQL (ROW-SQL) ein!  Keine '\', ':', '*' Befehle.
+Schließen Sie mit einer Leerzeile ab welche nur ".;" enthält
+um alles an die Datenbank zu senden;
+oder nur "." um alles in den Editiert-Puffer für die Bearbeitung oder
+Speicherung zu laden.
+-----------------------------------------------------------

@@ -1,0 +1,60 @@
+<HTML>
+
+<!--   BENUTZER: Zur Anpassung schreiben Sie bitte ihre eigene CSS-Datei
+       mit dem Namen "rejects_custom.css" und speichern Sie im selben
+       Verzeichniss wie diese Datei.
+       Es macht wohl den meisten Sinn, zuerst die Style-Elemente im
+       STYLE-Block zu überschreiben.
+       Wenn Sie diese Datei kopieren oder an jemanden mailen, so
+       vergessen Sie nicht auch ihre eigene CCS-Datei mit zu schicken.
+       Oder die Seitendarstellung wird ohne ihre Anpassung erfolgen. - blaine (im engl. Orginaltext)
+-->
+
+<HEAD>
+    <TITLE>SqlTool DSV Reject-Report</TITLE>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <STYLE>
+        th { background-color:DDEEEE; }
+        .right { text-align:right; }
+        td.reason { font-size:95%; font-weight:bold;}
+        th.reason { text-decoration:underline; color:red; }
+        .center { text-align:center; }
+        body { background:silver; }
+        span.headingval { font-weight:bold; font-style:courier; }
+        table { background-color:white; }
+        tr.oddrow { background-color:#EEEEEE; }
+        tr.evenrow { background-color:#EEFFFF; }
+        td.sum { border:3px solid #006363; font-weight:bold; }
+        div.footnote { margin:10px; font-size:90%;}
+    </STYLE>
+    <LINK rel='stylesheet' href='rejects_custom.css' type='text/css'>
+</HEAD>
+<BODY>
+
+<P>
+    Import durchgeführt am <SPAN class='headingval'>%{1}</SPAN> mit SqlTool.
+</P>
+<P>
+    Import-DSV-Datei: <SPAN class='headingval'>%{2}</SPAN>
+</P>
+<P>
+    Reject-DSV-Datei: <SPAN class='headingval'>%{3}</SPAN>
+</P>
+%{4:+
+<P>
+    Die passenden Datensätze in '%4'
+    sind bei Zeilennummer von (Reject # +), seit  der
+    führende Datensatz die erste Zeile eingenommen hat.
+</P>
+}
+
+<TABLE border='1px' cellpadding='5px'>
+    <THEAD><TR>
+        <TH title="Nummer dieses Fehlers">rej.&nbsp;#</TH>
+        <TH title="Zeilennummer in der Import-DSV-Datei">Eingabe<BR/>Zeile&nbsp;#</TH>
+        <TH title="Fehlerhafte Spalte. Leer, wenn unbekannt.">
+            fehlerhafte&nbsp;Spalte<BR/>(wenn&nbsp;bekannt)</TH>
+        <TH title="Ursache für den Fehler, vom DSV-Parser oder der Datenbank"
+            class='reason'>Ursache</TH>
+    </TR></THEAD>
+    <TBODY>

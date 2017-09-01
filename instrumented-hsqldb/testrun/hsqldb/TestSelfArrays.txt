@@ -1,0 +1,53 @@
+create cached table tarray (id int primary key, description varchar(20) array);
+insert into tarray values 1, array['light', 'red', 'hot']
+insert into tarray values 2, array['dark', 'grey', 'cold']
+select * from tarray
+select t1.description || t2.description from tarray t1 join tarray t2 on t1.id = t2.id + 1
+select t1.description || t2.description[2] from tarray t1 join tarray t2 on t1.id = t2.id + 1
+select (t1.description || t2.description)[2] from tarray t1 join tarray t2 on t1.id = t2.id + 1
+select max(t1.description[1]) from tarray t1
+select max(t1.description[1]) || min(t1.description[1]) from tarray t1
+select cardinality(t1.description || t2.description) from tarray t1 join tarray t2 on t1.id = t2.id + 1
+update tarray t1 set t1.description[2] = 'cool' where id = 2
+select trim_array(t1.description, 1) from tarray t1
+select trim_array(t1.description, 1)[1] from tarray t1
+select trim_array(t1.description, 1)[1] from tarray t1
+
+select * from tarray t1 where t1.id = 2 and t1.description[2] = 'cold'
+
+CREATE TABLE iarray (i BIGINT PRIMARY KEY, ar INTEGER ARRAY);
+
+INSERT INTO iarray VALUES (1, array [11, null, 13]);
+INSERT INTO iarray VALUES (2, null);
+INSERT INTO iarray VALUES 3, array ??(21, 22??);
+
+/*c3*/SELECT * FROM iarray;
+
+/*c1*/SELECT count(*) FROM iarray WHERE i = 1 AND ar[3] = 13;
+
+-- using customer and invoice tables defined in TestSelf.txt
+select firstname, lastname, a.c from customer, unnest(array[(select sum(total) from invoice where customerid = customer.id)]) a (c)
+alter table customer add column arr varchar(40) array
+update customer set arr = array[firstname, lastname, street, city]
+SELECT id, w, y FROM customer, unnest (arr) with ordinality j(w,y)
+
+SELECT firstname, lastname, (SELECT SUM(total) FROM invoice WHERE customerid = customer.id) s FROM customer
+SELECT firstname, lastname, a.c FROM customer, LATERAL(SELECT SUM(total) FROM invoice WHERE customerid = customer.id) a (c)
+
+--
+/*e*/select * from customer, (select sum(invoice.total) from invoice where invoice.customerid = customer.id)
+select * from customer, lateral(select sum(invoice.total) from invoice where invoice.customerid = customer.id)
+explain plan for select * from customer where firstname in(unnest(?))
+
+create table tour   ( id int primary key, name varchar(20)  );
+create table golfer   ( id int primary key, name  varchar(20),  tour_id  int);
+create table stat    ( id int primary key,  round  int, score  int,  golfer_id int);
+
+insert into tour values 1, 'PGA'
+insert into golfer values 3, 'Woods', 1
+insert into stat values 1000, 1, 5, 3
+insert into stat values 1010, 3, 10, 3
+
+/*c1*/select golfer.name, secondstat.score score1, firststat.score score2 from tour join golfer on (tour.id = tour_id and  tour.name = 'PGA' ),
+ lateral(select * from stat where golfer_id = golfer.id order by round desc limit 1 offset 1) secondstat,
+ lateral(select * from stat where golfer_id = golfer.id order by round desc limit 1) firststat

@@ -1,0 +1,57 @@
+DSV stands for Delimiter-Separated-Values, which is just CSV (comma-
+separated-values) but always using a proper delimiter to prevent the
+need for quoting and escaping which CSV files have.
+You can use all of these features with traditional CSV files, which allows for
+the use of the column-delimiter inside data, by using \xq and \mq instead of
+\x and \q.
+Here are the special commands to initiate DSV and CSV imports and exports.
+    \m file/path.dsv       iMport DSV text file records into a table (opts \m?)
+    \mq  f/path.csv        Ditto, but with traditional CSV double-quoting
+    \x {TABLE|:[appendage]|SELECT...}
+                           eXport table or query to DSV text file (options \x?)
+    \xq {TABLE|:[appendage]|SELECT...}   
+                           Ditto, but writes traditional CSV double-quoting.
+Export commands must specify either a table name, a 1-line SQL query (with no
+terminating ';') , or ':'.  ':' means to use the last edit buffer, which you
+set up by entering a SQL query in raw mode, or interactively recall or edit a
+previous command.
+
+All of the DSV PL variables are optional.  To see all PL var. values,
+run "* listvalues".  Set the values like:
+    * *DSV_COL_DELIM = ,
+Don't forget the * indicating a PL command PLUS the leading * in all of these
+ variable names.  (Names like *THIS indicate a SqlTool system PL variable).
+The second column indicates where the setting is applicable, either a
+ specific command; or M for \m or \mq; or X for \x or \xq; or MX for all.
+Default value/behavior is in [square brackets].
+    *ALL_QUOTED        \xq   Double-quote every cell for \xq exports. ["false"]
+    *DSV_COL_SPLITTER  M     Column input delimiter regexp.   ["\|"]
+    *DSV_COL_DELIM     X     Column output delimiter.   ["|"]
+    *DSV_CONST_COLS    M     Column value assignments to apply to every row.
+                             [None]
+    *DSV_RECORDS_PER_COMMIT M  Set to integer value (X).  Overrides current
+                             auto-commit setting and commits after every X
+                             successful inserts (and upon import completion).
+                              ["1" if auto-committing, "0" (never) if not]
+    *DSV_REJECT_FILE   M     DSV file to be created with rejected records.
+                              [None*]
+    *DSV_REJECT_REPORT M     HTML report to explain reject records [None*]
+    *DSV_ROW_SPLITTER  M     Row input delimiter regexp.   ["\r\n|\r|\n"]
+    *DSV_ROW_DELIM     X     Row output delimiter
+                              [OS-dependent (Java line.separator)]
+    *DSV_SKIP_COLS     MX    Skip columns from input DSV file or input table.
+                              [None]
+    *DSV_SKIP_PREFIX   M     Comment line prefix in DSV files.  ["#"]
+                             Set to "" (empty String) to disable commenting.
+    *DSV_TARGET_FILE   X     File which exports will write to
+                              [source table name + ".dsv", or ".csv" for \xq]
+    *DSV_TARGET_TABLE  M     Table which imports will write to
+                              [DSV filename without extension]
+    *DSV_TRIM_ALL      M     If set to "true", trim leading and trailing
+                             whitespace from all columns upon import [false]
+    *NULL_REP_TOKEN    MX    String to represent database null.   ["[null]"]
+* Imports will abort immediately upon the first import record failure, unless
+either *DSV_REJECT_FILE or *DSV_REJECT_REPORT (or both) are set.  (Whether
+SqlTool will roll back and quit depends on your settings for \c and \a).
+Auto-commit and *DSV_RECORDS_PER_COMMIT ensure that all successfully inserted
+records will commit, so rollbacks are impossible with either of these.

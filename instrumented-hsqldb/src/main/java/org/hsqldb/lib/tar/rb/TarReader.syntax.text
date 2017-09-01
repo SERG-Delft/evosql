@@ -1,0 +1,7 @@
+SYNTAX: java -cp path/to/hsqldb.jar %{1} {t|x}  \
+        [--directory=path] file/path/tar[.gz] [regex1...]
+where
+    t:      Table-of-content mode (like "tar -t...")
+    x:      Extract mode (like "tar -x...")
+    path:   Base extraction directory for relative entries
+    regex*: Pattern(s) which narrow entries listed or extracted

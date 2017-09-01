@@ -1,0 +1,12 @@
+\dX [Parameter...] wobei X eine der folgenden Möglichkeiten ist:
+    t:  Auflistung von Tabellen
+    v:  Auflistung von Views
+    s:  Auflistung von Sequenzen
+    i:  Auflistung von Indizes
+    S:  Auflistung von Systemtabellen
+    a:  Auflistung von Aliasse
+    n:  Auflistung von Schemanamen
+    u:  Auflistung von Benutzern
+    r:  Auflistung von Rollen
+    *:  Auflistung von tabellenähnlichen Objekten
+

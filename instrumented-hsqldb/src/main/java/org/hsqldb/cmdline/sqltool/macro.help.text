@@ -1,0 +1,34 @@
+Macros may only be entered as the first thing in a command, because macros
+are stored 'commands', not stored text (like PL variables).
+SqlTool functions are macros that accept positional parameters and the function
+names always end with () (like "myFunction()").
+Unless noted, everything said here about macros also applies to functions.
+
+/?                     Display this help
+/=                     Display all macros
+/= name body...        Define a macro with body of the specified Special, PL,
+                       or SQL command (do not type the SQL-terminating ";").
+/: name [appendage]    Define a macro wth body equal to the current buffer
+                       contents.  If you want your 'appendage' to begin with a
+                       space, then you must type two spaces after the name
+                       here.  This can be used to define a macro with content
+                       of a multi-lined SQL statement, or even of chunked SQL
+                       statements.
+/name [appendage]      Expand (non-function) macro to buffer
+/name [appendage];     Execute (non-function) macro after variables in body
+                       are dereferenced
+/name(param1,...) [appendage]    Expand function to buffer
+/name(param1,...) [appendage];   Execute function after dereferencing
+
+Macros may contain PL variable references.
+The references are not expanded until the macro executes.  Use the : syntax,
+like *{:name} to prevent the execution from failing if that variable is not set
+(this will cause the unset variable to expand to the empty string).
+
+Define functions exactly as you define macros, except with names like "this()",
+and the function body may contain positional PL variable references like
+*{1}, *{2}, *{:3}, etc.  Use the colon (like "*{:3}") for optional parameters
+(see previous paragraph).
+Use functions exactly like macros, except insert comma-separated parameters (if
+any), between the parentheses of the function name, like
+"fn1();" or "fn2(first param value, second param value)".

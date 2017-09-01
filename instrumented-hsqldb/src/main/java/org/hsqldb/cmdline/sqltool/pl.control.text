@@ -1,0 +1,56 @@
+PROCEDURAL LANGUAGE CONTROL/BRANCHING COMMANDS
+
+* ?                             Main PL Help
+* break [file|for|foreach|forrows|while]     Exits a PL block or file early
+* return                        Exits a file early
+                                (equivalent to no-param 'break')
+* continue [foreach|while]      Exits a PL block iteration early
+
+* if (logical expr) Any 1-line command   Called 'inline' or shortcut if.
+
+* if (logical expr)             Execute following PL block only if expr true
+* else                          Execute block if paired 'if' statement false
+* end if                        Obviously...
+
+* for ((VARNAME OP math expr))  (logical expr) ((VARNAME OP math expr))
+                                Traditional mathematical for loop with
+                                initial expr., test condition, iter. expr.
+                                Example: * for ((i = 0)) (*i < 10) ((i += 1))
+* for (logical expr) ((VARNAME OP math expr))
+                                Same as previous, but with no initial expr.
+* end for
+
+* foreach VARNAME ([val1...])   Repeat the following PL block with the
+                                variable set to each value in turn.
+* end foreach
+
+* forrows [VARNAME1...]        An SQL query statement must be the very next
+Sql query that may span        command, then a PL block that will be executed
+multiple lines;                for each output row from the query.
+                               Specified vars, if any, will be assigned to
+                               the corresponding column output for each row,
+                               and env var. *ROW will be set just like ?
+                               except if multiple columns, they will all be
+* end forrows                  concatenated into *ROW.
+
+* while (logical expr)         Repeat following PL block while expr true
+* end while
+
+Several of the PL control commands specify one or more PL variable names,
+logical expressions, or mathematical expressions.  You must write the PL
+variables as follows for these situations:
+    BARE_NAME      To just specify a variable name, like where 'VARNAME' is
+                   written above, just write the bare variable name.
+                   Variable references inside of ((math expressions)) are also
+                   written as bare names.
+    *STARRED_NAME  In logical expressions, you should prefix variable names
+                   with *, to indicate that you want to test the value of
+                   variable "X", not the string "X".
+    *{STARRED_CURLYBRACED_NAME}
+                   Resolve variable to its value.  Shown here only for
+                   completeness.  It is an error to do this if variable has
+                   not been set.  Example:  \p *{VARNAME}
+    *{:STARRED_CURLYBRACED_NAME}
+                   Same as previous.  Colon causes unset variables to
+                   resolve to the empty string instead of failing.
+                   Example:  \p *{:VARNAME}

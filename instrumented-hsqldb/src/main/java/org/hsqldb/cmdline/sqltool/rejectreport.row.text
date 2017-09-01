@@ -1,0 +1,6 @@
+        <TR class="%{1}">
+            <TD class="sqltool-rejnum_col sqltool-right">%{2}</TD>
+            <TD class="sqltool-inline_col sqltool-right">%{3}</TD>
+            <TD class="sqltool-incol_col sqltool-center">%{4}</TD>
+            <TD><PRE class="sqltool-reason">%{5}</PRE></TD>
+        </TR>

@@ -1,0 +1,7 @@
+SYNTAX: java -cp Pfad/zur/hsqldb.jar %{1} {t|x}  \
+        [--directory=Pfad] Pfad/zur/Datei/tar[.gz] [regex1...]
+wobei
+    t:      Anzeigen einer Tabelle mit den Einträgen (wie "tar -t...")
+    x:      Entpacken-Modus (wie "tar -x...")
+    Pfad:   Basisverzeichnis zum Entpacken der relativen Archiveinträge
+    regex*: Muster, welche die darauf passenden Einträge auflistet oder entpackt

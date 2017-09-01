@@ -1,0 +1,143 @@
+-- Test persistence via .script file
+-- Same blaine role tests as in test C, but after persistence.
+/*u0*/connect user blaine password blaine;
+/*u0*/set schema aschema;
+/*u0*/create table a4(i int);
+/*u0*/set schema bschema;
+/*u0*/create table b4(i int);
+/*c1*/select * from aschema.a1;
+/*c1*/select * from bschema.b1;
+/*c0*/select * from aschema.a2;
+/*c0*/select * from bschema.b2;
+/*c0*/select * from aschema.a4;
+/*c0*/select * from bschema.b4;
+/*u0*/connect user debbie password debbie;
+/*u0*/set schema aschema;
+/*u0*/create table a5(i int);
+/*u0*/set schema bschema;
+/*u0*/create table b5(i int);
+/*c1*/select * from aschema.a1;
+/*c1*/select * from bschema.b1;
+/*c0*/select * from aschema.a2;
+/*c0*/select * from bschema.b2;
+/*c0*/select * from aschema.a3;
+/*c0*/select * from bschema.b4;
+/*c0*/select * from aschema.a4;
+/*c0*/select * from bschema.b5;
+/*c0*/select * from aschema.a5;
+/*c0*/select * from bschema.b3;
+
+/*u0*/connect user sa password "";
+-- FRED:  Please tell me if I remember this correctly:
+-- Next line has no effect, since Role nestings are not preserved in the Roles
+-- but are resolved statically at grant time.  I.e., since r had s when
+-- r was granted, it doesn't matter what roles are added/removed to/from
+-- s after that.
+-- Role nestings ARE preserved in the Roles
+/*u0*/revoke s from r restrict;
+/*u0*/revoke r from blaine restrict;
+-- Following not necessary although blaine had both r and s implicitly.
+/*e*/revoke s from blaine restrict; -- role s was not directly granted to blaine
+/*u0*/revoke s from debbie restrict;
+
+-- Negative tests (after privilege revocation via role revocation)
+/*u0*/connect user blaine password blaine;
+/*u0*/set schema aschema;
+/*e*/create table a6(i int);
+/*u0*/set schema bschema;
+/*e*/create table b6(i int);
+/*e*/select * from aschema.a1;
+/*e*/select * from bschema.b1;
+/*e*/select * from aschema.a2;
+/*e*/select * from bschema.b2;
+/*e*/select * from aschema.a4;
+/*e*/select * from bschema.b4;
+/*u0*/connect user debbie password debbie;
+/*u0*/set schema aschema;
+/*e*/create table a6(i int);
+/*u0*/set schema bschema;
+/*e*/create table b6(i int);
+/*e*/select * from aschema.a1;
+/*e*/select * from bschema.b1;
+/*e*/select * from aschema.a2;
+/*e*/select * from bschema.b2;
+/*e*/select * from aschema.a3;
+/*e*/select * from bschema.b4;
+/*e*/select * from aschema.a4;
+/*e*/select * from bschema.b5;
+/*e*/select * from aschema.a5;
+/*e*/select * from bschema.b3;
+
+-- USER INITIAL SCHEMA settings tests.  Here, we can't test whether the
+-- settings actually "work", because TestSelf always connects up as "sa".
+-- But we can test if the SET commands work, and if they get saved properly.
+/*u0*/connect user debbie password debbie;
+-- Need DBA privilege for ALTER USER usage.
+/*e*/ALTER USER debbie SET INITIAL SCHEMA public;
+-- Invalid schema name
+/*e*/SET INITIAL SCHEMA bad;
+/*rnull*/SELECT initial_schema FROM information_schema.system_users
+     WHERE USER_NAME = 'DEBBIE';
+/*u0*/SET INITIAL SCHEMA public;
+/*rPUBLIC*/SELECT initial_schema FROM information_schema.system_users
+     WHERE USER_NAME = 'DEBBIE';
+/*u0*/SET INITIAL SCHEMA aschema;
+/*rASCHEMA*/SELECT initial_schema FROM information_schema.system_users
+     WHERE USER_NAME = 'DEBBIE';
+-- Special DEFAULT keyword to set to the system default schema.
+/*u0*/SET INITIAL SCHEMA DEFAULT;
+/*rnull*/SELECT initial_schema FROM information_schema.system_users
+     WHERE USER_NAME = 'DEBBIE';
+/*u0*/connect user sa password "";
+GRANT dba TO debbie;
+/*u0*/connect user debbie password debbie;
+-- Now that have DBA priv, can run ALTER USER.
+/*u0*/ALTER USER debbie SET INITIAL SCHEMA public;
+-- ... even for other users
+/*rnull*/SELECT initial_schema FROM information_schema.system_users
+     WHERE USER_NAME = 'BLAINE';
+/*u0*/ALTER USER blaine SET INITIAL SCHEMA aschema;
+/*rASCHEMA*/SELECT initial_schema FROM information_schema.system_users
+     WHERE USER_NAME = 'BLAINE';
+/*u0*/ALTER USER blaine SET INITIAL SCHEMA default;
+/*rnull*/SELECT initial_schema FROM information_schema.system_users
+     WHERE USER_NAME = 'BLAINE';
+-- Test prohibited schemas
+/*e*/ALTER USER debbie SET INITIAL SCHEMA nosuch;
+/*e*/SET INITIAL SCHEMA nosuch;
+-- Test prohibited target Users
+/*e*/ALTER USER nosuch SET INITIAL SCHEMA default;
+/*e*/ALTER USER nosuch SET INITIAL SCHEMA aschema;
+/*e*/ALTER USER _system SET INITIAL SCHEMA default;
+/*e*/ALTER USER _system SET INITIAL SCHEMA aschema;
+/*e*/ALTER USER public SET INITIAL SCHEMA default;
+/*e*/ALTER USER public SET INITIAL SCHEMA aschema;
+
+-- Test user-schema dependencies
+/*u0*/connect user sa password "";
+/*u0*/CREATE user depu password "depu";
+/*u0*/CREATE schema deps authorization depu;
+-- Will fail because a schema is authorized directly by depu
+/*e*/DROP USER depu;
+/*u0*/DROP SCHEMA deps;
+/*u0*/DROP USER depu;
+/*u0*/CREATE user depu password "depu";
+/*u0*/CREATE schema deps authorization depu;
+/*e*/DROP USER depu;
+/*u0*/DROP USER depu CASCADE;
+-- Roles authorizations are independent of any user.
+/*u0*/CREATE user depu password "depu";
+/*u0*/CREATE ROLE depr;
+/*u0*/GRANT depr TO depu;
+/*u0*/CREATE schema deps authorization depr;
+/*u0*/DROP user depu;
+
+-- Test of same-named-objects in different schemas.  As an Admin.
+/*u0*/connect user sa password "";
+/*r1,11*/SELECT i, NEXT VALUE FOR bschema.samesname FROM bschema.sametname;
+/*r2,21*/SELECT i, NEXT VALUE FOR aschema.samesname FROM aschema.sametname;
+/*r1*/SELECT i FROM bschema.samevname;
+/*r2*/SELECT i FROM aschema.samevname;
+
+/*u0*/connect user sa password "";
+/*u0*/REVOKE dba FROM debbie RESTRICT;

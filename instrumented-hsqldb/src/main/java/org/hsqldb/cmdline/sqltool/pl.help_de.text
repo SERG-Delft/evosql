@@ -1,0 +1,50 @@
+PROZEDUALE SPRACHE (PROCEDURAL LANGUAGE) BEFEHLE
+    * ?                            PL Hilfe
+    * VARNAME = [neur Wert]        Weist der Variable einen Wert zu.
+    * - VARNAME                    Löscht die Variable.
+    * VARNAME ~                    Weist der Variable als Wert den Inhalt der
+                                   direkt folgenden SQL-Anweiung oder eines
+                                   Zählers zu (Bitte beachten Sie auch die
+                                   Hinweise am Ende der Auflistung).
+    * VARNAME _                    Dasselbe wie * VARNAME _, nur das die
+                                   Abfrage keine Ausgabe erzeugt (d.h, es
+                                   werden keine Zeilen angezeigt).
+    * list[values] [VARNAME1...]   Listet PL-Variable(n) auf (standardmäßig
+                                   alle).
+    * listsysprops [VARNAME1...]   Listet die System-Properties von Java auf
+                                   (standardmäßig alle).
+    * load VARNAME datei.txt       Lädt Variable aus einer Textatei.
+    * dump VARNAME datei.txt       Schreibt die Variable in eine Textdatei.
+    * prepare VARNAME              Verwenden Sie ? in der nächsten SQL-Anweisung
+                                   um die Variable an dieser Stelle
+                                   einzusetzten (bei "*{?}" wird die
+                                   Standardvariable verwendet).
+    * foreach VARNAME ([Wert1...]) Wiederholt den folgenden PL-Block pro Wert
+                                   mit der Variable, wobei diese im PL-Block
+                                   jeweils durch den Wert ersetzt wird.
+    * if (logical expr)            Führt den folgenden PL-Block nur aus wenn
+                                   der Ausdruck in Klammern wahr ist.
+    * while (logical expr)         Wiederholt den folgenden PL-Block solange
+                                   wie der Ausdruck in den Klammern wahr ist.
+    * end foreach|if|while         Beendent einen PL-Block.
+    * break [foreach|if|while|file]Unterbricht einen PL-Block oder Datei
+                                   vorzeitig.
+    * return                       Unterbricht eine Datei vorzeitig.
+    * continue [foreach|while]     Bricht einen Schleifendurch in einem
+                                   PL-Block ab und fährt mit dem nächsten
+                                   Durchlauf fort.
+
+Verwenden Sie PL-Variablen (die Sie gesetzt haben) wie folgt: *{VARNAME}.
+Verwenden Sie Systemeigenschaften (auch wenn Sie sie vlt. nicht gesetzt haben)
+so: ${property.name}.
+In logischen Ausdrücken verwenden Sie PL-Variablen so: (VARNAME == 1).
+Die automatische Variable ? bezieht sich immer auf die jüngste SQL-Anweisung
+(oder Updatezähler).
+    Abfrage:  Der Wert des ersten Feldes aus der ersten Reihe welche zurück
+              gegeben wurde.
+    sonstige: Rückgabewert eines Befehls (bei Updates ist dies die Zahl
+              der aktualisierten Reihen).
+
+'* VARNAME ~' or '* VARNAME _' setzt den jeweiligen Wert der Variable exakt.
+genau wie  ?.  (~ zeigt den Wert, _ erzeugt keine Ausgabe).
+

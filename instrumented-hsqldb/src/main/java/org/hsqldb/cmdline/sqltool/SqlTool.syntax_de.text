@@ -1,0 +1,28 @@
+Syntax: java org.hsqldb.cmdline.SqlTool [--opt[=optwert]...] urlid [datei1.sql...]
+Optionen:
+    --help                   Gibt diese Hilfe aus.
+    --list                   Zeigt urlids aus der RC-Datei an.
+    --noInput                Nicht von stdin lesen (Standardeinstellung wenn
+                             SQL-Datei angegeben oder der Schalter --sql
+                             benutzt wird).
+    --stdInput               Liest von stdin ZUSÄTZLICH zu SQL-Dateien/--sql
+                             Eingabe.
+    --inlineRc=url=val1,user=val2[,x=val3...][,password=]  Inline RC-Variablen
+    --debug                  Gibt Debug Infos auf stderr aus.
+    --noAutoFile             Führt die Datei auto.sql im Home-Verzeichniss
+                             nicht aus.
+    --autoCommit             Auto-commit JDBC DML Befehle
+    --sql="SQL; Anweisungen;" Führt die angegebene SQL-Anweisung aus statt von
+                             stdin zu lesen (bevor SQL-Dateien
+                             - wenn angegeben - ausgeführt werden)
+                             wobei 'SQL' aus SQL-Befehlen gebildet wird. Siehe
+                             Handbuch.
+    --rcFile=path/file.rc    Verwende Info-Datei [$HOME/sqltool.rc]
+    --continueOnErr=true|false Weiter (true) oder Abbrechen (false) nach Fehler.
+    --setVar=NAME1=val1[,NAME2=val2...]   PL Variablen
+    --driver=a.b.c.Driver    JDBC Treiber Class [%{2}]
+    urlid                    ID von Url/Benutzername/Passwort in der RC-Datei
+    datei1.sql...            SQL Dateien auszuführen  [stdin]
+                             (Benutzen Sie '-' für Nicht-Interaktives stdin!).
+Lesen Sie das SqlTool Handbuch für unterstützte sqltool.* Systemeigenschaften.
+SqlTool v. %{1}.

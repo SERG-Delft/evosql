@@ -1,0 +1,12 @@
+-- Tests a bug where with write_delay of 0, DML is not persisted until and 
+-- if DML is committed or DB is "shutdown".  If DB stops with no shutdown,
+-- all work is lost.
+
+/*u0*/SET SCHEMA ghostSchema;
+
+/*s*/DROP SCHEMA ghostSchema CASCADE;
+
+-- N.b. this test is unable to exhibit the problem because
+-- (a) It doesn't show when data is being written to the .log file; and
+-- (b) The test runner does a shutdown of some sort.  To reproduce 
+--     problem manually, just Ctrl-C out of the session.

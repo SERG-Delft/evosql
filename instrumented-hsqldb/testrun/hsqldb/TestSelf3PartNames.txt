@@ -1,0 +1,68 @@
+-- $Id: TestSelf3PartNames.txt 610 2008-12-22 15:54:18Z unsaved $
+-- Test 3-part names like:  schemaname.tablename.columname
+--SET PROPERTY "hsqldb.default_table_type" 'cached'
+-- Setup
+CREATE USER blaine PASSWORD "blaine";
+GRANT dba TO blaine;
+CREATE SCHEMA b1 AUTHORIZATION blaine;
+SET SCHEMA b1;
+CREATE TABLE t(i int);
+
+/*u1*/INSERT INTO t VALUES(1);
+/*c1*/SELECT t.i FROM t;
+/*c1*/SELECT b1.t.i FROM t;
+/*c1*/SELECT b1.t.i FROM b1.t;
+/*e*/SELECT t.NOSUCH.i FROM t;
+/*c1*/SELECT i FROM t WHERE t.i > 0;
+/*c1*/SELECT i FROM t WHERE b1.t.i > 0;
+/*e*/SELECT i FROM NOSUCH.t WHERE b1.t.i > 0;
+/*e*/SELECT i FROM t WHERE NOSUCH.t.i > 0;
+/*e*/SELECT i FROM t WHERE t.NOSUCH.i > 0;
+SET SCHEMA public;
+/*c1*/SELECT b1.t.i FROM b1.t;
+/*e*/SELECT t.NOSUCH.i FROM b1.t;
+/*c1*/SELECT i FROM b1.t WHERE b1.t.i > 0;
+/*e*/SELECT i FROM t WHERE b1.NOSUCH.i > 0;
+-- Cleanup
+DROP SCHEMA b1 CASCADE;
+DROP USER blaine;
+
+
+-- Now build up to Joins with 3-part names
+-- Setup
+create schema s1 authorization dba;
+create schema s2 authorization dba;
+create table s1.t(i int, j1 int);
+insert into s1.t values(11, 4);
+create table s2.t(i int, j2 int);
+insert into s2.t values(22, 4);
+
+-- sanity checks
+/*r11,4*/SELECT * FROM s1.t;
+/*r22,4*/SELECT * FROM s2.t;
+-- cross-schema 2-part name Join
+/*r4*/SELECT j1 FROM s1.t, s2.t WHERE j1 = j2;
+-- cross-schema 3-part name Join
+/*r22,4,11*/SELECT s2.t.i, j1, s1.t.i FROM s1.t, s2.t WHERE j1 = j2;
+/*r22,4,11*/SELECT s2.t.i, j1, s1.t.i FROM s1.t, s2.t WHERE s1.t.j1 = s2.t.j2;
+/*e*/SELECT s2.t.i, j1, s1.t.i FROM s1.t, s2.t WHERE s2.t.j1 = s2.t.j2;
+/*e*/SELECT s2.t.i, j1, s1.t.i FROM s1.t, s2.t WHERE s1.t.j1 = s1.t.j2;
+-- schema qualifier in view defintion
+CREATE VIEW s2.v2 AS SELECT * FROM s2.t;
+-- 3-part Names w/ views
+/*r22,4,11*/SELECT s2.v2.i, j1, s1.t.i FROM s1.t, s2.v2 WHERE j1 = j2;
+/*r22,4,11*/SELECT s2.v2.i, j1, s1.t.i FROM s1.t, s2.v2 WHERE s1.t.j1 = s2.v2.j2;
+-- 3-part name w/ *
+/*r22,4*/SELECT s2.t.* FROM s2.t;
+SET SCHEMA s2;
+/*r22,4*/SELECT s2.t.* FROM t;
+
+-- Illegal use of 3-part names
+/*e*/SELECT  * from bad.s1.t;
+/*e*/SELECT  * from s1.t.bad;
+/*e*/SELECT  * from s1.bad.t;
+
+SET SCHEMA public;
+-- Cleanup
+DROP SCHEMA s1 CASCADE;
+DROP SCHEMA s2 CASCADE;

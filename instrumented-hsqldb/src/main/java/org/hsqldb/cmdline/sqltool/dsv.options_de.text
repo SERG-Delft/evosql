@@ -1,0 +1,62 @@
+    \m pfad/datei.dsv      Importiert Datensätze aus einer DSV-Textdatei in
+                           eine Tabelle. (weitere Optionen '\m?').
+    \mq pfad/datei.csv     Ditto, aber mit traditionellen CSV doppelt zitiert.
+    \x {TABELLE|SELECT...} Exportiert Tabellen oder Abfragen in eine
+                           DSV-Textdatei (weitere Optionen: '\x?').
+    \xq {TABELLE|SEL...}   Ditto, aber mit traditionellen CSV doppelt zitiert.
+
+DSV bedeutet Delimiter-Separated-Values (dt. etwa:Trennzeichen-getrennte Werte).
+Es ist im Grunde genommen CSV (Comma Separated Values), DSV verwendet aber als
+Trennzeichen nur Zeichen welche sonst nicht im Text vorkommen. Auf diese Weise
+wird die bei CSV oft notwendige Maskierung von Trennzeichen im Text umgangen.
+Alle DSV PL-Variablen sind optional.
+Um sich den Inhalt einer PL-Variable anzeigen zu lassen, geben Sie
+"* listvalues" ein (ohne die "").
+Um einer Variable einen Wert zu zuweisen: "* *DSV_COL_DELIM = ,"
+Bitte vergessen Sie nicht, das erste * leitet eine PL-Variable ein und
+das zweite * steht am Beginn eines jeden Variablennamens.
+\x oder \m im folgenden zeigen an wo die Einstellung anwendbar ist.
+Der Standardwert/Verhalten steht in den [quadratischen Klammern].
+    *ALL_QUOTED        \xq     Doppeltes Anführungszeichen jede Zelle für
+                               \xq Exporte.  ["false"]
+    *DSV_SKIP_PREFIX   \m      Das Vorzeichen, das eine Kommentarzeile in der
+                               Datei einleitet. ["#"]
+    *DSV_COL_SPLITTER  \m      Das Spaltentrennzeichen fürs Einlesen als Regex.
+                               ["\|"]
+    *DSV_COL_DELIM     \x      Das Spaltentrennzeichen für die Ausgabe.   ["|"]
+    *DSV_ROW_SPLITTER  \m      Das Zeilentrennzeichen fürs Einlesen als Regex.
+                               ["\r\n|\r|\n"]
+    *DSV_ROW_DELIM     \x      Das Zeilentrennzeichen für die Ausgabe.
+                               [Betriebssystem-abhängig
+                               (Java-System Property line.separator)]
+    *NULL_REP_TOKEN    \m\x    Zeichenkette, um eine Datenbank-null
+                               darzustellen.  ["[null]"]
+    *DSV_TARGET_FILE   \x      Der Name der Zieldatei.
+                               [Name Quelltabelle + ".dsv"]
+    *DSV_TARGET_TABLE  \m      Name der Tabelle in welche die Daten importiert
+                               werden.  [DSV-Dateiname ohne Dateiendung]
+    *DSV_CONST_COLS    \m      Spalteninhalt, welcher in jede Reihe geschrieben
+                               wird.
+    *DSV_REJECT_FILE   \m      DSV-Datei, in die alle abgelehnten Datensätze
+                               geschrieben werden. [None*]
+    *DSV_REJECT_REPORT \m      HTML-Bericht mit den Gründen für abgelehnten
+                               Datensätze. [None*]
+    *DSV_SKIP_COLS     \m\x    Spalten aus der Eingabedatei/Tabelle welche
+                               ausgelassen werden.
+    *DSV_TRIM_ALL      \m      Wenn auf "true" gesetzt, werden alle führenden
+                               und abschließenden Leerzeichen aus allen Spalten
+                               nach dem import entfernt. [false]
+    *DSV_RECORDS_PER_COMMIT \m Integer-Wert (X). Wird er gesetzt, so
+                               überschreibt er die aktuelle Autocommit
+                               Einstellung, es wird nun nach X erfolgreichen
+                               INSERTS commitet (sowie nach Abschluss des
+                               Imports).
+* Das Importieren wird sofort nach dem ersten fehlerhaften Ipmort eines
+Datensatzes abgebrochen, es sei den die Variablen *DSV_REJECT_FILE und/oder
+*DSV_REJECT_REPORT sind gesetzt.
+(Die "Rollback"-Funktion (Rückgängig machen) des SqlTols hängt von der
+Verwendung der Optionen \c und \z ab.)
+Auto-commit und *DSV_RECORDS_PER_COMMIT stellen sicher das alle erfolgreich
+eingefügten Datensätze auch commitet werden - Rollbacks sind dann aber nicht
+mehr möglich.
+

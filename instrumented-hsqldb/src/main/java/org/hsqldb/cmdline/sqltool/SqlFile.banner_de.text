@@ -1,0 +1,28 @@
+SqlFile processor v. %{1}.
+Die Weitergabe ist zulässig unter den Bedingungen der HSQLDB Lizenz.
+(c) 2004-2011 Blaine Simpson und die HSQL Development Group.
+
+    \q    beenden.
+    \?    Sonderbefehle auflisten.
+    :?    Edit-Puffer/Verlaufsbefehle auflisten.
+    *?    PL Befehle auflisten.
+    /?    Zeigt die Hilfe und wie Makros (Befehlsaliase)
+          definiert und gelöscht werden.
+
+SONDERBEFEHLE fangen mit \ ab und werden mit ENTER ausgeführt.
+EDIT-PUFFER / VERLAUFSBEFEHLE 
+    fangen mit einem ':' an und werden mit ENTER ausgeführt.
+PROCEDURAL LANGUAGE (PL)
+    Befehle fangen mit einem '*' an  und werden mit ENTER beendet.
+MAKRO Ausführungen und Definitionen beginnen  mit einem '/'
+    und werden mit ENTER beendet.
+Alle anderen Zeilen enthalten SQL-Anweisungen (oder Kommentare).
+  SQL-Anweisungen werden entweder durch ein ';' beendet (und dann ausgeführt)
+  oder mit einer Leerzeile (dadurch wird die Anweisung in den Edit-Puffer
+  verschoben und nicht ausgeführt).
+Nach einer Variablenexpansion mit dem Befehl '*' (oder jedem anderen PL-Befehl),
+können PL-Variablen in den meisten Befehlen wie folgt verwendet werden:
+  *{PLVARNAME}
+Wenn Sie Reguläre Ausdrücke in Kommandos verwenden, beachten Sie bitte, daß
+diese im Befehlstext nur nach dem '*' oder '\' Präfix (falls vorhanden) wirken,
+

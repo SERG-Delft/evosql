@@ -1,0 +1,3 @@
+SYNTAX: java -cp %{1} neu.tar [Dateieintrag1...]
+Wenn keine Dateien angegeben wurden, dann wird von stdin gelesen um einen Eintrag
+mit dem Namen 'stdin' zu speichern. Bei letzteren ist die Eingabegröße auf 10240 Bytes begrenzt.

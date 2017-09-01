@@ -1,0 +1,59 @@
+-- $Id: TestSelfViewGrants.txt 610 2008-12-22 15:54:18Z unsaved $
+-- Tests viw grants
+
+-- These two users are for sanity tests
+/*u0*/CREATE USER privd PASSWORD "privd";
+/*u0*/CREATE USER unprivd PASSWORD "unprivd";
+/*u0*/CREATE USER u1 PASSWORD "u1";
+/*u0*/GRANT CHANGE_AUTHORIZATION TO privd;
+/*u0*/GRANT CHANGE_AUTHORIZATION TO unprivd;
+/*u0*/GRANT CHANGE_AUTHORIZATION TO u1;
+-- rtable = restricted table
+/*u0*/CREATE TABLE rtable (c1 int, c2 int, c3 int);
+/*u1*/INSERT INTO rtable values (1, 2, 3);
+/*c1*/SELECT * from rtable;
+/*u0*/CREATE VIEW v as SELECT c1, c2 FROM rtable;
+/*c1*/SELECT * from v;
+/*u0*/GRANT ALL ON v TO privd;
+/*u0*/GRANT SELECT ON v TO privd;
+/*u0*/GRANT SELECT(c1) ON v TO u1;
+
+
+-- Test col-specific SELECTs
+/*u0*/CONNECT USER u1 PASSWORD "u1";
+/*e*/SELECT c1 from rtable;
+/*e*/SELECT c2 from rtable;
+/*e*/SELECT c3 from rtable;
+/*e*/SELECT c2 from v;
+/*c1*/SELECT c1 from v;
+COMMIT;
+/*u0*/CONNECT USER privd PASSWORD "privd";
+/*e*/SELECT c1 from rtable;
+/*e*/SELECT c2 from rtable;
+/*e*/SELECT c3 from rtable;
+-- The following tests that View grants supercede restrictions on underlying
+-- tables.  (For grants on entire View, not View columns).
+/*c1*/SELECT c2 from v;
+/*c1*/SELECT c1 from v;
+COMMIT;
+/*u0*/CONNECT USER unprivd PASSWORD "unprivd";
+/*e*/SELECT c1 from rtable;
+/*e*/SELECT c2 from rtable;
+/*e*/SELECT c3 from rtable;
+/*e*/SELECT c2 from v;
+/*e*/SELECT c1 from v;
+COMMIT;
+/*u0*/CONNECT USER SA PASSWORD "";
+-- Exactly according to "SQL 1999" section 14.3.7:
+/*u0*/GRANT SELECT ON v TO PUBLIC;
+/*u0*/CONNECT USER unprivd PASSWORD "unprivd";
+/*c1*/SELECT c2 from v;
+/*c1*/SELECT c1 from v;
+COMMIT;
+/*u0*/CONNECT USER SA PASSWORD "";
+/*u0*/DROP USER u1;
+/*u0*/DROP USER privd;
+/*u0*/DROP USER unprivd;
+/*u0*/DROP VIEW v;
+/*u0*/DROP TABLE rtable;
+/*u0*/SHUTDOWN;

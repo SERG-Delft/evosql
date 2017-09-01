@@ -1,0 +1,34 @@
+PROCEDURAL LANGUAGE HELP
+
+This help describes variable usage (referencing) and the PL help commands.
+Please use the following commands for help about other aspects of PL.
+
+* ?                           This PL Help
+* ? assign                    Help about variable assignments:  * ? assign
+* ? control                   Help about control structures like '*if' and
+                              loops:  *? control
+* dump VARNAME path.txt       Dump variable value to text file
+* list[values] [VARNAME1...]  List PL variable(s) (defaults to all)
+* listsysprops [VARNAME1...]  List Java System property(s) (defaults to all)
+* prepare VARNAME             Use ? in next SQL statement to upload val.
+                              (Just "?", since "*{?}" is the auto var.).
+
+Resolve PL variable values, which have been set, like: *{VARNAME}.
+Resolve PL variable values, which MAY have been set, like: *{:VARNAME}.
+SqlTool reserves variables with names beginning with * for special purposes.
+ These are called SqlTool system variables.  Variables beginning with a
+ letter and followed by zero or more letters, digits, or _, are 'user' vars.
+Resolve System Property values (which you may not set) like: ${property.name}.
+Resolve PL variables in logical expressions, like (*VARNAME == 1).  [No curlies]
+When purposefully telling SqlTool a variable's "name", like to make an
+ assignment, write just the name like:  VARNAME = 1.  [Bare names]
+Use PL vars in math expressions, like ((NEWVAR = VARNAME * 3)).  [Bare names]
+Auto. variable ? is set to the very latest SQL datum fetched (or update count).
+    Query:  The value of the last field of the last row returned.
+            (Except will be set to the *NULL_REP_TOKEN value instead of to
+            real null if the value retrieved is a SQL null).
+    other:  Return status of the command
+            (for updates this will be the number of rows updated).
+    null/unset:  If the last SQL command failed, ? will be unset (aka null).
+Auto. variable # is set to rowcount of the last completed query.
+

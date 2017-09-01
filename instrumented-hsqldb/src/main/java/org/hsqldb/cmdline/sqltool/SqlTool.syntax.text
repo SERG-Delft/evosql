@@ -1,0 +1,30 @@
+Syntax: java org.hsqldb.cmdline.SqlTool [--opt[=optval]...] urlid [file1.sql...]
+    urlid                    ID of connection settings in rcfile.
+                             '-' means to not connect to any data source
+    file1.sql...             SQL files to be executed [stdin]
+                             '-' means non-interactive stdin.
+OR: java org.hsqldb.cmdline.SqlTool [--opt[=optval]...]
+    (Precisely equivalent to the first case, with urlid of '-' and no SQL files)
+Options:
+    --help                   Displays this message
+    --autoCommit             Auto-commit JDBC DML commands
+    --continueOnErr=true|false  Continue (if true) or Abort (false) upon errors
+    --debug                  Print Debug info to stderr
+    --driver=a.b.c.Driver    JDBC driver class [%{2}]
+    --inlineRc=url=val1,user=val2[,asetting=val3...][,password=]
+                             Inline RC variables (use --driver for driver)
+    --list                   List urlids in the rc file
+    --noAutoFile             Do not execute auto.sql from home dir
+    --noInput                Do not read stdin (default if sql file given
+                             or --sql switch used).
+    --rcFile=/file/path.rc   Connect Info File [$HOME/sqltool.rc]
+    --setVar=NAME1=val1[,NAME2=val2...]   PL variables
+                             May use multiple instances of this switch.
+    -p NAME=value            Assign a single PL variable.
+                             May use multiple instances of this switch.
+    --sql="SQL; Statements;" Execute given SQL instead of stdin (before
+                             SQL files if any are specified) where "SQL"
+                             consists of SQL command(s).  See the Guide.
+    --stdInput               Read stdin IN ADDITION to sql files/--sql input
+Values set with inlineRc or setVar may use \ to escape commas inside of values.
+SqlTool v. %{1}.  The invocation samples assume you have set up 'CLASSPATH'.

@@ -1,0 +1,4 @@
+Enter RAW SQL.  No \, :, * commands.
+End with a line containing only ".;" to send to database,
+or only "." to store to edit buffer for editing or saving.
+-----------------------------------------------------------

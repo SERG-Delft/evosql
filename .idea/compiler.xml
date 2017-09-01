@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="evaluation" />
+        <module name="ga" />
+        <module name="instrumented-hsqldb" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="evaluation" target="1.8" />
+      <module name="evosql" target="1.5" />
+      <module name="ga" target="1.8" />
+      <module name="instrumented-hsqldb" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

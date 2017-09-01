@@ -1,0 +1,32 @@
+<!--   REPORT GENERATORS:  To customize, write your own CSS file named
+       "overrides.css" and place it in same directory as this file is read
+       from.
+       If you copy this file, email it to somebody, etc., remember
+       to send your overrides.css file too, or it will appear
+       without customization in the new location.  - blaine
+-->
+
+<P>
+    Input DSV file: <SPAN class="sqltool-metafieldval">%{1}</SPAN>
+</P>
+<P>
+    Reject DSV file: <SPAN class="sqltool-metafieldval">%{2}</SPAN>
+</P>
+%{3:+
+<P>
+    The corresponding records in '<SPAN class="sqltool-metafieldval">%3</SPAN>'
+    are at line numbers of (reject # + 1), since the
+    header record occupies the first line.
+</P>
+}
+
+<TABLE class="sqltool">
+    <THEAD><TR>
+        <TH title="Number of this error">rej.&nbsp;#</TH>
+        <TH title="Line number in input .dsv file">input<BR/>line&nbsp;#</TH>
+        <TH title="Offending column.  Blank if unknown.">
+            bad&nbsp;column<BR/>(if&nbsp;known)</TH>
+        <TH title="Reason for failure, from DSV parser or database"
+            class="sqltool-reason">reason</TH>
+    </TR></THEAD>
+    <TBODY>

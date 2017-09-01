@@ -1,0 +1,44 @@
+PROCEDURAL LANGUAGE ASSIGNMENT COMMANDS
+
+* ?                             Main PL Help
+* VARNAME = [new value]         Set variable value.
+                                Leading space is trimmed from new value.
+* - VARNAME                     Unset variable
+* VARNAME ~                     Set variable value to the value of the very
+                                next SQL value or count fetched (see details
+                                at the bottom of this listing).
+* VARNAME _                     Same as * VARNAME ~, except the query is
+                                done silently (i.e, no rows to screen).
+* VARNAME :[appendage]          Set variable value to the previous edit
+                                buffer contents.
+* load VARNAME path.txt         Load variable value from text file
+* ((VARNAME OP math expr))      Perform integer math and assign to the var.
+                                Internal ops: variables, +, -, *, /, %, ^, ()
+                                Assignment OPs:  =, ++, +=, -=, *=, /=, %=
+                                No string values, system properties, or
+                                SqlTool system variables allowed.
+                                PL user variables written as bare names.
+* for, * foreach, * forrows     These branching commands assign values.
+                                Run '* ? control" for more details about these.
+
+SqlTool reserves variables with names beginning with * for special purposes.
+ These are called SqlTool system variables.  Variables beginning with a
+ letter and followed by zero or more letters, digits, or _, are 'user' vars.
+System Property values may not be set.
+
+Auto. variable ? is set to the very latest SQL datum fetched (or update count).
+    Query:  The value of the last field of the last row returned.
+            (Except will be set to the *NULL_REP_TOKEN value instead of to
+            real null if the value retrieved is a SQL null).
+    other:  Return status of the command
+            (for updates this will be the number of rows updated).
+    null/unset:  If the last SQL command failed, ? will be unset (aka null).
+Auto. variable # is set to rowcount of the last completed query.
+Inside of * forrows blocks only, *ROW will be set just like ? except if
+ multiple columns, they will all be concatenated into *ROW.
+
+'* VARNAME ~' or '* VARNAME _' sets the specified variable's value just like ?,
+but to the very next returned value; and VARNAME will be assigned null if
+the fetched value is SQL null.
+~  and _ assignments are equivalent except that _ suppresses display output.
+

@@ -1,0 +1,28 @@
+drop table arith if exists;
+create table arith ( inta int, intb int, intc int );
+insert into arith ( inta, intb, intc ) values ( 1, 2, 3 );
+insert into arith ( inta, intb, intc ) values ( 3, 5, 7 );
+insert into arith ( inta, intb, intc ) values ( 7, 11, 13 );
+insert into arith ( inta, intb, intc ) values ( 13, 17, 19 );
+
+select inta, intb from arith order by inta;
+select inta, inta + intb from arith order by inta;
+select inta, inta * intb from arith order by inta;
+select inta, inta - intb from arith order by inta;
+select inta, ( inta - intb ) * intc from arith order by inta;
+select inta, ( inta + intb ) * intc from arith order by inta;
+select inta, ( inta - intb ) + intc from arith order by inta;
+select inta, ( inta + intb ) + intc from arith order by inta;
+select inta, (inta-intb)*intc from arith order by inta;
+select inta, (inta+intb)*intc from arith order by inta;
+select inta, (inta-intb)+intc from arith order by inta;
+select inta, (inta+intb)+intc from arith order by inta;
+select inta, intc * ( inta - intb ) from arith order by inta;
+select inta, intc * ( inta + intb ) from arith order by inta;
+select inta, intc - ( inta + intb ) from arith order by inta;
+
+drop table arith;
+
+create table arith ( inta int, intb int, intc int );
+insert into arith ( inta, intb, intc ) values ( 1, 2, 3 );
+select inta, ( inta - intb ) * intc from arith order by inta;

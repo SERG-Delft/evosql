@@ -1,0 +1,16 @@
+SYNTAX:
+    java -cp path/to/hsqldb.jar %{1}
+    (to display this message)
+OR
+    java -cp path/to/hsqldb.jar %{1} --save  \
+    [--overwrite] tar/path.tar db/base/path
+OR
+    java -cp path/to/hsqldb.jar %{1} --list  \
+    tar/path.tar [regex1...]
+OR
+    java -cp path/to/hsqldb.jar %{1} --extract  \
+    [--overwrite] file/path.tar[.gz] db/dir [regex1...]
+    (extracts entry files to the specified db/dir).
+
+N.b. the db/base/path includes file base name, like in JDBC URLs, whereas
+db/dir is a proper 'directory'.

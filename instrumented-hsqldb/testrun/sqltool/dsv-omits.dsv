@@ -1,0 +1,8 @@
+targettable=t
+
+# Following (header) line has intentional trailing whitespace.
+  - | i  |  -  |  a  |  -  |  b  |  - | c
+
+# Following line has intentional trailing whitespace (and mixed case).
+  1 | 1  |  1  |  1  |  1  |  1  |  1 | 1
+  2 | 2  |  2  |  2  |  2  |  2  |  2 | 2

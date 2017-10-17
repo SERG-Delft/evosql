@@ -12,6 +12,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Maven: mysql:mysql-connector-java:6.0.5" level="project" />
+    <orderEntry type="library" name="Maven: com.github.jsqlparser:jsqlparser:0.9.6" level="project" />
     <orderEntry type="module" module-name="ga" />
     <orderEntry type="module-library">
       <library name="Maven: sqlrules:sqlrules:1.0">
@@ -22,7 +23,6 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="Maven: com.github.jsqlparser:jsqlparser:0.9.6" level="project" />
     <orderEntry type="library" name="Maven: org.apache.axis:axis:1.4" level="project" />
     <orderEntry type="library" name="Maven: wsdl4j:wsdl4j:1.6.2" level="project" />
     <orderEntry type="library" name="Maven: javax.xml.rpc:javax.xml.rpc-api:1.1.1" level="project" />

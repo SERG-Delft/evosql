@@ -26,9 +26,15 @@ public class TournamentSelection {
 		while (round < ROUNDS - 1) {
 			new_num = random.nextInt(population.size());
 			Fixture selected = population.get(new_num);
-			if (fc.compare(selected, population.get(winner)) == -1) {
+			FixtureFitness f1 = population.get(winner).getFitness();
+			FixtureFitness f2 = selected.getFitness();
+			//TODO: Find a way to pass the sql query.
+			if(f2.getFitness("") < f1.getFitness("")) {
 				winner = new_num;
 			}
+			/*if (fc.compare(selected, population.get(winner)) == -1) {
+				winner = new_num;
+			}*/
 			round++;
 		}
 

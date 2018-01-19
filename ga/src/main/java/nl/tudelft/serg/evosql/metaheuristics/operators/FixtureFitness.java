@@ -26,8 +26,43 @@ public class FixtureFitness {
 
 		return qld;
 	}
+
+	/**
+	 * Finds the amount of levels based on the string of the query.
+	 * @param sqlQuery query to analyse
+	 * @return amount of query levels.
+	 */
+	public int getDeepestQueryLevel(String sqlQuery) {
+		String normalised = sqlQuery.toLowerCase();
+		int level = 1;
+		String[] statements = normalised.split(" ");
+		for (String statement : statements) {
+			switch(statement) {
+				//TODO: insert keywords to check for to increase query levels.
+				case "":
+					level++;
+			}
+		}
+		return level;
+	}
+
+	/**
+	 * Returns the fitness as an integer value. Fitness is defined as sum of the step distance
+	 * (the amount of levels not executed in the query) and the branch distance on the last level
+	 * (the distance to executing the last level).
+	 * @return fitness value.
+	 */
+	public int getFitness(String sqlQuery) {
+		int fitness = Integer.MAX_VALUE;
+		int step_distance = getDeepestQueryLevel(sqlQuery) - getQueryLevel();
+		int branch_distance = (int) lastLevelData.getDistance();
+		fitness = step_distance + branch_distance;
+
+		assert fitness >= 0;
+		return fitness;
+	}
 	
-	public int getMaxQueryLevel() {
+	public int getQueryLevel() {
 		return lastLevelData.getQueryLevel();
 	}
 

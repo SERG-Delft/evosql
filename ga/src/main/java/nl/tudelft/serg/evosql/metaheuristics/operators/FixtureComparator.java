@@ -24,13 +24,13 @@ public class FixtureComparator implements Comparator<Fixture>{
 			return -1;
 		
 		// Compare max query levels, higher is better
-		if (f1.getMaxQueryLevel() < f2.getMaxQueryLevel())
+		if (f1.getQueryLevel() < f2.getQueryLevel())
 			return 1;
-		else if (f1.getMaxQueryLevel() > f2.getMaxQueryLevel())
+		else if (f1.getQueryLevel() > f2.getQueryLevel())
 			return -1;
 		
 		// From max query level downwards check for differences
-		for (int queryLevel = f1.getMaxQueryLevel(); queryLevel >= 0; queryLevel--) {
+		for (int queryLevel = f1.getQueryLevel(); queryLevel >= 0; queryLevel--) {
 			QueryLevelData qld1 = f1.getQueryLevelData(queryLevel);
 			QueryLevelData qld2 = f2.getQueryLevelData(queryLevel);
 

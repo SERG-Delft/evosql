@@ -231,7 +231,7 @@ public class GAApproach extends Approach {
 		// Execute the path
 		genetic.Instrumenter.execute(pathToTest);
 		
-		FixtureFitness ff = new FixtureFitness(genetic.Instrumenter.getFitness());
+		FixtureFitness ff = new FixtureFitness(genetic.Instrumenter.getFitness(), pathToTest);
 		fixture.setFitness(ff);
 		
 		// Store exceptions

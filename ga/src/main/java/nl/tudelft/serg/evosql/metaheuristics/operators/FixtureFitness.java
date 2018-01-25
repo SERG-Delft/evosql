@@ -8,11 +8,14 @@ import nl.tudelft.serg.evosql.fixture.Fixture;
  *
  */
 public class FixtureFitness {
-	
+
+	private String sqlQuery;
+
 	QueryLevelData lastLevelData;
 	
-	public FixtureFitness(QueryLevelData lastLevelData) {
+	public FixtureFitness(QueryLevelData lastLevelData, String sqlQuery) {
 		this.lastLevelData = lastLevelData;
+		this.sqlQuery = sqlQuery;
 	}
 
 	public QueryLevelData getQueryLevelData(int queryLevel) {
@@ -29,10 +32,9 @@ public class FixtureFitness {
 
 	/**
 	 * Finds the amount of levels based on the string of the query.
-	 * @param sqlQuery query to analyse
 	 * @return amount of query levels.
 	 */
-	public int getDeepestQueryLevel(String sqlQuery) {
+	public int getDeepestQueryLevel() {
 		String normalised = sqlQuery.toLowerCase();
 		int level = 1;
 		String[] statements = normalised.split(" ");
@@ -52,9 +54,9 @@ public class FixtureFitness {
 	 * (the distance to executing the last level).
 	 * @return fitness value.
 	 */
-	public int getFitness(String sqlQuery) {
+	public int getFitness() {
 		int fitness = Integer.MAX_VALUE;
-		int step_distance = getDeepestQueryLevel(sqlQuery) - getQueryLevel();
+		int step_distance = getDeepestQueryLevel() - getQueryLevel();
 		int branch_distance = (int) lastLevelData.getDistance();
 		fitness = step_distance + branch_distance;
 
@@ -101,7 +103,7 @@ public class FixtureFitness {
 	}
 	
 	public FixtureFitness copy() {
-		FixtureFitness copy = new FixtureFitness(lastLevelData.copy());
+		FixtureFitness copy = new FixtureFitness(lastLevelData.copy(), sqlQuery);
 		
 		return copy;
 	}

@@ -28,7 +28,6 @@ public class TournamentSelection {
 			Fixture selected = population.get(new_num);
 			FixtureFitness f1 = population.get(winner).getFitness();
 			FixtureFitness f2 = selected.getFitness();
-			//TODO: Find a way to pass the sql query.
 			if(f2.getFitness() < f1.getFitness()) {
 				winner = new_num;
 			}

@@ -1,6 +1,7 @@
 package nl.tudelft.serg.evosql.metaheuristics.operators;
 
 import genetic.QueryLevelData;
+import nl.tudelft.serg.evosql.EvoSQLException;
 import nl.tudelft.serg.evosql.fixture.Fixture;
 
 /**
@@ -41,7 +42,11 @@ public class FixtureFitness {
 		for (String statement : statements) {
 			switch(statement) {
 				//TODO: insert keywords to check for to increase query levels.
-				case "":
+				case "select":
+					level++;
+				case "having":
+					level++;
+				case "join":
 					level++;
 			}
 		}
@@ -57,6 +62,9 @@ public class FixtureFitness {
 	public int getFitness() {
 		int fitness = Integer.MAX_VALUE;
 		int step_distance = getDeepestQueryLevel() - getQueryLevel();
+		if(step_distance < 0) {
+			throw new EvoSQLException("Error in fitness function (negative step_distance)");
+		}
 		int branch_distance = (int) lastLevelData.getDistance();
 		fitness = step_distance + branch_distance;
 

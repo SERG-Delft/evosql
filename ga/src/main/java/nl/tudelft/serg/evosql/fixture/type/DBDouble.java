@@ -46,7 +46,7 @@ public class DBDouble implements DBType {
 		return truncateDecimals(newValue, decimals);
 	}
 	
-	private String truncateDecimals(double value, int decimals) {
+	static String truncateDecimals(double value, int decimals) {
 		StringBuilder builder = new StringBuilder("0");
 		if (decimals > 0) builder.append('.');
 		for (int i = 0; i < decimals; i++) 

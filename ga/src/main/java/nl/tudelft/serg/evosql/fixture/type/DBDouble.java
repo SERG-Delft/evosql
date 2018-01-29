@@ -2,7 +2,9 @@ package nl.tudelft.serg.evosql.fixture.type;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.List;
+import java.util.Locale;
 
 import nl.tudelft.serg.evosql.EvoSQLConfiguration;
 import nl.tudelft.serg.evosql.db.Seeds;
@@ -11,6 +13,11 @@ import nl.tudelft.serg.evosql.util.random.Randomness;
 public class DBDouble implements DBType {
 
 	private static Randomness random = new Randomness();
+	private static final DecimalFormatSymbols defaultDecimalFormatSymbols;
+
+	static {
+		defaultDecimalFormatSymbols = new DecimalFormatSymbols(Locale.US);
+	}
 	
 	@Override
 	public String generateRandom(boolean nullable) {
@@ -39,12 +46,12 @@ public class DBDouble implements DBType {
 		return truncateDecimals(newValue, decimals);
 	}
 	
-	private String truncateDecimals(double value, int decimals) {
-		StringBuilder builder = new StringBuilder("#");
+	static String truncateDecimals(double value, int decimals) {
+		StringBuilder builder = new StringBuilder("0");
 		if (decimals > 0) builder.append('.');
 		for (int i = 0; i < decimals; i++) 
 			builder.append('#');
-		DecimalFormat df = new DecimalFormat(builder.toString());
+		DecimalFormat df = new DecimalFormat(builder.toString(), defaultDecimalFormatSymbols);
 		df.setRoundingMode(RoundingMode.FLOOR);
 		
 		return df.format(value);

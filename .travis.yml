@@ -1,3 +1,6 @@
 language: java
+script:
+- mvn install -pl ga -am -DskipTests
+- mvn test -pl ga 
 jdk:
   - oraclejdk8

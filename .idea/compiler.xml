@@ -13,9 +13,15 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="evaluation" target="1.8" />
+      <module name="evaluation_main" target="1.8" />
+      <module name="evaluation_test" target="1.8" />
       <module name="evosql" target="1.5" />
       <module name="ga" target="1.8" />
+      <module name="ga_main" target="1.8" />
+      <module name="ga_test" target="1.8" />
       <module name="instrumented-hsqldb" target="1.8" />
+      <module name="instrumented-hsqldb_main" target="1.8" />
+      <module name="instrumented-hsqldb_test" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

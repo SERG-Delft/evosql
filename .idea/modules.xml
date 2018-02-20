@@ -3,9 +3,19 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/evaluation/evaluation.iml" filepath="$PROJECT_DIR$/evaluation/evaluation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/evaluation/evaluation_main.iml" filepath="$PROJECT_DIR$/.idea/modules/evaluation/evaluation_main.iml" group="evaluation" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/evaluation/evaluation_test.iml" filepath="$PROJECT_DIR$/.idea/modules/evaluation/evaluation_test.iml" group="evaluation" />
       <module fileurl="file://$PROJECT_DIR$/evosql.iml" filepath="$PROJECT_DIR$/evosql.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/evaluation/evosql-evaluation.iml" filepath="$PROJECT_DIR$/.idea/modules/evaluation/evosql-evaluation.iml" group="evaluation" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ga/evosql-ga.iml" filepath="$PROJECT_DIR$/.idea/modules/ga/evosql-ga.iml" group="ga" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/instrumented-hsqldb/evosql-instrumented-hsqldb.iml" filepath="$PROJECT_DIR$/.idea/modules/instrumented-hsqldb/evosql-instrumented-hsqldb.iml" group="instrumented-hsqldb" />
       <module fileurl="file://$PROJECT_DIR$/ga/ga.iml" filepath="$PROJECT_DIR$/ga/ga.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ga/ga_main.iml" filepath="$PROJECT_DIR$/.idea/modules/ga/ga_main.iml" group="ga" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ga/ga_test.iml" filepath="$PROJECT_DIR$/.idea/modules/ga/ga_test.iml" group="ga" />
       <module fileurl="file://$PROJECT_DIR$/instrumented-hsqldb/instrumented-hsqldb.iml" filepath="$PROJECT_DIR$/instrumented-hsqldb/instrumented-hsqldb.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/instrumented-hsqldb/instrumented-hsqldb_main.iml" filepath="$PROJECT_DIR$/.idea/modules/instrumented-hsqldb/instrumented-hsqldb_main.iml" group="instrumented-hsqldb" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/instrumented-hsqldb/instrumented-hsqldb_test.iml" filepath="$PROJECT_DIR$/.idea/modules/instrumented-hsqldb/instrumented-hsqldb_test.iml" group="instrumented-hsqldb" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/repos-evosql.iml" filepath="$PROJECT_DIR$/.idea/modules/repos-evosql.iml" />
     </modules>
   </component>
 </project>

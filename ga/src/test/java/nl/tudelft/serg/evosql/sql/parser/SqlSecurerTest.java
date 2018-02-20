@@ -3,6 +3,9 @@ package nl.tudelft.serg.evosql.sql.parser;
 import org.junit.Test;
 import org.junit.Assert;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 public class SqlSecurerTest {
 
 	@Test
@@ -169,8 +172,8 @@ public class SqlSecurerTest {
 	
 	@Test
 	public void secureTimezoneDateString() {
-		String sql = new SqlSecurer("SELECT column1 FROM table WHERE column2 >= 'Thu Feb 09 15:02:45 BRST 2017'").getSecureSql();
-		Assert.assertEquals("SELECT \"COLUMN1\" FROM \"TABLE\" WHERE \"COLUMN2\" >= '2017-02-09 19:02:45'", sql);
+		String sql = new SqlSecurer("SELECT column1 FROM table WHERE column2 >= 'Thu Feb 09 15:02:45 GMT-03:00 2017'").getSecureSql();
+		Assert.assertEquals("SELECT \"COLUMN1\" FROM \"TABLE\" WHERE \"COLUMN2\" >= '2017-02-09 15:02:45'", sql);
 	}
 	
 	@Test

@@ -2,7 +2,9 @@ package nl.tudelft.serg.evosql.sql.parser;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 import net.sf.jsqlparser.expression.AllComparisonExpression;
 import net.sf.jsqlparser.expression.AnalyticExpression;
@@ -173,8 +175,15 @@ public class SqlSecurerVisitor implements ExpressionVisitor, FromItemVisitor, It
 		// If it can parse it, replace it with right date time value
 		try {
 			Date date = wrongDatetimeFormat.parse(arg0.getValue());
+
+			// output the date/time using the same passed timezone
+			String originalTimeZone = arg0.getValue().split(" ")[4];
+			TimeZone tz = TimeZone.getTimeZone(originalTimeZone);
+			rightDatetimeFormat.setTimeZone(tz);
+
 			arg0.setValue(rightDatetimeFormat.format(date));
-		} catch (ParseException e) {}
+		} catch (ParseException e) {
+		}
 	}
 
 	@Override

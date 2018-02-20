@@ -1,8 +1,10 @@
 package nl.tudelft.serg.evosql.test;
 
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
+@Ignore
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
 	TestSelect.class,

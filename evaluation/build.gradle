@@ -6,4 +6,5 @@ dependencies {
     compile project(':ga')
     compile project(':instrumented-hsqldb')
     compile group: 'org.hibernate', name: 'hibernate-core', version:'5.2.10.Final'
+    compileClasspath fileTree(dir: '../lib', includes: ['*.jar'])
 }

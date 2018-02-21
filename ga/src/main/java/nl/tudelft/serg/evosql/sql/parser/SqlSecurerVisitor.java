@@ -172,18 +172,6 @@ public class SqlSecurerVisitor implements ExpressionVisitor, FromItemVisitor, It
 
 	@Override
 	public void visit(StringValue arg0) {
-		// If it can parse it, replace it with right date time value
-		try {
-			Date date = wrongDatetimeFormat.parse(arg0.getValue());
-
-			// output the date/time using the same passed timezone
-			String originalTimeZone = arg0.getValue().split(" ")[4];
-			TimeZone tz = TimeZone.getTimeZone(originalTimeZone);
-			rightDatetimeFormat.setTimeZone(tz);
-
-			arg0.setValue(rightDatetimeFormat.format(date));
-		} catch (ParseException e) {
-		}
 	}
 
 	@Override

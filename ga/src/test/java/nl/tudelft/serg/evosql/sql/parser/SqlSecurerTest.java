@@ -169,13 +169,7 @@ public class SqlSecurerTest {
 		String sql = new SqlSecurer("SELECT column1 FROM table FOR UPDATE").getSecureSql();
 		Assert.assertEquals(sql, "SELECT \"COLUMN1\" FROM \"TABLE\"");
 	}
-	
-	@Test
-	public void secureTimezoneDateString() {
-		String sql = new SqlSecurer("SELECT column1 FROM table WHERE column2 >= 'Thu Feb 09 15:02:45 GMT-03:00 2017'").getSecureSql();
-		Assert.assertEquals("SELECT \"COLUMN1\" FROM \"TABLE\" WHERE \"COLUMN2\" >= '2017-02-09 15:02:45'", sql);
-	}
-	
+
 	@Test
 	public void secureEqualsNull() {
 		String sql = new SqlSecurer("SELECT column1 FROM table WHERE column2 = NULL").getSecureSql();

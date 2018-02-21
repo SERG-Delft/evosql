@@ -1,0 +1,6 @@
+
+description = 'Instrumented HSQLDB'
+dependencies {
+    compile group: 'javax.servlet', name: 'javax.servlet-api', version:'4.0.0-b01'
+    compile group: 'org.apache.ant', name: 'ant', version:'1.9.7'
+}

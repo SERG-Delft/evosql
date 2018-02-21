@@ -1,4 +1,9 @@
 language: java
+
+cache:
+  directories:
+  - ~/.gradle
+
 script:
 - gradle assemble     # compile all subprojects
 - gradle :ga:test     # runs unit tests

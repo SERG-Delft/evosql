@@ -1,6 +1,6 @@
 package nl.tudelft.serg.evosql.querydepth;
 
-import com.sun.istack.internal.NotNull;
+//import com.sun.istack.internal.NotNull;
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.statement.select.Select;
@@ -13,7 +13,7 @@ import net.sf.jsqlparser.statement.select.Select;
  */
 public class QueryDepthExtractor {
 
-    @NotNull
+    //@NotNull
     private Select statement;
 
     public QueryDepthExtractor(Select statement) {

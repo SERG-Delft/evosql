@@ -1,0 +1,13 @@
+
+description = 'evaluation'
+dependencies {
+    compile group: 'mysql', name: 'mysql-connector-java', version:'6.0.5'
+    compile group: 'com.github.jsqlparser', name: 'jsqlparser', version:'0.9.6'
+    compile project(':ga')
+    compile project(':instrumented-hsqldb')
+    compile group: 'org.hibernate', name: 'hibernate-core', version:'5.2.10.Final'
+    compileClasspath fileTree(dir: '../lib', includes: ['*.jar'])
+
+    // This dependency is not a testCompile since it is used in src/main/java, not src/test/java
+    compile group: 'org.mockito', name: 'mockito-all', version: '2.0.2-beta'
+}

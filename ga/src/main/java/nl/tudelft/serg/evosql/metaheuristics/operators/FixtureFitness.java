@@ -68,7 +68,7 @@ public class FixtureFitness {
 		int branch_distance = (int) lastLevelData.getDistance();
 		fitness = step_distance + branch_distance;
 
-		assert fitness >= 0;
+//		assert fitness >= 0;
 		return fitness;
 	}
 	

@@ -29,16 +29,15 @@ subprojects {
         jacoco {
             append = false
             destinationFile = file("$buildDir/jacoco/jacocoTest.exec")
-
-            finalizedBy jacocoTestReport
         }
+    }
 
-        jacocoTestReport {
-            reports {
-                xml.enabled false
-                csv.enabled false
-                html.destination file("${buildDir}/reports/jacocoHtml")
-            }
+    jacocoTestReport {
+        reports {
+            csv.enabled false
+            xml.enabled true
+            xml.destination file("${buildDir}/reports/jacoco/report.xml")
+            html.destination file("${buildDir}/reports/jacoco/html")
         }
     }
 }

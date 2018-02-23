@@ -1,6 +1,7 @@
 allprojects {
     apply plugin: 'maven'
     apply plugin: 'jacoco'
+    apply plugin: 'findbugs'
 
     group = 'nl.tudelft'
     version = '1.0'
@@ -31,6 +32,7 @@ subprojects {
             destinationFile = file("$buildDir/jacoco/jacocoTest.exec")
 
             finalizedBy jacocoTestReport
+            finalizedBy findbugsMain
         }
 
         jacocoTestReport {
@@ -39,6 +41,18 @@ subprojects {
                 csv.enabled false
                 html.destination file("${buildDir}/reports/jacoco")
             }
+        }
+    }
+
+    findbugs {
+        ignoreFailures = true
+        sourceSets=[sourceSets.main]
+    }
+
+    tasks.withType(FindBugs) {
+        reports {
+            xml.enabled false
+            html.enabled true
         }
     }
 }

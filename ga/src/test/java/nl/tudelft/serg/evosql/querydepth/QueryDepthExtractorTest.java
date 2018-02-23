@@ -1,25 +1,100 @@
 package nl.tudelft.serg.evosql.querydepth;
 
 import net.sf.jsqlparser.statement.select.Select;
+import nl.tudelft.serg.evosql.test.*;
 import org.junit.Assert;
 import org.junit.Test;
 
+/**
+ * Tests whether the QueryDepthExtractor can find the right depth for
+ * certain queries. The expected number is derived from running the query
+ * with EvoSQL and checking the fixture fitnesses.
+ */
 public class QueryDepthExtractorTest {
 
+    /**
+     * @see TestHaving#test2()
+     */
     static final String TEST_QUERY_HAVING =
             "SELECT Product, AVG(Price) FROM products WHERE LENGTH(Product) = 5 GROUP BY Product HAVING AVG(Price) > 0 AND AVG(Price) < 10";
 
-    static final String TEST_QUERY_SUBQUERY =
+    /**
+     * @see TestSubquerySelectWhere#test9()
+     */
+    static final String TEST_QUERY_SUBQUERY_1 =
             "SELECT * FROM Products t WHERE t.Price < (SELECT MAX(Type) FROM Product_Detail t2 WHERE LENGTH(t.Product) = (SELECT MIN(t3.ID) FROM Products t3 WHERE t3.ID >= 0 AND t3.Product = t2.Name))";
 
+    /**
+     * @see TestSubquerySelectWhere#test10()
+     */
+    static final String TEST_QUERY_SUBQUERY_2 =
+            "SELECT * FROM Products t WHERE t.Price < (SELECT MAX(Type) FROM Product_Detail t2 WHERE LENGTH(t.Product) = (SELECT MIN(t3.ID) FROM Products t3 WHERE t3.ID >= 0 AND t3.Product = t2.Name))";
+
+    /**
+     * @see TestInnerJoin#test7()
+     */
     static final String TEST_QUERY_JOIN =
             "SELECT Product FROM Products t1 INNER JOIN PRODUCT_DETAIL t2 ON t1.ID = t2.ID INNER JOIN PRODUCT_DETAIL t3 ON t1.ID = t3.ID - 10";
 
+    /**
+     * @author Daniël van Gelder
+     */
     static final String TEST_QUERY_ERROR =
             "SELEC t FR;";
 
+    /**
+     * @author Daniël van Gelder
+     */
     static final String TEST_QUERY_COMPOSITE =
             "SELECT Product, AVG(Price) FROM products INNER JOIN Table ON products.id=Table.id WHERE Price IN (SELECT Price FROM Product WHERE Price < 100) GROUP BY Product HAVING COUNT(Product) = 3";
+
+    /**
+     * @see TestIn#test1()
+     */
+    static final String TEST_QUERY_IN_SET =
+            "SELECT Product, Price FROM Products WHERE Product IN ('HI', 'BYE')";
+
+    /**
+     * @see TestIn#test2()
+     */
+    static final String TEST_QUERY_IN_SUBQUERY =
+            "SELECT Product, Price FROM Products WHERE Product IN (SELECT Name FROM Product_Detail)";
+
+    /**
+     * @author Daniël van Gelder
+     */
+    static final String TEST_QUERY_NESTED_SUBQUERY_1 =
+            "SELECT Product, Id FROM Products WHERE Id IN (SELECT Id FROM Product_Detail WHERE Name IN (SELECT Name FROM Price))";
+
+    /**
+     * @see TestExists#test2()
+     */
+    static final String TEST_QUERY_EXISTS =
+            "SELECT Product, Price FROM Products pr WHERE EXISTS (SELECT ID FROM Product_detail WHERE Type = pr.ID AND EXISTS(SELECT * FROM Price))";
+
+    /**
+     * @see TestRightJoin#testRightJoinWithNulls2BasedOnEspocrmQ21P15()
+     */
+    static final String TEST_QUERY_LONG =
+            "SELECT PORTAL.ID AS ID, PORTAL.NAME AS NAME, PORTAL.DELETED AS DELETED, PORTAL.CUSTOM_ID AS CUSTOMID, PORTAL.IS_ACTIVE AS " +
+                    "ISACTIVE, PORTAL.TAB_LIST AS TABLIST, PORTAL.QUICK_CREATE_LIST AS QUICKCREATELIST, PORTAL.THEME AS THEME, PORTAL.LANGUAGE" +
+                    "AS LANGUAGE, PORTAL.TIME_ZONE AS TIMEZONE, PORTAL.DATE_FORMAT AS DATEFORMAT, PORTAL.TIME_FORMAT AS TIMEFORMAT, " +
+                    "PORTAL.WEEK_START AS WEEKSTART, PORTAL.DEFAULT_CURRENCY AS DEFAULTCURRENCY, PORTAL.DASHBOARD_LAYOUT AS DASHBOARDLAYOUT, " +
+                    "PORTAL.DASHLETS_OPTIONS AS DASHLETSOPTIONS, PORTAL.CUSTOM_URL AS CUSTOMURL, PORTAL.MODIFIED_AT AS MODIFIEDAT, " +
+                    "PORTAL.CREATED_AT AS CREATEDAT, PORTAL.MODIFIED_BY_ID AS MODIFIEDBYID, TRIM(CONCAT(MODIFIEDBY.FIRST_NAME, ' ', " +
+                    "MODIFIEDBY.LAST_NAME)) AS MODIFIEDBYNAME, PORTAL.CREATED_BY_ID AS CREATEDBYID, TRIM(CONCAT(CREATEDBY.FIRST_NAME, ' ', " +
+                    "CREATEDBY.LAST_NAME)) AS CREATEDBYNAME, LOGO.NAME AS LOGONAME, PORTAL.LOGO_ID AS LOGOID, COMPANYLOGO.NAME AS " +
+                    "COMPANYLOGONAME, PORTAL.COMPANY_LOGO_ID AS COMPANYLOGOID "
+                    + "FROM PORTAL INNER JOIN "
+                    + "USER AS MODIFIEDBY ON PORTAL.MODIFIED_BY_ID = MODIFIEDBY.ID "
+                    + "INNER JOIN USER AS CREATEDBY ON PORTAL.CREATED_BY_ID = CREATEDBY.ID "
+                    + "INNER JOIN ATTACHMENT AS LOGO ON PORTAL.LOGO_ID = LOGO.ID "
+                    + "LEFT JOIN ATTACHMENT AS COMPANYLOGO ON PORTAL.COMPANY_LOGO_ID = COMPANYLOGO.ID "
+                    + "WHERE ( "
+                    + "( COMPANYLOGO.ID IS NULL ) AND "
+                    + "( PORTAL.COMPANY_LOGO_ID IS NULL ) "
+                    + ") AND "
+                    + "( PORTAL.ID = 'testPortalId' AND PORTAL.DELETED = '0' )";
 
     @Test
     public void parserSetupTest() {
@@ -35,15 +110,33 @@ public class QueryDepthExtractorTest {
     }
 
     @Test
-    public void queryDepthSubqueryTest() {
-        QueryDepthExtractor extractor = new QueryDepthExtractor(TEST_QUERY_SUBQUERY);
+    public void queryDepthSubquery1Test() {
+        QueryDepthExtractor extractor = new QueryDepthExtractor(TEST_QUERY_SUBQUERY_1);
         Assert.assertEquals(3, extractor.getQueryDepth());
+    }
+
+    @Test
+    public void queryDepthSubquery2Test() {
+        QueryDepthExtractor extractor = new QueryDepthExtractor(TEST_QUERY_SUBQUERY_2);
+        Assert.assertEquals(3,extractor.getQueryDepth());
     }
 
     @Test
     public void queryDepthJoinTest() {
         QueryDepthExtractor extractor = new QueryDepthExtractor(TEST_QUERY_JOIN);
-        Assert.assertEquals(3,extractor.getQueryDepth());
+        Assert.assertEquals(1,extractor.getQueryDepth());
+    }
+
+    @Test
+    public void queryDepthInSetTest() {
+        QueryDepthExtractor extractor = new QueryDepthExtractor(TEST_QUERY_IN_SET);
+        Assert.assertEquals(2,extractor.getQueryDepth());
+    }
+
+    @Test
+    public void queryDepthInSubQueryTest() {
+        QueryDepthExtractor extractor = new QueryDepthExtractor(TEST_QUERY_IN_SUBQUERY);
+        Assert.assertEquals(2,extractor.getQueryDepth());
     }
 
     @Test(expected=RuntimeException.class)
@@ -54,8 +147,27 @@ public class QueryDepthExtractorTest {
     @Test
     public void compositeQueryTest() {
         QueryDepthExtractor extractor = new QueryDepthExtractor(TEST_QUERY_COMPOSITE);
-        Assert.assertEquals(4, extractor.getQueryDepth());
+        Assert.assertEquals(3, extractor.getQueryDepth());
     }
+
+    @Test
+    public void nestedInQueryTest() {
+        QueryDepthExtractor extractor = new QueryDepthExtractor(TEST_QUERY_NESTED_SUBQUERY_1);
+        Assert.assertEquals(3,extractor.getQueryDepth());
+    }
+
+    @Test
+    public void existsWithNestedSubqueryTest() {
+        QueryDepthExtractor extractor = new QueryDepthExtractor(TEST_QUERY_EXISTS);
+        Assert.assertEquals(3,extractor.getQueryDepth());
+    }
+
+    @Test
+    public void longQueryTest() {
+        QueryDepthExtractor extractor = new QueryDepthExtractor(TEST_QUERY_LONG);
+        Assert.assertEquals(1,extractor.getQueryDepth());
+    }
+
 
 
 }

@@ -25,15 +25,15 @@ import net.sf.jsqlparser.statement.select.*;
 import net.sf.jsqlparser.statement.truncate.Truncate;
 import net.sf.jsqlparser.statement.update.Update;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * A visitor class which finds all expressions causing a new query level to
  * be created in EvoSQL evaluation. Uses jSQLParser library.
  */
-public class QueryDepthVisitor implements StatementVisitor, SelectVisitor, FromItemVisitor, ExpressionVisitor {
-    private List<Object> queryLevels = new ArrayList<>();
+public class QueryDepthVisitor implements StatementVisitor, SelectVisitor, FromItemVisitor, ExpressionVisitor, ItemsListVisitor {
+    private Stack<Object> queryLevels = new Stack<>();
 
     public List getQueryLevels() {
         return queryLevels;
@@ -41,17 +41,19 @@ public class QueryDepthVisitor implements StatementVisitor, SelectVisitor, FromI
 
     @Override
     public void visit(PlainSelect plainSelect) {
-        queryLevels.add(plainSelect);
+        if(queryLevels.isEmpty()) {
+            queryLevels.push(plainSelect);
+        }else if(!(queryLevels.peek() instanceof InExpression)) {
+            queryLevels.push(plainSelect);
+        }
         if(plainSelect.getHaving() != null) {
-            queryLevels.add(plainSelect.getHaving());
+            queryLevels.push(plainSelect.getHaving());
             plainSelect.getHaving().accept(this);
         }
         if(plainSelect.getWhere() != null) {
             plainSelect.getWhere().accept(this);
         }
-        if(plainSelect.getJoins() != null) {
-            queryLevels.addAll(plainSelect.getJoins());
-        }
+
 
     }
 
@@ -276,8 +278,9 @@ public class QueryDepthVisitor implements StatementVisitor, SelectVisitor, FromI
 
     @Override
     public void visit(InExpression inExpression) {
-        inExpression.getLeftExpression().accept(this);
-        queryLevels.add(this);
+        queryLevels.push(inExpression);
+        //inExpression.getLeftExpression().accept(this);
+        inExpression.getRightItemsList().accept(this);
     }
 
     @Override
@@ -318,6 +321,16 @@ public class QueryDepthVisitor implements StatementVisitor, SelectVisitor, FromI
     public void visit(SubSelect subSelect) {
         //queryLevels.add(subSelect);
         subSelect.getSelectBody().accept(this);
+    }
+
+    @Override
+    public void visit(ExpressionList expressionList) {
+        expressionList.getExpressions().forEach(x -> x.accept(this));
+    }
+
+    @Override
+    public void visit(MultiExpressionList multiExpressionList) {
+        multiExpressionList.getExprList().forEach(x -> x.accept(this));
     }
 
     @Override
@@ -462,7 +475,7 @@ public class QueryDepthVisitor implements StatementVisitor, SelectVisitor, FromI
 
     @Override
     public void visit(SubJoin subJoin) {
-        queryLevels.add(subJoin);
+        queryLevels.push(subJoin);
     }
 
     @Override

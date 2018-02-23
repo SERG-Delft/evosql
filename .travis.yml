@@ -9,7 +9,7 @@ notifications:
 
 script:
 - gradle assemble     # compile all subprojects
-- gradle :ga:test     # runs unit tests
+- gradle :ga:check    # runs unit verification tasks
 
 # See https://docs.gradle.org/current/userguide/java_plugin.html for
 # more details on the lifecycle events of Java projects in Gradle

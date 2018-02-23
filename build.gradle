@@ -1,5 +1,6 @@
 allprojects {
     apply plugin: 'maven'
+    apply plugin: 'jacoco'
 
     group = 'nl.tudelft'
     version = '1.0'
@@ -24,5 +25,20 @@ subprojects {
         testCompile group: 'org.mockito', name: 'mockito-all', version: '2.0.2-beta'
     }
 
+    test {
+        jacoco {
+            append = false
+            destinationFile = file("$buildDir/jacoco/jacocoTest.exec")
 
+            finalizedBy jacocoTestReport
+        }
+
+        jacocoTestReport {
+            reports {
+                xml.enabled false
+                csv.enabled false
+                html.destination file("${buildDir}/reports/jacoco")
+            }
+        }
+    }
 }

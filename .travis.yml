@@ -8,7 +8,6 @@ notifications:
   email: false
 
 script:
-- gradle assemble           # compile all subprojects
 - gradle :ga:check          # runs unit verification tasks
 - gradle jacocoTestReport   # generates Jacoco test report
 

@@ -1,7 +1,8 @@
 # EvoSQL
 
-
 [![Build Status](https://travis-ci.org/SERG-Delft/evosql.svg?branch=master)](https://travis-ci.org/SERG-Delft/evosql)
+[![codecov](https://codecov.io/gh/SERG-Delft/evosql/branch/master/graph/badge.svg)](https://codecov.io/gh/SERG-Delft/evosql)
+
 
 EvoSQL is a tool that automatically generates test data for your SQL queries.
 Behind the scenes, EvoSQL implements a search-based algorithm.

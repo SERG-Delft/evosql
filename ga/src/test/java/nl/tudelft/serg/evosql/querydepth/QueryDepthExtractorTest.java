@@ -74,6 +74,18 @@ public class QueryDepthExtractorTest {
             "SELECT Product, Price FROM Products pr WHERE EXISTS (SELECT ID FROM Product_detail WHERE Type = pr.ID AND EXISTS(SELECT * FROM Price))";
 
     /**
+     * @see TestSubqueryFrom#test7()
+     */
+    static final String TEST_GROUP_BY_HAVING =
+            "SELECT Product FROM (SELECT Product, Price FROM products GROUP BY Product, Price) t GROUP BY Product HAVING SUM(Price) > 4";
+
+    /**
+     * @see TestSubqueryFrom#test8()
+     */
+    static final String TEST_NESTED_HAVING =
+            "SELECT Product FROM (SELECT Product, Price FROM products GROUP BY Product, Price HAVING SUM(Price) < 10) t GROUP BY Product HAVING SUM(Price) > 4";
+
+    /**
      * @see TestRightJoin#testRightJoinWithNulls2BasedOnEspocrmQ21P15()
      */
     static final String TEST_QUERY_LONG =
@@ -167,6 +179,18 @@ public class QueryDepthExtractorTest {
     public void longQueryTest() {
         QueryDepthExtractor extractor = new QueryDepthExtractor(TEST_QUERY_LONG);
         Assert.assertEquals(1,extractor.getQueryDepth());
+    }
+
+    @Test
+    public void groupByHavingTest() {
+        QueryDepthExtractor extractor = new QueryDepthExtractor(TEST_GROUP_BY_HAVING);
+        Assert.assertEquals(3,extractor.getQueryDepth());
+    }
+
+    @Test
+    public void nestedHavingTest() {
+        QueryDepthExtractor extractor = new QueryDepthExtractor(TEST_NESTED_HAVING);
+        Assert.assertEquals(4,extractor.getQueryDepth());
     }
 
     //Verifies behaviour of reusing depth attribute using mocks

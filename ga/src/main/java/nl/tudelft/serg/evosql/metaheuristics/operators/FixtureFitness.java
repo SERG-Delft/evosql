@@ -41,7 +41,7 @@ public class FixtureFitness {
 		int fitness = Integer.MAX_VALUE;
 		int step_distance = depthExtractor.getQueryDepth() - getQueryLevel();
 		if(step_distance < 0) {
-			throw new EvoSQLException("Error in fitness function (negative step_distance)");
+			throw new EvoSQLException("Error in fitness function (negative step_distance: " + step_distance + ")");
 		}
 		int branch_distance = (int) lastLevelData.getDistance();
 		fitness = step_distance + branch_distance;

@@ -25,6 +25,7 @@ import net.sf.jsqlparser.statement.select.*;
 import net.sf.jsqlparser.statement.truncate.Truncate;
 import net.sf.jsqlparser.statement.update.Update;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
@@ -47,12 +48,22 @@ public class QueryDepthVisitor implements StatementVisitor, SelectVisitor, FromI
             queryLevels.push(plainSelect);
         }
         if(plainSelect.getHaving() != null) {
-            queryLevels.push(plainSelect.getHaving());
+            if(!(queryLevels.peek() instanceof ArrayList)) {
+                queryLevels.push(plainSelect.getHaving());
+            }
             plainSelect.getHaving().accept(this);
         }
+
         if(plainSelect.getWhere() != null) {
             plainSelect.getWhere().accept(this);
         }
+        if(plainSelect.getGroupByColumnReferences() != null) {
+//            queryLevels.push(plainSelect.getGroupByColumnReferences());
+            for (Expression expression : plainSelect.getGroupByColumnReferences()) {
+                expression.accept(this);
+            }
+        }
+        plainSelect.getFromItem().accept(this);
 
 
     }

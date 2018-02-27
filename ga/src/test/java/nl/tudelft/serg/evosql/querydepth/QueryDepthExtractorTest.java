@@ -4,6 +4,7 @@ import net.sf.jsqlparser.statement.select.Select;
 import nl.tudelft.serg.evosql.test.*;
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 /**
  * Tests whether the QueryDepthExtractor can find the right depth for
@@ -166,6 +167,16 @@ public class QueryDepthExtractorTest {
     public void longQueryTest() {
         QueryDepthExtractor extractor = new QueryDepthExtractor(TEST_QUERY_LONG);
         Assert.assertEquals(1,extractor.getQueryDepth());
+    }
+
+    //Verifies behaviour of reusing depth attribute using mocks
+    @Test
+    public void reuseDepthTest() {
+        Select mock = Mockito.mock(Select.class);
+        QueryDepthExtractor extractor = new QueryDepthExtractor(mock);
+        extractor.getQueryDepth();
+        extractor.getQueryDepth();
+        Mockito.verify(mock,Mockito.atMost(1)).accept(Mockito.any());
     }
 
 

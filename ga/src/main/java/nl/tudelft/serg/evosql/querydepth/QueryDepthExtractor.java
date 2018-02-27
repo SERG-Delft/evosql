@@ -15,6 +15,7 @@ public class QueryDepthExtractor {
 
     //@NotNull
     private Select statement;
+    private Integer depth = null;
 
     public QueryDepthExtractor(Select statement) {
         this.statement = statement;
@@ -41,9 +42,14 @@ public class QueryDepthExtractor {
      * @return query depth.
      */
     public int getQueryDepth() {
-        QueryDepthVisitor visitor = new QueryDepthVisitor();
-        statement.accept(visitor);
-        return visitor.getQueryLevels().size();
+        if(depth == null) {
+            QueryDepthVisitor visitor = new QueryDepthVisitor();
+            statement.accept(visitor);
+            depth = visitor.getQueryLevels().size();
+            return depth;
+        } else {
+            return depth;
+        }
     }
 
 }

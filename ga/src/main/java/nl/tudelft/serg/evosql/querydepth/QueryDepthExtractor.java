@@ -31,8 +31,19 @@ public class QueryDepthExtractor {
         statement = stmt;
     }
 
+
     public Select getStatement() {
         return statement;
+    }
+
+    /**
+     * Setter for statement attribute, also sets depth as null to prevent
+     * reuse of depth for different statement.
+     * @param statement statement to set
+     */
+    public void setStatement(Select statement) {
+        this.statement = statement;
+        depth = null;
     }
 
     /**

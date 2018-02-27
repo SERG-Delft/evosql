@@ -1,25 +1,19 @@
 package nl.tudelft.serg.evosql.metaheuristics;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-
 import nl.tudelft.serg.evosql.EvoSQLConfiguration;
 import nl.tudelft.serg.evosql.db.Seeds;
 import nl.tudelft.serg.evosql.fixture.Fixture;
 import nl.tudelft.serg.evosql.fixture.FixtureRow;
 import nl.tudelft.serg.evosql.fixture.FixtureRowFactory;
 import nl.tudelft.serg.evosql.fixture.FixtureTable;
-import nl.tudelft.serg.evosql.metaheuristics.operators.FixtureComparator;
-import nl.tudelft.serg.evosql.metaheuristics.operators.FixtureCrossover;
-import nl.tudelft.serg.evosql.metaheuristics.operators.FixtureFitness;
-import nl.tudelft.serg.evosql.metaheuristics.operators.FixtureMutation;
-import nl.tudelft.serg.evosql.metaheuristics.operators.TournamentSelection;
+import nl.tudelft.serg.evosql.metaheuristics.operators.*;
+import nl.tudelft.serg.evosql.querydepth.QueryDepthExtractor;
 import nl.tudelft.serg.evosql.sql.TableSchema;
+import nl.tudelft.serg.evosql.sql.parser.SqlSecurer;
 import nl.tudelft.serg.evosql.util.random.Randomness;
+
+import java.sql.SQLException;
+import java.util.*;
 
 public class GAApproach extends Approach {
 	private boolean isInitialized;
@@ -45,11 +39,15 @@ public class GAApproach extends Approach {
 	/** Seeds store **/
 	private Seeds seeds;
 
+	/** QueryDepthExtractor **/
+	private QueryDepthExtractor depthExtractor;
+
 	private int populationSize;
 
 	public GAApproach(List<Fixture> population, Map<String, TableSchema> pTableSchemas, String pPathToBeTested, Seeds seeds){
 		super(pTableSchemas, pPathToBeTested);
-		
+
+		this.depthExtractor = new QueryDepthExtractor(new SqlSecurer(pPathToBeTested).getSecureSql());
 		this.seeds = seeds;
 		
 		this.mutation = new FixtureMutation(rowFactory, seeds);
@@ -231,7 +229,7 @@ public class GAApproach extends Approach {
 		// Execute the path
 		genetic.Instrumenter.execute(pathToTest);
 		
-		FixtureFitness ff = new FixtureFitness(genetic.Instrumenter.getFitness(), pathToTest);
+		FixtureFitness ff = new FixtureFitness(genetic.Instrumenter.getFitness(), depthExtractor);
 		fixture.setFitness(ff);
 		
 		// Store exceptions

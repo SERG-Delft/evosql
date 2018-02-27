@@ -2,7 +2,7 @@ package nl.tudelft.serg.evosql.metaheuristics.operators;
 
 import genetic.QueryLevelData;
 import nl.tudelft.serg.evosql.EvoSQLException;
-import nl.tudelft.serg.evosql.fixture.Fixture;
+import nl.tudelft.serg.evosql.querydepth.QueryDepthExtractor;
 
 /**
  * Fitness of one fixture
@@ -10,13 +10,13 @@ import nl.tudelft.serg.evosql.fixture.Fixture;
  */
 public class FixtureFitness {
 
-	private String sqlQuery;
+	private QueryDepthExtractor depthExtractor;
 
 	QueryLevelData lastLevelData;
 	
-	public FixtureFitness(QueryLevelData lastLevelData, String sqlQuery) {
+	public FixtureFitness(QueryLevelData lastLevelData, QueryDepthExtractor depthExtractor) {
 		this.lastLevelData = lastLevelData;
-		this.sqlQuery = sqlQuery;
+		this.depthExtractor = depthExtractor;
 	}
 
 	public QueryLevelData getQueryLevelData(int queryLevel) {
@@ -32,28 +32,6 @@ public class FixtureFitness {
 	}
 
 	/**
-	 * Finds the amount of levels based on the string of the query.
-	 * @return amount of query levels.
-	 */
-	public int getDeepestQueryLevel() {
-		String normalised = sqlQuery.toLowerCase();
-		int level = 1;
-		String[] statements = normalised.split(" ");
-		for (String statement : statements) {
-			switch(statement) {
-				//TODO: insert keywords to check for to increase query levels.
-				case "select":
-					level++;
-				case "having":
-					level++;
-				case "join":
-					level++;
-			}
-		}
-		return level;
-	}
-
-	/**
 	 * Returns the fitness as an integer value. Fitness is defined as sum of the step distance
 	 * (the amount of levels not executed in the query) and the branch distance on the last level
 	 * (the distance to executing the last level).
@@ -61,14 +39,13 @@ public class FixtureFitness {
 	 */
 	public int getFitness() {
 		int fitness = Integer.MAX_VALUE;
-		int step_distance = getDeepestQueryLevel() - getQueryLevel();
+		int step_distance = depthExtractor.getQueryDepth() - getQueryLevel();
 		if(step_distance < 0) {
 			throw new EvoSQLException("Error in fitness function (negative step_distance)");
 		}
 		int branch_distance = (int) lastLevelData.getDistance();
 		fitness = step_distance + branch_distance;
 
-//		assert fitness >= 0;
 		return fitness;
 	}
 	
@@ -111,7 +88,7 @@ public class FixtureFitness {
 	}
 	
 	public FixtureFitness copy() {
-		FixtureFitness copy = new FixtureFitness(lastLevelData.copy(), sqlQuery);
+		FixtureFitness copy = new FixtureFitness(lastLevelData.copy(), depthExtractor);
 		
 		return copy;
 	}

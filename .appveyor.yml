@@ -17,6 +17,10 @@ build_script:
 test_script:
   - gradlew.bat :ga:check --no-daemon
 
+branches:
+  only:
+    - master
+
 cache:
   - C:\Users\appveyor\.gradle
 

@@ -35,7 +35,8 @@ subprojects {
         // Have the static API and the test engine as dependencies (JUnit 5)
         testCompile 'org.junit.jupiter:junit-jupiter-api:5.1.0'
         testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.1.0'
-        
+
+        testCompile 'org.assertj:assertj-core:3.9.0'
         testCompile group: 'org.mockito', name: 'mockito-all', version: '2.0.2-beta'
     }
 

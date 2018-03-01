@@ -9,5 +9,5 @@ dependencies {
     compileClasspath fileTree(dir: '../lib', includes: ['*.jar'])
 
     // This dependency is not a testCompile since it is used in src/main/java, not src/test/java
-    compile group: 'org.mockito', name: 'mockito-all', version: '2.0.2-beta'
+    compile group: 'org.mockito', name: 'mockito-core', version: '2.+'
 }

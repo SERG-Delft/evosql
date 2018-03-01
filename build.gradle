@@ -1,5 +1,6 @@
 allprojects {
     apply plugin: 'maven'
+    apply plugin: 'jacoco'
 
     group = 'nl.tudelft'
     version = '1.0'
@@ -35,5 +36,20 @@ subprojects {
 
         testCompile 'org.assertj:assertj-core:3.9.0'
         testCompile group: 'org.mockito', name: 'mockito-core', version: '2.+'
+    }
+    
+    test {
+        jacoco {
+            append = false
+            destinationFile = file("$buildDir/jacoco/jacocoTest.exec")
+        }
+    }
+
+    jacocoTestReport {
+        reports {
+            csv.enabled false
+            xml.enabled true
+            html.enabled true
+        }
     }
 }

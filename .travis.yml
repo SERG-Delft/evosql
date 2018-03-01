@@ -2,17 +2,20 @@ language: java
 
 cache:
   directories:
-  - ~/.gradle
+    - ~/.gradle
 
 notifications:
   email: false
 
 script:
-- gradle assemble     # compile all subprojects
-- gradle :ga:test     # runs unit tests
+  - gradle :ga:check          # runs unit verification tasks
+  - gradle jacocoTestReport   # generates Jacoco test report
 
-# See https://docs.gradle.org/current/userguide/java_plugin.html for
-# more details on the lifecycle events of Java projects in Gradle
+  # See https://docs.gradle.org/current/userguide/java_plugin.html for
+  # more details on the lifecycle events of Java projects in Gradle
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
 
 jdk:
   - oraclejdk8

@@ -10,4 +10,8 @@ dependencies {
     compile group: 'commons-discovery', name: 'commons-discovery', version:'0.5'
     
     compileClasspath fileTree(dir: '../lib', includes: ['*.jar'])
+
+    // Have the static API and the test engine as dependencies (JUnit 4, 5 vintage runtime)
+    testCompile 'junit:junit:4.12'
+    testRuntime 'org.junit.vintage:junit-vintage-engine:5.1.0'
 }

@@ -3,4 +3,8 @@ description = 'Instrumented HSQLDB'
 dependencies {
     compile group: 'javax.servlet', name: 'javax.servlet-api', version:'4.0.0-b01'
     compile group: 'org.apache.ant', name: 'ant', version:'1.9.7'
+
+    // Have the static API and the test engine as dependencies (JUnit 4, 5 vintage runtime)
+    testCompile 'junit:junit:4.12'
+    testRuntime 'org.junit.vintage:junit-vintage-engine:5.1.0'
 }

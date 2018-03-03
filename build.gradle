@@ -6,25 +6,38 @@ allprojects {
     version = '1.0'
 }
 
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.1.0'
+    }
+}
+// Tell Gradle to use JUnit
+apply plugin: 'org.junit.platform.gradle.plugin'
+
 subprojects {
     apply plugin: 'java'
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
 
-
     repositories {
-        mavenLocal()
         mavenCentral()
         jcenter()
     }
 
-
     dependencies {
         compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.6.2'
-        testCompile group: 'junit', name: 'junit', version: '4.12'
-        testCompile group: 'org.mockito', name: 'mockito-all', version: '2.0.2-beta'
-    }
 
+        // Have the static API and the test engine as dependencies (JUnit 5)
+        testCompile 'org.junit.jupiter:junit-jupiter-api:5.1.0'
+        testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.1.0'
+
+        testCompile 'org.assertj:assertj-core:3.9.0'
+        testCompile group: 'org.mockito', name: 'mockito-core', version: '2.+'
+    }
+    
     test {
         jacoco {
             append = false

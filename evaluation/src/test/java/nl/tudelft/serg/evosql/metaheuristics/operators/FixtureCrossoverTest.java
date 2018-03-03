@@ -5,9 +5,9 @@ import nl.tudelft.serg.evosql.fixture.FixtureRow;
 import nl.tudelft.serg.evosql.fixture.FixtureTable;
 import nl.tudelft.serg.evosql.sql.TableSchema;
 import nl.tudelft.serg.evosql.util.random.Randomness;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.util.Arrays;
@@ -22,7 +22,7 @@ public class FixtureCrossoverTest {
     private Randomness randomness;
     private FixtureCrossover crossover;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         randomness = Mockito.mock(Randomness.class);
         crossover = new FixtureCrossover(randomness);
@@ -52,11 +52,11 @@ public class FixtureCrossoverTest {
         Fixture offspring1 = offsprings.get(0);
         Fixture offspring2 = offsprings.get(1);
 
-        Assert.assertEquals(fixtureTable1, offspring1.getTable(0));
-        Assert.assertEquals(fixtureTable4, offspring1.getTable(1));
+        Assertions.assertEquals(fixtureTable1, offspring1.getTable(0));
+        Assertions.assertEquals(fixtureTable4, offspring1.getTable(1));
 
-        Assert.assertEquals(fixtureTable3, offspring2.getTable(0));
-        Assert.assertEquals(fixtureTable2, offspring2.getTable(1));
+        Assertions.assertEquals(fixtureTable3, offspring2.getTable(0));
+        Assertions.assertEquals(fixtureTable2, offspring2.getTable(1));
 
     }
 
@@ -74,7 +74,7 @@ public class FixtureCrossoverTest {
         Fixture parent2 = new Fixture(Arrays.asList(fixtureTable2, fixtureTable3));
 
         boolean canBeDone = this.crossover.canBeDone(parent1, parent2);
-        Assert.assertFalse(canBeDone);
+        Assertions.assertFalse(canBeDone);
 
         fixtureTable1 = new FixtureTable(schema1, Collections.emptyList());
         parent1 = new Fixture(Arrays.asList(fixtureTable1));
@@ -84,7 +84,7 @@ public class FixtureCrossoverTest {
         parent2 = new Fixture(Arrays.asList(fixtureTable2, fixtureTable3));
 
         canBeDone = this.crossover.canBeDone(parent2, parent1);
-        Assert.assertFalse(canBeDone);
+        Assertions.assertFalse(canBeDone);
 
     }
 
@@ -103,7 +103,7 @@ public class FixtureCrossoverTest {
         Fixture parent2 = new Fixture(Arrays.asList(fixtureTable3, fixtureTable4));
 
         boolean canBeDone = this.crossover.canBeDone(parent1, parent2);
-        Assert.assertTrue(canBeDone);
+        Assertions.assertTrue(canBeDone);
 
     }
 

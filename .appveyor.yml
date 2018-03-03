@@ -15,6 +15,7 @@ build_script:
 
 test_script:
   - gradlew.bat :ga:check --no-daemon
+  - gradlew.bat :brew:check --no-daemon
 
 branches:
   only:

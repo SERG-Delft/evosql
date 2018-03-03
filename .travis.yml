@@ -8,8 +8,9 @@ notifications:
   email: false
 
 script:
-  - gradle :ga:check          # runs unit verification tasks
-  - gradle jacocoTestReport   # generates Jacoco test report
+  - ./gradlew :ga:check          # runs verification tasks
+  - ./gradlew :brew:check        # runs verification tasks
+  - ./gradlew jacocoTestReport   # generates Jacoco test report
 
   # See https://docs.gradle.org/current/userguide/java_plugin.html for
   # more details on the lifecycle events of Java projects in Gradle

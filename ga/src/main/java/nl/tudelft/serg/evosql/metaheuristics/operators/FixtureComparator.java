@@ -22,7 +22,18 @@ public class FixtureComparator implements Comparator<Fixture>{
 			return 1;
 		else if (f2 == null)
 			return -1;
-		
+
+		if (f1.getFitness() < f2.getFitness()) {
+			return -1;
+		} else if (f2.getFitness() < f1.getFitness()) {
+			return 1;
+		} else {
+			return 0;
+		}
+
+		/*
+		Original code:
+
 		// Compare max query levels, higher is better
 		if (f1.getQueryLevel() < f2.getQueryLevel())
 			return 1;
@@ -40,6 +51,6 @@ public class FixtureComparator implements Comparator<Fixture>{
 		}
 		
 		return 0;
-
+		*/
 	}
 }

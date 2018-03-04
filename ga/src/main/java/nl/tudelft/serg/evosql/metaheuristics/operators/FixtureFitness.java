@@ -44,7 +44,9 @@ public class FixtureFitness {
 			throw new EvoSQLException("Error in fitness function (negative step_distance: " + step_distance + ")");
 		}
 		int branch_distance = (int) lastLevelData.getDistance();
-		fitness = step_distance + branch_distance;
+		//Take absolute of distance
+		//d(T,r) = step_level(T,r) + step_distance (T, L) 
+		fitness = step_distance + Math.abs(branch_distance);
 
 		return fitness;
 	}

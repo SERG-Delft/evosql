@@ -43,4 +43,11 @@ subprojects {
             html.enabled true
         }
     }
+
+    tasks.withType(FindBugs) {
+        reports {
+            xml.enabled = false
+            html.enabled = true
+        }
+    }
 }

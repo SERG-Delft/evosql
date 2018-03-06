@@ -5,7 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-public class TestStrings extends TestBase {
+public class StringsTest extends TestBase {
 	
 	@Test
 	public void testManyStringEqualities() {

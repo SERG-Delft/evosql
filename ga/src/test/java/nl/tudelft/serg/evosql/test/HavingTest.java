@@ -4,7 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-public class TestHaving extends TestBase {
+public class HavingTest extends TestBase {
 	/**
 	 * Having without WHERE
 	 */

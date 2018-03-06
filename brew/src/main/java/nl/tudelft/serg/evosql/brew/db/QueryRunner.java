@@ -1,8 +1,6 @@
 package nl.tudelft.serg.evosql.brew.db;
 
-import nl.tudelft.serg.evosql.fixture.Fixture;
-
-import java.util.List;
+import nl.tudelft.serg.evosql.Result;
 
 /**
  * An interface for obtaining test fixtures from a database.
@@ -14,5 +12,5 @@ public interface QueryRunner {
      * @param connectionData The database connection data.
      * @return A list of fixtures for the given SQL query.
      */
-    List<Fixture> runQuery(String sqlQuery, ConnectionData connectionData);
+    Result runQuery(String sqlQuery, ConnectionData connectionData);
 }

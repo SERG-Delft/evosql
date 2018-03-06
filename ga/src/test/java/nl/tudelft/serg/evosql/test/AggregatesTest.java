@@ -8,7 +8,7 @@ import org.junit.Test;
  * Test all aggregate functions in a having
  *
  */
-public class TestAggregates extends TestBase {
+public class AggregatesTest extends TestBase {
 	@Test
 	public void test1() {
 		assertTrue(testExecutePath("SELECT Product, AVG(Price) FROM products GROUP BY Product HAVING AVG(Price) = 15"));

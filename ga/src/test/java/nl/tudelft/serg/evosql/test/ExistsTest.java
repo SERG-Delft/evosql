@@ -4,7 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-public class TestExists extends TestBase {
+public class ExistsTest extends TestBase {
 	@Test
 	public void test1() {
 		assertTrue(testExecutePath("SELECT Product, Price FROM Products WHERE EXISTS (SELECT ID FROM Product_detail WHERE Type = 10)"));

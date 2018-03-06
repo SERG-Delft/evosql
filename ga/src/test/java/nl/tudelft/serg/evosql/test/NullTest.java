@@ -4,10 +4,10 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-public class TestBetween extends TestBase {
-
+public class NullTest extends TestBase {
 	@Test
 	public void test1() {
-		assertTrue(testExecutePath("SELECT * FROM Products WHERE Price BETWEEN 0 AND 100"));
+		assertTrue(testExecutePath("SELECT * FROM Products WHERE Product IS NULL"));
 	}
+
 }

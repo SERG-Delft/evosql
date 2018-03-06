@@ -4,7 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-public class TestLike extends TestBase {
+public class LikeTest extends TestBase {
 
 	/** Converts to an EQUAL operation **/
 	@Test

@@ -4,7 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-public class TestInnerJoin extends TestBase {
+public class InnerJoinTest extends TestBase {
 	/**
 	 * Inner join test, succeeds when both tables share an ID
 	 */

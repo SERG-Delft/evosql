@@ -23,8 +23,6 @@ public class DBDoubleTest {
 
     @Test
     public void truncateDecimals_locale() {
-        System.out.printf("The current locale decimal separator is: %s\n", new DecimalFormatSymbols().getDecimalSeparator());
-
         // Set locale to one where decimal separator is a comma
         Locale currentLocale = Locale.getDefault();
         Locale.setDefault(Locale.GERMAN);

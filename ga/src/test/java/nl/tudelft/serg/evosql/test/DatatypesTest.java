@@ -9,7 +9,7 @@ import java.sql.Statement;
 
 import org.junit.Test;
 
-public class TestDatatypes extends TestBase {
+public class DatatypesTest extends TestBase {
 	
 	@Test
 	public void testDatetime() {

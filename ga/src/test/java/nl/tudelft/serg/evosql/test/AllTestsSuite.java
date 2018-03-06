@@ -7,24 +7,24 @@ import org.junit.runners.Suite;
 @Ignore
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-	TestSelect.class,
-	TestDistinct.class,
-	TestWhere.class,
-	TestIn.class,
-	TestGroupBy.class,
-	TestHaving.class,
-	TestSubqueryFrom.class,
-	TestSubquerySelectWhere.class,
-	TestInnerJoin.class,
-	TestLeftJoin.class,
-	TestRightJoin.class,
-	TestNull.class,
-	TestCount.class,
-	TestBetween.class,
-	TestLike.class,
-	TestExists.class,
-	TestDatatypes.class,
-	TestAggregates.class,
-	TestStrings.class
+	SelectTest.class,
+	DistinctTest.class,
+	WhereTest.class,
+	InTest.class,
+	GroupByTest.class,
+	HavingTest.class,
+	SubqueryFromTest.class,
+	SubquerySelectWhereTest.class,
+	InnerJoinTest.class,
+	LeftJoinTest.class,
+	RightJoinTest.class,
+	NullTest.class,
+	CountTest.class,
+	BetweenTest.class,
+	LikeTest.class,
+	ExistsTest.class,
+	DatatypesTest.class,
+	AggregatesTest.class,
+	StringsTest.class
 })
 public class AllTestsSuite {}

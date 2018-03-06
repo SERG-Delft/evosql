@@ -8,7 +8,7 @@ import org.junit.Test;
  * FROM subquery tests, note that GROUP BY's are necessary as otherwise the HSQLDB parser will optimise by combining the queries.
  *
  */
-public class TestSubqueryFrom extends TestBase {
+public class SubqueryFromTest extends TestBase {
 
 	/**
 	 * Simple subquery no WHERE

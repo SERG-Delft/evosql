@@ -1,12 +1,18 @@
 package nl.tudelft.serg.evosql.brew.db;
 
-import lombok.Getter;
 import nl.tudelft.serg.evosql.fixture.Fixture;
 
 import java.util.List;
 
-public abstract class QueryRunner {
-    protected abstract List<Fixture> runQuery(String query);
-
-    @Getter private static String bla = "Currently running a query...";
+/**
+ * An interface for obtaining test fixtures from a database.
+ */
+public interface QueryRunner {
+    /**
+     * Returns test data fixtures for the given SQL query.
+     * @param sqlQuery The SQL query to generate fixtures for.
+     * @param connectionData The database connection data.
+     * @return A list of fixtures for the given SQL query.
+     */
+    List<Fixture> runQuery(String sqlQuery, ConnectionData connectionData);
 }

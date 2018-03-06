@@ -4,7 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-public class TestRightJoin extends TestBase {
+public class RightJoinTest extends TestBase {
 	
 	/**
 	 * Right join with WHERE on the first table to be a value, which is not possible in our GA

@@ -1,6 +1,7 @@
 package nl.tudelft.serg.evosql.brew.db;
 
 import lombok.Data;
+import lombok.NonNull;
 
 /**
  * A class for database connectivity data.
@@ -10,17 +11,17 @@ public class ConnectionData {
     /**
      * The JDBC connection string.
      */
-    private final String connectionString;
+    @NonNull private final String connectionString;
     /**
      * The database instance to connect to.
      */
-    private final String database;
+    @NonNull private final String database;
     /**
      * The database username.
      */
-    private final String username;
+    @NonNull private final String username;
     /**
      * The database password.
      */
-    private final String password;
+    @NonNull private final String password;
 }

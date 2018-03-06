@@ -16,7 +16,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import antlr.StringUtils;
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.statement.select.Select;
@@ -248,7 +247,7 @@ public class DetailedClassification {
 		runner.runScript(new StringReader(schemaSql));
 		conn.close();
 
-		extractor = new SchemaExtractor(connectionString, loadDatabase, "public", user, pwd);
+		extractor = new SchemaExtractor(connectionString, loadDatabase, user, pwd);
 	}
 
 	public static void main(String[] args) {

@@ -20,7 +20,7 @@ public class SerializeMySQLTableSchemas {
     }
     private static void suitecrm() {
         SchemaExtractor se = new SchemaExtractor("jdbc:mysql://localhost:3306/?nullNamePatternMatchesAll=true&useSSL=false&serverTimezone=UTC",
-                "evosqlsuitecrm", "evosqlsuitecrm", "root", "");
+                "evosqlsuitecrm", "root", "");
 
         String[] tables = new String[] {
                 "accounts",
@@ -256,7 +256,7 @@ public class SerializeMySQLTableSchemas {
 
     private static void erpnext() {
         SchemaExtractor se = new SchemaExtractor("jdbc:mysql://localhost:3306/?nullNamePatternMatchesAll=true&useSSL=false&serverTimezone=UTC",
-                "evosqlerpnext", "evosqlerpnext", "root", "");
+                "evosqlerpnext", "root", "");
 
         String[] tables = new String[] {
                 "__Auth",
@@ -648,7 +648,7 @@ public class SerializeMySQLTableSchemas {
 
     private static void espocrm() {
         SchemaExtractor se = new SchemaExtractor("jdbc:mysql://localhost:3306/?nullNamePatternMatchesAll=true&useSSL=false&serverTimezone=UTC",
-                "evosqlespocrm", "evosqlespocrm", "root", "");
+                "evosqlespocrm", "root", "");
 
         String[] tables = new String[] {
                 "account",
@@ -774,7 +774,7 @@ public class SerializeMySQLTableSchemas {
 
     private static void alura() {
         SchemaExtractor se = new SchemaExtractor("jdbc:mysql://localhost:3306/?nullNamePatternMatchesAll=true&useSSL=false&serverTimezone=UTC",
-                "evosqlalura", "evosqlalura", "root", "");
+                "evosqlalura", "root", "");
 
         String[] tables = new String[] {
                 "Acquirement",

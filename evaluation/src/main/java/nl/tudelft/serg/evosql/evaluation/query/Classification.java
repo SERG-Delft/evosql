@@ -16,7 +16,6 @@ import org.apache.logging.log4j.Logger;
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.statement.select.Select;
-import nl.tudelft.serg.evosql.Result;
 import nl.tudelft.serg.evosql.db.SchemaExtractor;
 import nl.tudelft.serg.evosql.evaluation.Evaluation;
 import nl.tudelft.serg.evosql.evaluation.ScriptRunner;
@@ -25,7 +24,6 @@ import nl.tudelft.serg.evosql.evaluation.tools.Crypto;
 import nl.tudelft.serg.evosql.path.PathExtractor;
 import nl.tudelft.serg.evosql.sql.TableSchema;
 import nl.tudelft.serg.evosql.sql.parser.SqlSecurer;
-import nl.tudelft.serg.evosql.sql.parser.SqlSecurerVisitor;
 import nl.tudelft.serg.evosql.sql.parser.UsedColumnExtractor;
 
 /**
@@ -63,7 +61,7 @@ public class Classification {
 		this.queries = queries;
 		this.output = output;
 		this.objOutput = objOutput;
-		extractor = new SchemaExtractor(connectionString, database, schema, user, pwd);
+		extractor = new SchemaExtractor(connectionString, database, user, pwd);
 		pathExtractor = new PathExtractor(extractor);
 		crypto = new Crypto();
 	}

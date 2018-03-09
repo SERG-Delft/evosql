@@ -28,7 +28,7 @@ public class TournamentSelection {
 			Fixture selected = population.get(new_num);
 			FixtureFitness f1 = population.get(winner).getFitness();
 			FixtureFitness f2 = selected.getFitness();
-			if(f2.getFitness() < f1.getFitness()) {
+			if(f2.getFitnessValue() < f1.getFitnessValue()) {
 				winner = new_num;
 			}
 			/*if (fc.compare(selected, population.get(winner)) == -1) {

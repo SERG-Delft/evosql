@@ -3,12 +3,9 @@ package nl.tudelft.serg.evosql.metaheuristics.operators;
 import nl.tudelft.serg.evosql.fixture.Fixture;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockingDetails;
 import org.mockito.Mockito;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,9 +31,9 @@ public class FixtureComparatorTest {
         Mockito.when(f2.getFitness()).thenReturn(ff2);
         Mockito.when(f3.getFitness()).thenReturn(ff3);
 
-        Mockito.when(ff1.getFitness()).thenReturn(1);
-        Mockito.when(ff2.getFitness()).thenReturn(2);
-        Mockito.when(ff3.getFitness()).thenReturn(3);
+        Mockito.when(ff1.getFitnessValue()).thenReturn(1.0);
+        Mockito.when(ff2.getFitnessValue()).thenReturn(2.0);
+        Mockito.when(ff3.getFitnessValue()).thenReturn(3.0);
     }
 
     @Test

@@ -3,7 +3,8 @@ package nl.tudelft.serg.evosql.querydepth;
 import net.sf.jsqlparser.statement.select.Select;
 import nl.tudelft.serg.evosql.test.*;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 /**
@@ -109,6 +110,13 @@ public class QueryDepthExtractorTest {
                     + ") AND "
                     + "( PORTAL.ID = 'testPortalId' AND PORTAL.DELETED = '0' )";
 
+    /**
+     * @see TestSubquerySelectWhere#test3()
+     */
+    static final String TEST_TWO_SUBQUERIES =
+            "SELECT * FROM (SELECT Product, Price FROM products t WHERE LENGTH(t.Product) = 1 GROUP BY Product, Price) t " +
+                    "WHERE t.Price < (SELECT MAX(Type) FROM product_detail t2 WHERE t.Product = t2.Name)";
+
     @Test
     public void parserSetupTest() {
         QueryDepthExtractor extractor = new QueryDepthExtractor(TEST_QUERY_HAVING);
@@ -152,9 +160,11 @@ public class QueryDepthExtractorTest {
         Assert.assertEquals(2,extractor.getQueryDepth());
     }
 
-    @Test(expected=RuntimeException.class)
+    @Test
     public void invalidQueryTest() {
-        QueryDepthExtractor extractor = new QueryDepthExtractor(TEST_QUERY_ERROR);
+        Assertions.assertThrows(RuntimeException.class, () -> {
+            QueryDepthExtractor extractor = new QueryDepthExtractor(TEST_QUERY_ERROR);
+        });
     }
 
     @Test
@@ -201,6 +211,12 @@ public class QueryDepthExtractorTest {
         extractor.getQueryDepth();
         extractor.getQueryDepth();
         Mockito.verify(mock,Mockito.atMost(1)).accept(Mockito.any());
+    }
+
+    @Test
+    public void setTestTwoSubqueries() {
+        QueryDepthExtractor extractor = new QueryDepthExtractor(TEST_TWO_SUBQUERIES);
+        Assert.assertEquals(3,extractor.getQueryDepth());
     }
 
 

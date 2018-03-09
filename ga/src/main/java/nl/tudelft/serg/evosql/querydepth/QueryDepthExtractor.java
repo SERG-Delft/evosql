@@ -4,6 +4,9 @@ package nl.tudelft.serg.evosql.querydepth;
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.statement.select.Select;
+import nl.tudelft.serg.evosql.metaheuristics.Approach;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * This class is responsible for extracting the depth of a query.
@@ -12,6 +15,8 @@ import net.sf.jsqlparser.statement.select.Select;
  * @see QueryDepthVisitor .
  */
 public class QueryDepthExtractor {
+
+    protected static Logger log = LogManager.getLogger(QueryDepthExtractor.class);
 
     //@NotNull
     private Select statement;
@@ -57,6 +62,7 @@ public class QueryDepthExtractor {
             QueryDepthVisitor visitor = new QueryDepthVisitor();
             statement.accept(visitor);
             depth = visitor.getQueryLevels().size();
+            log.debug("current query depth: {}", depth);
             return depth;
         } else {
             return depth;

@@ -58,7 +58,7 @@ public class FixtureFitness {
 		//d(T,r) = step_level(T,r) + step_level (T, L)
 		fitness = step_level + branch_distance;
 
-		log.debug("Step level = {}, Distance = {}, Step distance = {}, Branch distance = {}, Fitness value = {}", step_level, lastLevelData.getDistance(), step_distance, branch_distance, fitness);
+		//log.debug("Step level = {}, Distance = {}, Step distance = {}, Branch distance = {}, Fitness value = {}", step_level, lastLevelData.getDistance(), step_distance, branch_distance, fitness);
 
 		return fitness;
 	}

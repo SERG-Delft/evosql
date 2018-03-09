@@ -142,7 +142,7 @@ public class QueryLevelData implements Comparator<QueryLevelData> {
 	}
 	
 	public String toString() {
-		String result = "{" + getQueryLevel() + ", " + getMaxRangeVariableIndex() + ", " + getDistance();
+		String result = "{Level: " + getQueryLevel() + ", MaxRangeVariableIndex: " + getMaxRangeVariableIndex() + ", Distance: " + getDistance();
 		
 		if (this.subLevelData != null) {
 			result +=  ", Subdata: [";

@@ -254,7 +254,7 @@ public class GAApproach extends Approach {
 		for(int j=0; j < numberOfRows; j++) {
 			FixtureRow row = rowFactory.create(tableSchema, tables, seeds);
 			rows.add(row);
-			log.debug("Row created: {}", row);
+			//log.debug("Row created: {}", row);
 		}
 		return new FixtureTable(tableSchema, rows);
 	}

@@ -10,7 +10,7 @@ class ComparisonRow {
 	int maxIndex;
 	private Double distance = null;
 	
-	ComparisonRow () {
+	ComparisonRow() {
 		comparisons = new ArrayList<List<Comparison>>();
 		maxIndex = 0;
 	}

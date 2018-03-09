@@ -2,7 +2,6 @@ package nl.tudelft.serg.evosql.metaheuristics.operators;
 
 import java.util.Comparator;
 
-import genetic.QueryLevelData;
 import nl.tudelft.serg.evosql.fixture.Fixture;
 
 public class FixtureComparator implements Comparator<Fixture>{
@@ -23,14 +22,7 @@ public class FixtureComparator implements Comparator<Fixture>{
 		else if (f2 == null)
 			return -1;
 
-		if (f1.getFitness() < f2.getFitness()) {
-			return -1;
-		} else if (f2.getFitness() < f1.getFitness()) {
-			return 1;
-		} else {
-			return 0;
-		}
-
+		return Double.compare(f1.getFitnessValue(), f2.getFitnessValue());
 		/*
 		Original code:
 

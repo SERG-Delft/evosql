@@ -209,13 +209,13 @@ public class GAApproach extends Approach {
 		population.addAll(newPopulation);
 	}
 
-	private void calculateFitness(List<Fixture> solutions) throws SQLException{
+	public void calculateFitness(List<Fixture> solutions) throws SQLException{
 		for(Fixture fixture : population) {
 			calculateFitness(fixture);
 		}
 	}
 	
-	private void calculateFitness(Fixture fixture) throws SQLException {
+	public void calculateFitness(Fixture fixture) throws SQLException {
 		individualCount++;
 		
 		// Truncate tables in Instrumented DB

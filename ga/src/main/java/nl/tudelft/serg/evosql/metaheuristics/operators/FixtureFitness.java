@@ -2,7 +2,10 @@ package nl.tudelft.serg.evosql.metaheuristics.operators;
 
 import genetic.QueryLevelData;
 import nl.tudelft.serg.evosql.EvoSQLException;
+import nl.tudelft.serg.evosql.metaheuristics.Approach;
 import nl.tudelft.serg.evosql.querydepth.QueryDepthExtractor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Fitness of one fixture
@@ -11,6 +14,9 @@ import nl.tudelft.serg.evosql.querydepth.QueryDepthExtractor;
 public class FixtureFitness {
 
 	private QueryDepthExtractor depthExtractor;
+
+	protected static Logger log = LogManager.getLogger(FixtureFitness.class);
+
 
 	QueryLevelData lastLevelData;
 	
@@ -37,16 +43,22 @@ public class FixtureFitness {
 	 * (the distance to executing the last level).
 	 * @return fitness value.
 	 */
-	public int getFitness() {
-		int fitness = Integer.MAX_VALUE;
-		int step_distance = depthExtractor.getQueryDepth() - getQueryLevel();
-		if(step_distance < 0) {
-			throw new EvoSQLException("Error in fitness function (negative step_distance: " + step_distance + ")");
+	public double getFitnessValue() {
+		double fitness = Integer.MAX_VALUE;
+		double step_level = depthExtractor.getQueryDepth() - getQueryLevel();
+		if(step_level < 0) {
+			throw new EvoSQLException("Error in fitness function (negative step_level: " + step_level + ")");
 		}
-		int branch_distance = (int) lastLevelData.getDistance();
 		//Take absolute of distance
-		//d(T,r) = step_level(T,r) + step_distance (T, L) 
-		fitness = step_distance + Math.abs(branch_distance);
+		double step_distance = Math.max(0, lastLevelData.getDistance());
+
+		//φ(x)=x/(x+1), normalizing formula from paper
+		double branch_distance = step_distance / (step_distance + 1d);
+
+		//d(T,r) = step_level(T,r) + step_level (T, L)
+		fitness = step_level + branch_distance;
+
+		log.debug("Step level = {}, Distance = {}, Step distance = {}, Branch distance = {}, Fitness value = {}", step_level, lastLevelData.getDistance(), step_distance, branch_distance, fitness);
 
 		return fitness;
 	}

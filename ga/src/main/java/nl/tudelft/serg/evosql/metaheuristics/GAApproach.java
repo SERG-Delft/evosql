@@ -70,6 +70,11 @@ public class GAApproach extends Approach {
 		
 		isInitialized = true;
 	}
+
+	public void initialPopulation(List<Fixture> population) {
+		this.population = population;
+		isInitialized = true;
+	}
 	
 	@Override
 	public Fixture execute(long pathTime) throws SQLException {
@@ -120,11 +125,11 @@ public class GAApproach extends Approach {
 			    // Calculate fitness if needed
 			    if (o1Changed) {
 			    	calculateFitness(offspring1);
-					log.debug("Fitness = {}", offspring1.getFitness());
+					log.debug("Fitness = {} {}", offspring1.getFitness(), offspring1.getFitness().getFitnessValue());
 			    }
 			    if (o2Changed) {
 			    	calculateFitness(offspring2);
-					log.debug("Fitness = {}", offspring2.getFitness());
+					log.debug("Fitness = {} {}", offspring2.getFitness(), offspring2.getFitness().getFitnessValue());
 			    }
 			    
 			    // add offsprings to the offspring_population

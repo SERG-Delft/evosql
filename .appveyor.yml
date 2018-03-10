@@ -24,8 +24,8 @@ branches:
     - master
 
 cache:
-  - C:\Users\appveyor\.gradle
-  - C:\Users\appveyor\.evosql-libs-cache
+  - '%USERPROFILE%\.gradle'
+  - '%USERPROFILE%\.evosql-libs-cache'
 
 environment:
   matrix:

@@ -36,7 +36,7 @@ if ($CICache) {
 
         # Check if cache directory exists, create it if not
         if (![System.IO.Directory]::Exists($cacheDir)) {
-            [System.IO.Directory]::CreateDirectory($cacheDir)
+            [System.IO.Directory]::CreateDirectory($cacheDir) | Out-Null
         }
 
         Write-Output 'Unzipping files...'

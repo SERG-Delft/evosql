@@ -66,7 +66,7 @@ public class GAApproach extends Approach {
 		
 		// 2. sort population by Fitness Function
 		Collections.sort(population, fc);
-		log.debug("Best Fitness Function in the generated population = {}", population.get(0).getFitness());
+		log.debug("Best Fitness Function in the generated population = {}, {}", population.get(0).getFitness(), population.get((0)));
 		
 		isInitialized = true;
 	}
@@ -84,7 +84,6 @@ public class GAApproach extends Approach {
 		if (!isInitialized) {
 			initialize();
 		}
-
 		//3. Main Loop
 		while (population.get(0).getFitness().getDistance() > 0
 				&& System.currentTimeMillis() - startTime < pathTime
@@ -107,7 +106,7 @@ public class GAApproach extends Approach {
 					offspring1 = generatedOffsprings.get(0);
 					offspring2 = generatedOffsprings.get(1);
 
-			        log.debug("Crossover applied");
+			        //log.debug("Crossover applied");
 			        o1Changed = true;
 			        o2Changed = true;
 			    } else {
@@ -125,11 +124,11 @@ public class GAApproach extends Approach {
 			    // Calculate fitness if needed
 			    if (o1Changed) {
 			    	calculateFitness(offspring1);
-					log.debug("Fitness = {} {}", offspring1.getFitness(), offspring1.getFitness().getFitnessValue());
+					//log.debug("Fitness = {} {}", offspring1.getFitness(), offspring1.getFitness().getFitnessValue());
 			    }
 			    if (o2Changed) {
 			    	calculateFitness(offspring2);
-					log.debug("Fitness = {} {}", offspring2.getFitness(), offspring2.getFitness().getFitnessValue());
+					//log.debug("Fitness = {} {}", offspring2.getFitness(), offspring2.getFitness().getFitnessValue());
 			    }
 			    
 			    // add offsprings to the offspring_population

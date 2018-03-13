@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,8 +26,14 @@ import nl.tudelft.serg.evosql.metaheuristics.GAApproach;
 import nl.tudelft.serg.evosql.sql.ColumnSchema;
 import nl.tudelft.serg.evosql.sql.TableSchema;
 import nl.tudelft.serg.evosql.sql.parser.UsedColumnExtractor;
+import org.junit.Rule;
+import org.junit.rules.Timeout;
 
 public class TestBase {
+	@Rule
+	public Timeout globalTimeout = new Timeout(10000, TimeUnit.MILLISECONDS);
+
+
 	private static Logger log = LogManager.getLogger(TestBase.class);
 	
 	static final String TBL_PRODUCTS = "PRODUCTS";

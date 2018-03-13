@@ -24,7 +24,7 @@ class ConnectionDataTest {
         assertThat(connectionData.getPassword()).isEqualTo("password");
     }
 
-    void testConstructoFail() {
+    void testConstructorFail() {
         assertThatNullPointerException().isThrownBy(() ->
                 new ConnectionData(null, "database", "username", "password")
         );

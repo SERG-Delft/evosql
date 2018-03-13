@@ -106,7 +106,7 @@ public class TestBase {
 	 * @return Boolean indicating if execution was successful (meaning no errors and fixture outputs at least one output row) 
 	 */
 	public static boolean testExecutePath (String sqlToBeTested) {
-		return testExecutePath(sqlToBeTested, 10000L); // 10 seconds tops
+		return testExecutePath(sqlToBeTested, 20000L); // 20 seconds tops
 	}
 	
 	public static boolean testExecutePath (String sqlToBeTested, long time) {

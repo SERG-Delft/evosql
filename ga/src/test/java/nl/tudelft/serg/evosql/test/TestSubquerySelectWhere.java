@@ -23,9 +23,7 @@ public class TestSubquerySelectWhere extends TestBase {
 
 	@Test
 	public void test3() {
-		assertTrue(testExecutePath("SELECT * FROM (SELECT Product, Price FROM products t WHERE LENGTH(t.Product) = 1 " +
-				"GROUP BY Product, Price) t " +
-				"WHERE t.Price < (SELECT MAX(Type) FROM product_detail t2 WHERE t.Product = t2.Name)"));
+		assertTrue(testExecutePath("SELECT * FROM (SELECT Product, Price FROM products t WHERE LENGTH(t.Product) = 1 GROUP BY Product, Price) t WHERE t.Price < (SELECT MAX(Type) FROM product_detail t2 WHERE t.Product = t2.Name)"));
 	}
 
 	/**

@@ -118,7 +118,7 @@ public class FixtureMutation {
 					String seedValue = type.generateFromSeed(seeds);
 					seeds.unsetTemp();
 					if (seedValue != null) {
-						log.debug("seeding " + seedValue + " to " + columnName);
+						//log.debug("seeding " + seedValue + " to " + columnName);
 						row.set(columnName, seedValue);
 						didMutate = true;
 						continue;

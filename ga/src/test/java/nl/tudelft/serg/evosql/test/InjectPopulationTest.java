@@ -17,6 +17,34 @@ import java.util.List;
 import static junit.framework.TestCase.assertTrue;
 
 public class InjectPopulationTest extends TestBase {
+    private final TableSchema tableSchemaProducts = createTableProductsSchema();
+    private final TableSchema tableSchemaProductDetail = createTableProductDetailSchema();
+
+
+    private TableSchema createTableProductsSchema() {
+        List<ColumnSchema> columnSchemasProducts = new ArrayList<>();
+        TableSchema tableSchemaProducts = new TableSchema("PRODUCTS", columnSchemasProducts);
+        ColumnSchema columnSchemaIdProducts = new ColumnSchema(tableSchemaProducts, "ID", new DBInteger(), true, false);
+        ColumnSchema columnSchemaProductProducts = new ColumnSchema(tableSchemaProducts, "PRODUCT", new DBString(500), true, false);
+        ColumnSchema columnSchemaPriceProducts = new ColumnSchema(tableSchemaProducts, "PRICE", new DBDouble(), false, false);
+        columnSchemasProducts.add(columnSchemaIdProducts);
+        columnSchemasProducts.add(columnSchemaProductProducts);
+        columnSchemasProducts.add(columnSchemaPriceProducts);
+        return tableSchemaProducts;
+    }
+
+    private TableSchema createTableProductDetailSchema() {
+        List<ColumnSchema> columnSchemasProductDetail = new ArrayList<>();
+        TableSchema tableSchemaProductDetail = new TableSchema("PRODUCT_DETAIL", columnSchemasProductDetail);
+        ColumnSchema columnSchemaIdProductDetail = new ColumnSchema(tableSchemaProductDetail, "ID", new DBInteger(), true, false);
+        ColumnSchema columnSchemaNameProductDetail = new ColumnSchema(tableSchemaProductDetail, "NAME", new DBString(500), true, false);
+        ColumnSchema columnSchemaTypeProductDetail = new ColumnSchema(tableSchemaProductDetail, "TYPE", new DBInteger(), true, false);
+        columnSchemasProductDetail.add(columnSchemaIdProductDetail);
+        columnSchemasProductDetail.add(columnSchemaNameProductDetail);
+        columnSchemasProductDetail.add(columnSchemaTypeProductDetail);
+        return tableSchemaProductDetail;
+    }
+
     /**
      * @see SubquerySelectWhereTest#test3()
      * <p>
@@ -34,27 +62,6 @@ public class InjectPopulationTest extends TestBase {
         List<Fixture> injectedPopulation = new ArrayList<>();
         List<FixtureTable> fixtureTables = new ArrayList<>();
 
-
-        // Generate TableSchema for table PRODUCTS
-        List<ColumnSchema> columnSchemasProducts = new ArrayList<>();
-        TableSchema tableSchemaProducts = new TableSchema("PRODUCTS", columnSchemasProducts);
-        ColumnSchema columnSchemaIdProducts = new ColumnSchema(tableSchemaProducts, "ID", new DBInteger(), true, false);
-        ColumnSchema columnSchemaProductProducts = new ColumnSchema(tableSchemaProducts, "PRODUCT", new DBString(500), true, false);
-        ColumnSchema columnSchemaPriceProducts = new ColumnSchema(tableSchemaProducts, "PRICE", new DBDouble(), false, false);
-        columnSchemasProducts.add(columnSchemaIdProducts);
-        columnSchemasProducts.add(columnSchemaProductProducts);
-        columnSchemasProducts.add(columnSchemaPriceProducts);
-
-        // Generate TableSchema for table PRODUCT_DETAIL
-        List<ColumnSchema> columnSchemasProductDetail = new ArrayList<>();
-        TableSchema tableSchemaProductDetail = new TableSchema("PRODUCT_DETAIL", columnSchemasProductDetail);
-        ColumnSchema columnSchemaIdProductDetail = new ColumnSchema(tableSchemaProductDetail, "ID", new DBInteger(), true, false);
-        ColumnSchema columnSchemaNameProductDetail = new ColumnSchema(tableSchemaProductDetail, "NAME", new DBString(500), true, false);
-        ColumnSchema columnSchemaTypeProductDetail = new ColumnSchema(tableSchemaProductDetail, "TYPE", new DBInteger(), true, false);
-        columnSchemasProductDetail.add(columnSchemaIdProductDetail);
-        columnSchemasProductDetail.add(columnSchemaNameProductDetail);
-        columnSchemasProductDetail.add(columnSchemaTypeProductDetail);
-
         // Create Table for table PRODUCT
         List<FixtureRow> fixtureRowsProducts = new ArrayList<>();
         FixtureRow fixtureRowProducts = new FixtureRow("PRODUCTS", tableSchemaProducts);
@@ -65,7 +72,6 @@ public class InjectPopulationTest extends TestBase {
         fixtureRowProducts.set("PRICE", "1");
         fixtureTables.add(fixtureTableProducts);
 
-
         // Create Table for table PRODUCT_DETAIL
         List<FixtureRow> fixtureRowsProductDetail = new ArrayList<>();
         FixtureRow fixtureRowProductDetail = new FixtureRow("PRODUCT_DETAIL", tableSchemaProductDetail);
@@ -74,10 +80,6 @@ public class InjectPopulationTest extends TestBase {
         fixtureRowProductDetail.set("ID", "1");
         fixtureRowProductDetail.set("NAME", "i");
         fixtureRowProductDetail.set("TYPE", "2");
-        fixtureTables.add(fixtureTableProductDetail);
-
-        // Create Table List
-        fixtureTables.add(fixtureTableProducts);
         fixtureTables.add(fixtureTableProductDetail);
 
         // Set Fixture
@@ -90,7 +92,52 @@ public class InjectPopulationTest extends TestBase {
 
     /**
      * @see SubquerySelectWhereTest#test7()
+     * <p>
+     * FIXTURE to be generated:
+     * Products
+     * ID PRODUCT PRICE
+     * 1  to       10
+     * <p>
+     * Product detail
+     * ID NAME TYPE
+     * 1  to	   200
      */
+    @Test
+    public void injectCorrectPopulationTest7() {
+        List<Fixture> injectedPopulation = new ArrayList<>();
+        List<FixtureTable> fixtureTables = new ArrayList<>();
+
+        // Create Table for table PRODUCT
+        List<FixtureRow> fixtureRowsProducts = new ArrayList<>();
+        FixtureRow fixtureRowProducts = new FixtureRow("PRODUCTS", tableSchemaProducts);
+        fixtureRowsProducts.add(fixtureRowProducts);
+        FixtureTable fixtureTableProducts = new FixtureTable(tableSchemaProducts, fixtureRowsProducts);
+        fixtureRowProducts.set("ID", "1");
+        fixtureRowProducts.set("PRODUCT", "to");
+        fixtureRowProducts.set("PRICE", "10");
+        fixtureTables.add(fixtureTableProducts);
+
+
+        // Create Table for table PRODUCT_DETAIL
+        List<FixtureRow> fixtureRowsProductDetail = new ArrayList<>();
+        FixtureRow fixtureRowProductDetail = new FixtureRow("PRODUCT_DETAIL", tableSchemaProductDetail);
+        fixtureRowsProductDetail.add(fixtureRowProductDetail);
+        FixtureTable fixtureTableProductDetail = new FixtureTable(tableSchemaProductDetail, fixtureRowsProductDetail);
+        fixtureRowProductDetail.set("ID", "1");
+        fixtureRowProductDetail.set("NAME", "to");
+        fixtureRowProductDetail.set("TYPE", "200");
+        fixtureTables.add(fixtureTableProductDetail);
+
+        // Create Table List
+        fixtureTables.add(fixtureTableProductDetail);
+
+        // Set Fixture
+        Fixture fixture = new Fixture(fixtureTables);
+        injectedPopulation.add(fixture);
+        setPopulation(injectedPopulation);
+        assertTrue(testExecutePath("SELECT * FROM Products t WHERE t.Price < (SELECT MAX(Type) FROM (SELECT Name, Type FROM Product_Detail WHERE LENGTH(Name) = 2) t2 WHERE t.Product = t2.Name)"));
+    }
+
 
     /**
      * @see SubquerySelectWhereTest#test8()

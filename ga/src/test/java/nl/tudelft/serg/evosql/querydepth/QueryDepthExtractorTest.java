@@ -15,25 +15,25 @@ import org.mockito.Mockito;
 public class QueryDepthExtractorTest {
 
     /**
-     * @see TestHaving#test2()
+     * @see HavingTest#test2()
      */
     static final String TEST_QUERY_HAVING =
             "SELECT Product, AVG(Price) FROM products WHERE LENGTH(Product) = 5 GROUP BY Product HAVING AVG(Price) > 0 AND AVG(Price) < 10";
 
     /**
-     * @see TestSubquerySelectWhere#test9()
+     * @see SubquerySelectWhereTest#test9()
      */
     static final String TEST_QUERY_SUBQUERY_1 =
             "SELECT * FROM Products t WHERE t.Price < (SELECT MAX(Type) FROM Product_Detail t2 WHERE LENGTH(t.Product) = (SELECT MIN(t3.ID) FROM Products t3 WHERE t3.ID >= 0 AND t3.Product = t2.Name))";
 
     /**
-     * @see TestSubquerySelectWhere#test10()
+     * @see SubquerySelectWhereTest#test10()
      */
     static final String TEST_QUERY_SUBQUERY_2 =
             "SELECT * FROM Products t WHERE t.Price < (SELECT MAX(Type) FROM Product_Detail t2 WHERE LENGTH(t.Product) = (SELECT MIN(t3.ID) FROM Products t3 WHERE t3.ID >= 0 AND t3.Product = t2.Name))";
 
     /**
-     * @see TestInnerJoin#test7()
+     * @see InnerJoinTest#test7()
      */
     static final String TEST_QUERY_JOIN =
             "SELECT Product FROM Products t1 INNER JOIN PRODUCT_DETAIL t2 ON t1.ID = t2.ID INNER JOIN PRODUCT_DETAIL t3 ON t1.ID = t3.ID - 10";
@@ -51,13 +51,13 @@ public class QueryDepthExtractorTest {
             "SELECT Product, AVG(Price) FROM products INNER JOIN Table ON products.id=Table.id WHERE Price IN (SELECT Price FROM Product WHERE Price < 100) GROUP BY Product HAVING COUNT(Product) = 3";
 
     /**
-     * @see TestIn#test1()
+     * @see InTest#test1()
      */
     static final String TEST_QUERY_IN_SET =
             "SELECT Product, Price FROM Products WHERE Product IN ('HI', 'BYE')";
 
     /**
-     * @see TestIn#test2()
+     * @see InTest#test2()
      */
     static final String TEST_QUERY_IN_SUBQUERY =
             "SELECT Product, Price FROM Products WHERE Product IN (SELECT Name FROM Product_Detail)";
@@ -69,25 +69,25 @@ public class QueryDepthExtractorTest {
             "SELECT Product, Id FROM Products WHERE Id IN (SELECT Id FROM Product_Detail WHERE Name IN (SELECT Name FROM Price))";
 
     /**
-     * @see TestExists#test2()
+     * @see ExistsTest#test2()
      */
     static final String TEST_QUERY_EXISTS =
             "SELECT Product, Price FROM Products pr WHERE EXISTS (SELECT ID FROM Product_detail WHERE Type = pr.ID AND EXISTS(SELECT * FROM Price))";
 
     /**
-     * @see TestSubqueryFrom#test7()
+     * @see SubqueryFromTest#test7()
      */
     static final String TEST_GROUP_BY_HAVING =
             "SELECT Product FROM (SELECT Product, Price FROM products GROUP BY Product, Price) t GROUP BY Product HAVING SUM(Price) > 4";
 
     /**
-     * @see TestSubqueryFrom#test8()
+     * @see SubqueryFromTest#test8()
      */
     static final String TEST_NESTED_HAVING =
             "SELECT Product FROM (SELECT Product, Price FROM products GROUP BY Product, Price HAVING SUM(Price) < 10) t GROUP BY Product HAVING SUM(Price) > 4";
 
     /**
-     * @see TestRightJoin#testRightJoinWithNulls2BasedOnEspocrmQ21P15()
+     * @see RightJoinTest#testRightJoinWithNulls2BasedOnEspocrmQ21P15()
      */
     static final String TEST_QUERY_LONG =
             "SELECT PORTAL.ID AS ID, PORTAL.NAME AS NAME, PORTAL.DELETED AS DELETED, PORTAL.CUSTOM_ID AS CUSTOMID, PORTAL.IS_ACTIVE AS " +
@@ -111,7 +111,7 @@ public class QueryDepthExtractorTest {
                     + "( PORTAL.ID = 'testPortalId' AND PORTAL.DELETED = '0' )";
 
     /**
-     * @see TestSubquerySelectWhere#test3()
+     * @see SubquerySelectWhereTest#test3()
      */
     static final String TEST_TWO_SUBQUERIES =
             "SELECT * FROM (SELECT Product, Price FROM products t WHERE LENGTH(t.Product) = 1 GROUP BY Product, Price) t " +
@@ -119,7 +119,7 @@ public class QueryDepthExtractorTest {
 
 
     /**
-     * @see TestRightJoin#test4()
+     * @see RightJoinTest#test4()
      */
     static final String TEST_RIGHT_JOIN =
             "SELECT * FROM Products t1 RIGHT JOIN PRODUCT_DETAIL t3 ON t1.ID = t3.ID - 1 RIGHT JOIN PRODUCT_DETAIL t2 ON t1.ID = t2.ID WHERE t2.Type = 10";

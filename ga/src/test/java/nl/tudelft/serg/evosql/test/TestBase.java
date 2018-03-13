@@ -30,8 +30,8 @@ import org.junit.Rule;
 import org.junit.rules.Timeout;
 
 public class TestBase {
-	@Rule
-	public Timeout globalTimeout = new Timeout(10000, TimeUnit.MILLISECONDS);
+	//@Rule
+	//public Timeout globalTimeout = new Timeout(10000, TimeUnit.MILLISECONDS);
 
 
 	private static Logger log = LogManager.getLogger(TestBase.class);
@@ -106,7 +106,7 @@ public class TestBase {
 	 * @return Boolean indicating if execution was successful (meaning no errors and fixture outputs at least one output row) 
 	 */
 	public static boolean testExecutePath (String sqlToBeTested) {
-		return testExecutePath(sqlToBeTested, 60 * 1000L); // 1 minute tops
+		return testExecutePath(sqlToBeTested, 10000L); // 10 seconds tops
 	}
 	
 	public static boolean testExecutePath (String sqlToBeTested, long time) {
@@ -140,7 +140,7 @@ public class TestBase {
 			for (int i = 0; i < EvoSQLConfiguration.TEST_MAX_ITERATIONS; i++) {
 				List<Fixture> population = new ArrayList<Fixture>();
 				GAApproach ga = new GAApproach(population, tableSchemas, sqlToBeTested, seeds);
-				generatedFixture = ga.execute(time);
+				generatedFixture = ga.execute(time / EvoSQLConfiguration.TEST_MAX_ITERATIONS); //We want to hold the max time limit
 
 				log.info("For path: " + sqlToBeTested);
 				log.info("Generated fixture: {}", generatedFixture);

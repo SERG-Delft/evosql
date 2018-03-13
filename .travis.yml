@@ -3,13 +3,17 @@ language: java
 cache:
   directories:
     - ~/.gradle
+    - ~/.evosql-libs-cache
 
 notifications:
   email: false
 
+before_install:
+  - (cd lib; bash get-sqlfpc.sh --ci-cache)
+
 script:
-  - gradle :ga:check          # runs unit verification tasks
-  - gradle jacocoTestReport   # generates Jacoco test report
+  - ./gradlew :ga:check          # runs unit verification tasks
+  - ./gradlew jacocoTestReport   # generates Jacoco test report
 
   # See https://docs.gradle.org/current/userguide/java_plugin.html for
   # more details on the lifecycle events of Java projects in Gradle

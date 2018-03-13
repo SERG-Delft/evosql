@@ -6,7 +6,7 @@ import nl.tudelft.serg.evosql.EvoSQLConfiguration;
 import org.junit.Ignore;
 import org.junit.Test;
 
-public class TestLimit extends TestBase {
+public class LimitTest extends TestBase {
 	
 	@Test
 	public void test1() {

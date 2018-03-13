@@ -9,7 +9,7 @@ import org.junit.Test;
  * Tests with subqueries in the SELECT/WHERE's
  *
  */
-public class TestSubquerySelectWhere extends TestBase {
+public class SubquerySelectWhereTest extends TestBase {
 
 	@Test
 	public void test1() {

@@ -4,7 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-public class TestCount extends TestBase {
+public class CountTest extends TestBase {
 	
 	@Test
 	public void test1() {

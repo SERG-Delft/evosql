@@ -4,7 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-public class TestGroupBy extends TestBase {
+public class GroupByTest extends TestBase {
 	
 	/**
 	 * GROUP BY without WHERE

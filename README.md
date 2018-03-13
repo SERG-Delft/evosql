@@ -10,13 +10,22 @@ Behind the scenes, EvoSQL implements a search-based algorithm.
 
 More details can be found in our ICSE 2018 paper. Link to appear.
 
-## Commercial use of EvoSQL
+## SQLFpc's license
 
-EvoSQL is fully open source. However, our implementation currently makes use of SQLFPc webservice to generate
+EvoSQL currently makes use of SQLFPc webservice to generate
 MC/DC coverage targets, which is provided by University of Oviedo, in Spain. 
 Their tool can be only used for research purposes.
-For commercial use, you should contact their Tech Transfer Office. More information in 
+
+For any commercial use, you should contact their Tech Transfer Office. More information 
+about their license in 
 http://in2test.lsi.uniovi.es/sqltools/common/license.aspx.
+
+## Compiling EvoSQL
+
+For our Gradle build to work, you first should download the `sqlrules.jar` binary
+from this link, and copy it to our `lib/` folder: 
+http://in2test.lsi.uniovi.es/sqltools/sqlrules/?lang=en. 
+
 
 ## Authors
 

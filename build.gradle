@@ -24,7 +24,7 @@ subprojects {
         testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.1.0'
 
         testCompile 'org.assertj:assertj-core:3.9.0'
-        testCompile group: 'org.mockito', name: 'mockito-core', version: '2.+'
+        testCompile group: 'org.mockito', name: 'mockito-core', version: '2.15.0'
     }
     
     test {

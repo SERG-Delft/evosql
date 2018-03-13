@@ -35,6 +35,8 @@ public class TestBase {
 
 
 	private static Logger log = LogManager.getLogger(TestBase.class);
+
+	private static List<Fixture> population = new ArrayList<>();
 	
 	static final String TBL_PRODUCTS = "PRODUCTS";
 	
@@ -55,6 +57,14 @@ public class TestBase {
 	}
 
 	/**
+	 * Enables injection of initial population
+	 * @param population new population
+	 */
+	public void setPopulation(List<Fixture> population) {
+		this.population = population;
+	}
+
+	/**
 	 * Deletes the Database files in mem, then creates a new database with the necessary schema.
 	 */
 	@Before
@@ -65,6 +75,7 @@ public class TestBase {
 		createExtraProductTable();
 		
 		createTableToPlayWithStrings();
+		population = new ArrayList<>();
 	}
 	
 	private void createTableToPlayWithStrings() {
@@ -82,6 +93,7 @@ public class TestBase {
 	 */
 	@After
 	public void tearDown() {
+		population = new ArrayList<>();
 		try {
 			genetic.Instrumenter.execute("SHUTDOWN");
 		} catch (SQLException e) {
@@ -138,7 +150,6 @@ public class TestBase {
 			}
 			
 			for (int i = 0; i < EvoSQLConfiguration.TEST_MAX_ITERATIONS; i++) {
-				List<Fixture> population = new ArrayList<Fixture>();
 				GAApproach ga = new GAApproach(population, tableSchemas, sqlToBeTested, seeds);
 				generatedFixture = ga.execute(time / EvoSQLConfiguration.TEST_MAX_ITERATIONS); //We want to hold the max time limit
 

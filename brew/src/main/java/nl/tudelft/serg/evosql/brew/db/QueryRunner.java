@@ -1,6 +1,7 @@
 package nl.tudelft.serg.evosql.brew.db;
 
-import nl.tudelft.serg.evosql.Result;
+
+import nl.tudelft.serg.evosql.brew.data.Result;
 
 /**
  * An interface for obtaining test fixtures from a database.

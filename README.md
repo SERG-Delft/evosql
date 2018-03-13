@@ -8,7 +8,8 @@
 EvoSQL is a tool that automatically generates test data for your SQL queries.
 Behind the scenes, EvoSQL implements a search-based algorithm.
 
-More details can be found in our ICSE 2018 paper. Link to appear.
+More details can be found in our paper:
+_Castelein, J, Aniche, M, Soltani, M, Panichella, A & van Deursen, A 2018, Search-Based Test Data Generation for SQL Queries. in Proceedings of the 40th International Conference on Software Engineering. ICSE 2018, Gothenborg, Sweden, 26 May. DOI: 10.1145/3180155.3180202_. [Download](https://pure.tudelft.nl/portal/en/publications/searchbased-test-data-generation-for-sql-queries(90a6431f-f78f-4ac3-bf87-c052cd9cd5d4)/export.html)
 
 ## SQLFpc's license
 

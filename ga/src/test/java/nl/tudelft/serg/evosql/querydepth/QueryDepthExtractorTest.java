@@ -117,6 +117,13 @@ public class QueryDepthExtractorTest {
             "SELECT * FROM (SELECT Product, Price FROM products t WHERE LENGTH(t.Product) = 1 GROUP BY Product, Price) t " +
                     "WHERE t.Price < (SELECT MAX(Type) FROM product_detail t2 WHERE t.Product = t2.Name)";
 
+
+    /**
+     * @see TestRightJoin#test4()
+     */
+    static final String TEST_RIGHT_JOIN =
+            "SELECT * FROM Products t1 RIGHT JOIN PRODUCT_DETAIL t3 ON t1.ID = t3.ID - 1 RIGHT JOIN PRODUCT_DETAIL t2 ON t1.ID = t2.ID WHERE t2.Type = 10";
+
     @Test
     public void parserSetupTest() {
         QueryDepthExtractor extractor = new QueryDepthExtractor(TEST_QUERY_HAVING);
@@ -139,25 +146,25 @@ public class QueryDepthExtractorTest {
     @Test
     public void queryDepthSubquery2Test() {
         QueryDepthExtractor extractor = new QueryDepthExtractor(TEST_QUERY_SUBQUERY_2);
-        Assert.assertEquals(3,extractor.getQueryDepth());
+        Assert.assertEquals(3, extractor.getQueryDepth());
     }
 
     @Test
     public void queryDepthJoinTest() {
         QueryDepthExtractor extractor = new QueryDepthExtractor(TEST_QUERY_JOIN);
-        Assert.assertEquals(1,extractor.getQueryDepth());
+        Assert.assertEquals(1, extractor.getQueryDepth());
     }
 
     @Test
     public void queryDepthInSetTest() {
         QueryDepthExtractor extractor = new QueryDepthExtractor(TEST_QUERY_IN_SET);
-        Assert.assertEquals(2,extractor.getQueryDepth());
+        Assert.assertEquals(2, extractor.getQueryDepth());
     }
 
     @Test
     public void queryDepthInSubQueryTest() {
         QueryDepthExtractor extractor = new QueryDepthExtractor(TEST_QUERY_IN_SUBQUERY);
-        Assert.assertEquals(2,extractor.getQueryDepth());
+        Assert.assertEquals(2, extractor.getQueryDepth());
     }
 
     @Test
@@ -176,31 +183,31 @@ public class QueryDepthExtractorTest {
     @Test
     public void nestedInQueryTest() {
         QueryDepthExtractor extractor = new QueryDepthExtractor(TEST_QUERY_NESTED_SUBQUERY_1);
-        Assert.assertEquals(3,extractor.getQueryDepth());
+        Assert.assertEquals(3, extractor.getQueryDepth());
     }
 
     @Test
     public void existsWithNestedSubqueryTest() {
         QueryDepthExtractor extractor = new QueryDepthExtractor(TEST_QUERY_EXISTS);
-        Assert.assertEquals(3,extractor.getQueryDepth());
+        Assert.assertEquals(3, extractor.getQueryDepth());
     }
 
     @Test
     public void longQueryTest() {
         QueryDepthExtractor extractor = new QueryDepthExtractor(TEST_QUERY_LONG);
-        Assert.assertEquals(1,extractor.getQueryDepth());
+        Assert.assertEquals(1, extractor.getQueryDepth());
     }
 
     @Test
     public void groupByHavingTest() {
         QueryDepthExtractor extractor = new QueryDepthExtractor(TEST_GROUP_BY_HAVING);
-        Assert.assertEquals(3,extractor.getQueryDepth());
+        Assert.assertEquals(3, extractor.getQueryDepth());
     }
 
     @Test
     public void nestedHavingTest() {
         QueryDepthExtractor extractor = new QueryDepthExtractor(TEST_NESTED_HAVING);
-        Assert.assertEquals(4,extractor.getQueryDepth());
+        Assert.assertEquals(4, extractor.getQueryDepth());
     }
 
     //Verifies behaviour of reusing depth attribute using mocks
@@ -210,15 +217,20 @@ public class QueryDepthExtractorTest {
         QueryDepthExtractor extractor = new QueryDepthExtractor(mock);
         extractor.getQueryDepth();
         extractor.getQueryDepth();
-        Mockito.verify(mock,Mockito.atMost(1)).accept(Mockito.any());
+        Mockito.verify(mock, Mockito.atMost(1)).accept(Mockito.any());
     }
 
     @Test
     public void setTestTwoSubqueries() {
         QueryDepthExtractor extractor = new QueryDepthExtractor(TEST_TWO_SUBQUERIES);
-        Assert.assertEquals(3,extractor.getQueryDepth());
+        Assert.assertEquals(3, extractor.getQueryDepth());
     }
 
+    @Test
+    public void rightJoinTest() {
+        QueryDepthExtractor extractor = new QueryDepthExtractor(TEST_RIGHT_JOIN);
+        Assert.assertEquals(3, extractor.getQueryDepth());
+    }
 
 
 }

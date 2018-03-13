@@ -42,25 +42,32 @@ public class QueryDepthVisitor implements StatementVisitor, SelectVisitor, FromI
 
     @Override
     public void visit(PlainSelect plainSelect) {
-        if(queryLevels.isEmpty()) {
+        if (queryLevels.isEmpty()) {
             queryLevels.push(plainSelect);
-        }else if(!(queryLevels.peek() instanceof InExpression)) {
+        } else if (!(queryLevels.peek() instanceof InExpression)) {
             queryLevels.push(plainSelect);
         }
-        if(plainSelect.getHaving() != null) {
-            if(!(queryLevels.peek() instanceof ArrayList)) {
+        if (plainSelect.getHaving() != null) {
+            if (!(queryLevels.peek() instanceof ArrayList)) {
                 queryLevels.push(plainSelect.getHaving());
             }
             plainSelect.getHaving().accept(this);
         }
 
-        if(plainSelect.getWhere() != null) {
+        if (plainSelect.getWhere() != null) {
             plainSelect.getWhere().accept(this);
         }
-        if(plainSelect.getGroupByColumnReferences() != null) {
+        if (plainSelect.getGroupByColumnReferences() != null) {
 //            queryLevels.push(plainSelect.getGroupByColumnReferences());
             for (Expression expression : plainSelect.getGroupByColumnReferences()) {
                 expression.accept(this);
+            }
+        }
+        if (plainSelect.getJoins() != null) {
+            for (Join join : plainSelect.getJoins()) {
+                if (join.isRight()) {
+                    queryLevels.push(join);
+                }
             }
         }
         plainSelect.getFromItem().accept(this);
@@ -487,6 +494,8 @@ public class QueryDepthVisitor implements StatementVisitor, SelectVisitor, FromI
     @Override
     public void visit(SubJoin subJoin) {
         queryLevels.push(subJoin);
+        subJoin.accept(this);
+        System.out.println(subJoin.getAlias());
     }
 
     @Override

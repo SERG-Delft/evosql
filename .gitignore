@@ -1,7 +1,7 @@
 evaluation/mem
 
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and Webstorm
-.idea/
+.idea/*
 
 ## File-based project format:
 *.iws

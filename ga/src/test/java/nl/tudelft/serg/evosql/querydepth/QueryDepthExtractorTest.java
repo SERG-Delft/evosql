@@ -17,79 +17,79 @@ public class QueryDepthExtractorTest {
     /**
      * @see HavingTest#test2()
      */
-    static final String TEST_QUERY_HAVING =
+    public static final String TEST_QUERY_HAVING =
             "SELECT Product, AVG(Price) FROM products WHERE LENGTH(Product) = 5 GROUP BY Product HAVING AVG(Price) > 0 AND AVG(Price) < 10";
 
     /**
      * @see SubquerySelectWhereTest#test9()
      */
-    static final String TEST_QUERY_SUBQUERY_1 =
+    public static final String TEST_QUERY_SUBQUERY_1 =
             "SELECT * FROM Products t WHERE t.Price < (SELECT MAX(Type) FROM Product_Detail t2 WHERE LENGTH(t.Product) = (SELECT MIN(t3.ID) FROM Products t3 WHERE t3.ID >= 0 AND t3.Product = t2.Name))";
 
     /**
      * @see SubquerySelectWhereTest#test10()
      */
-    static final String TEST_QUERY_SUBQUERY_2 =
+    public static final String TEST_QUERY_SUBQUERY_2 =
             "SELECT * FROM Products t WHERE t.Price < (SELECT MAX(Type) FROM Product_Detail t2 WHERE LENGTH(t.Product) = (SELECT MIN(t3.ID) FROM Products t3 WHERE t3.ID >= 0 AND t3.Product = t2.Name))";
 
     /**
      * @see InnerJoinTest#test7()
      */
-    static final String TEST_QUERY_JOIN =
+    public static final String TEST_QUERY_JOIN =
             "SELECT Product FROM Products t1 INNER JOIN PRODUCT_DETAIL t2 ON t1.ID = t2.ID INNER JOIN PRODUCT_DETAIL t3 ON t1.ID = t3.ID - 10";
 
     /**
      * @author Daniël van Gelder
      */
-    static final String TEST_QUERY_ERROR =
+    public static final String TEST_QUERY_ERROR =
             "SELEC t FR;";
 
     /**
      * @author Daniël van Gelder
      */
-    static final String TEST_QUERY_COMPOSITE =
+    public static final String TEST_QUERY_COMPOSITE =
             "SELECT Product, AVG(Price) FROM products INNER JOIN Table ON products.id=Table.id WHERE Price IN (SELECT Price FROM Product WHERE Price < 100) GROUP BY Product HAVING COUNT(Product) = 3";
 
     /**
      * @see InTest#test1()
      */
-    static final String TEST_QUERY_IN_SET =
+    public static final String TEST_QUERY_IN_SET =
             "SELECT Product, Price FROM Products WHERE Product IN ('HI', 'BYE')";
 
     /**
      * @see InTest#test2()
      */
-    static final String TEST_QUERY_IN_SUBQUERY =
+    public static final String TEST_QUERY_IN_SUBQUERY =
             "SELECT Product, Price FROM Products WHERE Product IN (SELECT Name FROM Product_Detail)";
 
     /**
      * @author Daniël van Gelder
      */
-    static final String TEST_QUERY_NESTED_SUBQUERY_1 =
+    public static final String TEST_QUERY_NESTED_SUBQUERY_1 =
             "SELECT Product, Id FROM Products WHERE Id IN (SELECT Id FROM Product_Detail WHERE Name IN (SELECT Name FROM Price))";
 
     /**
      * @see ExistsTest#test2()
      */
-    static final String TEST_QUERY_EXISTS =
+    public static final String TEST_QUERY_EXISTS =
             "SELECT Product, Price FROM Products pr WHERE EXISTS (SELECT ID FROM Product_detail WHERE Type = pr.ID AND EXISTS(SELECT * FROM Price))";
 
     /**
      * @see SubqueryFromTest#test7()
      */
-    static final String TEST_GROUP_BY_HAVING =
+    public static final String TEST_GROUP_BY_HAVING =
             "SELECT Product FROM (SELECT Product, Price FROM products GROUP BY Product, Price) t GROUP BY Product HAVING SUM(Price) > 4";
 
     /**
      * @see SubqueryFromTest#test8()
      */
-    static final String TEST_NESTED_HAVING =
+    public static final String TEST_NESTED_HAVING =
             "SELECT Product FROM (SELECT Product, Price FROM products GROUP BY Product, Price HAVING SUM(Price) < 10) t GROUP BY Product HAVING SUM(Price) > 4";
 
     /**
      * @see RightJoinTest#testRightJoinWithNulls2BasedOnEspocrmQ21P15()
      */
-    static final String TEST_QUERY_LONG =
+    public static final String TEST_QUERY_LONG =
             "SELECT PORTAL.ID AS ID, PORTAL.NAME AS NAME, PORTAL.DELETED AS DELETED, PORTAL.CUSTOM_ID AS CUSTOMID, PORTAL.IS_ACTIVE AS " +
                     "ISACTIVE, PORTAL.TAB_LIST AS TABLIST, PORTAL.QUICK_CREATE_LIST AS QUICKCREATELIST, PORTAL.THEME AS THEME, PORTAL.LANGUAGE" +
                     "AS LANGUAGE, PORTAL.TIME_ZONE AS TIMEZONE, PORTAL.DATE_FORMAT AS DATEFORMAT, PORTAL.TIME_FORMAT AS TIMEFORMAT, " +
@@ -113,7 +113,7 @@ public class QueryDepthExtractorTest {
     /**
      * @see SubquerySelectWhereTest#test3()
      */
-    static final String TEST_TWO_SUBQUERIES =
+    public static final String TEST_TWO_SUBQUERIES =
             "SELECT * FROM (SELECT Product, Price FROM products t WHERE LENGTH(t.Product) = 1 GROUP BY Product, Price) t " +
                     "WHERE t.Price < (SELECT MAX(Type) FROM product_detail t2 WHERE t.Product = t2.Name)";
 
@@ -121,7 +121,7 @@ public class QueryDepthExtractorTest {
     /**
      * @see RightJoinTest#test4()
      */
-    static final String TEST_RIGHT_JOIN =
+    public static final String TEST_RIGHT_JOIN =
             "SELECT * FROM Products t1 RIGHT JOIN PRODUCT_DETAIL t3 ON t1.ID = t3.ID - 1 RIGHT JOIN PRODUCT_DETAIL t2 ON t1.ID = t2.ID WHERE t2.Type = 10";
 
     @Test

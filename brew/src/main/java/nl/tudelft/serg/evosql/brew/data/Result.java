@@ -1,5 +1,6 @@
 package nl.tudelft.serg.evosql.brew.data;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 
@@ -9,6 +10,7 @@ import java.util.List;
 /**
  * A class representing the result of test data generation.
  */
+@EqualsAndHashCode
 public class Result {
     /** The original query used for test data generation. */
     @Getter private final String inputQuery;

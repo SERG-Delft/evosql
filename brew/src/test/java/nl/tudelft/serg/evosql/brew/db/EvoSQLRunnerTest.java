@@ -1,5 +1,6 @@
 package nl.tudelft.serg.evosql.brew.db;
 
+import nl.tudelft.serg.evosql.EvoSQL;
 import nl.tudelft.serg.evosql.PathResult;
 import nl.tudelft.serg.evosql.Result;
 import nl.tudelft.serg.evosql.fixture.Fixture;
@@ -53,6 +54,23 @@ public class EvoSQLRunnerTest {
                 .isEqualTo("'string1'");
         assertThat(brewResult.getPaths().get(0).getFixture().getTables().get(2).getRows().get(1).getValues().get("TESTCOLUMN3_2"))
                 .isEqualTo("20");
+    }
+
+    @Test
+    void runQueryTest() {
+        EvoSQL evoSQL = Mockito.mock(EvoSQL.class);
+        EvoSQLFactory evoSQLFactory = Mockito.mock(EvoSQLFactory.class);
+        Mockito.when(evoSQLFactory.createEvoSQL(Mockito.any())).thenReturn(evoSQL);
+        Result result = new Result("Select * From all;", 0);
+        Mockito.when(evoSQL.execute(Mockito.anyString())).thenReturn(result);
+        ConnectionData connectionData = new ConnectionData("cs", "db", "user", "pass");
+
+        EvoSQLRunner evoSQLRunner = new EvoSQLRunner();
+        evoSQLRunner.setEvoSQLFactory(evoSQLFactory);
+        evoSQLRunner.runQuery("Select * From all;", connectionData);
+
+        Mockito.verify(evoSQLFactory, Mockito.times(1)).createEvoSQL(connectionData);
+        Mockito.verify(evoSQL, Mockito.times(1)).execute("Select * From all;");
     }
 
     /** Builds a new EvoSQL path result object. */

@@ -11,8 +11,6 @@ public class EvoSQLFactoryTest {
         ConnectionData connectionData = new ConnectionData("cs", "db", "user", "pass");
 
         EvoSQLFactory evoSQLFactory = new EvoSQLFactory();
-        evoSQLFactory.createEvoSQL(connectionData);
-
-        // no exceptions occurred, yay
+        assertThat(evoSQLFactory.createEvoSQL(connectionData)).isInstanceOf(EvoSQL.class);
     }
 }

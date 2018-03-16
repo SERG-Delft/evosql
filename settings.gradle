@@ -6,3 +6,5 @@ include ':evaluation'
 project(':instrumented-hsqldb').projectDir = "$rootDir/instrumented-hsqldb" as File
 project(':ga').projectDir = "$rootDir/ga" as File
 project(':evaluation').projectDir = "$rootDir/evaluation" as File
+include 'brew'
+

@@ -35,9 +35,8 @@ public class SchemaExtractor implements ISchemaExtractor {
 	private String pwd;
 
 	private String database;
-	private String schema;
 
-	public SchemaExtractor(String jdbc, String database, String schema, String user, String pwd) {
+	public SchemaExtractor(String jdbc, String database, String user, String pwd) {
 		this.jdbc = jdbc;
 		this.database = database;
 		this.user = user;
@@ -59,12 +58,12 @@ public class SchemaExtractor implements ISchemaExtractor {
 			
 			DatabaseMetaData metaData = con.getMetaData();
 
-			ResultSet result = metaData.getTables(database, schema, "%", new String[] { "TABLE" });
+			ResultSet result = metaData.getTables(database, null, "%", new String[] { "TABLE" });
 			while (result.next()) {
 				String tableName = result.getString(3);
 				if(!tableName.toUpperCase().equals(table.toUpperCase())) continue;
 				
-				ResultSet columns = metaData.getColumns(database, schema, tableName, null);
+				ResultSet columns = metaData.getColumns(database, null, tableName, null);
 
 				List<ColumnSchema> parsedColumns = new ArrayList<>();		
 				TableSchema ts = new TableSchema(tableName, parsedColumns);		

@@ -66,6 +66,10 @@ public class Result {
 		
 		return builder.toString();
 	}
+
+	public String getInputQuery() {
+		return inputQuery;
+	}
 	
 	public List<PathResult> getPathResults() {
 		return pathResults;

@@ -10,7 +10,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import nl.tudelft.serg.evosql.db.SchemaExtractor;
 import nl.tudelft.serg.evosql.sql.TableSchema;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -242,7 +241,7 @@ public class Evaluation {
 		try {
 			EvoSQL evoSQL;
 
-			if(!schemaIsMocked()) evoSQL = new EvoSQL(connectionString, database, schema, user, pwd, baseline);
+			if(!schemaIsMocked()) evoSQL = new EvoSQL(connectionString, database, user, pwd, baseline);
 			else evoSQL = new EvoSQL(new MockedSchemaExtractor(schemas), baseline);
 
 			if (paths != null) {

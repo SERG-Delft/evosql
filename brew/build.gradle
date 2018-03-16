@@ -1,0 +1,16 @@
+plugins {
+    id "io.franzbecker.gradle-lombok" version "1.11"
+}
+
+lombok {
+	version = "1.16.20"
+	sha256 = ""
+}
+
+description = 'The Java code brewery'
+
+apply plugin: 'findbugs'
+
+dependencies {
+    compile project(':ga')
+}

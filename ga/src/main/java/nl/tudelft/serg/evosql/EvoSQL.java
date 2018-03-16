@@ -53,8 +53,8 @@ public class EvoSQL {
 
 	private boolean baseline;
 	
-	public EvoSQL(String jdbcString, String dbDatabase, String dbSchema, String dbUser, String dbPwd, boolean baseline) {
-		this(new SchemaExtractor(jdbcString, dbDatabase, dbSchema, dbUser, dbPwd), baseline);
+	public EvoSQL(String jdbcString, String dbDatabase, String dbUser, String dbPwd, boolean baseline) {
+		this(new SchemaExtractor(jdbcString, dbDatabase, dbUser, dbPwd), baseline);
 	}
 
 	public EvoSQL(ISchemaExtractor se, boolean baseline) {

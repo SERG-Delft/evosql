@@ -150,7 +150,52 @@ public class InjectPopulationTest extends TestBase {
 
     /**
      * @see SubquerySelectWhereTest#test8()
+     * Products
+     * ID PRODUCT PRICE
+     * 2  i      10
+     *
+     * Product detail
+     * ID NAME TYPE
+     * 1  i    200
      */
+    @Test
+    public void injectCorrectPopulationTest8() {
+        List<Fixture> injectedPopulation = new ArrayList<>();
+        List<FixtureTable> fixtureTables = new ArrayList<>();
+
+        // Create Table for table PRODUCT
+        List<FixtureRow> fixtureRowsProducts = new ArrayList<>();
+        FixtureRow fixtureRowProducts = new FixtureRow("PRODUCTS", tableSchemaProducts);
+        fixtureRowsProducts.add(fixtureRowProducts);
+        FixtureTable fixtureTableProducts = new FixtureTable(tableSchemaProducts, fixtureRowsProducts);
+        fixtureRowProducts.set("ID", "2");
+        fixtureRowProducts.set("PRODUCT", "i");
+        fixtureRowProducts.set("PRICE", "10");
+        fixtureTables.add(fixtureTableProducts);
+
+
+        // Create Table for table PRODUCT_DETAIL
+        List<FixtureRow> fixtureRowsProductDetail = new ArrayList<>();
+        FixtureRow fixtureRowProductDetail = new FixtureRow("PRODUCT_DETAIL", tableSchemaProductDetail);
+        fixtureRowsProductDetail.add(fixtureRowProductDetail);
+        FixtureTable fixtureTableProductDetail = new FixtureTable(tableSchemaProductDetail, fixtureRowsProductDetail);
+        fixtureRowProductDetail.set("ID", "1");
+        fixtureRowProductDetail.set("NAME", "i");
+        fixtureRowProductDetail.set("TYPE", "200");
+        fixtureTables.add(fixtureTableProductDetail);
+
+        // Create Table List
+        fixtureTables.add(fixtureTableProductDetail);
+
+        // Set Fixture
+        Fixture fixture = new Fixture(fixtureTables);
+        FixtureFitness ff = Mockito.mock(FixtureFitness.class);
+        Mockito.when(ff.getFitnessValue()).thenReturn(0.d);
+        injectedPopulation.add(fixture);
+        fixture.setFitness(ff);
+        setPopulation(injectedPopulation);
+        assertTrue(testExecutePath("SELECT * FROM Products t WHERE t.Price < (SELECT MAX(Type) FROM (SELECT Name, Type FROM Product_Detail t3 WHERE LENGTH(Name) < t.ID) t2 WHERE t.Product = t2.Name)"));
+    }
 
 
     /**

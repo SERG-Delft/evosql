@@ -6,10 +6,13 @@ import nl.tudelft.serg.evosql.fixture.FixtureTable;
 import nl.tudelft.serg.evosql.fixture.type.DBDouble;
 import nl.tudelft.serg.evosql.fixture.type.DBInteger;
 import nl.tudelft.serg.evosql.fixture.type.DBString;
+import nl.tudelft.serg.evosql.metaheuristics.GAApproach;
+import nl.tudelft.serg.evosql.metaheuristics.operators.FixtureFitness;
 import nl.tudelft.serg.evosql.querydepth.QueryDepthExtractorTest;
 import nl.tudelft.serg.evosql.sql.ColumnSchema;
 import nl.tudelft.serg.evosql.sql.TableSchema;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,7 +87,10 @@ public class InjectPopulationTest extends TestBase {
 
         // Set Fixture
         Fixture fixture = new Fixture(fixtureTables);
+        FixtureFitness ff = Mockito.mock(FixtureFitness.class);
+        Mockito.when(ff.getFitnessValue()).thenReturn(0.d);
         injectedPopulation.add(fixture);
+        fixture.setFitness(ff);
         setPopulation(injectedPopulation);
         assertTrue(testExecutePath(QueryDepthExtractorTest.TEST_TWO_SUBQUERIES));
     }
@@ -133,7 +139,10 @@ public class InjectPopulationTest extends TestBase {
 
         // Set Fixture
         Fixture fixture = new Fixture(fixtureTables);
+        FixtureFitness ff = Mockito.mock(FixtureFitness.class);
+        Mockito.when(ff.getFitnessValue()).thenReturn(0.d);
         injectedPopulation.add(fixture);
+        fixture.setFitness(ff);
         setPopulation(injectedPopulation);
         assertTrue(testExecutePath("SELECT * FROM Products t WHERE t.Price < (SELECT MAX(Type) FROM (SELECT Name, Type FROM Product_Detail WHERE LENGTH(Name) = 2) t2 WHERE t.Product = t2.Name)"));
     }

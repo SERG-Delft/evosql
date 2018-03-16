@@ -12,7 +12,8 @@ before_install:
   - (cd lib; bash get-sqlfpc.sh --ci-cache)
 
 script:
-  - ./gradlew :ga:check          # runs unit verification tasks
+  - ./gradlew :ga:check          # runs verification tasks
+  - ./gradlew :brew:check        # runs verification tasks
   - ./gradlew jacocoTestReport   # generates Jacoco test report
 
   # See https://docs.gradle.org/current/userguide/java_plugin.html for

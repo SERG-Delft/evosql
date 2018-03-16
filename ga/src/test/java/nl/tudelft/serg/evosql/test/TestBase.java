@@ -107,7 +107,7 @@ public class TestBase {
 			log.info("Testing " + sqlToBeTested);
 			genetic.Instrumenter.startDatabase();
 			
-			SchemaExtractor schemaExtractor = new SchemaExtractor(jdbcUrl, database, schema, user, pwd);
+			SchemaExtractor schemaExtractor = new SchemaExtractor(jdbcUrl, database, user, pwd);
 			
 			Fixture generatedFixture = null;
 

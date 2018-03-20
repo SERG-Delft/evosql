@@ -2,6 +2,7 @@ package nl.tudelft.serg.evosql.brew.sql;
 
 import lombok.EqualsAndHashCode;
 import nl.tudelft.serg.evosql.brew.data.Path;
+import nl.tudelft.serg.evosql.brew.sql.vendor.VendorOptions;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -3,6 +3,7 @@ package nl.tudelft.serg.evosql.brew.sql;
 import lombok.Data;
 import lombok.NonNull;
 import nl.tudelft.serg.evosql.brew.data.Path;
+import nl.tudelft.serg.evosql.brew.sql.vendor.VendorOptions;
 
 
 import java.util.List;

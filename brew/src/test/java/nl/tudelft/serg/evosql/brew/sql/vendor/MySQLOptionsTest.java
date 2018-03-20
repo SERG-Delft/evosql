@@ -1,4 +1,4 @@
-package nl.tudelft.serg.evosql.brew.sql;
+package nl.tudelft.serg.evosql.brew.sql.vendor;
 
 
 import org.junit.jupiter.api.Test;

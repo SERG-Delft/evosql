@@ -22,7 +22,7 @@ public class InsertionBuilder extends QueryBuilder {
 
             insertBuilder.append(" (");
             List<String> escapedColumnNames = table.getSchema().getColumns().stream()
-                    .map(getVendorOptions()::escapeColumnName)
+                    .map(c -> getVendorOptions().escapeTableName(c.getName()))
                     .collect(Collectors.toList());
             insertBuilder.append(String.join(", ", escapedColumnNames));
             insertBuilder.append(") VALUES ");

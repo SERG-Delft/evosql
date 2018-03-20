@@ -16,14 +16,14 @@ public class TableSchema {
     @Getter private final String name;
 
     /** The columns of the schema. */
-    @Getter private final List<String> columns;
+    @Getter private final List<FixtureColumn> columns;
 
     /**
      * Initializes a new instance of the TableSchema class.
      * @param name The name of the table.
      * @param columns The columns of the schema.
      */
-    public TableSchema(@NonNull String name, @NonNull List<String> columns) {
+    public TableSchema(@NonNull String name, @NonNull List<FixtureColumn> columns) {
         this.name = name;
         this.columns = Collections.unmodifiableList(columns);
     }

@@ -4,8 +4,8 @@ import lombok.EqualsAndHashCode;
 import nl.tudelft.serg.evosql.brew.data.Path;
 import nl.tudelft.serg.evosql.brew.sql.vendor.VendorOptions;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @EqualsAndHashCode
 public class TableCreationBuilder extends QueryBuilder {
@@ -15,8 +15,18 @@ public class TableCreationBuilder extends QueryBuilder {
 
     @Override
     public List<String> buildQueries(Path path) {
-        List<String> queries = new ArrayList<>();
-        return queries;
+        return path.getFixture().getTables().stream().map(table -> {
+            StringBuilder createBuilder = new StringBuilder();
+            createBuilder.append("CREATE TABLE ");
+            createBuilder.append(table.getSchema().getName());
+            createBuilder.append(" (");
+            List<String> columnsWithTypes = table.getSchema().getColumns().stream()
+                    .map(c -> getVendorOptions().escapeColumnName(c.getName()) + " " + c.getType())
+                    .collect(Collectors.toList());
+            createBuilder.append(String.join(", ", columnsWithTypes));
+            createBuilder.append(");");
+            return createBuilder.toString();
+        }).collect(Collectors.toList());
     }
 
     @Override

@@ -11,12 +11,22 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class SelectionBuilderTest {
     @Test
-    void selectionBuilderTest() {
+    void selectionBuilderTestSmall() {
         // it should only wrap the query in a singleton list
         SelectionBuilder selectionBuilder = new SelectionBuilder(new MySQLOptions());
         Result result1 = new DataGenerator().makeResult1();
 
         assertThat(selectionBuilder.buildQueries(result1.getPaths().get(0)))
                 .isEqualTo(Collections.singletonList(result1.getPaths().get(0).getPathSql()));
+    }
+
+    @Test
+    void selectionBuilderTestMedium() {
+        // it should only wrap the query in a singleton list
+        SelectionBuilder selectionBuilder = new SelectionBuilder(new MySQLOptions());
+        Result result2 = new DataGenerator().makeResult2();
+
+        assertThat(selectionBuilder.buildQueries(result2.getPaths().get(2)))
+                .isEqualTo(Collections.singletonList(result2.getPaths().get(2).getPathSql()));
     }
 }

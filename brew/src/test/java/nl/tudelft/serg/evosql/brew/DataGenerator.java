@@ -5,7 +5,7 @@ import nl.tudelft.serg.evosql.brew.data.*;
 import java.util.*;
 
 public class DataGenerator {
-    Result makeResult1() {
+    public Result makeResult1() {
         // Build schema for table 1
         List<FixtureColumn> table1Columns = new ArrayList<>();
         table1Columns.add(new FixtureColumn("column1_1", "INTEGER"));

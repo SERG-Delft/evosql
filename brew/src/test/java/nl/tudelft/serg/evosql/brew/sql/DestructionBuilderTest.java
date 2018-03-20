@@ -11,7 +11,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TableCreationBuilderTest {
+public class DestructionBuilderTest {
     private List<Path> paths;
 
     @BeforeEach
@@ -23,15 +23,15 @@ public class TableCreationBuilderTest {
 
     @Test
     public void createTableMySQLStringTest() {
-        String expected = "CREATE TABLE `table1` (`column1_1` INTEGER, `column1_2` DOUBLE, `column1_3` STRING);";
-        TableCreationBuilder tableCreationBuilder = new TableCreationBuilder(new MySQLOptions());
-        assertThat(tableCreationBuilder.buildQueries(paths.get(0)).get(0)).isEqualTo(expected);
+        String expected = "DROP TABLE `table1`;";
+        DestructionBuilder destructionBuilder = new DestructionBuilder(new MySQLOptions());
+        assertThat(destructionBuilder.buildQueries(paths.get(0)).get(0)).isEqualTo(expected);
     }
 
     @Test
     public void createTablePostgreSQLTest() {
-        String expected = "CREATE TABLE \"table1\" (\"column1_1\" INTEGER, \"column1_2\" DOUBLE, \"column1_3\" STRING);";
-        TableCreationBuilder tableCreationBuilder = new TableCreationBuilder(new PostgreSQLOptions());
-        assertThat(tableCreationBuilder.buildQueries(paths.get(0)).get(0)).isEqualTo(expected);
+        String expected = "DROP TABLE \"table1\";";
+        DestructionBuilder destructionBuilder = new DestructionBuilder(new PostgreSQLOptions());
+        assertThat(destructionBuilder.buildQueries(paths.get(0)).get(0)).isEqualTo(expected);
     }
 }

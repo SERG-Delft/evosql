@@ -1,7 +1,7 @@
 package nl.tudelft.serg.evosql.brew.sql;
 
 import lombok.EqualsAndHashCode;
-import nl.tudelft.serg.evosql.brew.data.Result;
+import nl.tudelft.serg.evosql.brew.data.Path;
 
 import java.util.List;
 
@@ -12,12 +12,12 @@ public class CleaningBuilder extends QueryBuilder {
     }
 
     @Override
-    public List<String> buildQueries(Result result) {
+    public List<String> buildQueries(Path path) {
         return null;
     }
 
     @Override
-    public String buildAggregateQuery(Result result) {
+    public String buildAggregateQuery(Path path) {
         return null;
     }
 }

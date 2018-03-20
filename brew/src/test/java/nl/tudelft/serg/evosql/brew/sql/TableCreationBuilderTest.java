@@ -7,31 +7,43 @@ import nl.tudelft.serg.evosql.brew.sql.vendor.PostgreSQLOptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TableCreationBuilderTest {
-    private List<Path> paths;
+    private List<Path> pathsSmall;
+    private List<Path> pathsMedium;
 
     @BeforeEach
-    public void pathSetup() {
+    void pathSetup() {
         DataGenerator generator = new DataGenerator();
-        paths = generator.makeResult1().getPaths();
+        pathsSmall = generator.makeResult1().getPaths();
+        pathsMedium = generator.makeResult2().getPaths();
     }
 
 
     @Test
-    public void createTableMySQLStringTest() {
+    void createTableMySQLStringTestSmall() {
         String expected = "CREATE TABLE `table1` (`column1_1` INTEGER, `column1_2` DOUBLE, `column1_3` VARCHAR(100));";
         TableCreationBuilder tableCreationBuilder = new TableCreationBuilder(new MySQLOptions());
-        assertThat(tableCreationBuilder.buildQueries(paths.get(0)).get(0)).isEqualTo(expected);
+        assertThat(tableCreationBuilder.buildQueries(pathsSmall.get(0)).get(0)).isEqualTo(expected);
     }
 
     @Test
-    public void createTablePostgreSQLTest() {
+    void createTablePostgreSQLTestSmall() {
         String expected = "CREATE TABLE \"table1\" (\"column1_1\" INTEGER, \"column1_2\" DOUBLE, \"column1_3\" VARCHAR(100));";
         TableCreationBuilder tableCreationBuilder = new TableCreationBuilder(new PostgreSQLOptions());
-        assertThat(tableCreationBuilder.buildQueries(paths.get(0)).get(0)).isEqualTo(expected);
+        assertThat(tableCreationBuilder.buildQueries(pathsSmall.get(0)).get(0)).isEqualTo(expected);
+    }
+
+    @Test
+    void createTableMySQLStringTestMedium() {
+        List<String> expected = Arrays.asList(
+                "CREATE TABLE `table1` (`column1_1` INTEGER, `column1_2` VARCHAR(100));",
+                "CREATE TABLE `products` (`product_name` VARCHAR(100), `expired` BIT, `expiry_date` DATETIME);");
+        TableCreationBuilder tableCreationBuilder = new TableCreationBuilder(new MySQLOptions());
+        assertThat(tableCreationBuilder.buildQueries(pathsMedium.get(3))).isEqualTo(expected);
     }
 }

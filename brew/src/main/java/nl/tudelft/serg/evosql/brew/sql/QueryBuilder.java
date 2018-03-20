@@ -27,12 +27,4 @@ public abstract class QueryBuilder {
      * @return A list of SQL queries.
      */
     public abstract List<String> buildQueries(Path path);
-
-    /**
-     * Builds a single aggregate SQL query using result data.
-     *
-     * @param path The result data to use for SQL generation.
-     * @return A single SQL query.
-     */
-    public abstract String buildAggregateQuery(Path path);
 }

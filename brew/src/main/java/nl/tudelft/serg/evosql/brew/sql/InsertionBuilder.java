@@ -46,9 +46,4 @@ public class InsertionBuilder extends QueryBuilder {
             return insertBuilder.toString();
         }).collect(Collectors.toList());
     }
-
-    @Override
-    public String buildAggregateQuery(Path path) {
-        return null;
-    }
 }

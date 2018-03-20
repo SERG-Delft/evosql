@@ -17,10 +17,4 @@ public class SelectionBuilder extends QueryBuilder {
     public List<String> buildQueries(Path path) {
         return Arrays.asList(path.getPathSql());
     }
-
-    @Override
-    public String buildAggregateQuery(Path path) {
-        throw new UnsupportedOperationException("This operation is not supported on selection queries, " +
-                "use the buildQueries method instead.");
-    }
 }

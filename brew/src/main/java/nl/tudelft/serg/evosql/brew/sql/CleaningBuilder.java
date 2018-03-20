@@ -16,9 +16,4 @@ public class CleaningBuilder extends QueryBuilder {
     public List<String> buildQueries(Path path) {
         return null;
     }
-
-    @Override
-    public String buildAggregateQuery(Path path) {
-        return null;
-    }
 }

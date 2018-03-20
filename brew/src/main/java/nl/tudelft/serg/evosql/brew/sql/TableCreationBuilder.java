@@ -28,9 +28,4 @@ public class TableCreationBuilder extends QueryBuilder {
             return createBuilder.toString();
         }).collect(Collectors.toList());
     }
-
-    @Override
-    public String buildAggregateQuery(Path path) {
-        return null;
-    }
 }

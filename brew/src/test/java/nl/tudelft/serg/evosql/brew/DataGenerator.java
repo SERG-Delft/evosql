@@ -17,12 +17,12 @@ public class DataGenerator {
         Map<String, String> row1_1Data = new HashMap<>();
         row1_1Data.put("column1_1", "1");
         row1_1Data.put("column1_2", "0.5");
-        row1_1Data.put("column1_3", "The first row of table 1.");
+        row1_1Data.put("column1_3", "'The first row of table 1.'");
 
         Map<String, String> row1_2Data = new HashMap<>();
         row1_2Data.put("column1_1", "2");
         row1_2Data.put("column1_2", "1.5");
-        row1_2Data.put("column1_3", "The second row.");
+        row1_2Data.put("column1_3", "'The second row.'");
         FixtureTable table1 = new FixtureTable(table1Schema,
                 Arrays.asList(new FixtureRow(row1_1Data, table1Schema), new FixtureRow(row1_2Data, table1Schema)));
 

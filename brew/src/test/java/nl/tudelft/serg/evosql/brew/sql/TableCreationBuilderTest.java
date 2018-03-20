@@ -23,14 +23,14 @@ public class TableCreationBuilderTest {
 
     @Test
     public void createTableMySQLStringTest() {
-        String expected = "CREATE TABLE `table1` (`column1_1` INTEGER, `column1_2` DOUBLE, `column1_3` STRING);";
+        String expected = "CREATE TABLE `table1` (`column1_1` INTEGER, `column1_2` DOUBLE, `column1_3` VARCHAR(100));";
         TableCreationBuilder tableCreationBuilder = new TableCreationBuilder(new MySQLOptions());
         assertThat(tableCreationBuilder.buildQueries(paths.get(0)).get(0)).isEqualTo(expected);
     }
 
     @Test
     public void createTablePostgreSQLTest() {
-        String expected = "CREATE TABLE \"table1\" (\"column1_1\" INTEGER, \"column1_2\" DOUBLE, \"column1_3\" STRING);";
+        String expected = "CREATE TABLE \"table1\" (\"column1_1\" INTEGER, \"column1_2\" DOUBLE, \"column1_3\" VARCHAR(100));";
         TableCreationBuilder tableCreationBuilder = new TableCreationBuilder(new PostgreSQLOptions());
         assertThat(tableCreationBuilder.buildQueries(paths.get(0)).get(0)).isEqualTo(expected);
     }

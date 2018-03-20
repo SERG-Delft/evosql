@@ -7,12 +7,21 @@ import nl.tudelft.serg.evosql.brew.sql.vendor.VendorOptions;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * A query builder class for building data insertion SQL statements.
+ */
 @EqualsAndHashCode
 public class InsertionBuilder extends QueryBuilder {
     public InsertionBuilder(VendorOptions vendorOptions) {
         super(vendorOptions);
     }
 
+    /**
+     * Builds insertion statements for all tables in the given path fixture.
+     *
+     * @param path The result data to use for SQL generation.
+     * @return A list of insertion statements for the given data.
+     */
     @Override
     public List<String> buildQueries(Path path) {
         return path.getFixture().getTables().stream().map(table -> {

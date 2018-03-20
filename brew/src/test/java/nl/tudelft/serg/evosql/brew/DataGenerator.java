@@ -4,7 +4,14 @@ import nl.tudelft.serg.evosql.brew.data.*;
 
 import java.util.*;
 
+/**
+ * A class containing functionality to generate test data sets.
+ */
 public class DataGenerator {
+    /**
+     * Creates result set 1.
+     * @return Result set 1.
+     */
     public Result makeResult1() {
         // Build schema for table 1
         List<FixtureColumn> table1Columns = new ArrayList<>();
@@ -35,6 +42,10 @@ public class DataGenerator {
                 Arrays.asList(path1, path2));
     }
 
+    /**
+     * Creates result set 2.
+     * @return Result set 2.
+     */
     public Result makeResult2() {
         // Build schema for table 1
         List<FixtureColumn> table1Columns = new ArrayList<>();

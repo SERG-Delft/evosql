@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @EqualsAndHashCode
-public class CleaningBuilder extends QueryBuilder {
-    public CleaningBuilder(VendorOptions vendorOptions) {
+public class DestructionBuilder extends QueryBuilder {
+    public DestructionBuilder(VendorOptions vendorOptions) {
         super(vendorOptions);
     }
 
@@ -17,11 +17,10 @@ public class CleaningBuilder extends QueryBuilder {
     public List<String> buildQueries(Path path) {
         return path.getFixture().getTables().stream().map(table -> {
             StringBuilder cleanBuilder = new StringBuilder();
-            cleanBuilder.append("TRUNCATE TABLE ");
+            cleanBuilder.append("DROP TABLE ");
             cleanBuilder.append(getVendorOptions().escapeTableName(table.getSchema().getName()));
             cleanBuilder.append(";");
             return cleanBuilder.toString();
         }).collect(Collectors.toList());
     }
-
 }

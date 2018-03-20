@@ -26,10 +26,10 @@ public class TableCreationBuilder extends QueryBuilder {
         return path.getFixture().getTables().stream().map(table -> {
             StringBuilder createBuilder = new StringBuilder();
             createBuilder.append("CREATE TABLE ");
-            createBuilder.append(getVendorOptions().escapeTableName(table.getSchema().getName()));
+            createBuilder.append(getVendorOptions().escapeIdentifier(table.getSchema().getName()));
             createBuilder.append(" (");
             List<String> columnsWithTypes = table.getSchema().getColumns().stream()
-                    .map(c -> getVendorOptions().escapeColumnName(c.getName()) + " " + c.getType())
+                    .map(c -> getVendorOptions().escapeIdentifier(c.getName()) + " " + c.getType())
                     .collect(Collectors.toList());
             createBuilder.append(String.join(", ", columnsWithTypes));
             createBuilder.append(");");

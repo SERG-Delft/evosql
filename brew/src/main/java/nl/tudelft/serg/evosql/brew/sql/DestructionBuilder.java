@@ -27,7 +27,7 @@ public class DestructionBuilder extends QueryBuilder {
         return path.getFixture().getTables().stream().map(table -> {
             StringBuilder destructionBuilder = new StringBuilder();
             destructionBuilder.append("DROP TABLE ");
-            destructionBuilder.append(getVendorOptions().escapeTableName(table.getSchema().getName()));
+            destructionBuilder.append(getVendorOptions().escapeIdentifier(table.getSchema().getName()));
             destructionBuilder.append(";");
             return destructionBuilder.toString();
         }).collect(Collectors.toList());

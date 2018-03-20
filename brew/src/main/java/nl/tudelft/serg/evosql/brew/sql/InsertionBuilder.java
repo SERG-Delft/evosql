@@ -27,11 +27,11 @@ public class InsertionBuilder extends QueryBuilder {
         return path.getFixture().getTables().stream().map(table -> {
             StringBuilder insertBuilder = new StringBuilder();
             insertBuilder.append("INSERT INTO ");
-            insertBuilder.append(getVendorOptions().escapeTableName(table.getSchema().getName()));
+            insertBuilder.append(getVendorOptions().escapeIdentifier(table.getSchema().getName()));
 
             insertBuilder.append(" (");
             List<String> escapedColumnNames = table.getSchema().getColumns().stream()
-                    .map(c -> getVendorOptions().escapeTableName(c.getName()))
+                    .map(c -> getVendorOptions().escapeIdentifier(c.getName()))
                     .collect(Collectors.toList());
             insertBuilder.append(String.join(", ", escapedColumnNames));
             insertBuilder.append(") VALUES ");

@@ -11,13 +11,5 @@ public interface VendorOptions {
      * @param tableName The name of the table.
      * @return An escaped version of the table name.
      */
-    String escapeTableName(String tableName);
-
-    /**
-     * Escapes a column name for the correct vendor.
-     *
-     * @param columnName The name of the column.
-     * @return An escaped version of the column name.
-     */
-    String escapeColumnName(String columnName);
+    String escapeIdentifier(String tableName);
 }

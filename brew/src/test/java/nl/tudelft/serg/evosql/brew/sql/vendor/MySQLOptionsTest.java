@@ -7,14 +7,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class MySQLOptionsTest {
     @Test
-    void escapeTableNameTest() {
+    void testNormal() {
         VendorOptions mySQLOptions = new MySQLOptions();
-        assertThat(mySQLOptions.escapeColumnName("table")).isEqualTo("`table`");
+        assertThat(mySQLOptions.escapeIdentifier("table")).isEqualTo("`table`");
     }
 
     @Test
-    void escapeColumnNameTest() {
+    void testSpace() {
         VendorOptions mySQLOptions = new MySQLOptions();
-        assertThat(mySQLOptions.escapeColumnName("column")).isEqualTo("`column`");
+        assertThat(mySQLOptions.escapeIdentifier("table space")).isEqualTo("`table space`");
+    }
+
+    @Test
+    void testNumber() {
+        VendorOptions mySQLOptions = new MySQLOptions();
+        assertThat(mySQLOptions.escapeIdentifier("table2table")).isEqualTo("`table2table`");
     }
 }

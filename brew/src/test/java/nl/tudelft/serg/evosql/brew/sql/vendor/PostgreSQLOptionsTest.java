@@ -6,14 +6,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class PostgreSQLOptionsTest {
     @Test
-    void escapeTableNameTest() {
+    void testStandard() {
         VendorOptions postgreSQLOptions = new PostgreSQLOptions();
-        assertThat(postgreSQLOptions.escapeColumnName("table")).isEqualTo("\"table\"");
+        assertThat(postgreSQLOptions.escapeIdentifier("table")).isEqualTo("\"table\"");
     }
 
     @Test
-    void escapeColumnNameTest() {
+    void testSpace() {
         VendorOptions postgreSQLOptions = new PostgreSQLOptions();
-        assertThat(postgreSQLOptions.escapeColumnName("column")).isEqualTo("\"column\"");
+        assertThat(postgreSQLOptions.escapeIdentifier("table space")).isEqualTo("\"table space\"");
+    }
+
+    @Test
+    void testNumber() {
+        VendorOptions postgreSQLOptions = new PostgreSQLOptions();
+        assertThat(postgreSQLOptions.escapeIdentifier("table2table")).isEqualTo("\"table2table\"");
     }
 }

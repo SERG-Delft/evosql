@@ -27,7 +27,7 @@ public class CleaningBuilder extends QueryBuilder {
         return path.getFixture().getTables().stream().map(table -> {
             StringBuilder truncateBuilder = new StringBuilder();
             truncateBuilder.append("TRUNCATE TABLE ");
-            truncateBuilder.append(getVendorOptions().escapeTableName(table.getSchema().getName()));
+            truncateBuilder.append(getVendorOptions().escapeIdentifier(table.getSchema().getName()));
             truncateBuilder.append(";");
             return truncateBuilder.toString();
         }).collect(Collectors.toList());

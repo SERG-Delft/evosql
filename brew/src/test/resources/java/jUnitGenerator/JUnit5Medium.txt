@@ -50,12 +50,10 @@ public class JUnit5MediumTest {
 
   @BeforeAll
   static void beforeAll() {
-    createTables();
   }
 
   @BeforeEach
   void beforeEach() {
-    cleanTables();
   }
 
   @AfterEach

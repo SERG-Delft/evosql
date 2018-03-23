@@ -27,8 +27,8 @@ public class JUnit4TestGeneratorTest extends JUnitGeneratorTest {
                 true,
                 true,
                 true,
-                true,
-                true
+                false,
+                false
         );
         JUnit4TestGenerator jUnit4TestGenerator = new JUnit4TestGenerator(JUnitGeneratorSettings);
         assertThat(jUnit4TestGenerator.generate(resultSmall, new MySQLOptions()))
@@ -48,8 +48,8 @@ public class JUnit4TestGeneratorTest extends JUnitGeneratorTest {
                 "brew.test.generated",
                 "JUnit4MediumTest",
                 true,
-                true,
-                true,
+                false,
+                false,
                 true,
                 true
         );

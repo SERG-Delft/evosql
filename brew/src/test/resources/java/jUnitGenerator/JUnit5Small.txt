@@ -57,12 +57,10 @@ public class JUnit5SmallTest {
 
   @AfterEach
   void afterEach() {
-    cleanTables();
   }
 
   @AfterAll
   static void afterAll() {
-    dropTables();
   }
 
   @Test

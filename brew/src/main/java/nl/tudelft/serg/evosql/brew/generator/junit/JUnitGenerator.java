@@ -211,7 +211,7 @@ public abstract class JUnitGenerator implements Generator {
             afterEach.addModifiers(Modifier.PUBLIC);
         }
 
-        if (jUnitGeneratorSettings.isCreateTablesBeforeRunning()) {
+        if (jUnitGeneratorSettings.isCleanTableAfterEachRun()) {
             afterEach.addStatement("cleanTables()");
         }
         return afterEach.build();

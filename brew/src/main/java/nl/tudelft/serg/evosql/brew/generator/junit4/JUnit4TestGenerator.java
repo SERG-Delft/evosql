@@ -46,7 +46,7 @@ public class JUnit4TestGenerator implements Generator {
             typeSpecBuilder.addMethod(generatePathTest(result.getPaths().get(i), "queryTest" + i, vendorOptions));
         }
 
-        JavaFile javaFile = JavaFile.builder(getClass().getPackage().toString(), typeSpecBuilder.build()).build();
+        JavaFile javaFile = JavaFile.builder(getClass().getPackage().getName(), typeSpecBuilder.build()).build();
         return javaFile.toString();
     }
 

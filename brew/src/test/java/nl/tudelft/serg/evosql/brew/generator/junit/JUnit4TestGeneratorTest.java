@@ -20,7 +20,8 @@ public class JUnit4TestGeneratorTest {
         );
         JUnitGeneratorSettings JUnitGeneratorSettings = new JUnitGeneratorSettings(
                 connectionData,
-                "brew.test.package",
+                "brew.test.generated",
+                "JUnit4SmallTest",
                 true,
                 true,
                 true,
@@ -41,7 +42,8 @@ public class JUnit4TestGeneratorTest {
         );
         JUnitGeneratorSettings JUnitGeneratorSettings = new JUnitGeneratorSettings(
                 connectionData,
-                "brew.test.package",
+                "brew.test.generated",
+                "JUnit4MediumTest",
                 true,
                 true,
                 true,

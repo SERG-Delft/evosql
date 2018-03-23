@@ -38,7 +38,7 @@ public abstract class JUnitGenerator implements Generator {
         AnnotationSpec generatedAnnotation = AnnotationSpec.builder(Generated.class)
                 .addMember("value", "$S", getClass().getCanonicalName())
                 .build();
-        TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder("EvoSQLQueryTest")
+        TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(jUnitGeneratorSettings.getClassName())
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(generatedAnnotation);
 

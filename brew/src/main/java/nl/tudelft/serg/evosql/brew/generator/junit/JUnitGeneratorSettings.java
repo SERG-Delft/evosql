@@ -18,6 +18,10 @@ public class JUnitGeneratorSettings {
      */
     @NonNull private final String filePackage;
     /**
+     * The name of the test class.
+     */
+    @NonNull private final String className;
+    /**
      * Whether an implementation of a method for executing
      * SQL statements should be fully implemented.
      */

@@ -31,7 +31,8 @@ public class JUnit4TestGenerator implements Generator {
 
     @Override
     public String generate(Result result, VendorOptions vendorOptions) {
-        TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder("EvoSQLQueryTest");
+        TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder("EvoSQLQueryTest")
+                .addModifiers(Modifier.PUBLIC);
 
         typeSpecBuilder.addMethod(generateRunSQL());
         typeSpecBuilder.addMethod(generateCreateTables(result, vendorOptions));
@@ -58,7 +59,7 @@ public class JUnit4TestGenerator implements Generator {
      */
     private MethodSpec generateRunSQL() {
         return MethodSpec.methodBuilder("runSQL")
-                .addModifiers(Modifier.PRIVATE)
+                .addModifiers(Modifier.PRIVATE, Modifier.STATIC)
                 .returns(TypeName.BOOLEAN)
                 .addParameter(String.class, "query")
                 .addJavadoc(""
@@ -83,8 +84,8 @@ public class JUnit4TestGenerator implements Generator {
     private MethodSpec generateCreateTables(Result result, VendorOptions vendorOptions) {
         // Method signature
         MethodSpec.Builder createTables = MethodSpec.methodBuilder("createTables")
+                .addModifiers(Modifier.PRIVATE, Modifier.STATIC)
                 .returns(TypeName.VOID)
-                .addModifiers(Modifier.STATIC)
                 .addJavadoc("Creates tables required for queries.\n");
 
         // Create tables code
@@ -109,8 +110,8 @@ public class JUnit4TestGenerator implements Generator {
     private MethodSpec generateCleanTables(Result result, VendorOptions vendorOptions) {
         // Method signature
         MethodSpec.Builder cleanTables = MethodSpec.methodBuilder("cleanTables")
+                .addModifiers(Modifier.PRIVATE, Modifier.STATIC)
                 .returns(TypeName.VOID)
-                .addModifiers(Modifier.STATIC)
                 .addJavadoc("Truncates the tables.\n");
 
         // Create tables code
@@ -134,8 +135,8 @@ public class JUnit4TestGenerator implements Generator {
     private MethodSpec generateDropTables(Result result, VendorOptions vendorOptions) {
         // Method signature
         MethodSpec.Builder dropTables = MethodSpec.methodBuilder("dropTables")
+                .addModifiers(Modifier.PRIVATE, Modifier.STATIC)
                 .returns(TypeName.VOID)
-                .addModifiers(Modifier.STATIC)
                 .addJavadoc("Drops the tables.\n");
 
         // Create tables code
@@ -152,12 +153,13 @@ public class JUnit4TestGenerator implements Generator {
 
     /**
      * Generates a method specification for a before all test method.
+     *
      * @return A method specification for a before all test method.
      */
     private MethodSpec generateBeforeAll() {
         MethodSpec.Builder beforeAll = MethodSpec.methodBuilder("beforeAll")
+                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .returns(TypeName.VOID)
-                .addModifiers(Modifier.STATIC)
                 .addAnnotation(BeforeClass.class);
 
         if (testGeneratorSettings.isCreateTablesBeforeRunning()) {
@@ -168,12 +170,13 @@ public class JUnit4TestGenerator implements Generator {
 
     /**
      * Generates a method specification for a before each test method.
+     *
      * @return A method specification for a before each test method.
      */
     private MethodSpec generateBeforeEach() {
         MethodSpec.Builder beforeEach = MethodSpec.methodBuilder("beforeEach")
+                .addModifiers(Modifier.PUBLIC)
                 .returns(TypeName.VOID)
-                .addModifiers(Modifier.STATIC)
                 .addAnnotation(Before.class);
 
         if (testGeneratorSettings.isCleanTablesBeforeEachRun()) {
@@ -184,12 +187,13 @@ public class JUnit4TestGenerator implements Generator {
 
     /**
      * Generates a method specification for an after each test method.
+     *
      * @return A method specification for an after each test method.
      */
     private MethodSpec generateAfterEach() {
         MethodSpec.Builder beforeEach = MethodSpec.methodBuilder("afterEach")
+                .addModifiers(Modifier.PUBLIC)
                 .returns(TypeName.VOID)
-                .addModifiers(Modifier.STATIC)
                 .addAnnotation(After.class);
 
         if (testGeneratorSettings.isCreateTablesBeforeRunning()) {
@@ -200,12 +204,13 @@ public class JUnit4TestGenerator implements Generator {
 
     /**
      * Generates a method specification for an after all test method.
+     *
      * @return A method specification for an after all test method.
      */
     private MethodSpec generateAfterAll() {
         MethodSpec.Builder beforeEach = MethodSpec.methodBuilder("afterAll")
+                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .returns(TypeName.VOID)
-                .addModifiers(Modifier.STATIC)
                 .addAnnotation(AfterClass.class);
 
         if (testGeneratorSettings.isDropTablesAfterRunning()) {
@@ -233,8 +238,9 @@ public class JUnit4TestGenerator implements Generator {
         // Method signature
         MethodSpec.Builder pTestBuilder = MethodSpec.methodBuilder(
                 String.format("generatedTest%d", path.getPathNumber()));
-        pTestBuilder.returns(TypeName.VOID);
-        pTestBuilder.addAnnotation(Test.class);
+        pTestBuilder.addModifiers(Modifier.PUBLIC)
+                .returns(TypeName.VOID)
+                .addAnnotation(Test.class);
 
         // Arrange part
         pTestBuilder.addComment("Arrange: set up the fixture data");

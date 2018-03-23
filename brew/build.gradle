@@ -14,4 +14,5 @@ apply plugin: 'findbugs'
 dependencies {
     compile project(':ga')
     compile 'com.squareup:javapoet:1.10.0'
+    compile 'junit:junit:4.12'
 }

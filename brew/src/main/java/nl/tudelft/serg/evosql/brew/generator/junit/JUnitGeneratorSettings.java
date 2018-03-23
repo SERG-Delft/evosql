@@ -1,4 +1,4 @@
-package nl.tudelft.serg.evosql.brew.generator;
+package nl.tudelft.serg.evosql.brew.generator.junit;
 
 import lombok.Data;
 import lombok.NonNull;
@@ -8,7 +8,7 @@ import nl.tudelft.serg.evosql.brew.db.ConnectionData;
  * Represents settings for a unit test generator.
  */
 @Data
-public class TestGeneratorSettings {
+public class JUnitGeneratorSettings {
     /**
      * The connection data for the database.
      */

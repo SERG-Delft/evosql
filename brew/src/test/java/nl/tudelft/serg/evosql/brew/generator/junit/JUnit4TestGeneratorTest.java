@@ -1,9 +1,8 @@
-package nl.tudelft.serg.evosql.brew.generator.junit4;
+package nl.tudelft.serg.evosql.brew.generator.junit;
 
 import nl.tudelft.serg.evosql.brew.DataGenerator;
 import nl.tudelft.serg.evosql.brew.data.Result;
 import nl.tudelft.serg.evosql.brew.db.ConnectionData;
-import nl.tudelft.serg.evosql.brew.generator.TestGeneratorSettings;
 import nl.tudelft.serg.evosql.brew.sql.vendor.MySQLOptions;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +18,7 @@ public class JUnit4TestGeneratorTest {
                 "user",
                 "password"
         );
-        TestGeneratorSettings testGeneratorSettings = new TestGeneratorSettings(
+        JUnitGeneratorSettings JUnitGeneratorSettings = new JUnitGeneratorSettings(
                 connectionData,
                 "brew.test.package",
                 true,
@@ -28,7 +27,7 @@ public class JUnit4TestGeneratorTest {
                 true,
                 true
         );
-        JUnit4TestGenerator jUnit4TestGenerator = new JUnit4TestGenerator(testGeneratorSettings);
+        JUnit4TestGenerator jUnit4TestGenerator = new JUnit4TestGenerator(JUnitGeneratorSettings);
         System.out.println(jUnit4TestGenerator.generate(resultSmall, new MySQLOptions()));
     }
 
@@ -40,7 +39,7 @@ public class JUnit4TestGeneratorTest {
                 "user",
                 "password"
         );
-        TestGeneratorSettings testGeneratorSettings = new TestGeneratorSettings(
+        JUnitGeneratorSettings JUnitGeneratorSettings = new JUnitGeneratorSettings(
                 connectionData,
                 "brew.test.package",
                 true,
@@ -49,7 +48,7 @@ public class JUnit4TestGeneratorTest {
                 true,
                 true
         );
-        JUnit4TestGenerator jUnit4TestGenerator = new JUnit4TestGenerator(testGeneratorSettings);
+        JUnit4TestGenerator jUnit4TestGenerator = new JUnit4TestGenerator(JUnitGeneratorSettings);
         System.out.println(jUnit4TestGenerator.generate(resultMedium, new MySQLOptions()));
     }
 }

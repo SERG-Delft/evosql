@@ -1,10 +1,9 @@
-package nl.tudelft.serg.evosql.brew.generator.junit4;
+package nl.tudelft.serg.evosql.brew.generator.junit;
 
 import com.squareup.javapoet.*;
 import nl.tudelft.serg.evosql.brew.data.Path;
 import nl.tudelft.serg.evosql.brew.data.Result;
 import nl.tudelft.serg.evosql.brew.generator.Generator;
-import nl.tudelft.serg.evosql.brew.generator.TestGeneratorSettings;
 import nl.tudelft.serg.evosql.brew.sql.*;
 import nl.tudelft.serg.evosql.brew.sql.vendor.VendorOptions;
 import org.junit.*;
@@ -16,15 +15,15 @@ import java.util.Set;
 
 public class JUnit4TestGenerator implements Generator {
 
-    private final TestGeneratorSettings testGeneratorSettings;
+    private final JUnitGeneratorSettings jUnitGeneratorSettings;
 
     /**
      * Initializes a new instance of the JUnit4TestGenerator class.
      *
-     * @param testGeneratorSettings The settings used for this generator.
+     * @param junitgeneratorsettings The settings used for this generator.
      */
-    public JUnit4TestGenerator(TestGeneratorSettings testGeneratorSettings) {
-        this.testGeneratorSettings = testGeneratorSettings;
+    public JUnit4TestGenerator(JUnitGeneratorSettings junitgeneratorsettings) {
+        this.jUnitGeneratorSettings = junitgeneratorsettings;
     }
 
     @Override
@@ -50,7 +49,7 @@ public class JUnit4TestGenerator implements Generator {
             typeSpecBuilder.addMethod(generatePathTest(path, vendorOptions));
         }
 
-        JavaFile javaFile = JavaFile.builder(testGeneratorSettings.getFilePackage(), typeSpecBuilder.build()).build();
+        JavaFile javaFile = JavaFile.builder(jUnitGeneratorSettings.getFilePackage(), typeSpecBuilder.build()).build();
         return javaFile.toString();
     }
 
@@ -164,7 +163,7 @@ public class JUnit4TestGenerator implements Generator {
                 .returns(TypeName.VOID)
                 .addAnnotation(BeforeClass.class);
 
-        if (testGeneratorSettings.isCreateTablesBeforeRunning()) {
+        if (jUnitGeneratorSettings.isCreateTablesBeforeRunning()) {
             beforeAll.addStatement("createTables()");
         }
         return beforeAll.build();
@@ -181,7 +180,7 @@ public class JUnit4TestGenerator implements Generator {
                 .returns(TypeName.VOID)
                 .addAnnotation(Before.class);
 
-        if (testGeneratorSettings.isCleanTablesBeforeEachRun()) {
+        if (jUnitGeneratorSettings.isCleanTablesBeforeEachRun()) {
             beforeEach.addStatement("cleanTables()");
         }
         return beforeEach.build();
@@ -198,7 +197,7 @@ public class JUnit4TestGenerator implements Generator {
                 .returns(TypeName.VOID)
                 .addAnnotation(After.class);
 
-        if (testGeneratorSettings.isCreateTablesBeforeRunning()) {
+        if (jUnitGeneratorSettings.isCreateTablesBeforeRunning()) {
             beforeEach.addStatement("cleanTables()");
         }
         return beforeEach.build();
@@ -215,7 +214,7 @@ public class JUnit4TestGenerator implements Generator {
                 .returns(TypeName.VOID)
                 .addAnnotation(AfterClass.class);
 
-        if (testGeneratorSettings.isDropTablesAfterRunning()) {
+        if (jUnitGeneratorSettings.isDropTablesAfterRunning()) {
             beforeEach.addStatement("dropTables()");
         }
         return beforeEach.build();

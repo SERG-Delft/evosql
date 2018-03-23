@@ -7,68 +7,217 @@ import com.squareup.javapoet.TypeSpec;
 import nl.tudelft.serg.evosql.brew.data.Path;
 import nl.tudelft.serg.evosql.brew.data.Result;
 import nl.tudelft.serg.evosql.brew.generator.Generator;
+import nl.tudelft.serg.evosql.brew.generator.TestGeneratorSettings;
 import nl.tudelft.serg.evosql.brew.sql.*;
 import nl.tudelft.serg.evosql.brew.sql.vendor.VendorOptions;
 import org.junit.*;
 
 import javax.lang.model.element.Modifier;
+import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class JUnit4TestGenerator implements Generator {
-    /**
-     * Parameters for generating certain methods.
-     * These can probably be moved to a 'Settings' class.
-     */
-    static final boolean GENERATE_BEFORE_ALL = true;
-    static final boolean GENERATE_BEFORE_EACH = true;
-    static final boolean GENERATE_AFTER_ALL = true;
-    static final boolean GENERATE_AFTER_EACH = true;
 
+    private final TestGeneratorSettings testGeneratorSettings;
+
+    /**
+     * Initializes a new instance of the JUnit4TestGenerator class.
+     *
+     * @param testGeneratorSettings The settings used for this generator.
+     */
+    public JUnit4TestGenerator(TestGeneratorSettings testGeneratorSettings) {
+        this.testGeneratorSettings = testGeneratorSettings;
+    }
 
     @Override
     public String generate(Result result, VendorOptions vendorOptions) {
         TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder("EvoSQLQueryTest");
-        if (GENERATE_BEFORE_ALL) {
-            typeSpecBuilder.addMethod(generateBeforeAll(result, vendorOptions));
-        }
-        if (GENERATE_BEFORE_EACH) {
-            typeSpecBuilder.addMethod(generateBeforeEach(result, vendorOptions));
-        }
-        if (GENERATE_AFTER_ALL) {
-            typeSpecBuilder.addMethod(generateAfterAll(result, vendorOptions));
-        }
-        if (GENERATE_AFTER_EACH) {
-            typeSpecBuilder.addMethod(generateAfterEach(result, vendorOptions));
-        }
-        typeSpecBuilder.addMethod(generateRunSQLTest());
+
+        typeSpecBuilder.addMethod(generateRunSQL());
+        typeSpecBuilder.addMethod(generateCreateTables(result, vendorOptions));
+        typeSpecBuilder.addMethod(generateCleanTables(result, vendorOptions));
+        typeSpecBuilder.addMethod(generateDropTables(result, vendorOptions));
+
+        typeSpecBuilder.addMethod(generateBeforeAll());
+        typeSpecBuilder.addMethod(generateBeforeEach());
+        typeSpecBuilder.addMethod(generateAfterEach());
+        typeSpecBuilder.addMethod(generateAfterAll());
+
         for (int i = 0; i < result.getPaths().size(); i++) {
             typeSpecBuilder.addMethod(generatePathTest(result.getPaths().get(i), "queryTest" + i, vendorOptions));
         }
 
-        JavaFile javaFile = JavaFile.builder(getClass().getPackage().getName(), typeSpecBuilder.build()).build();
+        JavaFile javaFile = JavaFile.builder(testGeneratorSettings.getFilePackage(), typeSpecBuilder.build()).build();
         return javaFile.toString();
+    }
+
+    /**
+     * Generate the empty method runSQL.
+     *
+     * @return method.
+     */
+    private MethodSpec generateRunSQL() {
+        return MethodSpec.methodBuilder("runSQL")
+                .addModifiers(Modifier.PRIVATE)
+                .returns(TypeName.BOOLEAN)
+                .addParameter(String.class, "query")
+                .addJavadoc(""
+                        + "This method should connect to your database and execute the given query.\n"
+                        + "In order for the assertions to work this method must return true in the case \n"
+                        + "that the query yields at least one result and false if there is no result.\n\n"
+                        + "@param  query sql query to execute\n"
+                        + "@return result of query.\n")
+                .addComment("TODO: Implement method stub")
+                .addStatement("return false")
+                .build();
     }
 
 
     /**
+     * Generates a method specification for a method that creates the tables required for queries.
+     *
+     * @param result        Result containing data.
+     * @param vendorOptions Vendor options for the database.
+     * @return A method specification for a method that drops the tables.
+     */
+    private MethodSpec generateCreateTables(Result result, VendorOptions vendorOptions) {
+        // Method signature
+        MethodSpec.Builder createTables = MethodSpec.methodBuilder("createTables")
+                .returns(TypeName.VOID)
+                .addModifiers(Modifier.STATIC)
+                .addJavadoc("Creates tables required for queries.\n");
+
+        // Create tables code
+        TableCreationBuilder tableCreationBuilder = new TableCreationBuilder(vendorOptions);
+        Set<String> tableCreateStrings = new HashSet<>();
+        result.getPaths().stream().map(tableCreationBuilder::buildQueries).forEach(tableCreateStrings::addAll);
+        for (String s : tableCreateStrings) {
+            createTables.addStatement("runSQL($S)", s);
+        }
+
+        return createTables.build();
+    }
+
+
+    /**
+     * Generates a method specification for a method that truncates the tables.
+     *
+     * @param result        Result containing data.
+     * @param vendorOptions Vendor options for the database
+     * @return A method specification for a method that drops the tables.
+     */
+    private MethodSpec generateCleanTables(Result result, VendorOptions vendorOptions) {
+        // Method signature
+        MethodSpec.Builder cleanTables = MethodSpec.methodBuilder("cleanTables")
+                .returns(TypeName.VOID)
+                .addModifiers(Modifier.STATIC)
+                .addJavadoc("Truncates the tables.\n");
+
+        // Create tables code
+        CleaningBuilder cleaningBuilder = new CleaningBuilder(vendorOptions);
+        Set<String> tableCleanStrings = new HashSet<>();
+        result.getPaths().stream().map(cleaningBuilder::buildQueries).forEach(tableCleanStrings::addAll);
+        for (String s : tableCleanStrings) {
+            cleanTables.addStatement("runSQL($S)", s);
+        }
+
+        return cleanTables.build();
+    }
+
+    /**
+     * Generates a method specification for a method that drops the tables.
+     *
+     * @param result        Result containing data.
+     * @param vendorOptions Vendor options for the database.
+     * @return A method specification for a method that drops the tables.
+     */
+    private MethodSpec generateDropTables(Result result, VendorOptions vendorOptions) {
+        // Method signature
+        MethodSpec.Builder dropTables = MethodSpec.methodBuilder("dropTables")
+                .returns(TypeName.VOID)
+                .addModifiers(Modifier.STATIC)
+                .addJavadoc("Drops the tables.\n");
+
+        // Create tables code
+        DestructionBuilder destructionBuilder = new DestructionBuilder(vendorOptions);
+        Set<String> destructionStrings = new HashSet<>();
+        result.getPaths().stream().map(destructionBuilder::buildQueries).forEach(destructionStrings::addAll);
+        for (String s : destructionStrings) {
+            dropTables.addStatement("runSQL($S)", s);
+        }
+
+        return dropTables.build();
+    }
+
+    private MethodSpec generateBeforeAll() {
+        MethodSpec.Builder beforeAll = MethodSpec.methodBuilder("beforeAll")
+                .returns(TypeName.VOID)
+                .addModifiers(Modifier.STATIC)
+                .addAnnotation(BeforeClass.class);
+
+        if (testGeneratorSettings.isCreateTablesBeforeRunning()) {
+            beforeAll.addStatement("createTables()");
+        }
+        return beforeAll.build();
+    }
+
+    private MethodSpec generateBeforeEach() {
+        MethodSpec.Builder beforeEach = MethodSpec.methodBuilder("beforeEach")
+                .returns(TypeName.VOID)
+                .addModifiers(Modifier.STATIC)
+                .addAnnotation(Before.class);
+
+        if (testGeneratorSettings.isCleanTablesBeforeEachRun()) {
+            beforeEach.addStatement("cleanTables()");
+        }
+        return beforeEach.build();
+    }
+
+    private MethodSpec generateAfterEach() {
+        MethodSpec.Builder beforeEach = MethodSpec.methodBuilder("afterEach")
+                .returns(TypeName.VOID)
+                .addModifiers(Modifier.STATIC)
+                .addAnnotation(After.class);
+
+        if (testGeneratorSettings.isCreateTablesBeforeRunning()) {
+            beforeEach.addStatement("cleanTables()");
+        }
+        return beforeEach.build();
+    }
+
+    private MethodSpec generateAfterAll() {
+        MethodSpec.Builder beforeEach = MethodSpec.methodBuilder("afterAll")
+                .returns(TypeName.VOID)
+                .addModifiers(Modifier.STATIC)
+                .addAnnotation(AfterClass.class);
+
+        if (testGeneratorSettings.isDropTablesAfterRunning()) {
+            beforeEach.addStatement("dropTables()");
+        }
+        return beforeEach.build();
+    }
+
+    /**
      * Generates a unit test for a path in the test data.
-     * General pseudocode:
+     * General structure of the test:
      * <p>
      * - Arrange: insert data into database.
      * - Act: Execute select statement on database.
      * - Assert: Assert that a result is given back from the database.
      * <p>
-     * In order to execute sql queries, this method will reference the
+     * In order to execute SQL queries, this method will reference the
      * generated runSQL method.
      *
-     * @param path
-     * @return
+     * @param path          The path to generate a test for.
+     * @param vendorOptions The vendor options to use.
+     * @return A method specification for a single unit test.
      */
     private MethodSpec generatePathTest(Path path, String name, VendorOptions vendorOptions) {
-
-        //Setup method structure
-        MethodSpec.Builder pTestBuilder = MethodSpec.methodBuilder(name);
+        // Method signature
+        MethodSpec.Builder pTestBuilder = MethodSpec.methodBuilder(
+                String.format("generatedTest%d", path.getPathNumber()));
         pTestBuilder.addModifiers(Modifier.PUBLIC);
         pTestBuilder.returns(TypeName.VOID);
         pTestBuilder.addAnnotation(Test.class);
@@ -80,132 +229,9 @@ public class JUnit4TestGenerator implements Generator {
         }
         SelectionBuilder selectionBuilder = new SelectionBuilder(vendorOptions);
 
-        // Act with Assert part
+        // Act and assert
         String select = selectionBuilder.buildQueries(path).get(0);
         pTestBuilder.addStatement("$T.assertTrue(runSQL($S))", Assert.class, select);
         return pTestBuilder.build();
-    }
-
-
-    /**
-     * Generate beforeAll method which creates the required tables for the queries.
-     *
-     * @param result        result containing data
-     * @param vendorOptions VendorOptions for the database
-     * @return before all method.
-     */
-    private MethodSpec generateBeforeAll(Result result, VendorOptions vendorOptions) {
-        // Setup method structure
-        MethodSpec.Builder beforeAllBuilder = MethodSpec.methodBuilder("beforeAll");
-        beforeAllBuilder.addAnnotation(BeforeClass.class);
-        beforeAllBuilder.returns(TypeName.VOID);
-        beforeAllBuilder.addModifiers(Modifier.PUBLIC);
-
-        // Create tables code
-        TableCreationBuilder tableCreationBuilder = new TableCreationBuilder(vendorOptions);
-        Set<String> tableCreateStrings = new HashSet<>();
-        result.getPaths().stream().forEach(x -> tableCreateStrings.addAll(tableCreationBuilder.buildQueries(x)));
-        for (String s : tableCreateStrings) {
-            beforeAllBuilder.addStatement("runSQL($S)", s);
-        }
-
-        return beforeAllBuilder.build();
-    }
-
-
-    /**
-     * Generate beforeEach method which truncates the required tables for the queries.
-     *
-     * @param result        result containing data
-     * @param vendorOptions VendorOptions for the database
-     * @return before each method.
-     */
-    private MethodSpec generateBeforeEach(Result result, VendorOptions vendorOptions) {
-        // Setup method structure
-        MethodSpec.Builder beforeEachBuilder = MethodSpec.methodBuilder("beforeEach");
-        beforeEachBuilder.addAnnotation(Before.class);
-        beforeEachBuilder.returns(TypeName.VOID);
-        beforeEachBuilder.addModifiers(Modifier.PUBLIC);
-
-        // Create tables code
-        CleaningBuilder cleaningBuilder = new CleaningBuilder(vendorOptions);
-        Set<String> tableCleanStrings = new HashSet<>();
-        result.getPaths().stream().forEach(x -> tableCleanStrings.addAll(cleaningBuilder.buildQueries(x)));
-        for (String s : tableCleanStrings) {
-            beforeEachBuilder.addStatement("runSQL($S)", s);
-        }
-
-        return beforeEachBuilder.build();
-    }
-
-    /**
-     * Generate afterEach method which truncates the required tables for the queries.
-     *
-     * @param result        result containing data
-     * @param vendorOptions VendorOptions for the database
-     * @return after each method.
-     */
-    private MethodSpec generateAfterEach(Result result, VendorOptions vendorOptions) {
-        // Setup method structure
-        MethodSpec.Builder beforeEachBuilder = MethodSpec.methodBuilder("afterEach");
-        beforeEachBuilder.addAnnotation(After.class);
-        beforeEachBuilder.returns(TypeName.VOID);
-        beforeEachBuilder.addModifiers(Modifier.PUBLIC);
-
-        // Create tables code
-        CleaningBuilder cleaningBuilder = new CleaningBuilder(vendorOptions);
-        Set<String> tableCleanStrings = new HashSet<>();
-        result.getPaths().stream().forEach(x -> tableCleanStrings.addAll(cleaningBuilder.buildQueries(x)));
-        for (String s : tableCleanStrings) {
-            beforeEachBuilder.addStatement("runSQL($S)", s);
-        }
-
-        return beforeEachBuilder.build();
-    }
-
-    /**
-     * Generate afterAll method which drops the required tables for the queries.
-     *
-     * @param result        result containing data
-     * @param vendorOptions VendorOptions for the database
-     * @return after all method.
-     */
-    private MethodSpec generateAfterAll(Result result, VendorOptions vendorOptions) {
-        // Setup method structure
-        MethodSpec.Builder afterAllBuilder = MethodSpec.methodBuilder("afterAll");
-        afterAllBuilder.addAnnotation(AfterClass.class);
-        afterAllBuilder.returns(TypeName.VOID);
-        afterAllBuilder.addModifiers(Modifier.PUBLIC);
-
-        // Create tables code
-        DestructionBuilder destructionBuilder = new DestructionBuilder(vendorOptions);
-        Set<String> destructionStrings = new HashSet<>();
-        result.getPaths().stream().forEach(x -> destructionStrings.addAll(destructionBuilder.buildQueries(x)));
-        for (String s : destructionStrings) {
-            afterAllBuilder.addStatement("runSQL($S)", s);
-        }
-
-        return afterAllBuilder.build();
-    }
-
-    /**
-     * Generate the empty method runSQL.
-     *
-     * @return method.
-     */
-    private MethodSpec generateRunSQLTest() {
-        return MethodSpec.methodBuilder("runSQL")
-                .addModifiers(Modifier.PRIVATE)
-                .addJavadoc(""
-                        + "This method should connect to your database and execute the given query.\n"
-                        + "In order for the assertions to work this method must return true in the case \n"
-                        + "that the query yields at least one result and false if there is not result.\n\n"
-                        + "@param  query sql query to execute\n"
-                        + "@return result of query.\n")
-                .returns(TypeName.BOOLEAN)
-                .addParameter(String.class, "query")
-                .addComment("TODO: Implement method stub.")
-                .addStatement("return false")
-                .build();
     }
 }

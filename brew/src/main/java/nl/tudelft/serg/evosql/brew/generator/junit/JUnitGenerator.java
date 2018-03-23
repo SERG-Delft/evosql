@@ -72,7 +72,7 @@ public abstract class JUnitGenerator implements Generator {
                 .addParameter(String.class, "query")
                 .addJavadoc(""
                         + "This method should connect to your database and execute the given query.\n"
-                        + "In order for the assertions to work this method must return true in the case \n"
+                        + "In order for the assertions to work this method must return true in the case\n"
                         + "that the query yields at least one result and false if there is no result.\n\n"
                         + "@param  query sql query to execute\n"
                         + "@return result of query.\n")

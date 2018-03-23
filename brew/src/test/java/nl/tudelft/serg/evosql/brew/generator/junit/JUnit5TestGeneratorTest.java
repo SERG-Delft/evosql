@@ -6,7 +6,9 @@ import nl.tudelft.serg.evosql.brew.db.ConnectionData;
 import nl.tudelft.serg.evosql.brew.sql.vendor.MySQLOptions;
 import org.junit.jupiter.api.Test;
 
-public class JUnit5TestGeneratorTest {
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class JUnit5TestGeneratorTest extends JUnitGeneratorTest {
     private Result resultSmall = DataGenerator.makeResult1();
     private Result resultMedium = DataGenerator.makeResult2();
 
@@ -28,8 +30,9 @@ public class JUnit5TestGeneratorTest {
                 true,
                 true
         );
-        JUnit5TestGenerator jUnit4TestGenerator = new JUnit5TestGenerator(JUnitGeneratorSettings);
-        System.out.println(jUnit4TestGenerator.generate(resultSmall, new MySQLOptions()));
+        JUnit5TestGenerator jUnit5TestGenerator = new JUnit5TestGenerator(JUnitGeneratorSettings);
+        assertThat(jUnit5TestGenerator.generate(resultSmall, new MySQLOptions()))
+                .isEqualTo(getExpected("JUnit5Small.txt"));
     }
 
     @Test
@@ -51,6 +54,7 @@ public class JUnit5TestGeneratorTest {
                 true
         );
         JUnit5TestGenerator jUnit4TestGenerator = new JUnit5TestGenerator(JUnitGeneratorSettings);
-        System.out.println(jUnit4TestGenerator.generate(resultMedium, new MySQLOptions()));
+        assertThat(jUnit4TestGenerator.generate(resultMedium, new MySQLOptions()))
+                .isEqualTo(getExpected("JUnit5Medium.txt"));
     }
 }

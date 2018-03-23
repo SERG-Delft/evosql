@@ -1,0 +1,87 @@
+package brew.test.generated;
+
+import java.lang.String;
+import javax.annotation.Generated;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+@Generated("nl.tudelft.serg.evosql.brew.generator.junit.JUnit5TestGenerator")
+public class JUnit5SmallTest {
+  /**
+   * This method should connect to your database and execute the given query.
+   * In order for the assertions to work this method must return true in the case
+   * that the query yields at least one result and false if there is no result.
+   *
+   * @param  query sql query to execute
+   * @return result of query.
+   */
+  private static boolean runSQL(String query) {
+    // TODO: Implement method stub
+    return false;
+  }
+
+  /**
+   * Creates tables required for queries.
+   */
+  private static void createTables() {
+    runSQL("CREATE TABLE `table1` (`column1_1` INTEGER, `column1_2` DOUBLE, `column1_3` VARCHAR(100));");
+  }
+
+  /**
+   * Truncates the tables.
+   */
+  private static void cleanTables() {
+    runSQL("TRUNCATE TABLE `table1`;");
+  }
+
+  /**
+   * Drops the tables.
+   */
+  private static void dropTables() {
+    runSQL("DROP TABLE `table1`;");
+  }
+
+  @BeforeAll
+  static void beforeAll() {
+    createTables();
+  }
+
+  @BeforeEach
+  void beforeEach() {
+    cleanTables();
+  }
+
+  @AfterEach
+  void afterEach() {
+    cleanTables();
+  }
+
+  @AfterAll
+  static void afterAll() {
+    dropTables();
+  }
+
+  @Test
+  public void generatedTest1() {
+    // Arrange: set up the fixture data
+    runSQL("INSERT INTO `table1` (`column1_1`, `column1_2`, `column1_3`) VALUES (1, 0.5, 'The first row of table 1.'), (2, 1.5, 'The second row.');");
+    // Act: run a selection query on the database
+    boolean result = runSQL("Select * From table1 Where column1_2 < 1;");
+    // Assert: verify that at least one resulting row was returned
+    Assertions.assertTrue(result);
+  }
+
+  @Test
+  public void generatedTest2() {
+    // Arrange: set up the fixture data
+    runSQL("INSERT INTO `table1` (`column1_1`, `column1_2`, `column1_3`) VALUES (1, 0.5, 'The first row of table 1.'), (2, 1.5, 'The second row.');");
+    // Act: run a selection query on the database
+    boolean result = runSQL("Select * From table1 Where column1_2 >= 1;");
+    // Assert: verify that at least one resulting row was returned
+    Assertions.assertTrue(result);
+  }
+}

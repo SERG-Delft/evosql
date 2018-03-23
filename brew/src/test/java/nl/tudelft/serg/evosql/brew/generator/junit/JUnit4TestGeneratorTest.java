@@ -6,12 +6,14 @@ import nl.tudelft.serg.evosql.brew.db.ConnectionData;
 import nl.tudelft.serg.evosql.brew.sql.vendor.MySQLOptions;
 import org.junit.jupiter.api.Test;
 
-public class JUnit4TestGeneratorTest {
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class JUnit4TestGeneratorTest extends JUnitGeneratorTest {
     private Result resultSmall = DataGenerator.makeResult1();
     private Result resultMedium = DataGenerator.makeResult2();
 
     @Test
-    public void testMethodgenerationSmall() {
+    public void testMethodGenerationSmall() {
         ConnectionData connectionData = new ConnectionData(
                 "connection string",
                 "db",
@@ -29,11 +31,12 @@ public class JUnit4TestGeneratorTest {
                 true
         );
         JUnit4TestGenerator jUnit4TestGenerator = new JUnit4TestGenerator(JUnitGeneratorSettings);
-        System.out.println(jUnit4TestGenerator.generate(resultSmall, new MySQLOptions()));
+        assertThat(jUnit4TestGenerator.generate(resultSmall, new MySQLOptions()))
+                .isEqualTo(getExpected("JUnit4Small.txt"));
     }
 
     @Test
-    public void testMethodgenerationMedium() {
+    public void testMethodGenerationMedium() {
         ConnectionData connectionData = new ConnectionData(
                 "connection string",
                 "db",
@@ -51,6 +54,7 @@ public class JUnit4TestGeneratorTest {
                 true
         );
         JUnit4TestGenerator jUnit4TestGenerator = new JUnit4TestGenerator(JUnitGeneratorSettings);
-        System.out.println(jUnit4TestGenerator.generate(resultMedium, new MySQLOptions()));
+        assertThat(jUnit4TestGenerator.generate(resultSmall, new MySQLOptions()))
+                .isEqualTo(getExpected("JUnit4Medium.txt"));
     }
 }

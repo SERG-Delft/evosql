@@ -2,7 +2,7 @@ package nl.tudelft.serg.evosql.brew.generator.junit;
 
 import java.util.Scanner;
 
-public class JUnitGeneratorTest {
+public abstract class JUnitGeneratorTest {
     String getExpected(String filename) {
         String raw = new Scanner(
                 getClass().getClassLoader().getResourceAsStream("java/jUnitGenerator/" + filename),
@@ -11,7 +11,7 @@ public class JUnitGeneratorTest {
         return normalizeLineEndings(raw);
     }
 
-    String normalizeLineEndings(String string) {
+    private String normalizeLineEndings(String string) {
         return string.replaceAll("\r\n", "\n");
     }
 }

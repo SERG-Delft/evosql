@@ -12,9 +12,9 @@ import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 public class TableSchemaTest {
     @Test
     void constructorTest() {
-        List<String> columns = new ArrayList<>();
-        columns.add("first");
-        columns.add("second");
+        List<FixtureColumn> columns = new ArrayList<>();
+        columns.add(new FixtureColumn("first","firsttype"));
+        columns.add(new FixtureColumn("second","secondtype"));
 
         TableSchema tableSchema = new TableSchema(
                 "schemaName",

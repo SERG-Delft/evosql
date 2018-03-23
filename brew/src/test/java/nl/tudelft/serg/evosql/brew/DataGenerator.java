@@ -12,7 +12,7 @@ public class DataGenerator {
      * Creates result set 1.
      * @return Result set 1.
      */
-    public Result makeResult1() {
+    public static Result makeResult1() {
         // Build schema for table 1
         List<FixtureColumn> table1Columns = new ArrayList<>();
         table1Columns.add(new FixtureColumn("column1_1", "INTEGER"));
@@ -46,7 +46,7 @@ public class DataGenerator {
      * Creates result set 2.
      * @return Result set 2.
      */
-    public Result makeResult2() {
+    public static Result makeResult2() {
         // Build schema for table 1
         List<FixtureColumn> table1Columns = new ArrayList<>();
         table1Columns.add(new FixtureColumn("column1_1", "INTEGER"));

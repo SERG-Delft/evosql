@@ -13,10 +13,8 @@ import nl.tudelft.serg.evosql.brew.sql.vendor.VendorOptions;
 import org.junit.*;
 
 import javax.lang.model.element.Modifier;
-import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class JUnit4TestGenerator implements Generator {
 
@@ -45,8 +43,8 @@ public class JUnit4TestGenerator implements Generator {
         typeSpecBuilder.addMethod(generateAfterEach());
         typeSpecBuilder.addMethod(generateAfterAll());
 
-        for (int i = 0; i < result.getPaths().size(); i++) {
-            typeSpecBuilder.addMethod(generatePathTest(result.getPaths().get(i), "queryTest" + i, vendorOptions));
+        for (Path path : result.getPaths()) {
+            typeSpecBuilder.addMethod(generatePathTest(path, vendorOptions));
         }
 
         JavaFile javaFile = JavaFile.builder(testGeneratorSettings.getFilePackage(), typeSpecBuilder.build()).build();
@@ -54,7 +52,7 @@ public class JUnit4TestGenerator implements Generator {
     }
 
     /**
-     * Generate the empty method runSQL.
+     * Generates a method specification for the runSQL method.
      *
      * @return method.
      */
@@ -151,6 +149,11 @@ public class JUnit4TestGenerator implements Generator {
         return dropTables.build();
     }
 
+
+    /**
+     * Generates a method specification for a before all test method.
+     * @return A method specification for a before all test method.
+     */
     private MethodSpec generateBeforeAll() {
         MethodSpec.Builder beforeAll = MethodSpec.methodBuilder("beforeAll")
                 .returns(TypeName.VOID)
@@ -163,6 +166,10 @@ public class JUnit4TestGenerator implements Generator {
         return beforeAll.build();
     }
 
+    /**
+     * Generates a method specification for a before each test method.
+     * @return A method specification for a before each test method.
+     */
     private MethodSpec generateBeforeEach() {
         MethodSpec.Builder beforeEach = MethodSpec.methodBuilder("beforeEach")
                 .returns(TypeName.VOID)
@@ -175,6 +182,10 @@ public class JUnit4TestGenerator implements Generator {
         return beforeEach.build();
     }
 
+    /**
+     * Generates a method specification for an after each test method.
+     * @return A method specification for an after each test method.
+     */
     private MethodSpec generateAfterEach() {
         MethodSpec.Builder beforeEach = MethodSpec.methodBuilder("afterEach")
                 .returns(TypeName.VOID)
@@ -187,6 +198,10 @@ public class JUnit4TestGenerator implements Generator {
         return beforeEach.build();
     }
 
+    /**
+     * Generates a method specification for an after all test method.
+     * @return A method specification for an after all test method.
+     */
     private MethodSpec generateAfterAll() {
         MethodSpec.Builder beforeEach = MethodSpec.methodBuilder("afterAll")
                 .returns(TypeName.VOID)
@@ -200,7 +215,7 @@ public class JUnit4TestGenerator implements Generator {
     }
 
     /**
-     * Generates a unit test for a path in the test data.
+     * Generates a unit test method specification for a path in the test data.
      * General structure of the test:
      * <p>
      * - Arrange: insert data into database.
@@ -214,24 +229,29 @@ public class JUnit4TestGenerator implements Generator {
      * @param vendorOptions The vendor options to use.
      * @return A method specification for a single unit test.
      */
-    private MethodSpec generatePathTest(Path path, String name, VendorOptions vendorOptions) {
+    private MethodSpec generatePathTest(Path path, VendorOptions vendorOptions) {
         // Method signature
         MethodSpec.Builder pTestBuilder = MethodSpec.methodBuilder(
                 String.format("generatedTest%d", path.getPathNumber()));
-        pTestBuilder.addModifiers(Modifier.PUBLIC);
         pTestBuilder.returns(TypeName.VOID);
         pTestBuilder.addAnnotation(Test.class);
 
         // Arrange part
+        pTestBuilder.addComment("Arrange: set up the fixture data");
         InsertionBuilder insertionBuilder = new InsertionBuilder(vendorOptions);
         for (String s : insertionBuilder.buildQueries(path)) {
-            pTestBuilder.addCode("runSQL($S);\n", s);
+            pTestBuilder.addStatement("runSQL($S)", s);
         }
-        SelectionBuilder selectionBuilder = new SelectionBuilder(vendorOptions);
 
-        // Act and assert
+        // Act
+        pTestBuilder.addComment("Act: run a selection query on the database");
+        SelectionBuilder selectionBuilder = new SelectionBuilder(vendorOptions);
         String select = selectionBuilder.buildQueries(path).get(0);
-        pTestBuilder.addStatement("$T.assertTrue(runSQL($S))", Assert.class, select);
+        pTestBuilder.addStatement("$T result = runSQL($S)", boolean.class, select);
+
+        // Assert
+        pTestBuilder.addComment("Assert: verify that at least one resulting row was returned");
+        pTestBuilder.addStatement("$T.assertTrue(result)", Assert.class);
         return pTestBuilder.build();
     }
 }

@@ -12,6 +12,21 @@ import org.junit.jupiter.api.Test;
 @Generated("nl.tudelft.serg.evosql.brew.generator.junit.JUnit5TestGenerator")
 public class JUnit5MediumTest {
   /**
+   * The JDBC url used to connect to the test database.
+   */
+  private static final String DB_JDBC_URL = "connection string";
+
+  /**
+   * The username used to connect to the test database.
+   */
+  private static final String DB_USER = "user";
+
+  /**
+   * The password used to connect to the test database.
+   */
+  private static final String DB_PASSWORD = "password";
+
+  /**
    * This method should connect to your database and execute the given query.
    * In order for the assertions to work this method must return true in the case
    * that the query yields at least one result and false if there is no result.

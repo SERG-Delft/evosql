@@ -15,10 +15,10 @@ public class JUnit5TestGeneratorTest extends JUnitGeneratorTest {
     @Test
     public void testMethodgenerationSmall() {
         ConnectionData connectionData = new ConnectionData(
-                "connection string",
+                TEST_DATABASE_JDBC_URL,
                 "db",
-                "user",
-                "password"
+                TEST_DATABASE_USER,
+                TEST_DATABASE_PASSWORD
         );
         JUnitGeneratorSettings JUnitGeneratorSettings = new JUnitGeneratorSettings(
                 connectionData,
@@ -47,7 +47,7 @@ public class JUnit5TestGeneratorTest extends JUnitGeneratorTest {
                 connectionData,
                 "brew.test.generated",
                 "JUnit5MediumTest",
-                true,
+                false,
                 false,
                 false,
                 true,

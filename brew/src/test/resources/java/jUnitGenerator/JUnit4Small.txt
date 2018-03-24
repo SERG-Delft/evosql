@@ -1,6 +1,11 @@
 package brew.test.generated;
 
 import java.lang.String;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import javax.annotation.Generated;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -12,16 +17,30 @@ import org.junit.Test;
 @Generated("nl.tudelft.serg.evosql.brew.generator.junit.JUnit4TestGenerator")
 public class JUnit4SmallTest {
   /**
-   * This method should connect to your database and execute the given query.
-   * In order for the assertions to work this method must return true in the case
-   * that the query yields at least one result and false if there is no result.
-   *
-   * @param  query sql query to execute
-   * @return result of query.
+   * The JDBC url used to connect to the test database.
    */
+  private static final String DB_JDBC_URL = "jdbc:mysql://localhost:3306/evosql_brew_test";
+
+  /**
+   * The username used to connect to the test database.
+   */
+  private static final String DB_USER = "root";
+
+  /**
+   * The password used to connect to the test database.
+   */
+  private static final String DB_PASSWORD = "";
+
   private static boolean runSQL(String query) {
-    // TODO: Implement method stub
-    return false;
+    try {
+      Connection connection = DriverManager.getConnection(DB_JDBC_URL, DB_USER, DB_PASSWORD);
+      Statement statement = connection.createStatement();
+      ResultSet resultSet = statement.executeQuery(query);
+      return resultSet.next();
+    } catch (SQLException sqlException) {
+      sqlException.printStackTrace();
+      return false;
+    }
   }
 
   /**

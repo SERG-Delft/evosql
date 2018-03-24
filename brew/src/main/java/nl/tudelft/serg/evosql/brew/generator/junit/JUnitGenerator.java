@@ -11,6 +11,7 @@ import nl.tudelft.serg.evosql.brew.sql.vendor.VendorOptions;
 
 import javax.annotation.Generated;
 import javax.lang.model.element.Modifier;
+import java.sql.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,10 +27,15 @@ public abstract class JUnitGenerator implements Generator {
     @NonNull private final Class<?> afterEachAnnotation;
     @NonNull private final Class<?> assertionClass;
 
+    private static final String
+            NAME_DB_JDBC_URL = "DB_JDBC_URL",
+            NAME_DB_USER = "DB_USER",
+            NAME_DB_PASSWORD = "DB_PASSWORD";
+
     /**
      * Generates JUnit test suites based on the given result.
      *
-     * @param result The result to generate unit tests from.
+     * @param result        The result to generate unit tests from.
      * @param vendorOptions The database vendor options.
      * @return String representation of generated data.
      */
@@ -41,6 +47,8 @@ public abstract class JUnitGenerator implements Generator {
         TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(jUnitGeneratorSettings.getClassName())
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(generatedAnnotation);
+
+        addConnectionDataFields(typeSpecBuilder);
 
         typeSpecBuilder.addMethod(generateRunSQL());
         typeSpecBuilder.addMethod(generateCreateTables(result, vendorOptions));
@@ -60,25 +68,65 @@ public abstract class JUnitGenerator implements Generator {
         return javaFile.toString();
     }
 
+    private void addConnectionDataFields(TypeSpec.Builder typeSpecBuilder) {
+        FieldSpec jdbcUrlField = FieldSpec.builder(String.class, NAME_DB_JDBC_URL)
+                .addModifiers(Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL)
+                .initializer("$S", jUnitGeneratorSettings.getConnectionData().getConnectionString())
+                .addJavadoc("The JDBC url used to connect to the test database.\n")
+                .build();
+        typeSpecBuilder.addField(jdbcUrlField);
+
+        FieldSpec jdbcUserField = FieldSpec.builder(String.class, NAME_DB_USER)
+                .addModifiers(Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL)
+                .initializer("$S", jUnitGeneratorSettings.getConnectionData().getUsername())
+                .addJavadoc("The username used to connect to the test database.\n")
+                .build();
+        typeSpecBuilder.addField(jdbcUserField);
+
+        FieldSpec jdbcPasswordField = FieldSpec.builder(String.class, NAME_DB_PASSWORD)
+                .addModifiers(Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL)
+                .initializer("$S", jUnitGeneratorSettings.getConnectionData().getPassword())
+                .addJavadoc("The password used to connect to the test database.\n")
+                .build();
+        typeSpecBuilder.addField(jdbcPasswordField);
+    }
+
     /**
      * Generates a method specification for the runSQL method.
      *
      * @return method.
      */
     private MethodSpec generateRunSQL() {
-        return MethodSpec.methodBuilder("runSQL")
+        MethodSpec.Builder runSQL = MethodSpec.methodBuilder("runSQL")
                 .addModifiers(Modifier.PRIVATE, Modifier.STATIC)
                 .returns(TypeName.BOOLEAN)
-                .addParameter(String.class, "query")
-                .addJavadoc(""
-                        + "This method should connect to your database and execute the given query.\n"
-                        + "In order for the assertions to work this method must return true in the case\n"
-                        + "that the query yields at least one result and false if there is no result.\n\n"
-                        + "@param  query sql query to execute\n"
-                        + "@return result of query.\n")
-                .addComment("TODO: Implement method stub")
-                .addStatement("return false")
-                .build();
+                .addParameter(String.class, "query");
+
+        if (jUnitGeneratorSettings.isGenerateSqlExecutorImplementation()) {
+            runSQL.beginControlFlow("try")
+                    .addStatement(
+                            "$T connection = $T.getConnection($L, $L, $L)",
+                            Connection.class, DriverManager.class,
+                            NAME_DB_JDBC_URL, NAME_DB_USER, NAME_DB_PASSWORD)
+                    .addStatement("$T statement = connection.createStatement()", Statement.class)
+                    .addStatement("$T resultSet = statement.executeQuery(query)", ResultSet.class)
+                    .addStatement("return resultSet.next()")
+                    .nextControlFlow("catch ($T sqlException)", SQLException.class)
+                    .addStatement("sqlException.printStackTrace()")
+                    .addStatement("return false")
+                    .endControlFlow();
+        } else {
+            runSQL.addJavadoc(""
+                    + "This method should connect to your database and execute the given query.\n"
+                    + "In order for the assertions to work this method must return true in the case\n"
+                    + "that the query yields at least one result and false if there is no result.\n\n"
+                    + "@param  query sql query to execute\n"
+                    + "@return result of query.\n")
+                    .addComment("TODO: Implement method stub")
+                    .addStatement("return false");
+        }
+
+        return runSQL.build();
     }
 
     /**

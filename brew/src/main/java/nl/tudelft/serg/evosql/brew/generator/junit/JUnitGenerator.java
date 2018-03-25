@@ -48,7 +48,9 @@ public abstract class JUnitGenerator implements Generator {
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(generatedAnnotation);
 
-        addConnectionDataFields(typeSpecBuilder);
+        if (jUnitGeneratorSettings.isGenerateSqlExecutorImplementation()) {
+            addConnectionDataFields(typeSpecBuilder);
+        }
 
         typeSpecBuilder.addMethod(generateRunSQL());
         typeSpecBuilder.addMethod(generateCreateTables(result, vendorOptions));
@@ -104,7 +106,12 @@ public abstract class JUnitGenerator implements Generator {
                 .addParameter(boolean.class, "isUpdate");
 
         if (jUnitGeneratorSettings.isGenerateSqlExecutorImplementation()) {
-            runSQL.beginControlFlow("try")
+            runSQL.addJavadoc(""
+                    + "Executes an SQL query on the database.\n\n"
+                    + "@param  query    The SQL query to execute\n"
+                    + "@param  isUpdate Whether the query is a data modification statement.\n"
+                    + "@return Whether the query execution has succeeded.\n")
+                    .beginControlFlow("try")
                     .addStatement(
                             "$T connection = $T.getConnection($L, $L, $L)",
                             Connection.class, DriverManager.class,
@@ -124,9 +131,9 @@ public abstract class JUnitGenerator implements Generator {
         } else {
             runSQL.addJavadoc(""
                     + "This method should connect to your database and execute the given query.\n"
-                    + "In order for the assertions to work this method must return true in the case\n"
+                    + "In order for the assertions to work correctly this method must return true in the case\n"
                     + "that the query yields at least one result and false if there is no result.\n\n"
-                    + "@param  query sql query to execute\n"
+                    + "@param  query    The SQL query to execute\n"
                     + "@param  isUpdate Whether the query is a data modification statement.\n"
                     + "@return Whether the query execution has succeeded.\n")
                     .addComment("TODO: Implement method stub")

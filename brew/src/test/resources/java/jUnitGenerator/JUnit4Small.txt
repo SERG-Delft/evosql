@@ -31,6 +31,13 @@ public class JUnit4SmallTest {
    */
   private static final String DB_PASSWORD = "";
 
+  /**
+   * Executes an SQL query on the database.
+   *
+   * @param  query    The SQL query to execute
+   * @param  isUpdate Whether the query is a data modification statement.
+   * @return Whether the query execution has succeeded.
+   */
   private static boolean runSQL(String sql, boolean isUpdate) {
     try {
       Connection connection = DriverManager.getConnection(DB_JDBC_URL, DB_USER, DB_PASSWORD);

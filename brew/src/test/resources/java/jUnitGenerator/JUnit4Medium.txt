@@ -12,26 +12,11 @@ import org.junit.Test;
 @Generated("nl.tudelft.serg.evosql.brew.generator.junit.JUnit4TestGenerator")
 public class JUnit4MediumTest {
   /**
-   * The JDBC url used to connect to the test database.
-   */
-  private static final String DB_JDBC_URL = "connection string";
-
-  /**
-   * The username used to connect to the test database.
-   */
-  private static final String DB_USER = "user";
-
-  /**
-   * The password used to connect to the test database.
-   */
-  private static final String DB_PASSWORD = "password";
-
-  /**
    * This method should connect to your database and execute the given query.
-   * In order for the assertions to work this method must return true in the case
+   * In order for the assertions to work correctly this method must return true in the case
    * that the query yields at least one result and false if there is no result.
    *
-   * @param  query sql query to execute
+   * @param  query    The SQL query to execute
    * @param  isUpdate Whether the query is a data modification statement.
    * @return Whether the query execution has succeeded.
    */

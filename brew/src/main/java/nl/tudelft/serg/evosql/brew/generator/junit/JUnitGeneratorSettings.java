@@ -2,48 +2,49 @@ package nl.tudelft.serg.evosql.brew.generator.junit;
 
 import lombok.Data;
 import lombok.NonNull;
+import lombok.Value;
 import nl.tudelft.serg.evosql.brew.db.ConnectionData;
 
 /**
  * Represents settings for a unit test generator.
  */
-@Data
+@Value
 public class JUnitGeneratorSettings {
     /**
      * The connection data for the database.
      */
-    @NonNull private final ConnectionData connectionData;
+    @NonNull ConnectionData connectionData;
     /**
      * The package the file is in.
      */
-    @NonNull private final String filePackage;
+    @NonNull String filePackage;
     /**
      * The name of the test class.
      */
-    @NonNull private final String className;
+    @NonNull String className;
     /**
      * Whether an implementation of a method for executing
      * SQL statements should be fully implemented.
      */
-    private final boolean generateSqlExecutorImplementation;
+    boolean generateSqlExecutorImplementation;
     /**
      * Whether the database tables should be created before
      * running any unit tests.
      */
-    private final boolean createTablesBeforeRunning;
+    boolean createTablesBeforeRunning;
     /**
      * Whether the database tables should be truncated
      * before each unit test run.
      */
-    private final boolean cleanTablesBeforeEachRun;
+    boolean cleanTablesBeforeEachRun;
     /**
      * Whether the database tables should be truncated
      * after each unit test run.
      */
-    private final boolean cleanTableAfterEachRun;
+    boolean cleanTableAfterEachRun;
     /**
      * Whether the database tables should be dropped
      * after running all unit tests.
      */
-    private final boolean dropTablesAfterRunning;
+    boolean dropTablesAfterRunning;
 }

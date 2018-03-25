@@ -100,7 +100,8 @@ public abstract class JUnitGenerator implements Generator {
         MethodSpec.Builder runSQL = MethodSpec.methodBuilder("runSQL")
                 .addModifiers(Modifier.PRIVATE, Modifier.STATIC)
                 .returns(TypeName.BOOLEAN)
-                .addParameter(String.class, "query");
+                .addParameter(String.class, "sql")
+                .addParameter(boolean.class, "isUpdate");
 
         if (jUnitGeneratorSettings.isGenerateSqlExecutorImplementation()) {
             runSQL.beginControlFlow("try")
@@ -109,8 +110,13 @@ public abstract class JUnitGenerator implements Generator {
                             Connection.class, DriverManager.class,
                             NAME_DB_JDBC_URL, NAME_DB_USER, NAME_DB_PASSWORD)
                     .addStatement("$T statement = connection.createStatement()", Statement.class)
-                    .addStatement("$T resultSet = statement.executeQuery(query)", ResultSet.class)
+                    .beginControlFlow("if (isUpdate == true)")
+                    .addStatement("statement.executeUpdate(sql)")
+                    .addStatement("return true")
+                    .nextControlFlow("else")
+                    .addStatement("$T resultSet = statement.executeQuery(sql)", ResultSet.class)
                     .addStatement("return resultSet.next()")
+                    .endControlFlow()
                     .nextControlFlow("catch ($T sqlException)", SQLException.class)
                     .addStatement("sqlException.printStackTrace()")
                     .addStatement("return false")
@@ -121,7 +127,8 @@ public abstract class JUnitGenerator implements Generator {
                     + "In order for the assertions to work this method must return true in the case\n"
                     + "that the query yields at least one result and false if there is no result.\n\n"
                     + "@param  query sql query to execute\n"
-                    + "@return result of query.\n")
+                    + "@param  isUpdate Whether the query is a data modification statement.\n"
+                    + "@return Whether the query execution has succeeded.\n")
                     .addComment("TODO: Implement method stub")
                     .addStatement("return false");
         }
@@ -148,7 +155,7 @@ public abstract class JUnitGenerator implements Generator {
         Set<String> tableCreateStrings = new HashSet<>();
         result.getPaths().stream().map(tableCreationBuilder::buildQueries).forEach(tableCreateStrings::addAll);
         for (String s : tableCreateStrings) {
-            createTables.addStatement("runSQL($S)", s);
+            createTables.addStatement("runSQL($S, true)", s);
         }
 
         return createTables.build();
@@ -173,7 +180,7 @@ public abstract class JUnitGenerator implements Generator {
         Set<String> tableCleanStrings = new HashSet<>();
         result.getPaths().stream().map(cleaningBuilder::buildQueries).forEach(tableCleanStrings::addAll);
         for (String s : tableCleanStrings) {
-            cleanTables.addStatement("runSQL($S)", s);
+            cleanTables.addStatement("runSQL($S, true)", s);
         }
 
         return cleanTables.build();
@@ -198,7 +205,7 @@ public abstract class JUnitGenerator implements Generator {
         Set<String> destructionStrings = new HashSet<>();
         result.getPaths().stream().map(destructionBuilder::buildQueries).forEach(destructionStrings::addAll);
         for (String s : destructionStrings) {
-            dropTables.addStatement("runSQL($S)", s);
+            dropTables.addStatement("runSQL($S, true)", s);
         }
 
         return dropTables.build();
@@ -313,14 +320,14 @@ public abstract class JUnitGenerator implements Generator {
         pTestBuilder.addComment("Arrange: set up the fixture data");
         InsertionBuilder insertionBuilder = new InsertionBuilder(vendorOptions);
         for (String s : insertionBuilder.buildQueries(path)) {
-            pTestBuilder.addStatement("runSQL($S)", s);
+            pTestBuilder.addStatement("runSQL($S, true)", s);
         }
 
         // Act
         pTestBuilder.addComment("Act: run a selection query on the database");
         SelectionBuilder selectionBuilder = new SelectionBuilder(vendorOptions);
         String select = selectionBuilder.buildQueries(path).get(0);
-        pTestBuilder.addStatement("$T result = runSQL($S)", boolean.class, select);
+        pTestBuilder.addStatement("$T result = runSQL($S, false)", boolean.class, select);
 
         // Assert
         pTestBuilder.addComment("Assert: verify that at least one resulting row was returned");

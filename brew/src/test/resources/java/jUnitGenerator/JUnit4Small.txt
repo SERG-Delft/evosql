@@ -31,12 +31,17 @@ public class JUnit4SmallTest {
    */
   private static final String DB_PASSWORD = "";
 
-  private static boolean runSQL(String query) {
+  private static boolean runSQL(String sql, boolean isUpdate) {
     try {
       Connection connection = DriverManager.getConnection(DB_JDBC_URL, DB_USER, DB_PASSWORD);
       Statement statement = connection.createStatement();
-      ResultSet resultSet = statement.executeQuery(query);
-      return resultSet.next();
+      if (isUpdate == true) {
+        statement.executeUpdate(sql);
+        return true;
+      } else {
+        ResultSet resultSet = statement.executeQuery(sql);
+        return resultSet.next();
+      }
     } catch (SQLException sqlException) {
       sqlException.printStackTrace();
       return false;
@@ -47,21 +52,21 @@ public class JUnit4SmallTest {
    * Creates tables required for queries.
    */
   private static void createTables() {
-    runSQL("CREATE TABLE `table1` (`column1_1` INTEGER, `column1_2` DOUBLE, `column1_3` VARCHAR(100));");
+    runSQL("CREATE TABLE `table1` (`column1_1` INTEGER, `column1_2` DOUBLE, `column1_3` VARCHAR(100));", true);
   }
 
   /**
    * Truncates the tables.
    */
   private static void cleanTables() {
-    runSQL("TRUNCATE TABLE `table1`;");
+    runSQL("TRUNCATE TABLE `table1`;", true);
   }
 
   /**
    * Drops the tables.
    */
   private static void dropTables() {
-    runSQL("DROP TABLE `table1`;");
+    runSQL("DROP TABLE `table1`;", true);
   }
 
   @BeforeClass
@@ -85,9 +90,9 @@ public class JUnit4SmallTest {
   @Test
   public void generatedTest1() {
     // Arrange: set up the fixture data
-    runSQL("INSERT INTO `table1` (`column1_1`, `column1_2`, `column1_3`) VALUES (1, 0.5, 'The first row of table 1.'), (2, 1.5, 'The second row.');");
+    runSQL("INSERT INTO `table1` (`column1_1`, `column1_2`, `column1_3`) VALUES (1, 0.5, 'The first row of table 1.'), (2, 1.5, 'The second row.');", true);
     // Act: run a selection query on the database
-    boolean result = runSQL("Select * From table1 Where column1_2 < 1;");
+    boolean result = runSQL("Select * From table1 Where column1_2 < 1;", false);
     // Assert: verify that at least one resulting row was returned
     Assert.assertTrue(result);
   }
@@ -95,9 +100,9 @@ public class JUnit4SmallTest {
   @Test
   public void generatedTest2() {
     // Arrange: set up the fixture data
-    runSQL("INSERT INTO `table1` (`column1_1`, `column1_2`, `column1_3`) VALUES (1, 0.5, 'The first row of table 1.'), (2, 1.5, 'The second row.');");
+    runSQL("INSERT INTO `table1` (`column1_1`, `column1_2`, `column1_3`) VALUES (1, 0.5, 'The first row of table 1.'), (2, 1.5, 'The second row.');", true);
     // Act: run a selection query on the database
-    boolean result = runSQL("Select * From table1 Where column1_2 >= 1;");
+    boolean result = runSQL("Select * From table1 Where column1_2 >= 1;", false);
     // Assert: verify that at least one resulting row was returned
     Assert.assertTrue(result);
   }

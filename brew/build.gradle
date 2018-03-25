@@ -13,4 +13,11 @@ apply plugin: 'findbugs'
 
 dependencies {
     compile project(':ga')
+    compile 'com.squareup:javapoet:1.10.0'
+    compile 'javax.annotation:javax.annotation-api:1.3.2'
+
+    // These dependencies are not testCompile dependencies
+    // because they are used for code generation types.    
+    compile 'junit:junit:4.12'
+    compile 'org.junit.jupiter:junit-jupiter-api:5.1.0'
 }

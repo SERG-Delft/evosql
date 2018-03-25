@@ -18,9 +18,8 @@ public class TableCreationBuilderTest {
 
     @BeforeEach
     void pathSetup() {
-        DataGenerator generator = new DataGenerator();
-        pathsSmall = generator.makeResult1().getPaths();
-        pathsMedium = generator.makeResult2().getPaths();
+        pathsSmall = DataGenerator.makeResult1().getPaths();
+        pathsMedium = DataGenerator.makeResult2().getPaths();
     }
 
 

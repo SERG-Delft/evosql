@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class InsertionBuilderTest {
     @Test
     void result1Test() {
-        Result result1 = new DataGenerator().makeResult1();
+        Result result1 = DataGenerator.makeResult1();
         InsertionBuilder insertionBuilder = new InsertionBuilder(new MySQLOptions());
 
         List<String> insertionQueries = insertionBuilder.buildQueries(result1.getPaths().get(0));
@@ -29,7 +29,7 @@ public class InsertionBuilderTest {
 
     @Test
     void result2Test() {
-        Result result2 = new DataGenerator().makeResult2();
+        Result result2 = DataGenerator.makeResult2();
         InsertionBuilder insertionBuilder = new InsertionBuilder(new MySQLOptions());
 
         List<List<String>> pathsQueries = result2.getPaths().stream()

@@ -20,6 +20,10 @@ public class JUnit5TestGeneratorTest extends JUnitGeneratorTest {
                 TEST_DATABASE_USER,
                 TEST_DATABASE_PASSWORD
         );
+
+        // FIXME: Do not use the settings below on an actual database.
+        // FIXME: When tables are created, they should also be dropped.
+
         JUnitGeneratorSettings JUnitGeneratorSettings = new JUnitGeneratorSettings(
                 connectionData,
                 "brew.test.generated",
@@ -30,6 +34,7 @@ public class JUnit5TestGeneratorTest extends JUnitGeneratorTest {
                 false,
                 false
         );
+
         JUnit5TestGenerator jUnit5TestGenerator = new JUnit5TestGenerator(JUnitGeneratorSettings);
         assertThat(jUnit5TestGenerator.generate(resultSmall, new MySQLOptions()))
                 .isEqualTo(getExpected("JUnit5Small.txt"));

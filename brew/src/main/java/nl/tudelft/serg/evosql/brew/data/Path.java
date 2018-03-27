@@ -15,4 +15,7 @@ public class Path {
 
     /** The input SQL for this specific path. */
     private final String pathSql;
+
+    /** The path number. */
+    private final int pathNumber;
 }

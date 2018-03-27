@@ -1,13 +1,15 @@
 
-description = 'evaluation'
+description = 'EvoSQL evaluation code'
 dependencies {
-    compile group: 'mysql', name: 'mysql-connector-java', version:'6.0.5'
-    compile group: 'com.github.jsqlparser', name: 'jsqlparser', version:'0.9.6'
     compile project(':ga')
     compile project(':instrumented-hsqldb')
-    compile group: 'org.hibernate', name: 'hibernate-core', version:'5.2.10.Final'
+
+    compile 'mysql:mysql-connector-java:6.0.5'
+    compile 'com.github.jsqlparser:jsqlparser:0.9.6'
+    compile 'org.hibernate:hibernate-core:5.2.10.Final'
+    
     compileClasspath fileTree(dir: '../lib', includes: ['*.jar'])
 
     // This dependency is not a testCompile since it is used in src/main/java, not src/test/java
-    compile group: 'org.mockito', name: 'mockito-core', version: '2.+'
+    compile 'org.mockito:mockito-core:2.+'
 }

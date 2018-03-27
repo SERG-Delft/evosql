@@ -24,12 +24,12 @@ public class DataGenerator {
         Map<String, String> row1_1Data = new HashMap<>();
         row1_1Data.put("column1_1", "1");
         row1_1Data.put("column1_2", "0.5");
-        row1_1Data.put("column1_3", "'The first row of table 1.'");
+        row1_1Data.put("column1_3", "The first row of table 1.");
 
         Map<String, String> row1_2Data = new HashMap<>();
         row1_2Data.put("column1_1", "2");
         row1_2Data.put("column1_2", "1.5");
-        row1_2Data.put("column1_3", "'The second row.'");
+        row1_2Data.put("column1_3", "The second row.");
         FixtureTable table1 = new FixtureTable(table1Schema,
                 Arrays.asList(new FixtureRow(row1_1Data, table1Schema), new FixtureRow(row1_2Data, table1Schema)));
 
@@ -56,11 +56,11 @@ public class DataGenerator {
         // Build values for table 1
         Map<String, String> row1_1Data = new HashMap<>();
         row1_1Data.put("column1_1", "1");
-        row1_1Data.put("column1_2", "'String of row 1'");
+        row1_1Data.put("column1_2", "String of row 1");
 
         Map<String, String> row1_2Data = new HashMap<>();
         row1_2Data.put("column1_1", "2");
-        row1_2Data.put("column1_2", "'String of row 2'");
+        row1_2Data.put("column1_2", "String of row 2");
 
         FixtureTable table1 = new FixtureTable(table1Schema,
                 Arrays.asList(new FixtureRow(row1_1Data, table1Schema), new FixtureRow(row1_2Data, table1Schema)));
@@ -74,19 +74,19 @@ public class DataGenerator {
 
         // Build values for table 2
         Map<String, String> row2_1Data = new HashMap<>();
-        row2_1Data.put("product_name", "'Milk'");
+        row2_1Data.put("product_name", "Milk");
         row2_1Data.put("expired", "0");
-        row2_1Data.put("expiry_date", "'2018-03-22 00:00:00'");
+        row2_1Data.put("expiry_date", "2018-03-22 00:00:00");
 
         Map<String, String> row2_2Data = new HashMap<>();
-        row2_2Data.put("product_name", "'Yogurt'");
+        row2_2Data.put("product_name", "Yogurt");
         row2_2Data.put("expired", "1");
-        row2_2Data.put("expiry_date", "'2018-03-15 00:00:00'");
+        row2_2Data.put("expiry_date", "2018-03-15 00:00:00");
 
         Map<String, String> row2_3Data = new HashMap<>();
-        row2_3Data.put("product_name", "'Salt'");
+        row2_3Data.put("product_name", "Salt");
         row2_3Data.put("expired", "0");
-        row2_3Data.put("expiry_date", "'2025-12-31 23:59:59'");
+        row2_3Data.put("expiry_date", "2025-12-31 23:59:59");
 
         FixtureTable productsTable = new FixtureTable(productsSchema,
                 Arrays.asList(new FixtureRow(row2_1Data, productsSchema), new FixtureRow(row2_2Data, productsSchema), new FixtureRow(row2_3Data, productsSchema)));

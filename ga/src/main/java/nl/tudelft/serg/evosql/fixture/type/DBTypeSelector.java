@@ -60,9 +60,9 @@ public class DBTypeSelector {
                 return new DBDateTime("TIMESTAMP");
             // Other types
             case Types.ARRAY:
-                throw new RuntimeException("EvoSQL currently lacks an ARRAY implementation.");
+                throw new UnsupportedOperationException("The ARRAY data type is currently not supported by EvoSQL.");
             default:
-                throw new RuntimeException("This database type is not currently supported: " + dataType);
+                throw new UnsupportedOperationException("This database type is not currently supported: " + dataType);
         }
     }
 }

@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.sql.Types;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class DBTypeSelectorTest {
     private static DBTypeSelector dbTypeSelector;
@@ -59,5 +60,22 @@ public class DBTypeSelectorTest {
     @Test
     void dbTimeTest() {
         assertThat(dbTypeSelector.create(Types.TIME, 0)).isInstanceOf(DBTime.class);
+    }
+
+    @Test
+    void dbArrayTest() {
+        assertThatThrownBy(() -> dbTypeSelector.create(Types.ARRAY, 0))
+                .isInstanceOf(UnsupportedOperationException.class)
+                .hasMessageContaining("ARRAY");
+    }
+
+    @Test
+    void dbOtherTest() {
+        assertThatThrownBy(() -> dbTypeSelector.create(Types.OTHER, 0))
+                .isInstanceOf(UnsupportedOperationException.class)
+                .hasMessageContaining("This database type");
+        assertThatThrownBy(() -> dbTypeSelector.create(Types.JAVA_OBJECT, 0))
+                .isInstanceOf(UnsupportedOperationException.class)
+                .hasMessageContaining("This database type");
     }
 }

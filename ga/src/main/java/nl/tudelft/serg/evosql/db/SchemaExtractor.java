@@ -29,6 +29,7 @@ public class SchemaExtractor implements ISchemaExtractor {
     private static Logger log = LogManager.getLogger(SchemaExtractor.class);
 
     private Map<String, TableSchema> knownTables;
+    private final DBTypeSelector dbTypeSelector;
 
     private String jdbc;
     private String user;
@@ -43,6 +44,7 @@ public class SchemaExtractor implements ISchemaExtractor {
         this.pwd = pwd;
 
         knownTables = new HashMap<String, TableSchema>();
+        dbTypeSelector = new DBTypeSelector();
     }
 
     @Override
@@ -75,7 +77,7 @@ public class SchemaExtractor implements ISchemaExtractor {
                     int nullable = columns.getInt(11);
                     String autoIncrement = columns.getString(23);
 
-                    DBType dbDataType = createDBType(dataType, length);
+                    DBType dbDataType = dbTypeSelector.create(dataType, length);
 
                     log.debug("Field {}={}", columnName, dbDataType.getClass().getSimpleName());
 
@@ -98,45 +100,6 @@ public class SchemaExtractor implements ISchemaExtractor {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-        }
-    }
-
-    private DBType createDBType(int dataType, int length) {
-        switch (dataType) {
-            case Types.DOUBLE:
-                return new DBDouble();
-            case Types.REAL:
-                return new DBDouble("REAL");
-            case Types.DECIMAL:
-                return new DBDouble("DECIMAL");
-            case Types.INTEGER:
-                return new DBInteger();
-            case Types.SMALLINT:
-                return new DBInteger("SMALLINT");
-            case Types.TINYINT:
-                return new DBInteger("TINYINT"); // HSQLDB doesn't support tinyint
-            case Types.BIGINT:
-                return new DBInteger(); // we don't need bigint in our evaluations
-            case Types.VARCHAR:
-                return new DBString(length);
-            case Types.LONGVARCHAR:
-                return new DBString(EvoSQLConfiguration.MAX_STRING_LENGTH, "LONGVARCHAR");
-            case Types.CHAR:
-                return new DBString(length, "CHAR");
-            case Types.BIT:
-                return new DBBoolean(); // HSQLDB doesn't support bit
-            case Types.BOOLEAN:
-                return new DBBoolean("BOOLEAN");
-            case Types.DATE:
-                return new DBDate();
-            case Types.TIME:
-                return new DBTime();
-            case Types.TIMESTAMP:
-                return new DBDateTime("TIMESTAMP");
-            case Types.ARRAY:
-                throw new RuntimeException("EvoSQL currently lacks an ARRAY implementation.");
-            default:
-                throw new RuntimeException("This database type is not currently supported: " + dataType);
         }
     }
 

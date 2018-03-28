@@ -98,9 +98,15 @@ public class DBString implements DBType {
 		int character = random.nextInt(EvoSQLConfiguration.MAX_CHAR_ORD + 1 - EvoSQLConfiguration.MIN_CHAR_ORD);
 		return (char) (character+EvoSQLConfiguration.MIN_CHAR_ORD);
 	}
-	
+
+	@Override
 	public String getTypeString() {
 		//TODO Add size of field
 		return typeString;
 	}
+
+    @Override
+    public String getNormalizedTypeString() {
+        return DEFAULT_TYPE_STRING;
+    }
 }

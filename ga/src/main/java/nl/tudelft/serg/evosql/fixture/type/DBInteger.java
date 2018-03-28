@@ -46,11 +46,17 @@ public class DBInteger implements DBType {
 		return String.valueOf(newValue);
 	}
 
+	@Override
 	public String getTypeString() {
 		return typeString;
 	}
 
-	@Override
+    @Override
+    public String getNormalizedTypeString() {
+        return DEFAULT_TYPE_STRING;
+    }
+
+    @Override
 	public boolean hasSeed(Seeds seeds) {
 		return seeds.hasLongs();
 	}

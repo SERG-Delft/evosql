@@ -49,9 +49,15 @@ public class DBBoolean implements DBType {
 	public String generateFromSeed(Seeds seeds) {
 		return generateRandom(false);
 	}
-	
+
+	@Override
 	public String getTypeString() {
 		return typeString;
 	}
+
+    @Override
+    public String getNormalizedTypeString() {
+        return DEFAULT_TYPE_STRING;
+    }
 
 }

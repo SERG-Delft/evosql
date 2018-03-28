@@ -36,10 +36,16 @@ public class DBTypeSelector {
             // Strings
             case Types.VARCHAR:
                 return new DBString(length);
+            case Types.NVARCHAR:
+                return new DBString(length, "NVARCHAR");
             case Types.LONGVARCHAR:
                 return new DBString(EvoSQLConfiguration.MAX_STRING_LENGTH, "LONGVARCHAR");
+            case Types.LONGNVARCHAR:
+                return new DBString(EvoSQLConfiguration.MAX_STRING_LENGTH, "LONGNVARCHAR");
             case Types.CHAR:
                 return new DBString(length, "CHAR");
+            case Types.NCHAR:
+                return new DBString(length, "NCHAR");
             // Boolean values
             case Types.BIT:
                 return new DBBoolean(); // HSQLDB doesn't support bit

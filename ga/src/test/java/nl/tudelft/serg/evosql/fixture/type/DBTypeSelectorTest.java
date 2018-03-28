@@ -49,8 +49,11 @@ public class DBTypeSelectorTest {
     @Test
     void dbStringTest() {
         assertThat(dbTypeSelector.create(Types.VARCHAR, 16)).isInstanceOf(DBString.class);
+        assertThat(dbTypeSelector.create(Types.NVARCHAR, 16)).isInstanceOf(DBString.class);
         assertThat(dbTypeSelector.create(Types.LONGVARCHAR, 16)).isInstanceOf(DBString.class);
+        assertThat(dbTypeSelector.create(Types.LONGNVARCHAR, 16)).isInstanceOf(DBString.class);
         assertThat(dbTypeSelector.create(Types.CHAR, 16)).isInstanceOf(DBString.class);
+        assertThat(dbTypeSelector.create(Types.NCHAR, 16)).isInstanceOf(DBString.class);
     }
 
     @Test

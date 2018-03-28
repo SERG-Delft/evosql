@@ -104,18 +104,18 @@ public class SchemaExtractor implements ISchemaExtractor {
 	private DBType createDBType(int dataType, int length) {
 		DBType dbDataType = null;
 		if(dataType == Types.DOUBLE) dbDataType= new DBDouble();
-		else if(dataType == Types.REAL) dbDataType = new DBDouble();
-		else if(dataType == Types.DECIMAL) dbDataType = new DBDouble();
+		else if(dataType == Types.REAL) dbDataType = new DBDouble("REAL");
+		else if(dataType == Types.DECIMAL) dbDataType = new DBDouble("DECIMAL");
 		else if(dataType == Types.INTEGER) dbDataType = new DBInteger();
-		else if(dataType == Types.SMALLINT) dbDataType = new DBInteger();
+		else if(dataType == Types.SMALLINT) dbDataType = new DBInteger("SMALLINT");
 		else if(dataType == Types.VARCHAR) dbDataType = new DBString(length);
-		else if(dataType == Types.LONGVARCHAR) dbDataType = new DBString(EvoSQLConfiguration.MAX_STRING_LENGTH);
-		else if(dataType == Types.CHAR)	dbDataType = new DBString(length);
-		else if(dataType == Types.BOOLEAN) dbDataType = new DBBoolean();
+		else if(dataType == Types.LONGVARCHAR) dbDataType = new DBString(EvoSQLConfiguration.MAX_STRING_LENGTH, "LONGVARCHAR");
+		else if(dataType == Types.CHAR)	dbDataType = new DBString(length, "CHAR");
+		else if(dataType == Types.BOOLEAN) dbDataType = new DBBoolean("BOOLEAN");
 		else if(dataType == Types.DATE) dbDataType = new DBDate();
 		else if(dataType == Types.TIME) dbDataType = new DBTime();
-		else if(dataType == Types.TIMESTAMP) dbDataType = new DBDateTime(); //datetime
-		else if(dataType == Types.TINYINT) dbDataType = new DBInteger(); // HSQLDB doesnt support tinyint
+		else if(dataType == Types.TIMESTAMP) dbDataType = new DBDateTime("TIMESTAMP"); //datetime
+		else if(dataType == Types.TINYINT) dbDataType = new DBInteger("TINYINT"); // HSQLDB doesnt support tinyint
 		else if(dataType == Types.BIT) dbDataType = new DBBoolean(); // HSQLDB doesnt support bit
 		else if(dataType == Types.BIGINT) dbDataType = new DBInteger(); // we dont need bigint in our evaluations
 		else if(dataType == Types.ARRAY) throw new RuntimeException("EvoSQL lacks a ARRAY implementation");

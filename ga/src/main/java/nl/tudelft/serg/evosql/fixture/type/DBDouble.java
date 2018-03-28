@@ -12,12 +12,24 @@ import nl.tudelft.serg.evosql.util.random.Randomness;
 
 public class DBDouble implements DBType {
 
+	private static final String DEFAULT_TYPE_STRING = "DOUBLE";
+
 	private static Randomness random = new Randomness();
 	private static final DecimalFormatSymbols defaultDecimalFormatSymbols;
 
 	static {
 		defaultDecimalFormatSymbols = new DecimalFormatSymbols(Locale.US);
 	}
+
+	private final String typeString;
+
+	public DBDouble() {
+	    this(DEFAULT_TYPE_STRING);
+    }
+
+	public DBDouble(String typeString) {
+	    this.typeString = typeString;
+    }
 	
 	@Override
 	public String generateRandom(boolean nullable) {
@@ -71,7 +83,7 @@ public class DBDouble implements DBType {
 	}
 	
 	public String getTypeString() {
-		return "DOUBLE";
+		return typeString;
 	}
 	
 	protected static double polynomialMutation(double oldValue){

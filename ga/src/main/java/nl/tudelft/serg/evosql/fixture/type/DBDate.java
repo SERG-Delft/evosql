@@ -11,11 +11,23 @@ import nl.tudelft.serg.evosql.util.random.Randomness;
 
 public class DBDate implements DBType{
 
+	private static final String DEFAULT_TYPE_STRING = "DATE";
+
 	private static final double probability = 1d/5d;
 	private static Randomness random = new Randomness();
 	private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 	private static long offset = Timestamp.valueOf(EvoSQLConfiguration.MIN_DATE).getTime();
 	private static long diff = Timestamp.valueOf(EvoSQLConfiguration.MAX_DATE).getTime() - offset + 1;
+
+	private final String typeString;
+
+	public DBDate() {
+	    this(DEFAULT_TYPE_STRING);
+    }
+
+	public DBDate(String typeString) {
+	    this.typeString = typeString;
+    }
 	
 	@Override
 	public String generateRandom(boolean nullable) {
@@ -74,7 +86,7 @@ public class DBDate implements DBType{
 	}
 	
 	public String getTypeString() {
-		return "DATE";
+		return typeString;
 	}
 
 }

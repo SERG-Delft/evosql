@@ -8,12 +8,20 @@ import nl.tudelft.serg.evosql.util.random.Randomness;
 
 public class DBString implements DBType {
 
+	private static final String DEFAULT_TYPE_STRING = "VARCHAR(500)";
+
 	private static Randomness random = new Randomness();
 	private int length;
+	private final String typeString;
 	
 	public DBString(int length) {
-		this.length = length;
+	    this(length, DEFAULT_TYPE_STRING);
 	}
+
+	public DBString(int length, String typeString) {
+		this.length = length;
+	    this.typeString = typeString;
+    }
 	
 	@Override
 	public String generateRandom(boolean nullable) {
@@ -93,6 +101,6 @@ public class DBString implements DBType {
 	
 	public String getTypeString() {
 		//TODO Add size of field
-		return "VARCHAR(500)";
+		return typeString;
 	}
 }

@@ -43,11 +43,11 @@ public class FixtureTest {
 
         Assert.assertEquals(
                 "-- Table: t1\n" +
-                " Row #1: C1='1',C2='Mauricio',\n" +
-                " Row #2: C1='2',C2='Jeroen',\n" +
+                " Row #1: c1='1',c2='Mauricio',\n" +
+                " Row #2: c1='2',c2='Jeroen',\n" +
                 "\n" +
                 "-- Table: t2\n" +
-                " Row #1: C3='10.0',C4='Mozhan',\n" +
-                " Row #2: C3='25.5',C4='Annibale',", fixture.prettyPrint());
+                " Row #1: c3='10.0',c4='Mozhan',\n" +
+                " Row #2: c3='25.5',c4='Annibale',", fixture.prettyPrint());
     }
 }

@@ -10,23 +10,23 @@ import nl.tudelft.serg.evosql.sql.TableSchema;
 public class TableSchemaMocks {
 	public static TableSchema T1() {
 		List<ColumnSchema> csList = new ArrayList<ColumnSchema>();
-		TableSchema ts = new TableSchema("T1", csList);
+		TableSchema ts = new TableSchema("t1", csList);
 		
-		csList.add(new ColumnSchema(ts, "A", new DBInteger(), false, false));
-		csList.add(new ColumnSchema(ts, "B", new DBInteger(), false, false));
-		csList.add(new ColumnSchema(ts, "C", new DBInteger(), false, false));
-		csList.add(new ColumnSchema(ts, "D", new DBInteger(), false, false));
+		csList.add(new ColumnSchema(ts, "a", new DBInteger(), false, false));
+		csList.add(new ColumnSchema(ts, "b", new DBInteger(), false, false));
+		csList.add(new ColumnSchema(ts, "c", new DBInteger(), false, false));
+		csList.add(new ColumnSchema(ts, "d", new DBInteger(), false, false));
 		
 		return ts;
 	}
 	
 	public static TableSchema T2() {
 		List<ColumnSchema> csList = new ArrayList<ColumnSchema>();
-		TableSchema ts = new TableSchema("T2", csList);
+		TableSchema ts = new TableSchema("t2", csList);
 		
-		csList.add(new ColumnSchema(ts, "A", new DBInteger(), false, false));
-		csList.add(new ColumnSchema(ts, "B", new DBInteger(), false, false));
-		csList.add(new ColumnSchema(ts, "C", new DBInteger(), false, false));
+		csList.add(new ColumnSchema(ts, "a", new DBInteger(), false, false));
+		csList.add(new ColumnSchema(ts, "b", new DBInteger(), false, false));
+		csList.add(new ColumnSchema(ts, "c", new DBInteger(), false, false));
 		
 		return ts;
 	}

@@ -8,14 +8,26 @@ import nl.tudelft.serg.evosql.util.random.Randomness;
 
 public class DBInteger implements DBType {
 
+	private static final String DEFAULT_TYPE_STRING = "INTEGER";
+
 	private static Randomness random = new Randomness();
-	
+
+	private final String typeString;
+
+	public DBInteger() {
+        this(DEFAULT_TYPE_STRING);
+    }
+
+	public DBInteger(String typeString) {
+        this.typeString = typeString;
+    }
+
 	@Override
 	public String generateRandom(boolean nullable) {
 		if(nullable && random.nextDouble() < EvoSQLConfiguration.NULL_PROBABIBLITY)
 			return null;
-		
-		return 
+
+		return
 			String.valueOf(random.nextInt(EvoSQLConfiguration.ABS_INT_RANGE * 2) - EvoSQLConfiguration.ABS_INT_RANGE);
 	}
 
@@ -26,19 +38,25 @@ public class DBInteger implements DBType {
 			return generateRandom(false);
 		else if(nullable && random.nextDouble() < EvoSQLConfiguration.MUTATE_NULL_PROBABIBLITY)
 			return null;
-		
+
 		// mutate integer
 		int oldValue = Integer.parseInt(currentValue);
 		int newValue = (int) (oldValue + (random.nextSignedDouble() * 10));
-		
+
 		return String.valueOf(newValue);
 	}
 
-	public String getTypeString() {
-		return "INTEGER";
-	}
-	
 	@Override
+	public String getTypeString() {
+		return typeString;
+	}
+
+    @Override
+    public String getNormalizedTypeString() {
+        return DEFAULT_TYPE_STRING;
+    }
+
+    @Override
 	public boolean hasSeed(Seeds seeds) {
 		return seeds.hasLongs();
 	}
@@ -46,7 +64,7 @@ public class DBInteger implements DBType {
 	@Override
 	public String generateFromSeed(Seeds seeds) {
 		List<String> source = seeds.getLongs();
-		
+
 		if (source.size() == 0) return null;
 		return source.get(random.nextInt(source.size()));
 	}

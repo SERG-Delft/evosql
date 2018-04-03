@@ -6,8 +6,20 @@ import nl.tudelft.serg.evosql.util.random.Randomness;
 
 public class DBBoolean implements DBType {
 
+	private static final String DEFAULT_TYPE_STRING = "BIT";
+
 	private static Randomness random = new Randomness();
-	
+
+	private final String typeString;
+
+	public DBBoolean() {
+	    this(DEFAULT_TYPE_STRING);
+    }
+
+	public DBBoolean(String typeString) {
+	    this.typeString = typeString;
+    }
+
 	@Override
 	public String generateRandom(boolean nullable) {
 		if(nullable && random.nextDouble() < EvoSQLConfiguration.NULL_PROBABIBLITY)
@@ -37,9 +49,15 @@ public class DBBoolean implements DBType {
 	public String generateFromSeed(Seeds seeds) {
 		return generateRandom(false);
 	}
-	
+
+	@Override
 	public String getTypeString() {
-		return "BIT";
+		return typeString;
 	}
+
+    @Override
+    public String getNormalizedTypeString() {
+        return DEFAULT_TYPE_STRING;
+    }
 
 }

@@ -12,7 +12,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CleaningBuilderTest {
+public class CleaningBuilderTest extends QueryBuilderTest {
     private List<Path> pathsSmall;
     private List<Path> pathsMedium;
 
@@ -42,5 +42,10 @@ public class CleaningBuilderTest {
         List<String> expected = Arrays.asList("TRUNCATE TABLE `table1`;", "TRUNCATE TABLE `products`;");
         CleaningBuilder cleaningBuilder = new CleaningBuilder(new MySQLOptions());
         assertThat(cleaningBuilder.buildQueries(pathsMedium.get(2))).isEqualTo(expected);
+    }
+
+    @Override
+    protected QueryBuilder getQueryBuilder() {
+        return new CleaningBuilder(new MySQLOptions());
     }
 }

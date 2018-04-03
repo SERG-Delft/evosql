@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class InsertionBuilderTest {
+public class InsertionBuilderTest extends QueryBuilderTest {
     @Test
     void result1Test() {
         Result result1 = DataGenerator.makeResult1();
@@ -44,5 +44,10 @@ public class InsertionBuilderTest {
         for (List<String> pathQuery : pathsQueries) {
             assertThat(pathQuery).isEqualTo(expectedQueries);
         }
+    }
+
+    @Override
+    protected QueryBuilder getQueryBuilder() {
+        return new InsertionBuilder(new MySQLOptions());
     }
 }

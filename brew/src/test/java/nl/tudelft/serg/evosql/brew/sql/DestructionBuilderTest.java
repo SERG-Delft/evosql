@@ -12,7 +12,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class DestructionBuilderTest {
+public class DestructionBuilderTest extends QueryBuilderTest {
     private List<Path> pathsSmall;
     private List<Path> pathsMedium;
 
@@ -42,5 +42,10 @@ public class DestructionBuilderTest {
         List<String> expected = Arrays.asList("DROP TABLE `table1`;", "DROP TABLE `products`;");
         DestructionBuilder destructionBuilder = new DestructionBuilder(new MySQLOptions());
         assertThat(destructionBuilder.buildQueries(pathsMedium.get(2))).isEqualTo(expected);
+    }
+
+    @Override
+    protected QueryBuilder getQueryBuilder() {
+        return new DestructionBuilder(new MySQLOptions());
     }
 }

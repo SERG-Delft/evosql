@@ -41,7 +41,7 @@ public class InsertionBuilder extends QueryBuilder {
                 valueBuilder.append("(");
 
                 List<String> values = row.getTableSchema().getColumns().stream()
-                        .map(c -> row.getValues().get(c.getName()))
+                        .map(c -> getEscapedValue(c, row))
                         .collect(Collectors.toList());
                 valueBuilder.append(String.join(", ", values));
 

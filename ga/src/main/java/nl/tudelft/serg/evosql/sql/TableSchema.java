@@ -65,7 +65,7 @@ public class TableSchema implements Serializable {
 		String sql = "CREATE TABLE \"" + this.name.toUpperCase() + "\" ( \n"; 
 		
 		for (ColumnSchema cs : columns) {
-			sql += "\t\"" + cs.getName().toUpperCase() + "\" " + cs.getType().getTypeString();
+			sql += "\t\"" + cs.getName().toUpperCase() + "\" " + cs.getType().getNormalizedTypeString();
 			if (!cs.isNullable())
 				sql += " NOT NULL";
 			sql += ",\n";

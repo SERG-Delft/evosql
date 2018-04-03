@@ -122,7 +122,7 @@ public class PathExtractor {
 	 * @return
 	 */
 	protected String getTypeXml(DBType type) {
-		String result = type.getTypeString().toLowerCase();
+		String result = type.getNormalizedTypeString().toLowerCase();
 		
 		if (type instanceof DBString)
 			result = "varchar";

@@ -12,12 +12,24 @@ import nl.tudelft.serg.evosql.util.random.Randomness;
 
 public class DBDouble implements DBType {
 
+	private static final String DEFAULT_TYPE_STRING = "DOUBLE";
+
 	private static Randomness random = new Randomness();
 	private static final DecimalFormatSymbols defaultDecimalFormatSymbols;
 
 	static {
 		defaultDecimalFormatSymbols = new DecimalFormatSymbols(Locale.US);
 	}
+
+	private final String typeString;
+
+	public DBDouble() {
+	    this(DEFAULT_TYPE_STRING);
+    }
+
+	public DBDouble(String typeString) {
+	    this.typeString = typeString;
+    }
 	
 	@Override
 	public String generateRandom(boolean nullable) {
@@ -69,12 +81,18 @@ public class DBDouble implements DBType {
 		if (source.size() == 0) return null;
 		return source.get(random.nextInt(source.size()));
 	}
-	
+
+	@Override
 	public String getTypeString() {
-		return "DOUBLE";
+		return typeString;
 	}
-	
-	protected static double polynomialMutation(double oldValue){
+
+    @Override
+    public String getNormalizedTypeString() {
+        return DEFAULT_TYPE_STRING;
+    }
+
+    protected static double polynomialMutation(double oldValue){
 		double distributionIndex = 20;
 		double lowerBound = -EvoSQLConfiguration.ABS_DOUBLE_RANGE/2;
 		double upperBound = EvoSQLConfiguration.ABS_DOUBLE_RANGE/2;

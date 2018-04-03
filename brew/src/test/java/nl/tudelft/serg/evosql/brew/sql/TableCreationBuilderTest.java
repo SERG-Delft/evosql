@@ -12,7 +12,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TableCreationBuilderTest {
+public class TableCreationBuilderTest extends QueryBuilderTest {
     private List<Path> pathsSmall;
     private List<Path> pathsMedium;
 
@@ -44,5 +44,10 @@ public class TableCreationBuilderTest {
                 "CREATE TABLE `products` (`product_name` VARCHAR(100), `expired` BIT, `expiry_date` DATETIME);");
         TableCreationBuilder tableCreationBuilder = new TableCreationBuilder(new MySQLOptions());
         assertThat(tableCreationBuilder.buildQueries(pathsMedium.get(3))).isEqualTo(expected);
+    }
+
+    @Override
+    protected QueryBuilder getQueryBuilder() {
+        return new TableCreationBuilder(new MySQLOptions());
     }
 }

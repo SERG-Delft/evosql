@@ -149,11 +149,11 @@ public class UsedColumnExtractorVisitor implements ExpressionVisitor, FromItemVi
 
 		TableSource(String tableName, String tableAlias) {
 			if (tableName != null)
-				this.name = tableName.toUpperCase().replaceAll("^\"|\"$", "");
+				this.name = tableName.replaceAll("^\"|\"$", "");
 			if (tableAlias == null)
 				alias = this.name;
 			else
-				alias = tableAlias.toUpperCase().replaceAll("^\"|\"$", "");;
+				alias = tableAlias.replaceAll("^\"|\"$", "");;
 			
 			columnSources = new HashMap<String, ColumnSource>();
 		}
@@ -163,11 +163,11 @@ public class UsedColumnExtractorVisitor implements ExpressionVisitor, FromItemVi
 		}
 		
 		ColumnSource get(String columnName) {
-			return columnSources.get(columnName.toUpperCase());
+			return columnSources.get(columnName);
 		}
 		
 		boolean contains(String columnName) {
-			return columnSources.containsKey(columnName.toUpperCase());
+			return columnSources.containsKey(columnName);
 		}
 	}
 	
@@ -196,8 +196,8 @@ public class UsedColumnExtractorVisitor implements ExpressionVisitor, FromItemVi
 	
 	private void sourceTable(String tableName, String tableAlias) {
 		// Find TableSchema
-		tableName = tableName.toUpperCase().replaceAll("^\"|\"$", "");
-		tableAlias = tableAlias.toUpperCase().replaceAll("^\"|\"$", "");
+		tableName = tableName.replaceAll("^\"|\"$", "");
+		tableAlias = tableAlias.replaceAll("^\"|\"$", "");
 		TableSchema schema = tableSchemas.get(tableName);
 		
 		if (schema == null)
@@ -208,7 +208,7 @@ public class UsedColumnExtractorVisitor implements ExpressionVisitor, FromItemVi
 		
 		// Add all columns
 		for (ColumnSchema cs : schema.getColumns()) {
-			ColumnSource columnSource = new ColumnSource(tableSource, cs.getName().toUpperCase());
+			ColumnSource columnSource = new ColumnSource(tableSource, cs.getName());
 			tableSource.add(columnSource);
 		}
 		
@@ -224,7 +224,7 @@ public class UsedColumnExtractorVisitor implements ExpressionVisitor, FromItemVi
 	 **/
 	private void sourceAllColumns(String tableName) {
 		if (tableName != null)
-			tableName = tableName.toUpperCase().replaceAll("^\"|\"$", "");
+			tableName = tableName.replaceAll("^\"|\"$", "");
 		
 		for (TableSource ts : currentState.stateLevelTableSources.values()) {
 			if (tableName == null || tableName.equals(ts.alias)) {
@@ -238,8 +238,8 @@ public class UsedColumnExtractorVisitor implements ExpressionVisitor, FromItemVi
 
 	private void addUsedColumn(String columnName, String tableName) {
 		if (tableName != null)
-			tableName = tableName.toUpperCase().replaceAll("^\"|\"$", "");
-		columnName = columnName.toUpperCase().replaceAll("^\"|\"$", "");
+			tableName = tableName.replaceAll("^\"|\"$", "");
+		columnName = columnName.replaceAll("^\"|\"$", "");
 		
 		ColumnSource source = getColumnSource(columnName, tableName);
 		
@@ -251,7 +251,7 @@ public class UsedColumnExtractorVisitor implements ExpressionVisitor, FromItemVi
 	 */
 	private void useAllColumns(String tableName) {
 		if (tableName != null)
-			tableName = tableName.toUpperCase().replaceAll("^\"|\"$", "");
+			tableName = tableName.replaceAll("^\"|\"$", "");
 		
 		for (TableSource ts : currentState.stateLevelTableSources.values()) {
 			if (tableName == null || tableName.equals(ts.alias)) {
@@ -264,12 +264,12 @@ public class UsedColumnExtractorVisitor implements ExpressionVisitor, FromItemVi
 	
 	private void linkColumns(String column1Name, String table1Name, String column2Name, String table2Name) {
 		if (table1Name != null)
-			table1Name = table1Name.toUpperCase().replaceAll("^\"|\"$", "");
-		column1Name = column1Name.toUpperCase().replaceAll("^\"|\"$", "");
+			table1Name = table1Name.replaceAll("^\"|\"$", "");
+		column1Name = column1Name.replaceAll("^\"|\"$", "");
 
 		if (table2Name != null)
-			table2Name = table2Name.toUpperCase().replaceAll("^\"|\"$", "");
-		column2Name = column2Name.toUpperCase().replaceAll("^\"|\"$", "");
+			table2Name = table2Name.replaceAll("^\"|\"$", "");
+		column2Name = column2Name.replaceAll("^\"|\"$", "");
 		
 		// Get sources
 		ColumnSource source1 = getColumnSource(column1Name, table1Name);
@@ -311,8 +311,8 @@ public class UsedColumnExtractorVisitor implements ExpressionVisitor, FromItemVi
 	
 	private ColumnSource getColumnSource(String columnName, String tableName) {
 		if (tableName != null)
-			tableName = tableName.toUpperCase().replaceAll("^\"|\"$", "");
-		columnName = columnName.toUpperCase().replaceAll("^\"|\"$", "");
+			tableName = tableName.replaceAll("^\"|\"$", "");
+		columnName = columnName.replaceAll("^\"|\"$", "");
 		
 		TableSource tableSource;
 		if (tableName != null) {
@@ -951,7 +951,7 @@ public class UsedColumnExtractorVisitor implements ExpressionVisitor, FromItemVi
 			}
 			// Strip quotes
 			if (columnName != null)
-				columnName = columnName.toUpperCase().replaceAll("^\"|\"$", "");
+				columnName = columnName.replaceAll("^\"|\"$", "");
 			currentState.columnSource = new ColumnSource(currentState.stateSource, columnName);
 		}
 		

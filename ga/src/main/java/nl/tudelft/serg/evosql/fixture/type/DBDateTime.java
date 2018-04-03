@@ -10,11 +10,23 @@ import nl.tudelft.serg.evosql.db.Seeds;
 import nl.tudelft.serg.evosql.util.random.Randomness;
 
 public class DBDateTime implements DBType {
+	private static final String DEFAULT_TYPE_STRING = "DATETIME";
+
 	private static final double probability = 1d/5d;
 	private static Randomness random = new Randomness();
 	private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 	private static long offset = Timestamp.valueOf(EvoSQLConfiguration.MIN_DATE).getTime();
 	private static long diff = Timestamp.valueOf(EvoSQLConfiguration.MAX_DATE).getTime() - offset + 1;
+
+	private final String typeString;
+
+	public DBDateTime() {
+	    this(DEFAULT_TYPE_STRING);
+    }
+
+	public DBDateTime(String typeString) {
+	    this.typeString = typeString;
+    }
 	
 	@Override
 	public String generateRandom(boolean nullable) {
@@ -79,9 +91,15 @@ public class DBDateTime implements DBType {
 	public String generateFromSeed(Seeds seeds) {
 		return generateRandom(false);
 	}
-	
+
+	@Override
 	public String getTypeString() {
-		return "DATETIME";
+		return typeString;
 	}
+
+    @Override
+    public String getNormalizedTypeString() {
+        return DEFAULT_TYPE_STRING;
+    }
 
 }

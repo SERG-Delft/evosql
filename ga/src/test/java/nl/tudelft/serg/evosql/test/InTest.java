@@ -11,7 +11,7 @@ public class InTest extends TestBase {
 	 */
 	@Test
 	public void test1() {
-		assertTrue(testExecutePath("SELECT Product, Price FROM Products WHERE Product IN ('HI', 'BYE')"));
+		assertTrue(testExecutePath("SELECT PRODUCT, PRICE FROM PRODUCTS WHERE PRODUCT IN ('HI', 'BYE')"));
 	}
 	
 	/**
@@ -19,7 +19,7 @@ public class InTest extends TestBase {
 	 */
 	@Test
 	public void test2() {
-		assertTrue(testExecutePath("SELECT Product, Price FROM Products WHERE Product IN (SELECT Name FROM Product_Detail)"));
+		assertTrue(testExecutePath("SELECT PRODUCT, PRICE FROM PRODUCTS WHERE PRODUCT IN (SELECT NAME FROM PRODUCT_DETAIL)"));
 	}
 	
 	/**
@@ -27,7 +27,7 @@ public class InTest extends TestBase {
 	 */
 	@Test
 	public void test3() {
-		assertTrue(testExecutePath("SELECT Product, Price FROM Products WHERE Product IN (SELECT Name FROM Product_Detail WHERE LENGTH(Name) > 1)"));
+		assertTrue(testExecutePath("SELECT PRODUCT, PRICE FROM PRODUCTS WHERE PRODUCT IN (SELECT NAME FROM PRODUCT_DETAIL WHERE LENGTH(NAME) > 1)"));
 	}
 	
 	/**
@@ -35,6 +35,6 @@ public class InTest extends TestBase {
 	 */
 	@Test
 	public void test4() {
-		assertTrue(testExecutePath("SELECT Product, Price FROM Products WHERE Product IN (SELECT Name FROM Product_Detail WHERE Type = 10)"));
+		assertTrue(testExecutePath("SELECT PRODUCT, PRICE FROM PRODUCTS WHERE PRODUCT IN (SELECT NAME FROM PRODUCT_DETAIL WHERE TYPE = 10)"));
 	}
 }

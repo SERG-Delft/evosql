@@ -68,7 +68,7 @@ public class StringsTest extends TestBase {
 	@Test
 	public void testStringFunctionsReverse() {
 		String sql = "SELECT * FROM STRINGS WHERE " +
-				"reverse(C1) = 'Mauricio' and C2 = 'Annibale' and C3 = 'Mozhan'";
+				"REVERSE(C1) = 'Mauricio' and C2 = 'Annibale' and C3 = 'Mozhan'";
 		
 		assertTrue(testExecutePath(sql));
 	}
@@ -76,7 +76,7 @@ public class StringsTest extends TestBase {
 	@Test
 	public void refrigeratorReverse() {
 		String sql = "SELECT * FROM STRINGS WHERE " +
-				"reverse(C1) = 'refrigerator'";
+				"REVERSE(C1) = 'refrigerator'";
 		
 		assertTrue(testExecutePath(sql));
 	}

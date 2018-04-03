@@ -22,7 +22,7 @@ public class WhereTest extends TestBase {
 	
 	@Test
 	public void test4() {
-		assertTrue(testExecutePath("SELECT * FROM PRODUCTS WHERE LCASE(PRODUCT) = 'TV'"));
+		assertTrue(testExecutePath("SELECT * FROM PRODUCTS WHERE LCASE(PRODUCT) = 'tv'"));
 	}
 
 	@Test

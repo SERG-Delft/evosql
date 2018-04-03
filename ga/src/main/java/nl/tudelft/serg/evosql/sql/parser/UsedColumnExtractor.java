@@ -21,7 +21,7 @@ public class UsedColumnExtractor {
 		this.tableSchemas = new HashMap<String, TableSchema>();
 		this.stringEqs = 0;
 		this.dateEqs = 0;
-		tableSchemasInput.forEach((str, ts) -> tableSchemas.put(str.toUpperCase(), ts));
+		tableSchemasInput.forEach((str, ts) -> tableSchemas.put(str, ts));
 	}
 	
 	public Set<ColumnSchema> extract() {

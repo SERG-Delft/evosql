@@ -95,7 +95,7 @@ public class SqlSecurerVisitor implements ExpressionVisitor, FromItemVisitor, It
 	private boolean isOuter = true;
 	
 	private String secureName(String name) {
-		name = name.toUpperCase().replaceAll("`", "");
+		name = name.replaceAll("`", "");
 		if (!name.matches("^\".*$")) {
 			name = "\"" + name;
 		}

@@ -10,7 +10,7 @@ public class HavingTest extends TestBase {
 	 */
 	@Test
 	public void test1() {
-		assertTrue(testExecutePath("SELECT Product, AVG(Price) FROM products GROUP BY Product HAVING AVG(Price) > 5 AND AVG(Price) < 10"));
+		assertTrue(testExecutePath("SELECT PRODUCT, AVG(PRICE) FROM PRODUCTS GROUP BY PRODUCT HAVING AVG(PRICE) > 5 AND AVG(PRICE) < 10"));
 	}
 	
 	/**
@@ -18,7 +18,7 @@ public class HavingTest extends TestBase {
 	 */
 	@Test
 	public void test2() {
-		assertTrue(testExecutePath("SELECT Product, AVG(Price) FROM products WHERE LENGTH(Product) = 5 GROUP BY Product HAVING AVG(Price) > 0 AND AVG(Price) < 10"));
+		assertTrue(testExecutePath("SELECT PRODUCT, AVG(PRICE) FROM PRODUCTS WHERE LENGTH(PRODUCT) = 5 GROUP BY PRODUCT HAVING AVG(PRICE) > 0 AND AVG(PRICE) < 10"));
 	}
 	
 	/**
@@ -26,7 +26,7 @@ public class HavingTest extends TestBase {
 	 */
 	@Test
 	public void testHavingExists() {
-		assertTrue(testExecutePath("SELECT Product FROM products t GROUP BY Product HAVING EXISTS (SELECT * FROM Product_Detail t2 WHERE t.Product = t2.Name)"));
+		assertTrue(testExecutePath("SELECT PRODUCT FROM PRODUCTS T GROUP BY PRODUCT HAVING EXISTS (SELECT * FROM PRODUCT_DETAIL T2 WHERE T.PRODUCT = T2.NAME)"));
 	}
 	
 	/**
@@ -34,6 +34,6 @@ public class HavingTest extends TestBase {
 	 */
 	@Test
 	public void testHavingExistsAndSome() {
-		assertTrue(testExecutePath("SELECT Product FROM products t GROUP BY Product HAVING EXISTS (SELECT * FROM Product_Detail t2 WHERE t.Product = t2.Name) AND SUM(t.Price) > 50"));
+		assertTrue(testExecutePath("SELECT PRODUCT FROM PRODUCTS T GROUP BY PRODUCT HAVING EXISTS (SELECT * FROM PRODUCT_DETAIL T2 WHERE T.PRODUCT = T2.NAME) AND SUM(T.PRICE) > 50"));
 	}
 }

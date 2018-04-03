@@ -15,7 +15,7 @@ public class LimitTest extends TestBase {
 
 	@Test
 	public void test2() {
-		assertTrue(testExecutePath("SELECT Product, Price FROM Products WHERE Price > 100 AND Price < 150 LIMIT 2"));
+		assertTrue(testExecutePath("SELECT PRODUCT, PRICE FROM PRODUCTS WHERE PRICE > 100 AND PRICE < 150 LIMIT 2"));
 	}
 	
 	/**
@@ -24,7 +24,7 @@ public class LimitTest extends TestBase {
 	 */
 	@Test @Ignore
 	public void test3() {
-		assertTrue(testExecutePath("SELECT Product, Price FROM Products LIMIT 2 OFFSET 20"));
+		assertTrue(testExecutePath("SELECT PRODUCT, PRICE FROM PRODUCTS LIMIT 2 OFFSET 20"));
 	}
 
 }

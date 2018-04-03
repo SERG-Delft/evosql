@@ -12,37 +12,37 @@ public class WhereTest extends TestBase {
 	
 	@Test
 	public void test2() {
-		assertTrue(testExecutePath("SELECT * FROM products WHERE (Price > 10 AND LENGTH(Product) = 1) OR (Price < 8 AND Product = 'A')-- OR (Price < 4 AND Price > 1)"));
+		assertTrue(testExecutePath("SELECT * FROM PRODUCTS WHERE (PRICE > 10 AND LENGTH(PRODUCT) = 1) OR (PRICE < 8 AND PRODUCT = 'A')-- OR (PRICE < 4 AND PRICE > 1)"));
 	}
 	
 	@Test
 	public void test3() {
-		assertTrue(testExecutePath("SELECT * FROM Products WHERE NOT (Price > 1 OR Price < -1)"));
+		assertTrue(testExecutePath("SELECT * FROM PRODUCTS WHERE NOT (PRICE > 1 OR PRICE < -1)"));
 	}
 	
 	@Test
 	public void test4() {
-		assertTrue(testExecutePath("SELECT * FROM Products WHERE LCASE(Product) = 'tv'"));
+		assertTrue(testExecutePath("SELECT * FROM PRODUCTS WHERE LCASE(PRODUCT) = 'TV'"));
 	}
 
 	@Test
 	public void test5() {
-		assertTrue(testExecutePath("SELECT * FROM Products WHERE Price > 10 AND Price < 20"));
+		assertTrue(testExecutePath("SELECT * FROM PRODUCTS WHERE PRICE > 10 AND PRICE < 20"));
 	}
 	
 	@Test
 	public void test6() {
-		assertTrue(testExecutePath("SELECT * FROM Products WHERE Product = 'tv'"));
+		assertTrue(testExecutePath("SELECT * FROM PRODUCTS WHERE PRODUCT = 'TV'"));
 	}
 	
 	/** Test Double equals **/
 	@Test
 	public void test7() {
-		assertTrue(testExecutePath("SELECT * FROM Products WHERE Price = 10"));
+		assertTrue(testExecutePath("SELECT * FROM PRODUCTS WHERE PRICE = 10"));
 	}
 	
 	@Test
 	public void test8() {
-		assertTrue(testExecutePath("SELECT * FROM Products WHERE Price = 10.59"));
+		assertTrue(testExecutePath("SELECT * FROM PRODUCTS WHERE PRICE = 10.59"));
 	}
 }

@@ -11,7 +11,7 @@ public class GroupByTest extends TestBase {
 	 */
 	@Test
 	public void test1() {
-		assertTrue(testExecutePath("SELECT Product, AVG(Price) FROM products GROUP BY Product"));
+		assertTrue(testExecutePath("SELECT PRODUCT, AVG(PRICE) FROM PRODUCTS GROUP BY PRODUCT"));
 	}
 	
 	/**
@@ -19,7 +19,7 @@ public class GroupByTest extends TestBase {
 	 */
 	@Test
 	public void test2() {
-		assertTrue(testExecutePath("SELECT Product, AVG(Price) FROM products WHERE Price > 4 GROUP BY Product"));
+		assertTrue(testExecutePath("SELECT PRODUCT, AVG(PRICE) FROM PRODUCTS WHERE PRICE > 4 GROUP BY PRODUCT"));
 	}
 
 	/**
@@ -27,6 +27,6 @@ public class GroupByTest extends TestBase {
 	 */
 	@Test
 	public void test3() {
-		assertTrue(testExecutePath("SELECT Product, AVG(Price) FROM products WHERE (Price > 4 AND Product = 'BINGO') OR (Product = 'TEST') GROUP BY Product"));
+		assertTrue(testExecutePath("SELECT PRODUCT, AVG(PRICE) FROM PRODUCTS WHERE (PRICE > 4 AND PRODUCT = 'BINGO') OR (PRODUCT = 'TEST') GROUP BY PRODUCT"));
 	}
 }

@@ -7,11 +7,11 @@ import org.junit.Test;
 public class ExistsTest extends TestBase {
 	@Test
 	public void test1() {
-		assertTrue(testExecutePath("SELECT Product, Price FROM Products WHERE EXISTS (SELECT ID FROM Product_detail WHERE Type = 10)"));
+		assertTrue(testExecutePath("SELECT PRODUCT, PRICE FROM PRODUCTS WHERE EXISTS (SELECT ID FROM PRODUCT_DETAIL WHERE TYPE = 10)"));
 	}
 
 	@Test
 	public void test2() {
-		assertTrue(testExecutePath("SELECT Product, Price FROM Products pr WHERE EXISTS (SELECT ID FROM Product_detail WHERE Type = pr.ID)"));
+		assertTrue(testExecutePath("SELECT PRODUCT, PRICE FROM PRODUCTS PR WHERE EXISTS (SELECT ID FROM PRODUCT_DETAIL WHERE TYPE = PR.ID)"));
 	}
 }

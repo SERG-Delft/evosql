@@ -6,14 +6,14 @@ import lombok.RequiredArgsConstructor;
 import nl.tudelft.serg.evosql.brew.data.Path;
 import nl.tudelft.serg.evosql.brew.data.Result;
 import nl.tudelft.serg.evosql.brew.generator.Generator;
+import nl.tudelft.serg.evosql.brew.generator.Output;
 import nl.tudelft.serg.evosql.brew.sql.*;
 import nl.tudelft.serg.evosql.brew.sql.vendor.VendorOptions;
 
 import javax.annotation.Generated;
 import javax.lang.model.element.Modifier;
 import java.sql.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @RequiredArgsConstructor
 public abstract class JUnitGenerator implements Generator {
@@ -40,7 +40,7 @@ public abstract class JUnitGenerator implements Generator {
      * @return String representation of generated data.
      */
     @Override
-    public final String generate(Result result, VendorOptions vendorOptions) {
+    public final List<Output> generate(Result result, VendorOptions vendorOptions) {
         AnnotationSpec generatedAnnotation = AnnotationSpec.builder(Generated.class)
                 .addMember("value", "$S", getClass().getCanonicalName())
                 .build();
@@ -67,7 +67,8 @@ public abstract class JUnitGenerator implements Generator {
         }
 
         JavaFile javaFile = JavaFile.builder(jUnitGeneratorSettings.getFilePackage(), typeSpecBuilder.build()).build();
-        return javaFile.toString();
+        Output output = new Output(jUnitGeneratorSettings.getClassName() + ".java", javaFile.toString());
+        return Collections.singletonList(output);
     }
 
     private void addConnectionDataFields(TypeSpec.Builder typeSpecBuilder) {

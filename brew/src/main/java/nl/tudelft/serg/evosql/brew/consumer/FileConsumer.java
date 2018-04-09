@@ -5,6 +5,7 @@ import lombok.NonNull;
 import nl.tudelft.serg.evosql.brew.generator.Output;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -33,7 +34,7 @@ public class FileConsumer implements OutputConsumer {
                 File outfile = Paths.get(directory.toString(), output.getName()).toFile();
                 FileOutputStream outStream = fileOutputStreamProvider.createStream(outfile);
 
-                OutputStreamWriter writer = new OutputStreamWriter(outStream);
+                OutputStreamWriter writer = new OutputStreamWriter(outStream, StandardCharsets.UTF_8);
                 writer.write(output.getData());
                 writer.close();
             } catch (IOException e) {

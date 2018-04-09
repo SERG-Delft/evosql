@@ -9,8 +9,9 @@ import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 
 import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -29,24 +30,24 @@ public class PrintConsumerTest {
 
     @ParameterizedTest
     @ArgumentsSource(PrintConsumerArgumentsProvider.class)
-    void testSingle(List<Output> in, String expected) {
-        OutputStream outStream = new ByteArrayOutputStream();
-        PrintStream printStream = new PrintStream(outStream, true);
+    void testSingle(List<Output> in, String expected) throws UnsupportedEncodingException {
+        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+        PrintStream printStream = new PrintStream(outStream, true, StandardCharsets.UTF_8.name());
 
         PrintConsumer printConsumer = new PrintConsumer(printStream);
         printConsumer.consumeOutput(in);
 
-        String actual = outStream.toString();
+        String actual = outStream.toString(StandardCharsets.UTF_8.name());
         assertThat(actual).isEqualTo(expected);
     }
 
     @ParameterizedTest
     @ArgumentsSource(PrintConsumerArgumentsProvider.class)
-    void testDefault(List<Output> in, String expected) {
+    void testDefault(List<Output> in, String expected) throws UnsupportedEncodingException {
         PrintStream stdOut = System.out;
         try {
-            OutputStream outStream = new ByteArrayOutputStream();
-            PrintStream printStream = new PrintStream(outStream, true);
+            ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+            PrintStream printStream = new PrintStream(outStream, true, StandardCharsets.UTF_8.name());
 
             System.setOut(printStream);
 
@@ -54,7 +55,7 @@ public class PrintConsumerTest {
             PrintConsumer printConsumer = new PrintConsumer();
             printConsumer.consumeOutput(in);
 
-            String actual = outStream.toString();
+            String actual = outStream.toString(StandardCharsets.UTF_8.name());
             assertThat(actual).isEqualTo(expected);
         } finally {
             // ALWAYS restore standard out

@@ -58,14 +58,14 @@ public class TableSchema implements Serializable {
 	}
 	
 	public String getDropSQL() {
-		return "DROP TABLE \"" + this.name.toUpperCase() + "\" IF EXISTS";
+		return "DROP TABLE \"" + this.name + "\" IF EXISTS";
 	}
 	
 	public String getCreateSQL() {
-		String sql = "CREATE TABLE \"" + this.name.toUpperCase() + "\" ( \n"; 
+		String sql = "CREATE TABLE \"" + this.name + "\" ( \n";
 		
 		for (ColumnSchema cs : columns) {
-			sql += "\t\"" + cs.getName().toUpperCase() + "\" " + cs.getType().getNormalizedTypeString();
+			sql += "\t\"" + cs.getName() + "\" " + cs.getType().getNormalizedTypeString();
 			if (!cs.isNullable())
 				sql += " NOT NULL";
 			sql += ",\n";
@@ -78,11 +78,11 @@ public class TableSchema implements Serializable {
 	}
 	
 	public String getTruncateSQL() {
-		return "TRUNCATE TABLE \"" + this.name.toUpperCase() + "\"";
+		return "TRUNCATE TABLE \"" + this.name + "\"";
 	}
 	
 	public String getInsertSQL() {
-		return "INSERT INTO \"" + this.name.toUpperCase() + "\"";
+		return "INSERT INTO \"" + this.name + "\"";
 	}
 
 	@Override

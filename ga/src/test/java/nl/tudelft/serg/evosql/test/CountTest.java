@@ -8,12 +8,12 @@ public class CountTest extends TestBase {
 	
 	@Test
 	public void test1() {
-		assertTrue(testExecutePath("SELECT COUNT(*) FROM Products"));
+		assertTrue(testExecutePath("SELECT COUNT(*) FROM PRODUCTS"));
 	}
 	
 	@Test
 	public void test2() {
-		assertTrue(testExecutePath("SELECT COUNT(*) FROM Products WHERE Price > 50"));
+		assertTrue(testExecutePath("SELECT COUNT(*) FROM PRODUCTS WHERE PRICE > 50"));
 	}
 	
 	/**
@@ -26,12 +26,12 @@ public class CountTest extends TestBase {
 	
 	@Test
 	public void test4() {
-		assertTrue(testExecutePath("SELECT COUNT(*) FROM Products HAVING COUNT(*) > 0"));
+		assertTrue(testExecutePath("SELECT COUNT(*) FROM PRODUCTS HAVING COUNT(*) > 0"));
 	}
 	
 	@Test
 	public void test5() {
-		assertTrue(testExecutePath("SELECT COUNT(*) FROM Products WHERE Price > 50 AND Price < 60 HAVING COUNT(*) > 0"));
+		assertTrue(testExecutePath("SELECT COUNT(*) FROM PRODUCTS WHERE PRICE > 50 AND PRICE < 60 HAVING COUNT(*) > 0"));
 	}
 
 	/**
@@ -39,7 +39,7 @@ public class CountTest extends TestBase {
 	 */
 	@Test
 	public void test6() {
-		assertTrue(testExecutePath("SELECT Product, COUNT(*) FROM Products GROUP BY Product HAVING COUNT(*) > 1"));
+		assertTrue(testExecutePath("SELECT PRODUCT, COUNT(*) FROM PRODUCTS GROUP BY PRODUCT HAVING COUNT(*) > 1"));
 	}
 
 	/**
@@ -47,7 +47,7 @@ public class CountTest extends TestBase {
 	 */
 	@Test
 	public void test7() {
-		assertTrue(testExecutePath("SELECT Product, COUNT(*) FROM Products GROUP BY Product HAVING COUNT(*) > 3"));
+		assertTrue(testExecutePath("SELECT PRODUCT, COUNT(*) FROM PRODUCTS GROUP BY PRODUCT HAVING COUNT(*) > 3"));
 	}
 
 	/**
@@ -55,7 +55,7 @@ public class CountTest extends TestBase {
 	 */
 	@Test
 	public void test8() {
-		assertTrue(testExecutePath("SELECT COUNT(Product) FROM Products HAVING COUNT(Product) > COUNT(DISTINCT Product) AND COUNT(DISTINCT Product) > 1"));
+		assertTrue(testExecutePath("SELECT COUNT(PRODUCT) FROM PRODUCTS HAVING COUNT(PRODUCT) > COUNT(DISTINCT PRODUCT) AND COUNT(DISTINCT PRODUCT) > 1"));
 	}
 
 }

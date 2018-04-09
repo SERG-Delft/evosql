@@ -9,37 +9,37 @@ public class LikeTest extends TestBase {
 	/** Converts to an EQUAL operation **/
 	@Test
 	public void test1() {
-		assertTrue(testExecutePath("SELECT * FROM Products WHERE Product LIKE 'A'"));
+		assertTrue(testExecutePath("SELECT * FROM PRODUCTS WHERE PRODUCT LIKE 'A'"));
 	}
 	
 	@Test
 	public void test2() {
-		assertTrue(testExecutePath("SELECT * FROM Products WHERE Product LIKE 'A_'"));
+		assertTrue(testExecutePath("SELECT * FROM PRODUCTS WHERE PRODUCT LIKE 'A_'"));
 	}
 	
 	@Test
 	public void test3() {
-		assertTrue(testExecutePath("SELECT * FROM Products WHERE Product LIKE '%_A'"));
+		assertTrue(testExecutePath("SELECT * FROM PRODUCTS WHERE PRODUCT LIKE '%_A'"));
 	}
 	
 	@Test
 	public void test4() {
-		assertTrue(testExecutePath("SELECT * FROM Products WHERE Product LIKE '%A'"));
+		assertTrue(testExecutePath("SELECT * FROM PRODUCTS WHERE PRODUCT LIKE '%A'"));
 	}
 	
 	@Test
 	public void test5() {
-		assertTrue(testExecutePath("SELECT * FROM Products WHERE Product LIKE '%A%'"));
+		assertTrue(testExecutePath("SELECT * FROM PRODUCTS WHERE PRODUCT LIKE '%A%'"));
 	}
 	
 	@Test
 	public void test6() {
-		assertTrue(testExecutePath("SELECT * FROM Products WHERE Product LIKE 'A%'"));
+		assertTrue(testExecutePath("SELECT * FROM PRODUCTS WHERE PRODUCT LIKE 'A%'"));
 	}
 	
 	@Test
 	public void test7() {
-		assertTrue(testExecutePath("SELECT * FROM Products WHERE Product LIKE 'WEST%'"));
+		assertTrue(testExecutePath("SELECT * FROM PRODUCTS WHERE PRODUCT LIKE 'WEST%'"));
 	}
 
 }

@@ -1,6 +1,6 @@
 package nl.tudelft.serg.evosql.brew.generator.junit;
 
-import lombok.Data;
+import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
 import nl.tudelft.serg.evosql.brew.db.ConnectionData;
@@ -9,6 +9,7 @@ import nl.tudelft.serg.evosql.brew.db.ConnectionData;
  * Represents settings for a unit test generator.
  */
 @Value
+@Builder
 public class JUnitGeneratorSettings {
     /**
      * The connection data for the database.
@@ -47,4 +48,26 @@ public class JUnitGeneratorSettings {
      * after running all unit tests.
      */
     boolean dropTablesAfterRunning;
+
+    /**
+     * Gets a new JUnitGeneratorSettings instance with default options applied.
+     *
+     * @param connectionData The connection data for the unit tests.
+     * @param filePackage    The package of the file.
+     * @param className      The class name of the test class.
+     * @return An instance of JUnitGeneratorSettings with default options applied.
+     */
+    public static JUnitGeneratorSettings getDefault(
+            ConnectionData connectionData, String filePackage, String className) {
+        return new JUnitGeneratorSettings(
+                connectionData,
+                filePackage,
+                className,
+                true,
+                true,
+                true,
+                false,
+                true
+        );
+    }
 }

@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 
 public class FileConsumerTest {
     private static Path tempDir;
@@ -22,6 +23,13 @@ public class FileConsumerTest {
     @BeforeAll
     static void setUp() throws IOException {
         tempDir = Files.createTempDirectory("nl-tudelft-serg-evosql-brew-fileconsumertest");
+    }
+
+    @Test
+    void nullConstructorTest() {
+        assertThatNullPointerException().isThrownBy(() -> {
+            new FileConsumer(null);
+        });
     }
 
     @Test

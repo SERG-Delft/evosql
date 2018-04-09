@@ -12,9 +12,15 @@ import java.util.List;
 public class FileConsumer implements OutputConsumer {
     @Getter
     private final Path directory;
+    private final FileOutputStreamProvider fileOutputStreamProvider;
 
-    public FileConsumer(@NonNull Path directory) {
+    public FileConsumer(Path directory) {
+        this(directory, new FileOutputStreamProvider());
+    }
+
+    public FileConsumer(@NonNull Path directory, FileOutputStreamProvider fileOutputStreamProvider) {
         this.directory = directory;
+        this.fileOutputStreamProvider = fileOutputStreamProvider;
     }
 
     @Override
@@ -25,14 +31,20 @@ public class FileConsumer implements OutputConsumer {
         for (Output output : outputs) {
             try {
                 File outfile = Paths.get(directory.toString(), output.getName()).toFile();
-                FileOutputStream outStream = new FileOutputStream(outfile);
+                FileOutputStream outStream = fileOutputStreamProvider.createStream(outfile);
 
                 OutputStreamWriter writer = new OutputStreamWriter(outStream);
                 writer.write(output.getData());
                 writer.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
+        }
+    }
+
+    public static class FileOutputStreamProvider {
+        public FileOutputStream createStream(File file) throws FileNotFoundException {
+            return new FileOutputStream(file);
         }
     }
 }

@@ -4,8 +4,9 @@ package nl.tudelft.serg.evosql.brew.consumer;
 import nl.tudelft.serg.evosql.brew.generator.Output;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
-import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -14,8 +15,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatNullPointerException;
+import static org.assertj.core.api.Assertions.*;
 
 public class FileConsumerTest {
     private static Path tempDir;
@@ -30,6 +30,24 @@ public class FileConsumerTest {
         assertThatNullPointerException().isThrownBy(() -> {
             new FileConsumer(null);
         });
+    }
+
+    @Test
+    void ioExceptionTest() throws FileNotFoundException {
+        final IOException ioException = new IOException();
+        FileConsumer.FileOutputStreamProvider fileOutputStreamProvider =
+                Mockito.mock(FileConsumer.FileOutputStreamProvider.class);
+
+        // Throw an IO exception on creating a file stream.
+        Mockito.when(fileOutputStreamProvider.createStream(Mockito.any())).then(invocation -> {
+            throw ioException;
+        });
+        Output output = new Output("exception test", "");
+
+        FileConsumer fileConsumer = new FileConsumer(tempDir, fileOutputStreamProvider);
+        assertThatExceptionOfType(RuntimeException.class).isThrownBy(() -> {
+            fileConsumer.consumeOutput(Collections.singletonList(output));
+        }).withCause(ioException);
     }
 
     @Test

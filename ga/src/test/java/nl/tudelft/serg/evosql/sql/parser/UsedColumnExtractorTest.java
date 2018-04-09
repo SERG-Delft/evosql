@@ -24,8 +24,8 @@ public class UsedColumnExtractorTest {
 	public void setUp() {
 		this.extractor = Mockito.mock(SchemaExtractor.class);
 		
-		Mockito.when(extractor.extract("T1")).thenReturn(TableSchemaMocks.T1());
-		Mockito.when(extractor.extract("T2")).thenReturn(TableSchemaMocks.T2());
+		Mockito.when(extractor.extract("t1")).thenReturn(TableSchemaMocks.T1());
+		Mockito.when(extractor.extract("t2")).thenReturn(TableSchemaMocks.T2());
 		Mockito.when(extractor.getTablesFromQuery(Mockito.anyString())).thenCallRealMethod();
 	}
 	
@@ -37,27 +37,20 @@ public class UsedColumnExtractorTest {
 	}
 	
 	private boolean contains(Set<ColumnSchema> columns, String tableName, String columnName) {
-		String uTableName = tableName.toUpperCase();
-		String uColumnName = columnName.toUpperCase();
 		return columns.stream()
-				.filter(cs -> cs.getName().equals(uColumnName) && cs.getTable().getName().equals(uTableName))
+				.filter(cs -> cs.getName().equals(columnName) && cs.getTable().getName().equals(tableName))
 				.findAny()
 				.isPresent();
 	}
 	
 	// Assumes both column schemas are present
 	private boolean areLinked(Set<ColumnSchema> columns, String table1Name, String column1Name, String table2Name, String column2Name) {
-		String uTable1Name = table1Name.toUpperCase();
-		String uColumn1Name = column1Name.toUpperCase();
-		String uTable2Name = table2Name.toUpperCase();
-		String uColumn2Name = column2Name.toUpperCase();
-		
 		ColumnSchema cs1 = columns.stream()
-				.filter(cs -> cs.getName().equals(uColumn1Name) && cs.getTable().getName().equals(uTable1Name))
+				.filter(cs -> cs.getName().equals(column1Name) && cs.getTable().getName().equals(table1Name))
 				.findFirst().get();
 		
 		ColumnSchema cs2 = columns.stream()
-				.filter(cs -> cs.getName().equals(uColumn2Name) && cs.getTable().getName().equals(uTable2Name))
+				.filter(cs -> cs.getName().equals(column2Name) && cs.getTable().getName().equals(table2Name))
 				.findFirst().get();
 		
 		Set<ColumnSchema> colSet = cs1.getSeedSourceColumns();

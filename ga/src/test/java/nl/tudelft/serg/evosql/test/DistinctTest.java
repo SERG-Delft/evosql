@@ -8,17 +8,17 @@ public class DistinctTest extends TestBase {
 	
 	@Test
 	public void test1() {
-		assertTrue(testExecutePath("SELECT DISTINCT Product FROM Products"));
+		assertTrue(testExecutePath("SELECT DISTINCT PRODUCT FROM PRODUCTS"));
 	}
 	
 	@Test
 	public void test2() {
-		assertTrue(testExecutePath("SELECT DISTINCT Product FROM Products WHERE Price > 50 AND Price < 75"));
+		assertTrue(testExecutePath("SELECT DISTINCT PRODUCT FROM PRODUCTS WHERE PRICE > 50 AND PRICE < 75"));
 	}
 
 	@Test
 	public void test3() {
-		assertTrue(testExecutePath("SELECT DISTINCT Product FROM Products GROUP BY Product HAVING SUM(Price) > 50 AND SUM(Price) < 75"));
+		assertTrue(testExecutePath("SELECT DISTINCT PRODUCT FROM PRODUCTS GROUP BY PRODUCT HAVING SUM(PRICE) > 50 AND SUM(PRICE) < 75"));
 	}
 
 }

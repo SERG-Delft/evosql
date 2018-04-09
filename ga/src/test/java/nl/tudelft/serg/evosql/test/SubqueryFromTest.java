@@ -15,7 +15,7 @@ public class SubqueryFromTest extends TestBase {
 	 */
 	@Test
 	public void test1() {
-		assertTrue(testExecutePath("SELECT * FROM (SELECT Product, Price FROM products GROUP BY Product, Price) t"));
+		assertTrue(testExecutePath("SELECT * FROM (SELECT PRODUCT, PRICE FROM PRODUCTS GROUP BY PRODUCT, PRICE) T"));
 	}
 	
 	/**
@@ -23,7 +23,7 @@ public class SubqueryFromTest extends TestBase {
 	 */
 	@Test
 	public void test2() {
-		assertTrue(testExecutePath("SELECT * FROM (SELECT Product, Price FROM products WHERE Product = 'A' GROUP BY Product, Price) t"));
+		assertTrue(testExecutePath("SELECT * FROM (SELECT PRODUCT, PRICE FROM PRODUCTS WHERE PRODUCT = 'A' GROUP BY PRODUCT, PRICE) T"));
 	}
 	
 	/**
@@ -31,7 +31,7 @@ public class SubqueryFromTest extends TestBase {
 	 */
 	@Test
 	public void test3() {
-		assertTrue(testExecutePath("SELECT * FROM (SELECT Product, Price FROM products GROUP BY Product, Price) t WHERE Price > 5 AND Price < 20"));
+		assertTrue(testExecutePath("SELECT * FROM (SELECT PRODUCT, PRICE FROM PRODUCTS GROUP BY PRODUCT, PRICE) T WHERE PRICE > 5 AND PRICE < 20"));
 	}
 	
 	/**
@@ -39,7 +39,7 @@ public class SubqueryFromTest extends TestBase {
 	 */
 	@Test
 	public void test4() {
-		assertTrue(testExecutePath("SELECT * FROM (SELECT Product, Price FROM products WHERE Product = 'A' GROUP BY Product, Price) t WHERE Price > 5 AND Price < 20"));
+		assertTrue(testExecutePath("SELECT * FROM (SELECT PRODUCT, PRICE FROM PRODUCTS WHERE PRODUCT = 'A' GROUP BY PRODUCT, PRICE) T WHERE PRICE > 5 AND PRICE < 20"));
 	}
 	
 	/**
@@ -47,7 +47,7 @@ public class SubqueryFromTest extends TestBase {
 	 */
 	@Test
 	public void test5() {
-		assertTrue(testExecutePath("SELECT * FROM (SELECT * FROM (SELECT Product, Price FROM products WHERE Product = 'A' GROUP BY Product, Price) t WHERE Price > 5 GROUP BY Product, Price) t WHERE Price < 20"));
+		assertTrue(testExecutePath("SELECT * FROM (SELECT * FROM (SELECT PRODUCT, PRICE FROM PRODUCTS WHERE PRODUCT = 'A' GROUP BY PRODUCT, PRICE) T WHERE PRICE > 5 GROUP BY PRODUCT, PRICE) T WHERE PRICE < 20"));
 	}
 	
 	/**
@@ -55,7 +55,7 @@ public class SubqueryFromTest extends TestBase {
 	 */
 	@Test
 	public void test6() {
-		assertTrue(testExecutePath("SELECT * FROM (SELECT Product, Price FROM products GROUP BY Product, Price HAVING SUM(Price) > 4) t WHERE Product = 'A'"));
+		assertTrue(testExecutePath("SELECT * FROM (SELECT PRODUCT, PRICE FROM PRODUCTS GROUP BY PRODUCT, PRICE HAVING SUM(PRICE) > 4) T WHERE PRODUCT = 'A'"));
 	}
 	
 	/**
@@ -63,7 +63,7 @@ public class SubqueryFromTest extends TestBase {
 	 */
 	@Test
 	public void test7() {
-		assertTrue(testExecutePath("SELECT Product FROM (SELECT Product, Price FROM products GROUP BY Product, Price) t GROUP BY Product HAVING SUM(Price) > 4"));
+		assertTrue(testExecutePath("SELECT PRODUCT FROM (SELECT PRODUCT, PRICE FROM PRODUCTS GROUP BY PRODUCT, PRICE) T GROUP BY PRODUCT HAVING SUM(PRICE) > 4"));
 	}
 	
 	/**
@@ -71,6 +71,6 @@ public class SubqueryFromTest extends TestBase {
 	 */
 	@Test
 	public void test8() {
-		assertTrue(testExecutePath("SELECT Product FROM (SELECT Product, Price FROM products GROUP BY Product, Price HAVING SUM(Price) < 10) t GROUP BY Product HAVING SUM(Price) > 4"));
+		assertTrue(testExecutePath("SELECT PRODUCT FROM (SELECT PRODUCT, PRICE FROM PRODUCTS GROUP BY PRODUCT, PRICE HAVING SUM(PRICE) < 10) T GROUP BY PRODUCT HAVING SUM(PRICE) > 4"));
 	}
 }

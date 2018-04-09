@@ -8,6 +8,6 @@ public class SelectTest extends TestBase {
 	
 	@Test
 	public void test1() {
-		assertTrue(testExecutePath("SELECT Product, Price FROM Products"));
+		assertTrue(testExecutePath("SELECT PRODUCT, PRICE FROM PRODUCTS"));
 	}
 }

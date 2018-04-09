@@ -50,9 +50,9 @@ public class EvoSQLRunnerTest {
         assertThat(brewResult.getPaths().get(1).getFixture().getTables().get(1).getSchema().getName())
                 .isEqualTo("testTable2");
         // GA capitalizes column names
-        assertThat(brewResult.getPaths().get(0).getFixture().getTables().get(0).getRows().get(0).getValues().get("TESTCOLUMN1_1"))
+        assertThat(brewResult.getPaths().get(0).getFixture().getTables().get(0).getRows().get(0).getValues().get("testColumn1_1"))
                 .isEqualTo("'string1'");
-        assertThat(brewResult.getPaths().get(0).getFixture().getTables().get(2).getRows().get(1).getValues().get("TESTCOLUMN3_2"))
+        assertThat(brewResult.getPaths().get(0).getFixture().getTables().get(2).getRows().get(1).getValues().get("testColumn3_2"))
                 .isEqualTo("20");
     }
 

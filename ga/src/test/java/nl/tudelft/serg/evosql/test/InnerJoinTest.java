@@ -10,7 +10,7 @@ public class InnerJoinTest extends TestBase {
 	 */
 	@Test
 	public void test1() {
-		assertTrue(testExecutePath("SELECT * FROM Products t1 INNER JOIN PRODUCT_DETAIL t2 ON t1.ID = t2.ID"));
+		assertTrue(testExecutePath("SELECT * FROM PRODUCTS T1 INNER JOIN PRODUCT_DETAIL T2 ON T1.ID = T2.ID"));
 	}
 	
 	/**
@@ -18,7 +18,7 @@ public class InnerJoinTest extends TestBase {
 	 */
 	@Test
 	public void testJoinString() {
-		assertTrue(testExecutePath("SELECT * FROM Products t1 INNER JOIN PRODUCT_DETAIL t2 ON t1.PRoduct = t2.Name"));
+		assertTrue(testExecutePath("SELECT * FROM PRODUCTS T1 INNER JOIN PRODUCT_DETAIL T2 ON T1.PRODUCT = T2.NAME"));
 	}
 
 	/**
@@ -26,7 +26,7 @@ public class InnerJoinTest extends TestBase {
 	 */
 	@Test
 	public void test2() {
-		assertTrue(testExecutePath("SELECT * FROM Products t1 INNER JOIN PRODUCT_DETAIL t2 ON t1.ID = t2.ID WHERE t2.TYPE = 10"));
+		assertTrue(testExecutePath("SELECT * FROM PRODUCTS T1 INNER JOIN PRODUCT_DETAIL T2 ON T1.ID = T2.ID WHERE T2.TYPE = 10"));
 	}
 
 	/**
@@ -34,7 +34,7 @@ public class InnerJoinTest extends TestBase {
 	 */
 	@Test
 	public void test3() {
-		assertTrue(testExecutePath("SELECT Product FROM Products t1 INNER JOIN PRODUCT_DETAIL t2 ON t1.ID = t2.ID WHERE t2.TYPE = 10 GROUP BY Product HAVING AVG(Price) > 5 AND AVG(Price) < 10"));
+		assertTrue(testExecutePath("SELECT PRODUCT FROM PRODUCTS T1 INNER JOIN PRODUCT_DETAIL T2 ON T1.ID = T2.ID WHERE T2.TYPE = 10 GROUP BY PRODUCT HAVING AVG(PRICE) > 5 AND AVG(PRICE) < 10"));
 	}
 	
 	/**
@@ -42,7 +42,7 @@ public class InnerJoinTest extends TestBase {
 	 */
 	@Test
 	public void test4() {
-		assertTrue(testExecutePath("SELECT Product FROM Products t1 INNER JOIN PRODUCT_DETAIL t2 ON t1.ID = t2.ID WHERE t1.Price > 10"));
+		assertTrue(testExecutePath("SELECT PRODUCT FROM PRODUCTS T1 INNER JOIN PRODUCT_DETAIL T2 ON T1.ID = T2.ID WHERE T1.PRICE > 10"));
 	}
 	
 	/**
@@ -50,7 +50,7 @@ public class InnerJoinTest extends TestBase {
 	 */
 	@Test
 	public void test5() {
-		assertTrue(testExecutePath("SELECT Product FROM Products t1 INNER JOIN PRODUCT_DETAIL t2 ON t1.ID = t2.ID WHERE t1.Price > 10 AND t2.TYPE = 10"));
+		assertTrue(testExecutePath("SELECT PRODUCT FROM PRODUCTS T1 INNER JOIN PRODUCT_DETAIL T2 ON T1.ID = T2.ID WHERE T1.PRICE > 10 AND T2.TYPE = 10"));
 	}
 	
 	/**
@@ -58,7 +58,7 @@ public class InnerJoinTest extends TestBase {
 	 */
 	@Test
 	public void test6() {
-		assertTrue(testExecutePath("SELECT Product FROM Products t1 INNER JOIN PRODUCT_DETAIL t2 ON t1.ID = t2.ID WHERE t1.Price > t2.TYPE - 10 AND t1.Price < t2.TYPE + 10"));
+		assertTrue(testExecutePath("SELECT PRODUCT FROM PRODUCTS T1 INNER JOIN PRODUCT_DETAIL T2 ON T1.ID = T2.ID WHERE T1.PRICE > T2.TYPE - 10 AND T1.PRICE < T2.TYPE + 10"));
 	}
 	
 	/**
@@ -66,6 +66,6 @@ public class InnerJoinTest extends TestBase {
 	 */
 	@Test
 	public void test7() {
-		assertTrue(testExecutePath("SELECT Product FROM Products t1 INNER JOIN PRODUCT_DETAIL t2 ON t1.ID = t2.ID INNER JOIN PRODUCT_DETAIL t3 ON t1.ID = t3.ID - 10"));
+		assertTrue(testExecutePath("SELECT PRODUCT FROM PRODUCTS T1 INNER JOIN PRODUCT_DETAIL T2 ON T1.ID = T2.ID INNER JOIN PRODUCT_DETAIL T3 ON T1.ID = T3.ID - 10"));
 	}
 }

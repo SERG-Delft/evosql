@@ -87,6 +87,7 @@ public class EvoSQLRunnerTest {
                 "Select * From table" + n,
                 0,
                 evoSQLFixture,
+                true,
                 0,
                 1,
                 ""

@@ -2,6 +2,7 @@ package nl.tudelft.serg.evosql.brew.demo;
 
 import nl.tudelft.serg.evosql.brew.Pipeline;
 import nl.tudelft.serg.evosql.brew.consumer.FileConsumer;
+import nl.tudelft.serg.evosql.brew.consumer.PrintConsumer;
 import nl.tudelft.serg.evosql.brew.data.Result;
 import nl.tudelft.serg.evosql.brew.db.ConnectionData;
 import nl.tudelft.serg.evosql.brew.db.EvoSQLRunner;
@@ -9,6 +10,7 @@ import nl.tudelft.serg.evosql.brew.generator.junit.JUnit5TestGenerator;
 import nl.tudelft.serg.evosql.brew.generator.junit.JUnitGeneratorSettings;
 import nl.tudelft.serg.evosql.brew.sql.vendor.PostgreSQLOptions;
 
+import java.io.PrintStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -17,7 +19,7 @@ public class Demo {
     /**
      * This is the query on which we will generate tests.
      */
-    final static String QUERY_TO_RUN = "SELECT * FROM Products t WHERE t.Price < (SELECT MAX(Type) FROM product_detail t2 WHERE t.Product = t2.Name) AND t.Price > (SELECT MAX(Type) FROM product_detail t2 WHERE t.Product = t2.Name) - 10";
+    final static String QUERY_TO_RUN = "SELECT * FROM Products t WHERE t.Price < (SELECT MAX(Type) FROM Product_Detail t2 WHERE t.Product = t2.Name) AND t.Price > (SELECT MAX(Type) FROM Product_Detail t2 WHERE t.Product = t2.Name) - 10";
 
     public static void main(String[] args) {
         //Connection data to production database
@@ -31,7 +33,7 @@ public class Demo {
         //Configure jUnitGenerator
         JUnitGeneratorSettings jUnitGeneratorSettings = new JUnitGeneratorSettings(
                 connectionDataTest,
-                "brew.test",
+                "nl.tudelft.serg.evosql.brew.demo",
                 "DemoTest",
                 true,
                 true,
@@ -43,10 +45,18 @@ public class Demo {
                 .queryRunner(new EvoSQLRunner())
                 .connectionData(connectionDataProd)
                 .sqlQuery(QUERY_TO_RUN)
+                //Process result to TestFile
                 .resultProcessor(new Pipeline.ResultProcessor(
                         new JUnit5TestGenerator(jUnitGeneratorSettings),
                         new PostgreSQLOptions(),
-                        new FileConsumer(Paths.get("."))))
+                        //D:\OneDrive\Documenten\GitHub\evosql\evosql\brew\src\test\java\nl\tudelft\serg\evosql\brew\demo\DemoTest.java
+                        new FileConsumer(Paths.get("brew","src","test","java","nl","tudelft","serg","evosql","brew","demo"))))
+                //Process result to System.out
+                .resultProcessor(new Pipeline.ResultProcessor(
+                        new JUnit5TestGenerator(jUnitGeneratorSettings),
+                        new PostgreSQLOptions(),
+                        new PrintConsumer())
+                )
                 .build();
         //Execute pipeline
         pipeline.execute();

@@ -20,5 +20,5 @@ dependencies {
     // These dependencies are not testCompile dependencies
     // because they are used for code generation types.
     compile 'junit:junit:4.12'
-    compile 'org.junit.jupiter:junit-jupiter-api:5.1.0'
+    compile 'org.junit.jupiter:junit-jupiter-api:5.1.1'
 }

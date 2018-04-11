@@ -37,7 +37,7 @@ public class JUnit5TestGeneratorTest extends JUnitGeneratorTest {
 
         JUnit5TestGenerator jUnit5TestGenerator = new JUnit5TestGenerator(JUnitGeneratorSettings);
         assertThat(jUnit5TestGenerator.generate(resultSmall, new MySQLOptions()))
-                .isEqualTo(getExpected("JUnit5Small.txt"));
+                .isEqualTo(getExpected("JUnit5SmallTest.java"));
     }
 
     @Test
@@ -60,6 +60,6 @@ public class JUnit5TestGeneratorTest extends JUnitGeneratorTest {
         );
         JUnit5TestGenerator jUnit4TestGenerator = new JUnit5TestGenerator(JUnitGeneratorSettings);
         assertThat(jUnit4TestGenerator.generate(resultMedium, new MySQLOptions()))
-                .isEqualTo(getExpected("JUnit5Medium.txt"));
+                .isEqualTo(getExpected("JUnit5MediumTest.java"));
     }
 }

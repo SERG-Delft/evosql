@@ -17,5 +17,5 @@ dependencies {
 
     // Have the static API and the test engine as dependencies (JUnit 4, 5 vintage runtime)
     testCompile 'junit:junit:4.12'
-    testRuntime 'org.junit.vintage:junit-vintage-engine:5.1.0'
+    testRuntime 'org.junit.vintage:junit-vintage-engine:5.1.1'
 }

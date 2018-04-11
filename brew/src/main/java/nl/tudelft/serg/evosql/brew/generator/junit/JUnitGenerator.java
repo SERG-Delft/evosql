@@ -337,7 +337,7 @@ public abstract class JUnitGenerator implements Generator {
 
         // Assert
         pTestBuilder.addComment("Assert: verify that at least one resulting row was returned");
-        pTestBuilder.addStatement("$T.assertEquals(result, $L)", assertionClass, path.isSuccess());
+        pTestBuilder.addStatement("$T.assertEquals($L, result)", assertionClass, path.isSuccess());
         return pTestBuilder.build();
     }
 }

@@ -63,7 +63,7 @@ public abstract class JUnitGenerator implements Generator {
         typeSpecBuilder.addMethod(generateAfterAll());
 
         for (Path path : result.getPaths()) {
-            typeSpecBuilder.addMethod(generatePathTest(path, vendorOptions));
+            typeSpecBuilder.addMethod(generatePathTest(path, result.getInputQuery(), vendorOptions));
         }
 
         JavaFile javaFile = JavaFile.builder(jUnitGeneratorSettings.getFilePackage(), typeSpecBuilder.build()).build();
@@ -316,7 +316,7 @@ public abstract class JUnitGenerator implements Generator {
      * @param vendorOptions The vendor options to use.
      * @return A method specification for a single unit test.
      */
-    private MethodSpec generatePathTest(Path path, VendorOptions vendorOptions) {
+    private MethodSpec generatePathTest(Path path, String productionQuery, VendorOptions vendorOptions) {
         // Method signature
         MethodSpec.Builder pTestBuilder = MethodSpec.methodBuilder(
                 String.format("generatedTest%d", path.getPathNumber()));
@@ -333,13 +333,11 @@ public abstract class JUnitGenerator implements Generator {
 
         // Act
         pTestBuilder.addComment("Act: run a selection query on the database");
-        SelectionBuilder selectionBuilder = new SelectionBuilder(vendorOptions);
-        String select = selectionBuilder.buildQueries(path).get(0);
-        pTestBuilder.addStatement("$T result = runSQL($S, false)", boolean.class, select);
+        pTestBuilder.addStatement("$T result = runSQL($S, false)", boolean.class, productionQuery);
 
         // Assert
         pTestBuilder.addComment("Assert: verify that at least one resulting row was returned");
-        pTestBuilder.addStatement("$T.assertTrue(result)", assertionClass);
+        pTestBuilder.addStatement("$T.assertEquals(result, $L)", assertionClass, path.isSuccess());
         return pTestBuilder.build();
     }
 }

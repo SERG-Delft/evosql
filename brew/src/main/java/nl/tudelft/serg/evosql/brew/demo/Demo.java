@@ -26,10 +26,12 @@ public class Demo {
         ConnectionData connectionDataProd = new ConnectionData(
                 "jdbc:postgresql://localhost:5432/evosql_brew_prod",
                 "evosql_brew_prod", "postgres", "");
+
         //Connection data to test database (this is where the test cases make a connection to
         ConnectionData connectionDataTest = new ConnectionData(
                 "jdbc:postgresql://localhost:5432/evosql_brew_test",
                 "evosql_brew_test", "postgres", "");
+
         //Configure jUnitGenerator
         JUnitGeneratorSettings jUnitGeneratorSettings = new JUnitGeneratorSettings(
                 connectionDataTest,
@@ -40,6 +42,7 @@ public class Demo {
                 true,
                 false,
                 true);
+
         //Construct Pipeline
         Pipeline pipeline = Pipeline.builder()
                 .queryRunner(new EvoSQLRunner())
@@ -58,6 +61,7 @@ public class Demo {
                         new PrintConsumer())
                 )
                 .build();
+
         //Execute pipeline
         pipeline.execute();
     }

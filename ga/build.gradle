@@ -9,8 +9,6 @@ dependencies {
     compile 'javax.xml.rpc:javax.xml.rpc-api:1.1.1'
     compile 'commons-logging:commons-logging:1.1.1'
     compile 'commons-discovery:commons-discovery:0.5'
-    compile 'mysql:mysql-connector-java:8.0.8-dmr'
-    compile 'org.postgresql:postgresql:42.2.2'
     compile fileTree(dir: '../lib', includes: ['*.jar'])
 
     // Have the static API and the test engine as dependencies (JUnit 4, 5 vintage runtime)

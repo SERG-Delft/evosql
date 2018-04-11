@@ -101,7 +101,7 @@ public class JUnit4SmallTest {
     // Act: run a selection query on the database
     boolean result = runSQL("Select * From table1 Where column1_2 < 1;", false);
     // Assert: verify that at least one resulting row was returned
-    Assert.assertTrue(result);
+    Assert.assertEquals(true, result);
   }
 
   @Test
@@ -109,8 +109,8 @@ public class JUnit4SmallTest {
     // Arrange: set up the fixture data
     runSQL("INSERT INTO `table1` (`column1_1`, `column1_2`, `column1_3`) VALUES (1, 0.5, 'The first row of table 1.'), (2, 1.5, 'The second row.');", true);
     // Act: run a selection query on the database
-    boolean result = runSQL("Select * From table1 Where column1_2 >= 1;", false);
+    boolean result = runSQL("Select * From table1 Where column1_2 < 1;", false);
     // Assert: verify that at least one resulting row was returned
-    Assert.assertTrue(result);
+    Assert.assertEquals(false, result);
   }
 }

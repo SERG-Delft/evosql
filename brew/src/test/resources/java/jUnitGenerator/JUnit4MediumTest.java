@@ -75,7 +75,7 @@ public class JUnit4MediumTest {
     // Act: run a selection query on the database
     boolean result = runSQL("Select * From table1, products Where column1_2 < 1 And expired = 0;", false);
     // Assert: verify that at least one resulting row was returned
-    Assert.assertTrue(result);
+    Assert.assertEquals(true, result);
   }
 
   @Test
@@ -84,9 +84,9 @@ public class JUnit4MediumTest {
     runSQL("INSERT INTO `table1` (`column1_1`, `column1_2`) VALUES (1, 'String of row 1'), (2, 'String of row 2');", true);
     runSQL("INSERT INTO `products` (`product_name`, `expired`, `expiry_date`) VALUES ('Milk', 0, '2018-03-22 00:00:00'), ('Yogurt', 1, '2018-03-15 00:00:00'), ('Salt', 0, '2025-12-31 23:59:59');", true);
     // Act: run a selection query on the database
-    boolean result = runSQL("Select * From table1, products Where column1_2 < 1 And expired = 1;", false);
+    boolean result = runSQL("Select * From table1, products Where column1_2 < 1 And expired = 0;", false);
     // Assert: verify that at least one resulting row was returned
-    Assert.assertTrue(result);
+    Assert.assertEquals(false, result);
   }
 
   @Test
@@ -95,9 +95,9 @@ public class JUnit4MediumTest {
     runSQL("INSERT INTO `table1` (`column1_1`, `column1_2`) VALUES (1, 'String of row 1'), (2, 'String of row 2');", true);
     runSQL("INSERT INTO `products` (`product_name`, `expired`, `expiry_date`) VALUES ('Milk', 0, '2018-03-22 00:00:00'), ('Yogurt', 1, '2018-03-15 00:00:00'), ('Salt', 0, '2025-12-31 23:59:59');", true);
     // Act: run a selection query on the database
-    boolean result = runSQL("Select * From table1, products Where column1_2 >= 1 And Expired = 0;", false);
+    boolean result = runSQL("Select * From table1, products Where column1_2 < 1 And expired = 0;", false);
     // Assert: verify that at least one resulting row was returned
-    Assert.assertTrue(result);
+    Assert.assertEquals(false, result);
   }
 
   @Test
@@ -106,8 +106,8 @@ public class JUnit4MediumTest {
     runSQL("INSERT INTO `table1` (`column1_1`, `column1_2`) VALUES (1, 'String of row 1'), (2, 'String of row 2');", true);
     runSQL("INSERT INTO `products` (`product_name`, `expired`, `expiry_date`) VALUES ('Milk', 0, '2018-03-22 00:00:00'), ('Yogurt', 1, '2018-03-15 00:00:00'), ('Salt', 0, '2025-12-31 23:59:59');", true);
     // Act: run a selection query on the database
-    boolean result = runSQL("Select * From table1, products Where column1_2 >= 1 And Expired = 1;", false);
+    boolean result = runSQL("Select * From table1, products Where column1_2 < 1 And expired = 0;", false);
     // Assert: verify that at least one resulting row was returned
-    Assert.assertTrue(result);
+    Assert.assertEquals(true, result);
   }
 }

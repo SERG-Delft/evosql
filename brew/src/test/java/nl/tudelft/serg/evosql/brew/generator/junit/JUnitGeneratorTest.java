@@ -1,5 +1,9 @@
 package nl.tudelft.serg.evosql.brew.generator.junit;
 
+import nl.tudelft.serg.evosql.brew.generator.Output;
+
+import java.util.Collections;
+import java.util.List;
 import java.util.Scanner;
 
 public abstract class JUnitGeneratorTest {
@@ -19,12 +23,14 @@ public abstract class JUnitGeneratorTest {
     protected static final String TEST_DATABASE_USER = "root";
     protected static final String TEST_DATABASE_PASSWORD = "";
 
-    String getExpected(String filename) {
+    List<Output> getExpected(String filename) {
         String raw = new Scanner(
                 getClass().getClassLoader().getResourceAsStream("java/jUnitGenerator/" + filename),
                 "UTF-8").useDelimiter("\\A").next();
 
-        return normalizeLineEndings(raw);
+        String normalizedFileContent = normalizeLineEndings(raw);
+        Output output = new Output(filename, normalizedFileContent);
+        return Collections.singletonList(output);
     }
 
     private String normalizeLineEndings(String string) {

@@ -17,6 +17,11 @@ import org.junit.jupiter.api.Test;
 @Generated("nl.tudelft.serg.evosql.brew.generator.junit.JUnit5TestGenerator")
 public class JUnit5SmallTest {
   /**
+   * The production query used to test the generated fixtures on.
+   */
+  private static final String PRODUCTION_QUERY = "Select * From table1 Where column1_2 < 1;";
+
+  /**
    * The JDBC url used to connect to the test database.
    */
   private static final String DB_JDBC_URL = "jdbc:mysql://localhost:3306/evosql_brew_test";
@@ -99,7 +104,7 @@ public class JUnit5SmallTest {
     // Arrange: set up the fixture data
     runSQL("INSERT INTO `table1` (`column1_1`, `column1_2`, `column1_3`) VALUES (1, 0.5, 'The first row of table 1.'), (2, 1.5, 'The second row.');", true);
     // Act: run a selection query on the database
-    boolean result = runSQL("Select * From table1 Where column1_2 < 1;", false);
+    boolean result = runSQL(PRODUCTION_QUERY, false);
     // Assert: verify that at least one resulting row was returned
     Assertions.assertEquals(true, result);
   }
@@ -109,7 +114,7 @@ public class JUnit5SmallTest {
     // Arrange: set up the fixture data
     runSQL("INSERT INTO `table1` (`column1_1`, `column1_2`, `column1_3`) VALUES (1, 0.5, 'The first row of table 1.'), (2, 1.5, 'The second row.');", true);
     // Act: run a selection query on the database
-    boolean result = runSQL("Select * From table1 Where column1_2 < 1;", false);
+    boolean result = runSQL(PRODUCTION_QUERY, false);
     // Assert: verify that at least one resulting row was returned
     Assertions.assertEquals(false, result);
   }

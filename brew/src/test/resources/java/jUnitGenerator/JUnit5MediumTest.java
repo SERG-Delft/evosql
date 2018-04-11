@@ -12,6 +12,11 @@ import org.junit.jupiter.api.Test;
 @Generated("nl.tudelft.serg.evosql.brew.generator.junit.JUnit5TestGenerator")
 public class JUnit5MediumTest {
   /**
+   * The production query used to test the generated fixtures on.
+   */
+  private static final String PRODUCTION_QUERY = "Select * From table1, products Where column1_2 < 1 And expired = 0;";
+
+  /**
    * This method should connect to your database and execute the given query.
    * In order for the assertions to work correctly this method must return true in the case
    * that the query yields at least one result and false if there is no result.
@@ -73,7 +78,7 @@ public class JUnit5MediumTest {
     runSQL("INSERT INTO `table1` (`column1_1`, `column1_2`) VALUES (1, 'String of row 1'), (2, 'String of row 2');", true);
     runSQL("INSERT INTO `products` (`product_name`, `expired`, `expiry_date`) VALUES ('Milk', 0, '2018-03-22 00:00:00'), ('Yogurt', 1, '2018-03-15 00:00:00'), ('Salt', 0, '2025-12-31 23:59:59');", true);
     // Act: run a selection query on the database
-    boolean result = runSQL("Select * From table1, products Where column1_2 < 1 And expired = 0;", false);
+    boolean result = runSQL(PRODUCTION_QUERY, false);
     // Assert: verify that at least one resulting row was returned
     Assertions.assertEquals(true, result);
   }
@@ -84,7 +89,7 @@ public class JUnit5MediumTest {
     runSQL("INSERT INTO `table1` (`column1_1`, `column1_2`) VALUES (1, 'String of row 1'), (2, 'String of row 2');", true);
     runSQL("INSERT INTO `products` (`product_name`, `expired`, `expiry_date`) VALUES ('Milk', 0, '2018-03-22 00:00:00'), ('Yogurt', 1, '2018-03-15 00:00:00'), ('Salt', 0, '2025-12-31 23:59:59');", true);
     // Act: run a selection query on the database
-    boolean result = runSQL("Select * From table1, products Where column1_2 < 1 And expired = 0;", false);
+    boolean result = runSQL(PRODUCTION_QUERY, false);
     // Assert: verify that at least one resulting row was returned
     Assertions.assertEquals(false, result);
   }
@@ -95,7 +100,7 @@ public class JUnit5MediumTest {
     runSQL("INSERT INTO `table1` (`column1_1`, `column1_2`) VALUES (1, 'String of row 1'), (2, 'String of row 2');", true);
     runSQL("INSERT INTO `products` (`product_name`, `expired`, `expiry_date`) VALUES ('Milk', 0, '2018-03-22 00:00:00'), ('Yogurt', 1, '2018-03-15 00:00:00'), ('Salt', 0, '2025-12-31 23:59:59');", true);
     // Act: run a selection query on the database
-    boolean result = runSQL("Select * From table1, products Where column1_2 < 1 And expired = 0;", false);
+    boolean result = runSQL(PRODUCTION_QUERY, false);
     // Assert: verify that at least one resulting row was returned
     Assertions.assertEquals(false, result);
   }
@@ -106,7 +111,7 @@ public class JUnit5MediumTest {
     runSQL("INSERT INTO `table1` (`column1_1`, `column1_2`) VALUES (1, 'String of row 1'), (2, 'String of row 2');", true);
     runSQL("INSERT INTO `products` (`product_name`, `expired`, `expiry_date`) VALUES ('Milk', 0, '2018-03-22 00:00:00'), ('Yogurt', 1, '2018-03-15 00:00:00'), ('Salt', 0, '2025-12-31 23:59:59');", true);
     // Act: run a selection query on the database
-    boolean result = runSQL("Select * From table1, products Where column1_2 < 1 And expired = 0;", false);
+    boolean result = runSQL(PRODUCTION_QUERY, false);
     // Assert: verify that at least one resulting row was returned
     Assertions.assertEquals(true, result);
   }

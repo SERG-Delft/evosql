@@ -30,7 +30,8 @@ public abstract class JUnitGenerator implements Generator {
     private static final String
             NAME_DB_JDBC_URL = "DB_JDBC_URL",
             NAME_DB_USER = "DB_USER",
-            NAME_DB_PASSWORD = "DB_PASSWORD";
+            NAME_DB_PASSWORD = "DB_PASSWORD",
+            NAME_PRODUCTION_QUERY = "PRODUCTION_QUERY";
 
     /**
      * Generates JUnit test suites based on the given result.
@@ -48,6 +49,14 @@ public abstract class JUnitGenerator implements Generator {
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(generatedAnnotation);
 
+        FieldSpec fieldSpec = FieldSpec.builder(String.class, NAME_PRODUCTION_QUERY)
+                .addModifiers(Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL)
+                .initializer("$S", result.getInputQuery())
+                .addJavadoc("The production query used to test the generated fixtures on.\n")
+                .build();
+
+        typeSpecBuilder.addField(fieldSpec);
+
         if (jUnitGeneratorSettings.isGenerateSqlExecutorImplementation()) {
             addConnectionDataFields(typeSpecBuilder);
         }
@@ -63,7 +72,7 @@ public abstract class JUnitGenerator implements Generator {
         typeSpecBuilder.addMethod(generateAfterAll());
 
         for (Path path : result.getPaths()) {
-            typeSpecBuilder.addMethod(generatePathTest(path, result.getInputQuery(), vendorOptions));
+            typeSpecBuilder.addMethod(generatePathTest(path, vendorOptions));
         }
 
         JavaFile javaFile = JavaFile.builder(jUnitGeneratorSettings.getFilePackage(), typeSpecBuilder.build()).build();
@@ -316,7 +325,7 @@ public abstract class JUnitGenerator implements Generator {
      * @param vendorOptions The vendor options to use.
      * @return A method specification for a single unit test.
      */
-    private MethodSpec generatePathTest(Path path, String productionQuery, VendorOptions vendorOptions) {
+    private MethodSpec generatePathTest(Path path, VendorOptions vendorOptions) {
         // Method signature
         MethodSpec.Builder pTestBuilder = MethodSpec.methodBuilder(
                 String.format("generatedTest%d", path.getPathNumber()));
@@ -333,7 +342,7 @@ public abstract class JUnitGenerator implements Generator {
 
         // Act
         pTestBuilder.addComment("Act: run a selection query on the database");
-        pTestBuilder.addStatement("$T result = runSQL($S, false)", boolean.class, productionQuery);
+        pTestBuilder.addStatement("$T result = runSQL($L, false)", boolean.class, NAME_PRODUCTION_QUERY);
 
         // Assert
         pTestBuilder.addComment("Assert: verify that at least one resulting row was returned");

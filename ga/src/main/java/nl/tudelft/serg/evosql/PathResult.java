@@ -7,17 +7,19 @@ public class PathResult {
 	private String pathSql;
 	private Fixture data;
 	private boolean success;
+	private boolean productionSuccess;
 	private String message;
 	private long runtime;
 	private int generations;
 	private int individualCount;
 	private String exceptions;
 	
-	public PathResult(int pathNo, String pathSql, long runtime, Fixture data, int generations, int individualCount, String exceptions) {
+	public PathResult(int pathNo, String pathSql, long runtime, Fixture data, boolean productionSuccess, int generations, int individualCount, String exceptions) {
 		this.pathNo = pathNo;
 		this.pathSql = pathSql;
 		this.data = data;
 		this.success = true;
+		this.productionSuccess = productionSuccess;
 		this.runtime = runtime;
 		this.message = "";
 		this.generations = generations;
@@ -29,6 +31,7 @@ public class PathResult {
 		this.pathNo = pathNo;
 		this.pathSql = pathSql;
 		this.success = false;
+		this.productionSuccess = false;
 		this.message = message;
 		this.runtime = runtime;
 		this.generations = generations;
@@ -50,6 +53,10 @@ public class PathResult {
 
 	public boolean isSuccess() {
 		return success;
+	}
+
+	public boolean isProductionSuccess() {
+		return productionSuccess;
 	}
 
 	public String getMessage() {

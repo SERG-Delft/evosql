@@ -30,7 +30,8 @@ public abstract class JUnitGenerator implements Generator {
     private static final String
             NAME_DB_JDBC_URL = "DB_JDBC_URL",
             NAME_DB_USER = "DB_USER",
-            NAME_DB_PASSWORD = "DB_PASSWORD";
+            NAME_DB_PASSWORD = "DB_PASSWORD",
+            NAME_PRODUCTION_QUERY = "PRODUCTION_QUERY";
 
     /**
      * Generates JUnit test suites based on the given result.
@@ -47,6 +48,14 @@ public abstract class JUnitGenerator implements Generator {
         TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(jUnitGeneratorSettings.getClassName())
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(generatedAnnotation);
+
+        FieldSpec fieldSpec = FieldSpec.builder(String.class, NAME_PRODUCTION_QUERY)
+                .addModifiers(Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL)
+                .initializer("$S", result.getInputQuery())
+                .addJavadoc("The production query used to test the generated fixtures on.\n")
+                .build();
+
+        typeSpecBuilder.addField(fieldSpec);
 
         if (jUnitGeneratorSettings.isGenerateSqlExecutorImplementation()) {
             addConnectionDataFields(typeSpecBuilder);
@@ -333,13 +342,11 @@ public abstract class JUnitGenerator implements Generator {
 
         // Act
         pTestBuilder.addComment("Act: run a selection query on the database");
-        SelectionBuilder selectionBuilder = new SelectionBuilder(vendorOptions);
-        String select = selectionBuilder.buildQueries(path).get(0);
-        pTestBuilder.addStatement("$T result = runSQL($S, false)", boolean.class, select);
+        pTestBuilder.addStatement("$T result = runSQL($L, false)", boolean.class, NAME_PRODUCTION_QUERY);
 
         // Assert
         pTestBuilder.addComment("Assert: verify that at least one resulting row was returned");
-        pTestBuilder.addStatement("$T.assertTrue(result)", assertionClass);
+        pTestBuilder.addStatement("$T.assertEquals($L, result)", assertionClass, path.isSuccess());
         return pTestBuilder.build();
     }
 }

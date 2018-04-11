@@ -1,3 +1,6 @@
+plugins {
+    id 'com.github.kt3k.coveralls' version '2.6.3'
+}
 
 description = 'EvoSQL GA Algorithm'
 dependencies {
@@ -9,6 +12,7 @@ dependencies {
     compile 'javax.xml.rpc:javax.xml.rpc-api:1.1.1'
     compile 'commons-logging:commons-logging:1.1.1'
     compile 'commons-discovery:commons-discovery:0.5'
+
     compile fileTree(dir: '../lib', includes: ['*.jar'])
 
     // Have the static API and the test engine as dependencies (JUnit 4, 5 vintage runtime)

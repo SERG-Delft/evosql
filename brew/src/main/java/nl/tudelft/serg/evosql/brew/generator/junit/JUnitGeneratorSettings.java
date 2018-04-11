@@ -1,8 +1,6 @@
 package nl.tudelft.serg.evosql.brew.generator.junit;
 
-import lombok.Builder;
-import lombok.NonNull;
-import lombok.Value;
+import lombok.*;
 import nl.tudelft.serg.evosql.brew.db.ConnectionData;
 
 /**
@@ -10,6 +8,7 @@ import nl.tudelft.serg.evosql.brew.db.ConnectionData;
  */
 @Value
 @Builder
+@AllArgsConstructor
 public class JUnitGeneratorSettings {
     /**
      * The connection data for the database.

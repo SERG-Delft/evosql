@@ -17,7 +17,7 @@ import java.util.Map;
  * Represents a Brew pipeline.
  */
 @EqualsAndHashCode
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Builder
 public class Pipeline {
     /**

@@ -9,7 +9,9 @@ import nl.tudelft.serg.evosql.brew.generator.Generator;
 import nl.tudelft.serg.evosql.brew.generator.Output;
 import nl.tudelft.serg.evosql.brew.sql.vendor.VendorOptions;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Represents a Brew pipeline.
@@ -36,25 +38,48 @@ public class Pipeline {
     /**
      * The Generator instance used in the pipeline.
      */
-    @NonNull
-    private final Generator generator;
-    /**
-     * The vendor options used in SQL generation.
-     */
-    @NonNull
-    private final VendorOptions vendorOptions;
-    /**
-     * The OutputConsumer instance used in the pipeline.
-     */
-    @NonNull
-    private final OutputConsumer outputConsumer;
+    @NonNull @Singular
+    private final List<ResultProcessor> resultProcessors;
 
     /**
      * Executes the pipeline.
      */
     public void execute() {
         Result queryRunnerResult = queryRunner.runQuery(sqlQuery, connectionData);
-        List<Output> generatedOutputs = generator.generate(queryRunnerResult, vendorOptions);
-        outputConsumer.consumeOutput(generatedOutputs);
+
+        Map<Generator, List<Output>> outputCache = new HashMap<>();
+
+        for (ResultProcessor rp : resultProcessors) {
+            List<Output> generatedOutputs;
+
+            if (outputCache.containsKey(rp.getGenerator())) {
+                generatedOutputs = outputCache.get(rp.getGenerator());
+            } else {
+                generatedOutputs = rp.getGenerator()
+                        .generate(queryRunnerResult, rp.getVendorOptions());
+                outputCache.put(rp.getGenerator(), generatedOutputs);
+            }
+
+            rp.getOutputConsumer().consumeOutput(generatedOutputs);
+        }
+    }
+
+    @Value
+    public static class ResultProcessor {
+        /**
+         * The Generator instance used to process the result.
+         */
+        @NonNull
+        private final Generator generator;
+        /**
+         * The vendor-specific options used in SQL generation.
+         */
+        @NonNull
+        private final VendorOptions vendorOptions;
+        /**
+         * The OutputConsumer instance used to write the data.
+         */
+        @NonNull
+        private final OutputConsumer outputConsumer;
     }
 }

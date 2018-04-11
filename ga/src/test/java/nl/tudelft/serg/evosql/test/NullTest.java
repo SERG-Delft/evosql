@@ -7,7 +7,7 @@ import org.junit.Test;
 public class NullTest extends TestBase {
 	@Test
 	public void test1() {
-		assertTrue(testExecutePath("SELECT * FROM Products WHERE Product IS NULL"));
+		assertTrue(testExecutePath("SELECT * FROM PRODUCTS WHERE PRODUCT IS NULL"));
 	}
 
 }

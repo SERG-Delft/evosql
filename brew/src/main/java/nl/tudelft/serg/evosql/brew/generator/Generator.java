@@ -3,6 +3,8 @@ package nl.tudelft.serg.evosql.brew.generator;
 import nl.tudelft.serg.evosql.brew.data.Result;
 import nl.tudelft.serg.evosql.brew.sql.vendor.VendorOptions;
 
+import java.util.List;
+
 public interface Generator {
 
     /**
@@ -12,6 +14,6 @@ public interface Generator {
      * @param vendorOptions VendorOptions of database
      * @return String representation of generated data.
      */
-    String generate(Result result, VendorOptions vendorOptions);
+    List<Output> generate(Result result, VendorOptions vendorOptions);
 
 }

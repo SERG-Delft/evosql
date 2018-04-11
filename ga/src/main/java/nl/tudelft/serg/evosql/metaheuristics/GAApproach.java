@@ -266,7 +266,7 @@ public class GAApproach extends Approach {
 		
 		for (int i = 0; i < tables.size(); i++) {
 			// Remove table if not in tableSchemas
-			if (!tableSchemas.containsKey(tables.get(i).getName().toUpperCase())) {
+			if (!tableSchemas.containsKey(tables.get(i).getName())) {
 				fixture.removeTable(i);
 				tableCount--;
 			}

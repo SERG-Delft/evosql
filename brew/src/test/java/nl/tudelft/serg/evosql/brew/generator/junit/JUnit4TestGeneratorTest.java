@@ -37,7 +37,7 @@ public class JUnit4TestGeneratorTest extends JUnitGeneratorTest {
 
         JUnit4TestGenerator jUnit4TestGenerator = new JUnit4TestGenerator(JUnitGeneratorSettings);
         assertThat(jUnit4TestGenerator.generate(resultSmall, new MySQLOptions()))
-                .isEqualTo(getExpected("JUnit4Small.txt"));
+                .isEqualTo(getExpected("JUnit4SmallTest.java"));
     }
 
     @Test
@@ -60,6 +60,6 @@ public class JUnit4TestGeneratorTest extends JUnitGeneratorTest {
         );
         JUnit4TestGenerator jUnit4TestGenerator = new JUnit4TestGenerator(JUnitGeneratorSettings);
         assertThat(jUnit4TestGenerator.generate(resultMedium, new MySQLOptions()))
-                .isEqualTo(getExpected("JUnit4Medium.txt"));
+                .isEqualTo(getExpected("JUnit4MediumTest.java"));
     }
 }

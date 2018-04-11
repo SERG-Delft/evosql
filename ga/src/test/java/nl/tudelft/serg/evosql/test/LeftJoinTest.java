@@ -19,7 +19,7 @@ public class LeftJoinTest extends TestBase {
 	 */
 	@Test
 	public void test2() {
-		assertTrue(testExecutePath("SELECT * FROM Products t1 LEFT JOIN PRODUCT_DETAIL t2 ON t1.ID = t2.ID WHERE t2.TYPE IS NULL"));
+		assertTrue(testExecutePath("SELECT * FROM PRODUCTS T1 LEFT JOIN PRODUCT_DETAIL T2 ON T1.ID = T2.ID WHERE T2.TYPE IS NULL"));
 	}
 	
 	/**
@@ -27,7 +27,7 @@ public class LeftJoinTest extends TestBase {
 	 */
 	@Test
 	public void test3() {
-		assertTrue(testExecutePath("SELECT * FROM Products t1 LEFT JOIN PRODUCT_DETAIL t2 ON t1.ID = t2.ID WHERE t1.Price > 10 AND t1.Price < 20"));
+		assertTrue(testExecutePath("SELECT * FROM PRODUCTS T1 LEFT JOIN PRODUCT_DETAIL T2 ON T1.ID = T2.ID WHERE T1.PRICE > 10 AND T1.PRICE < 20"));
 	} 
 	
 	/**
@@ -35,6 +35,6 @@ public class LeftJoinTest extends TestBase {
 	 */
 	@Test
 	public void test4() {
-		assertTrue(testExecutePath("SELECT * FROM Products t1 LEFT JOIN PRODUCT_DETAIL t2 ON t1.ID = t2.ID WHERE ((t1.ID IS NULL) AND (t2.ID IS NULL)) AND (t1.Price > 10 AND t1.Price < 20)"));
+		assertTrue(testExecutePath("SELECT * FROM PRODUCTS T1 LEFT JOIN PRODUCT_DETAIL T2 ON T1.ID = T2.ID WHERE ((T1.ID IS NULL) AND (T2.ID IS NULL)) AND (T1.PRICE > 10 AND T1.PRICE < 20)"));
 	} 
 }

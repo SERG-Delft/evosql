@@ -25,7 +25,7 @@ public class FixtureRow implements Cloneable{
 	}
 	
 	public void set(String k, String v) {
-		values.put(k.toUpperCase(), v);
+		values.put(k, v);
 	}
 
 	public String getTable() {
@@ -49,7 +49,7 @@ public class FixtureRow implements Cloneable{
 	}
 
 	public String getValueFor(String column) {
-		return values.get(column.toUpperCase());
+		return values.get(column);
 	}
 
 	@Override

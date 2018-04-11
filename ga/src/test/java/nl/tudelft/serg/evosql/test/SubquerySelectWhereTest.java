@@ -13,17 +13,17 @@ public class SubquerySelectWhereTest extends TestBase {
 
 	@Test
 	public void test1() {
-		assertTrue(testExecutePath("SELECT * FROM products t WHERE LENGTH(t.Product) = 1 AND t.Price = (SELECT MAX(Price) FROM products)"));
+		assertTrue(testExecutePath("SELECT * FROM PRODUCTS T WHERE LENGTH(T.PRODUCT) = 1 AND T.PRICE = (SELECT MAX(PRICE) FROM PRODUCTS)"));
 	}
 
 	@Test
 	public void test2() {
-		assertTrue(testExecutePath("SELECT * FROM (SELECT Product, Price FROM products t WHERE LENGTH(t.Product) = 1 GROUP BY Product, Price) t WHERE t.Price = (SELECT MAX(Price) FROM products)"));
+		assertTrue(testExecutePath("SELECT * FROM (SELECT PRODUCT, PRICE FROM PRODUCTS T WHERE LENGTH(T.PRODUCT) = 1 GROUP BY PRODUCT, PRICE) T WHERE T.PRICE = (SELECT MAX(PRICE) FROM PRODUCTS)"));
 	}
 
 	@Test
 	public void test3() {
-		assertTrue(testExecutePath("SELECT * FROM (SELECT Product, Price FROM products t WHERE LENGTH(t.Product) = 1 GROUP BY Product, Price) t WHERE t.Price < (SELECT MAX(Type) FROM product_detail t2 WHERE t.Product = t2.Name)"));
+		assertTrue(testExecutePath("SELECT * FROM (SELECT PRODUCT, PRICE FROM PRODUCTS T WHERE LENGTH(T.PRODUCT) = 1 GROUP BY PRODUCT, PRICE) T WHERE T.PRICE < (SELECT MAX(TYPE) FROM PRODUCT_DETAIL T2 WHERE T.PRODUCT = T2.NAME)"));
 	}
 
 	/**
@@ -31,7 +31,7 @@ public class SubquerySelectWhereTest extends TestBase {
 	 */
 	@Test
 	public void test4() {
-		assertTrue(testExecutePath("SELECT (SELECT MAX(Type) FROM Product_Detail WHERE Name = 'A') Subinfo, Product FROM Products"));
+		assertTrue(testExecutePath("SELECT (SELECT MAX(TYPE) FROM PRODUCT_DETAIL WHERE NAME = 'A') SUBINFO, PRODUCT FROM PRODUCTS"));
 	}
 	
 	/**
@@ -39,12 +39,12 @@ public class SubquerySelectWhereTest extends TestBase {
 	 */
 	@Test
 	public void test5() {
-		assertTrue(testExecutePath("SELECT * FROM (SELECT (SELECT MAX(Type) FROM Product_Detail WHERE Name = 'A') Subinfo, Product FROM Products) t WHERE SubInfo > 10 AND SubInfo < 20"));
+		assertTrue(testExecutePath("SELECT * FROM (SELECT (SELECT MAX(TYPE) FROM PRODUCT_DETAIL WHERE NAME = 'A') SUBINFO, PRODUCT FROM PRODUCTS) T WHERE SUBINFO > 10 AND SUBINFO < 20"));
 	}
 	
 	@Test
 	public void test6() {
-		assertTrue(testExecutePath("SELECT * FROM Products t WHERE t.Price < (SELECT MAX(Type) FROM product_detail t2 WHERE t.Product = t2.Name)"));
+		assertTrue(testExecutePath("SELECT * FROM PRODUCTS T WHERE T.PRICE < (SELECT MAX(TYPE) FROM PRODUCT_DETAIL T2 WHERE T.PRODUCT = T2.NAME)"));
 	}
 	
 	/**
@@ -52,17 +52,17 @@ public class SubquerySelectWhereTest extends TestBase {
 	 */
 	@Test
 	public void test7() {
-		assertTrue(testExecutePath("SELECT * FROM Products t WHERE t.Price < (SELECT MAX(Type) FROM (SELECT Name, Type FROM Product_Detail WHERE LENGTH(Name) = 2) t2 WHERE t.Product = t2.Name)"));
+		assertTrue(testExecutePath("SELECT * FROM PRODUCTS T WHERE T.PRICE < (SELECT MAX(TYPE) FROM (SELECT NAME, TYPE FROM PRODUCT_DETAIL WHERE LENGTH(NAME) = 2) T2 WHERE T.PRODUCT = T2.NAME)"));
 	}
 	
 	@Test
 	public void test8() {
-		assertTrue(testExecutePath("SELECT * FROM Products t WHERE t.Price < (SELECT MAX(Type) FROM (SELECT Name, Type FROM Product_Detail t3 WHERE LENGTH(Name) < t.ID) t2 WHERE t.Product = t2.Name)"));
+		assertTrue(testExecutePath("SELECT * FROM PRODUCTS T WHERE T.PRICE < (SELECT MAX(TYPE) FROM (SELECT NAME, TYPE FROM PRODUCT_DETAIL T3 WHERE LENGTH(NAME) < T.ID) T2 WHERE T.PRODUCT = T2.NAME)"));
 	}
 	
 	@Test
 	public void test9() {
-		assertTrue(testExecutePath("SELECT * FROM Products t WHERE t.Price < (SELECT MAX(Type) FROM Product_Detail t2 WHERE LENGTH(t.Product) = (SELECT MIN(t3.ID) FROM Products t3 WHERE t3.ID >= 0))"));
+		assertTrue(testExecutePath("SELECT * FROM PRODUCTS T WHERE T.PRICE < (SELECT MAX(TYPE) FROM PRODUCT_DETAIL T2 WHERE LENGTH(T.PRODUCT) = (SELECT MIN(T3.ID) FROM PRODUCTS T3 WHERE T3.ID >= 0))"));
 	}
 	
 	/**
@@ -70,7 +70,7 @@ public class SubquerySelectWhereTest extends TestBase {
 	 */
 	@Test
 	public void test10() {
-		assertTrue(testExecutePath("SELECT * FROM Products t WHERE t.Price < (SELECT MAX(Type) FROM Product_Detail t2 WHERE LENGTH(t.Product) = (SELECT MIN(t3.ID) FROM Products t3 WHERE t3.ID >= 0 AND t3.Product = t2.Name))"));
+		assertTrue(testExecutePath("SELECT * FROM PRODUCTS T WHERE T.PRICE < (SELECT MAX(TYPE) FROM PRODUCT_DETAIL T2 WHERE LENGTH(T.PRODUCT) = (SELECT MIN(T3.ID) FROM PRODUCTS T3 WHERE T3.ID >= 0 AND T3.PRODUCT = T2.NAME))"));
 	}
 	
 	/**
@@ -78,6 +78,6 @@ public class SubquerySelectWhereTest extends TestBase {
 	 */
 	@Test
 	public void test11() { 
-		assertTrue(testExecutePath("SELECT * FROM Products t WHERE t.Price < (SELECT MAX(Type) FROM product_detail t2 WHERE t.Product = t2.Name) AND t.Price > (SELECT MAX(Type) FROM product_detail t2 WHERE t.Product = t2.Name) - 10"));
+		assertTrue(testExecutePath("SELECT * FROM PRODUCTS T WHERE T.PRICE < (SELECT MAX(TYPE) FROM PRODUCT_DETAIL T2 WHERE T.PRODUCT = T2.NAME) AND T.PRICE > (SELECT MAX(TYPE) FROM PRODUCT_DETAIL T2 WHERE T.PRODUCT = T2.NAME) - 10"));
 	}
 }

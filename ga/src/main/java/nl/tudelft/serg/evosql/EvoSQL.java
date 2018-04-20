@@ -200,7 +200,7 @@ public class EvoSQL {
 				if (pathState.approach.hasOutput(generatedFixture)) {
 					// Add success
 					result.addPathSuccess(pathNo, pathSql, pathState.timePassed, generatedFixture
-							, pathState.approach.hasOutput(generatedFixture, sqlToBeTested)
+							, pathState.approach.generateOutput(generatedFixture, sqlToBeTested)
 							, pathState.approach.getGenerations(), pathState.approach.getIndividualCount()
 							, pathState.approach.getExceptions());
 					

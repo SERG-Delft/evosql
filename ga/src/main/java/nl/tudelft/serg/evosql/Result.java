@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nl.tudelft.serg.evosql.fixture.Fixture;
+import nl.tudelft.serg.evosql.metaheuristics.DatabaseOutput;
 
 public class Result {
 	private String inputQuery;
@@ -20,12 +21,12 @@ public class Result {
 		this.coveragePerc = new ArrayList<Double>();
 	}
 	
-	public void addPathSuccess(int pathNo, String pathSql, long runtime, Fixture data, boolean productionSuccess, int generations, int individualCount, String exceptions) {
+	public void addPathSuccess(int pathNo, String pathSql, long runtime, Fixture data, DatabaseOutput dbOutput, int generations, int individualCount, String exceptions) {
 		int idx = pathNo - 1;
 		while (idx >= pathResults.size()) {
 			pathResults.add(null);
 		}
-		pathResults.set(idx, new PathResult(pathNo, pathSql, runtime, data, productionSuccess, generations, individualCount, exceptions));
+		pathResults.set(idx, new PathResult(pathNo, pathSql, runtime, data, dbOutput, generations, individualCount, exceptions));
 	}
 	
 	public void addPathFailure(int pathNo, String pathSql, long runtime, String message, int generations, int individualCount, String exceptions) {

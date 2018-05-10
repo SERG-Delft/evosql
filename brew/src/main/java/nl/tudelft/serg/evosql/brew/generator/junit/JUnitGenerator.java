@@ -72,7 +72,7 @@ public abstract class JUnitGenerator implements Generator {
         typeSpecBuilder.addMethod(generateAfterAll());
 
         for (Path path : result.getPaths()) {
-            typeSpecBuilder.addMethod(generatePathTest(path, vendorOptions));
+            typeSpecBuilder.addMethod(generatePathTest(path, vendorOptions, path.getProductionOutput().size()));
         }
 
         JavaFile javaFile = JavaFile.builder(jUnitGeneratorSettings.getFilePackage(), typeSpecBuilder.build()).build();
@@ -111,7 +111,7 @@ public abstract class JUnitGenerator implements Generator {
     private MethodSpec generateRunSQL() {
         MethodSpec.Builder runSQL = MethodSpec.methodBuilder("runSQL")
                 .addModifiers(Modifier.PRIVATE, Modifier.STATIC)
-                .returns(TypeName.BOOLEAN)
+                .returns(TypeName.INT)
                 .addParameter(String.class, "sql")
                 .addParameter(boolean.class, "isUpdate");
 
@@ -126,17 +126,21 @@ public abstract class JUnitGenerator implements Generator {
                             "$T connection = $T.getConnection($L, $L, $L)",
                             Connection.class, DriverManager.class,
                             NAME_DB_JDBC_URL, NAME_DB_USER, NAME_DB_PASSWORD)
-                    .addStatement("$T statement = connection.createStatement()", Statement.class)
+                    .addStatement("$T statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, " +
+                            "ResultSet.CONCUR_READ_ONLY)", Statement.class)
                     .beginControlFlow("if (isUpdate == true)")
                     .addStatement("statement.executeUpdate(sql)")
-                    .addStatement("return true")
+                    .addStatement("return 0")
                     .nextControlFlow("else")
                     .addStatement("$T resultSet = statement.executeQuery(sql)", ResultSet.class)
-                    .addStatement("return resultSet.next()")
+                    .beginControlFlow("if(rs.last())")
+                    .addStatement("return rs.getRow()")
+                    .nextControlFlow("else")
+                    .addStatement("return 0")
                     .endControlFlow()
                     .nextControlFlow("catch ($T sqlException)", SQLException.class)
                     .addStatement("sqlException.printStackTrace()")
-                    .addStatement("return false")
+                    .addStatement("return 0")
                     .endControlFlow();
         } else {
             runSQL.addJavadoc(""
@@ -325,7 +329,7 @@ public abstract class JUnitGenerator implements Generator {
      * @param vendorOptions The vendor options to use.
      * @return A method specification for a single unit test.
      */
-    private MethodSpec generatePathTest(Path path, VendorOptions vendorOptions) {
+    private MethodSpec generatePathTest(Path path, VendorOptions vendorOptions, int expected) {
         // Method signature
         MethodSpec.Builder pTestBuilder = MethodSpec.methodBuilder(
                 String.format("generatedTest%d", path.getPathNumber()));
@@ -342,11 +346,11 @@ public abstract class JUnitGenerator implements Generator {
 
         // Act
         pTestBuilder.addComment("Act: run a selection query on the database");
-        pTestBuilder.addStatement("$T result = runSQL($L, false)", boolean.class, NAME_PRODUCTION_QUERY);
+        pTestBuilder.addStatement("$T result = runSQL($L, false)", int.class, NAME_PRODUCTION_QUERY);
 
         // Assert
         pTestBuilder.addComment("Assert: verify that at least one resulting row was returned");
-        pTestBuilder.addStatement("$T.assertEquals($L, result)", assertionClass, path.isSuccess());
+        pTestBuilder.addStatement("$T.assertEquals($L, result)", assertionClass, expected);
         return pTestBuilder.build();
     }
 }

@@ -43,24 +43,34 @@ public class GAApproach extends Approach {
 	private QueryDepthExtractor depthExtractor;
 
 	private int populationSize;
+	private int maxGenerations;
+	private boolean skipInitialGeneration;
 
 	public GAApproach(List<Fixture> population, Map<String, TableSchema> pTableSchemas, String pPathToBeTested, Seeds seeds){
+		this(population, pTableSchemas, pPathToBeTested, seeds, Integer.MAX_VALUE, false);
+	}
+
+	public GAApproach(List<Fixture> population, Map<String, TableSchema> pTableSchemas, String pPathToBeTested, Seeds seeds, int maxGenerations, boolean skipInitialGeneration){
 		super(pTableSchemas, pPathToBeTested);
 
 		this.depthExtractor = new QueryDepthExtractor(new SqlSecurer(pPathToBeTested).getSecureSql());
 		this.seeds = seeds;
-		
+
 		this.mutation = new FixtureMutation(rowFactory, seeds);
 		this.population = population;
+		this.maxGenerations = maxGenerations;
+		this.skipInitialGeneration = skipInitialGeneration;
 		this.isInitialized = false;
-		
+
 		// if it's baseline, there will be only a single generation, and population will be larger
 		populationSize = EvoSQLConfiguration.POPULATION_SIZE; // * (baseline ? 2 : 1);
+
 	}
 
 	private void initialize() throws SQLException {
 		//1. Initial population
-		generateInitialPopulation();
+		if(!skipInitialGeneration)
+			generateInitialPopulation();
 		
 		calculateFitness(population);
 		
@@ -71,11 +81,6 @@ public class GAApproach extends Approach {
 		isInitialized = true;
 	}
 
-	public void initialPopulation(List<Fixture> population) {
-		this.population = population;
-		isInitialized = true;
-	}
-	
 	@Override
 	public Fixture execute(long pathTime) throws SQLException {
 		long startTime = System.currentTimeMillis();
@@ -87,7 +92,7 @@ public class GAApproach extends Approach {
 		//3. Main Loop
 		while (population.get(0).getFitness().getDistance() > 0
 				&& System.currentTimeMillis() - startTime < pathTime
-				//&& generations < maxGenerations
+				&& generations < maxGenerations
 		){
 			List<Fixture> offsprings = new ArrayList<Fixture>(populationSize);
 			for (int index=0; index < populationSize; index += 2){

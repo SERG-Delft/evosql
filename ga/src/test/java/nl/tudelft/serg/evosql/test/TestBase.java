@@ -36,7 +36,8 @@ public class TestBase {
 
 	private static Logger log = LogManager.getLogger(TestBase.class);
 
-	private static List<Fixture> population = new ArrayList<>();
+	static List<Fixture> population = new ArrayList<>();
+	static int maxGenerations = Integer.MAX_VALUE;
 	
 	static final String TBL_PRODUCTS = "PRODUCTS";
 	
@@ -58,10 +59,10 @@ public class TestBase {
 
 	/**
 	 * Enables injection of initial population
-	 * @param population new population
+	 * @param newPopulation new population
 	 */
-	public void setPopulation(List<Fixture> population) {
-		this.population = population;
+	static void setPopulation(List<Fixture> newPopulation) {
+		population = newPopulation;
 	}
 
 	/**
@@ -150,7 +151,7 @@ public class TestBase {
 			}
 			
 			for (int i = 0; i < EvoSQLConfiguration.TEST_MAX_ITERATIONS; i++) {
-				GAApproach ga = new GAApproach(population, tableSchemas, sqlToBeTested, seeds);
+				GAApproach ga = new GAApproach(population, tableSchemas, sqlToBeTested, seeds, maxGenerations, !population.isEmpty());
 				generatedFixture = ga.execute(time / EvoSQLConfiguration.TEST_MAX_ITERATIONS); //We want to hold the max time limit
 
 				log.info("For path: " + sqlToBeTested);

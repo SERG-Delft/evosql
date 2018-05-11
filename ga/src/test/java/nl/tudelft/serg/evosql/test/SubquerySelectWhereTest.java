@@ -2,8 +2,17 @@ package nl.tudelft.serg.evosql.test;
 
 import static org.junit.Assert.assertTrue;
 
+import nl.tudelft.serg.evosql.db.SchemaExtractor;
+import nl.tudelft.serg.evosql.fixture.Fixture;
+import nl.tudelft.serg.evosql.fixture.FixtureRow;
+import nl.tudelft.serg.evosql.fixture.FixtureTable;
+import nl.tudelft.serg.evosql.sql.TableSchema;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Tests with subqueries in the SELECT/WHERE's
@@ -52,6 +61,36 @@ public class SubquerySelectWhereTest extends TestBase {
 	 */
 	@Test
 	public void test7() {
+
+        SchemaExtractor se = new SchemaExtractor(jdbcUrl, database, user, pwd);
+        TableSchema productsSchema = se.extract("PRODUCTS");
+        TableSchema productDetailSchema = se.extract("PRODUCT_DETAIL");
+
+        List<FixtureTable> tables = new ArrayList<>();
+        Fixture fixture = new Fixture(tables);
+
+        List<FixtureRow> productRows = new ArrayList<>();
+        FixtureRow row1 = new FixtureRow("PRODUCTS", productsSchema);
+        row1.set("ID", "1");
+        row1.set("PRODUCT", "PS");
+        row1.set("PRICE", "4");
+        productRows.add(row1);
+        FixtureTable productsTable = new FixtureTable(productsSchema, productRows);
+        tables.add(productsTable);
+
+
+        List<FixtureRow> productDetailsRows = new ArrayList<>();
+        FixtureRow row2 = new FixtureRow("PRODUCT_DETAIL", productDetailSchema);
+        row2.set("ID", "1");
+        row2.set("NAME", "PS");
+        row2.set("TYPE", "3");
+        productDetailsRows.add(row2);
+        FixtureTable productDetailsTable = new FixtureTable(productDetailSchema, productDetailsRows);
+        tables.add(productDetailsTable);
+
+        population = Arrays.asList(fixture);
+        maxGenerations = 2;
+
 		assertTrue(testExecutePath("SELECT * FROM PRODUCTS T WHERE T.PRICE < (SELECT MAX(TYPE) FROM (SELECT NAME, TYPE FROM PRODUCT_DETAIL WHERE LENGTH(NAME) = 2) T2 WHERE T.PRODUCT = T2.NAME)"));
 	}
 	

@@ -185,7 +185,7 @@ public class Instrumenter {
 	}
 	
 	public static void execute(String sql) throws SQLException {
-		//log.info("Executing SQL for Instrumenter: " + sql.replace("\n", ""));
+//		log.debug("Executing SQL for Instrumenter: " + sql.replace("\n", ""));
 		if (st == null) return;
 		try {
 			st.execute(sql);

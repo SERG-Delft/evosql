@@ -51,7 +51,8 @@ public class EvoSQLRunner implements QueryRunner {
         return new Path(
                 convertFixture(pathResult.getFixture()),
                 pathResult.getPathSql(),
-                pathResult.getPathNo()
+                pathResult.getPathNo(),
+                pathResult.isProductionSuccess()
         );
     }
 

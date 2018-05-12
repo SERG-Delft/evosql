@@ -10,6 +10,7 @@ import java.util.*;
 public class DataGenerator {
     /**
      * Creates result set 1.
+     *
      * @return Result set 1.
      */
     public static Result makeResult1() {
@@ -35,15 +36,16 @@ public class DataGenerator {
 
         // Make fixture
         Fixture fixture = new Fixture(Arrays.asList(table1));
-        Path path1 = new Path(fixture, "Select * From table1 Where column1_2 < 1;", 1);
-        Path path2 = new Path(fixture, "Select * From table1 Where column1_2 >= 1;", 2);
+        Path path1 = new Path(fixture, "Select * From table1 Where column1_2 < 1;", 1, true);
+        Path path2 = new Path(fixture, "Select * From table1 Where column1_2 >= 1;", 2, false);
 
-        return new Result("Select * From table1 Where column1_2 < 1",
+        return new Result("Select * From table1 Where column1_2 < 1;",
                 Arrays.asList(path1, path2));
     }
 
     /**
      * Creates result set 2.
+     *
      * @return Result set 2.
      */
     public static Result makeResult2() {
@@ -93,12 +95,12 @@ public class DataGenerator {
 
         // Make fixture
         Fixture fixture = new Fixture(Arrays.asList(table1, productsTable));
-        Path path1 = new Path(fixture, "Select * From table1, products Where column1_2 < 1 And expired = 0;", 1);
-        Path path2 = new Path(fixture, "Select * From table1, products Where column1_2 < 1 And expired = 1;", 2);
-        Path path3 = new Path(fixture, "Select * From table1, products Where column1_2 >= 1 And Expired = 0;", 3);
-        Path path4 = new Path(fixture, "Select * From table1, products Where column1_2 >= 1 And Expired = 1;", 4);
+        Path path1 = new Path(fixture, "Select * From table1, products Where column1_2 < 1 And expired = 0;", 1, true);
+        Path path2 = new Path(fixture, "Select * From table1, products Where column1_2 < 1 And expired = 1;", 2, false);
+        Path path3 = new Path(fixture, "Select * From table1, products Where column1_2 >= 1 And expired = 0;", 3, false);
+        Path path4 = new Path(fixture, "Select * From table1, products Where column1_2 >= 1 And expired = 1;", 4, true);
 
-        return new Result("Select * From table1, products Where column1_2 < 1 And Expired = 0",
+        return new Result("Select * From table1, products Where column1_2 < 1 And expired = 0;",
                 Arrays.asList(path1, path2, path3, path4));
     }
 }

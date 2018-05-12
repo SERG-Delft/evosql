@@ -92,7 +92,7 @@ public abstract class Approach {
 
         // Extract column names
         List<String> columns = new ArrayList<>();
-        for (int i = 0; i < meta.getColumnCount(); i++) {
+        for (int i = 1; i <= meta.getColumnCount(); i++) {
             columns.add(meta.getColumnName(i));
         }
 

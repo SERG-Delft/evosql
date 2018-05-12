@@ -152,7 +152,7 @@ public abstract class JUnitGenerator implements Generator {
                     + "@param  isUpdate Whether the query is a data modification statement.\n"
                     + "@return Whether the query execution has succeeded.\n")
                     .addComment("TODO: Implement method stub")
-                    .addStatement("return false");
+                    .addStatement("return 0");
         }
 
         return runSQL.build();

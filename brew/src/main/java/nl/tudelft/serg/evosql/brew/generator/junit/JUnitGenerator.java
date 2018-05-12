@@ -350,7 +350,7 @@ public abstract class JUnitGenerator implements Generator {
         pTestBuilder.addStatement("$T result = runSQL($L, false)", int.class, NAME_PRODUCTION_QUERY);
 
         // Assert
-        pTestBuilder.addComment("Assert: verify that at least one resulting row was returned");
+        pTestBuilder.addComment("Assert: verify that the expected amount of rows are returned");
         pTestBuilder.addStatement("$T.assertEquals($L, result)", assertionClass, expected);
         return pTestBuilder.build();
     }

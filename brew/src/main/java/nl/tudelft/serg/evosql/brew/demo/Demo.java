@@ -23,8 +23,8 @@ public class Demo {
     /**
      * This is the query on which we will generate tests.
      */
-    //final static String QUERY_TO_RUN = "SELECT * FROM Products t WHERE t.Price < (SELECT MAX(Type) FROM Product_Detail t2 WHERE t.Product = t2.Name) AND t.Price > (SELECT MAX(Type) FROM Product_Detail t2 WHERE t.Product = t2.Name) - 10";
-    final static String QUERY_TO_RUN = "SELECT * FROM Products t WHERE t.Price < 10";
+    final static String QUERY_TO_RUN = "SELECT * FROM Products t WHERE t.Price < (SELECT MAX(Type) FROM Product_Detail t2 WHERE t.Product = t2.Name) AND t.Price > (SELECT MAX(Type) FROM Product_Detail t2 WHERE t.Product = t2.Name) - 10";
+    //final static String QUERY_TO_RUN = "SELECT * FROM Products t WHERE t.Price < 10";
     public static void main(String[] args) {
         //Connection data to production database
         ConnectionData connectionDataProd = new ConnectionData(

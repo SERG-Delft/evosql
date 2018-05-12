@@ -109,7 +109,7 @@ public class JUnit4SmallTest {
     runSQL("INSERT INTO `table1` (`column1_1`, `column1_2`, `column1_3`) VALUES (1, 0.5, 'The first row of table 1.'), (2, 1.5, 'The second row.');", true);
     // Act: run a selection query on the database
     int result = runSQL(PRODUCTION_QUERY, false);
-    // Assert: verify that at least one resulting row was returned
+    // Assert: verify that the expected amount of rows is returned
     Assert.assertEquals(1, result);
   }
 
@@ -119,7 +119,7 @@ public class JUnit4SmallTest {
     runSQL("INSERT INTO `table1` (`column1_1`, `column1_2`, `column1_3`) VALUES (1, 0.5, 'The first row of table 1.'), (2, 1.5, 'The second row.');", true);
     // Act: run a selection query on the database
     int result = runSQL(PRODUCTION_QUERY, false);
-    // Assert: verify that at least one resulting row was returned
+    // Assert: verify that the expected amount of rows is returned
     Assert.assertEquals(1, result);
   }
 }

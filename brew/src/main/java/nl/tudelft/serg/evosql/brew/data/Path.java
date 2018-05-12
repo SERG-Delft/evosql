@@ -18,4 +18,7 @@ public class Path {
 
     /** The path number. */
     private final int pathNumber;
+
+    /** If path is a success from production query (returns something). */
+    private final boolean success;
 }

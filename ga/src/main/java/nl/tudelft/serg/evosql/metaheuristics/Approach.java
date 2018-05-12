@@ -77,8 +77,16 @@ public abstract class Approach {
 	public boolean hasOutput(Fixture fixture) throws SQLException {
 		return hasOutput(fixture, "", -1);
 	}
-	
+
+	public boolean hasOutput(Fixture fixture, String sql) throws SQLException {
+		return hasOutput(fixture, sql, "", -1);
+	}
+
 	protected boolean hasOutput (Fixture fixture, String excludeTableName, int excludeIndex) throws SQLException {
+		return hasOutput(fixture, pathToTest, excludeTableName, excludeIndex);
+	}
+
+	protected boolean hasOutput (Fixture fixture, String sql, String excludeTableName, int excludeIndex) throws SQLException {
 		// Truncate tables in Instrumented DB
 		for (TableSchema tableSchema : tableSchemas.values()) {
 			genetic.Instrumenter.execute(tableSchema.getTruncateSQL());
@@ -92,11 +100,9 @@ public abstract class Approach {
 		Statement st = genetic.Instrumenter.getStatement();
 
 		try {
-			ResultSet res = st.executeQuery(pathToTest);
-			if (res.next()) // If next returns true there is at least one row.
-				return true;
-			else
-				return false;
+			ResultSet res = st.executeQuery(sql);
+			// If next returns true there is at least one row.
+			return res.next();
 		} catch (SQLException e) {
 			if (!exceptions.contains(e.getMessage())) {
 				exceptions += ", " + e.getMessage();

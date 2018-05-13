@@ -72,7 +72,7 @@ public abstract class JUnitGenerator implements Generator {
         typeSpecBuilder.addMethod(generateAfterAll());
 
         for (Path path : result.getPaths()) {
-            typeSpecBuilder.addMethod(generatePathTest(path, vendorOptions, path.getProductionOutput().size()));
+            typeSpecBuilder.addMethod(generatePathTest(path, vendorOptions));
         }
 
         JavaFile javaFile = JavaFile.builder(jUnitGeneratorSettings.getFilePackage(), typeSpecBuilder.build()).build();
@@ -129,8 +129,7 @@ public abstract class JUnitGenerator implements Generator {
                     .addStatement("$T statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, " +
                             "ResultSet.CONCUR_READ_ONLY)", Statement.class)
                     .beginControlFlow("if (isUpdate == true)")
-                    .addStatement("statement.executeUpdate(sql)")
-                    .addStatement("return 0")
+                    .addStatement("return statement.executeUpdate(sql)")
                     .nextControlFlow("else")
                     .addStatement("$T resultSet = statement.executeQuery(sql)", ResultSet.class)
                     .beginControlFlow("if(resultSet.last())")
@@ -330,7 +329,7 @@ public abstract class JUnitGenerator implements Generator {
      * @param vendorOptions The vendor options to use.
      * @return A method specification for a single unit test.
      */
-    private MethodSpec generatePathTest(Path path, VendorOptions vendorOptions, int expected) {
+    private MethodSpec generatePathTest(Path path, VendorOptions vendorOptions) {
         // Method signature
         MethodSpec.Builder pTestBuilder = MethodSpec.methodBuilder(
                 String.format("generatedTest%d", path.getPathNumber()));
@@ -350,8 +349,8 @@ public abstract class JUnitGenerator implements Generator {
         pTestBuilder.addStatement("$T result = runSQL($L, false)", int.class, NAME_PRODUCTION_QUERY);
 
         // Assert
-        pTestBuilder.addComment("Assert: verify that the expected amount of rows is returned");
-        pTestBuilder.addStatement("$T.assertEquals($L, result)", assertionClass, expected);
+        pTestBuilder.addComment("Assert: verify that the expected number of rows is returned");
+        pTestBuilder.addStatement("$T.assertEquals($L, result)", assertionClass, path.getProductionOutput().size());
         return pTestBuilder.build();
     }
 }

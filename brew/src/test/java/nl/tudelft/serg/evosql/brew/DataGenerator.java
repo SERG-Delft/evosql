@@ -1,7 +1,6 @@
 package nl.tudelft.serg.evosql.brew;
 
 import nl.tudelft.serg.evosql.brew.data.*;
-import nl.tudelft.serg.evosql.metaheuristics.DatabaseOutput;
 
 import java.util.*;
 
@@ -102,9 +101,9 @@ public class DataGenerator {
 
 
         // TODO: Also pass output to the paths, instead of empty data.
-        DatabaseOutput dbOutput1 = new DatabaseOutput();
+        List<Map<String,String>> dbOutput1 = new ArrayList<>();
         dbOutput1.add(new HashMap<>());
-        DatabaseOutput dbOutput2 = new DatabaseOutput();
+        List<Map<String,String>> dbOutput2 = new ArrayList<>();
 
 
         // Make fixture

@@ -79,7 +79,7 @@ public class JUnit4MediumTest {
     runSQL("INSERT INTO `products` (`product_name`, `expired`, `expiry_date`) VALUES ('Milk', 0, '2018-03-22 00:00:00'), ('Yogurt', 1, '2018-03-15 00:00:00'), ('Salt', 0, '2025-12-31 23:59:59');", true);
     // Act: run a selection query on the database
     int result = runSQL(PRODUCTION_QUERY, false);
-    // Assert: verify that the expected amount of rows is returned
+    // Assert: verify that the expected number of rows is returned
     Assert.assertEquals(1, result);
   }
 
@@ -90,7 +90,7 @@ public class JUnit4MediumTest {
     runSQL("INSERT INTO `products` (`product_name`, `expired`, `expiry_date`) VALUES ('Milk', 0, '2018-03-22 00:00:00'), ('Yogurt', 1, '2018-03-15 00:00:00'), ('Salt', 0, '2025-12-31 23:59:59');", true);
     // Act: run a selection query on the database
     int result = runSQL(PRODUCTION_QUERY, false);
-    // Assert: verify that the expected amount of rows is returned
+    // Assert: verify that the expected number of rows is returned
     Assert.assertEquals(0, result);
   }
 
@@ -101,7 +101,7 @@ public class JUnit4MediumTest {
     runSQL("INSERT INTO `products` (`product_name`, `expired`, `expiry_date`) VALUES ('Milk', 0, '2018-03-22 00:00:00'), ('Yogurt', 1, '2018-03-15 00:00:00'), ('Salt', 0, '2025-12-31 23:59:59');", true);
     // Act: run a selection query on the database
     int result = runSQL(PRODUCTION_QUERY, false);
-    // Assert: verify that the expected amount of rows is returned
+    // Assert: verify that the expected number of rows is returned
     Assert.assertEquals(0, result);
   }
 
@@ -112,7 +112,7 @@ public class JUnit4MediumTest {
     runSQL("INSERT INTO `products` (`product_name`, `expired`, `expiry_date`) VALUES ('Milk', 0, '2018-03-22 00:00:00'), ('Yogurt', 1, '2018-03-15 00:00:00'), ('Salt', 0, '2025-12-31 23:59:59');", true);
     // Act: run a selection query on the database
     int result = runSQL(PRODUCTION_QUERY, false);
-    // Assert: verify that the expected amount of rows is returned
+    // Assert: verify that the expected number of rows is returned
     Assert.assertEquals(1, result);
   }
 }

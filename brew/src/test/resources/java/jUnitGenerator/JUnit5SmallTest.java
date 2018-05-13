@@ -48,8 +48,7 @@ public class JUnit5SmallTest {
       Connection connection = DriverManager.getConnection(DB_JDBC_URL, DB_USER, DB_PASSWORD);
       Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
       if (isUpdate == true) {
-        statement.executeUpdate(sql);
-        return 0;
+        return statement.executeUpdate(sql);
       } else {
         ResultSet resultSet = statement.executeQuery(sql);
         if(resultSet.last()) {
@@ -109,7 +108,7 @@ public class JUnit5SmallTest {
     runSQL("INSERT INTO `table1` (`column1_1`, `column1_2`, `column1_3`) VALUES (1, 0.5, 'The first row of table 1.'), (2, 1.5, 'The second row.');", true);
     // Act: run a selection query on the database
     int result = runSQL(PRODUCTION_QUERY, false);
-    // Assert: verify that the expected amount of rows is returned
+    // Assert: verify that the expected number of rows is returned
     Assertions.assertEquals(1, result);
   }
 
@@ -119,7 +118,7 @@ public class JUnit5SmallTest {
     runSQL("INSERT INTO `table1` (`column1_1`, `column1_2`, `column1_3`) VALUES (1, 0.5, 'The first row of table 1.'), (2, 1.5, 'The second row.');", true);
     // Act: run a selection query on the database
     int result = runSQL(PRODUCTION_QUERY, false);
-    // Assert: verify that the expected amount of rows is returned
+    // Assert: verify that the expected number of rows is returned
     Assertions.assertEquals(1, result);
   }
 }

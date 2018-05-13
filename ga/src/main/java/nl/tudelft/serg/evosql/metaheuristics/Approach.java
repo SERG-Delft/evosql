@@ -81,7 +81,7 @@ public abstract class Approach {
 		return minimizedFixture;
 	}
 
-	public DatabaseOutput generateOutput(Fixture fixture, String sql) throws SQLException {
+	public DatabaseOutput fetchOutput(Fixture fixture, String sql) throws SQLException {
 		insertData(fixture, "", -1);
 		Statement st = genetic.Instrumenter.getStatement();
 

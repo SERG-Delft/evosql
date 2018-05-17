@@ -31,7 +31,7 @@ public class GAApproach extends Approach {
 	private FixtureMutation mutation;
 	
 	/** Comparator **/
-	private FixtureComparator fc = new FixtureComparator();
+	private Comparator fc = new FixtureComparator();
 
 	/** Crossover operator **/
 	private FixtureCrossover crossover = new FixtureCrossover(new Randomness());
@@ -65,6 +65,14 @@ public class GAApproach extends Approach {
 		// if it's baseline, there will be only a single generation, and population will be larger
 		populationSize = EvoSQLConfiguration.POPULATION_SIZE; // * (baseline ? 2 : 1);
 
+	}
+
+	/**
+	 * Sets the Fixturer Comparator. Used for testing purposes.
+	 * @param comparator comparator to set
+	 */
+	public void setFc(Comparator comparator) {
+		this.fc = comparator;
 	}
 
 	private void initialize() throws SQLException {

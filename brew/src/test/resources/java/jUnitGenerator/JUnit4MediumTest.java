@@ -25,9 +25,9 @@ public class JUnit4MediumTest {
    * @param  isUpdate Whether the query is a data modification statement.
    * @return Whether the query execution has succeeded.
    */
-  private static boolean runSQL(String sql, boolean isUpdate) {
+  private static int runSQL(String sql, boolean isUpdate) {
     // TODO: Implement method stub
-    return false;
+    return 0;
   }
 
   /**
@@ -78,9 +78,9 @@ public class JUnit4MediumTest {
     runSQL("INSERT INTO `table1` (`column1_1`, `column1_2`) VALUES (1, 'String of row 1'), (2, 'String of row 2');", true);
     runSQL("INSERT INTO `products` (`product_name`, `expired`, `expiry_date`) VALUES ('Milk', 0, '2018-03-22 00:00:00'), ('Yogurt', 1, '2018-03-15 00:00:00'), ('Salt', 0, '2025-12-31 23:59:59');", true);
     // Act: run a selection query on the database
-    boolean result = runSQL(PRODUCTION_QUERY, false);
-    // Assert: verify that at least one resulting row was returned
-    Assert.assertEquals(true, result);
+    int result = runSQL(PRODUCTION_QUERY, false);
+    // Assert: verify that the expected number of rows is returned
+    Assert.assertEquals(1, result);
   }
 
   @Test
@@ -89,9 +89,9 @@ public class JUnit4MediumTest {
     runSQL("INSERT INTO `table1` (`column1_1`, `column1_2`) VALUES (1, 'String of row 1'), (2, 'String of row 2');", true);
     runSQL("INSERT INTO `products` (`product_name`, `expired`, `expiry_date`) VALUES ('Milk', 0, '2018-03-22 00:00:00'), ('Yogurt', 1, '2018-03-15 00:00:00'), ('Salt', 0, '2025-12-31 23:59:59');", true);
     // Act: run a selection query on the database
-    boolean result = runSQL(PRODUCTION_QUERY, false);
-    // Assert: verify that at least one resulting row was returned
-    Assert.assertEquals(false, result);
+    int result = runSQL(PRODUCTION_QUERY, false);
+    // Assert: verify that the expected number of rows is returned
+    Assert.assertEquals(0, result);
   }
 
   @Test
@@ -100,9 +100,9 @@ public class JUnit4MediumTest {
     runSQL("INSERT INTO `table1` (`column1_1`, `column1_2`) VALUES (1, 'String of row 1'), (2, 'String of row 2');", true);
     runSQL("INSERT INTO `products` (`product_name`, `expired`, `expiry_date`) VALUES ('Milk', 0, '2018-03-22 00:00:00'), ('Yogurt', 1, '2018-03-15 00:00:00'), ('Salt', 0, '2025-12-31 23:59:59');", true);
     // Act: run a selection query on the database
-    boolean result = runSQL(PRODUCTION_QUERY, false);
-    // Assert: verify that at least one resulting row was returned
-    Assert.assertEquals(false, result);
+    int result = runSQL(PRODUCTION_QUERY, false);
+    // Assert: verify that the expected number of rows is returned
+    Assert.assertEquals(0, result);
   }
 
   @Test
@@ -111,8 +111,8 @@ public class JUnit4MediumTest {
     runSQL("INSERT INTO `table1` (`column1_1`, `column1_2`) VALUES (1, 'String of row 1'), (2, 'String of row 2');", true);
     runSQL("INSERT INTO `products` (`product_name`, `expired`, `expiry_date`) VALUES ('Milk', 0, '2018-03-22 00:00:00'), ('Yogurt', 1, '2018-03-15 00:00:00'), ('Salt', 0, '2025-12-31 23:59:59');", true);
     // Act: run a selection query on the database
-    boolean result = runSQL(PRODUCTION_QUERY, false);
-    // Assert: verify that at least one resulting row was returned
-    Assert.assertEquals(true, result);
+    int result = runSQL(PRODUCTION_QUERY, false);
+    // Assert: verify that the expected number of rows is returned
+    Assert.assertEquals(1, result);
   }
 }

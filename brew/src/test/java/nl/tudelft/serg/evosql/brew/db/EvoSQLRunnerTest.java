@@ -8,6 +8,7 @@ import nl.tudelft.serg.evosql.fixture.FixtureRow;
 import nl.tudelft.serg.evosql.fixture.FixtureTable;
 import nl.tudelft.serg.evosql.fixture.type.DBInteger;
 import nl.tudelft.serg.evosql.fixture.type.DBString;
+import nl.tudelft.serg.evosql.metaheuristics.DatabaseOutput;
 import nl.tudelft.serg.evosql.sql.ColumnSchema;
 import nl.tudelft.serg.evosql.sql.TableSchema;
 import org.junit.jupiter.api.Test;
@@ -87,7 +88,8 @@ public class EvoSQLRunnerTest {
                 "Select * From table" + n,
                 0,
                 evoSQLFixture,
-                true,
+                // TODO: Make a real dbOutput
+                new DatabaseOutput(),
                 0,
                 1,
                 ""

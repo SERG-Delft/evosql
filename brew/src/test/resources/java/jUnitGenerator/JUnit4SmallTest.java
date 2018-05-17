@@ -43,20 +43,23 @@ public class JUnit4SmallTest {
    * @param  isUpdate Whether the query is a data modification statement.
    * @return Whether the query execution has succeeded.
    */
-  private static boolean runSQL(String sql, boolean isUpdate) {
+  private static int runSQL(String sql, boolean isUpdate) {
     try {
       Connection connection = DriverManager.getConnection(DB_JDBC_URL, DB_USER, DB_PASSWORD);
-      Statement statement = connection.createStatement();
+      Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
       if (isUpdate == true) {
-        statement.executeUpdate(sql);
-        return true;
+        return statement.executeUpdate(sql);
       } else {
         ResultSet resultSet = statement.executeQuery(sql);
-        return resultSet.next();
+        if(resultSet.last()) {
+          return resultSet.getRow();
+        } else {
+          return 0;
+        }
       }
     } catch (SQLException sqlException) {
       sqlException.printStackTrace();
-      return false;
+      return 0;
     }
   }
 
@@ -104,9 +107,9 @@ public class JUnit4SmallTest {
     // Arrange: set up the fixture data
     runSQL("INSERT INTO `table1` (`column1_1`, `column1_2`, `column1_3`) VALUES (1, 0.5, 'The first row of table 1.'), (2, 1.5, 'The second row.');", true);
     // Act: run a selection query on the database
-    boolean result = runSQL(PRODUCTION_QUERY, false);
-    // Assert: verify that at least one resulting row was returned
-    Assert.assertEquals(true, result);
+    int result = runSQL(PRODUCTION_QUERY, false);
+    // Assert: verify that the expected number of rows is returned
+    Assert.assertEquals(1, result);
   }
 
   @Test
@@ -114,8 +117,8 @@ public class JUnit4SmallTest {
     // Arrange: set up the fixture data
     runSQL("INSERT INTO `table1` (`column1_1`, `column1_2`, `column1_3`) VALUES (1, 0.5, 'The first row of table 1.'), (2, 1.5, 'The second row.');", true);
     // Act: run a selection query on the database
-    boolean result = runSQL(PRODUCTION_QUERY, false);
-    // Assert: verify that at least one resulting row was returned
-    Assert.assertEquals(false, result);
+    int result = runSQL(PRODUCTION_QUERY, false);
+    // Assert: verify that the expected number of rows is returned
+    Assert.assertEquals(1, result);
   }
 }

@@ -34,10 +34,16 @@ public class DataGenerator {
         FixtureTable table1 = new FixtureTable(table1Schema,
                 Arrays.asList(new FixtureRow(row1_1Data, table1Schema), new FixtureRow(row1_2Data, table1Schema)));
 
+        // Make output lists
+        List<Map<String,String>> output1 = new ArrayList<>();
+        output1.add(row1_1Data);
+        List<Map<String,String>> output2 = new ArrayList<>();
+        output2.add(row1_2Data);
+
         // Make fixture
         Fixture fixture = new Fixture(Arrays.asList(table1));
-        Path path1 = new Path(fixture, "Select * From table1 Where column1_2 < 1;", 1, true);
-        Path path2 = new Path(fixture, "Select * From table1 Where column1_2 >= 1;", 2, false);
+        Path path1 = new Path(fixture, "Select * From table1 Where column1_2 < 1;", 1, true, output1);
+        Path path2 = new Path(fixture, "Select * From table1 Where column1_2 >= 1;", 2, false, output2);
 
         return new Result("Select * From table1 Where column1_2 < 1;",
                 Arrays.asList(path1, path2));
@@ -93,12 +99,19 @@ public class DataGenerator {
         FixtureTable productsTable = new FixtureTable(productsSchema,
                 Arrays.asList(new FixtureRow(row2_1Data, productsSchema), new FixtureRow(row2_2Data, productsSchema), new FixtureRow(row2_3Data, productsSchema)));
 
+
+        // TODO: Also pass output to the paths, instead of empty data.
+        List<Map<String,String>> dbOutput1 = new ArrayList<>();
+        dbOutput1.add(new HashMap<>());
+        List<Map<String,String>> dbOutput2 = new ArrayList<>();
+
+
         // Make fixture
         Fixture fixture = new Fixture(Arrays.asList(table1, productsTable));
-        Path path1 = new Path(fixture, "Select * From table1, products Where column1_2 < 1 And expired = 0;", 1, true);
-        Path path2 = new Path(fixture, "Select * From table1, products Where column1_2 < 1 And expired = 1;", 2, false);
-        Path path3 = new Path(fixture, "Select * From table1, products Where column1_2 >= 1 And expired = 0;", 3, false);
-        Path path4 = new Path(fixture, "Select * From table1, products Where column1_2 >= 1 And expired = 1;", 4, true);
+        Path path1 = new Path(fixture, "Select * From table1, products Where column1_2 < 1 And expired = 0;", 1, true, dbOutput1);
+        Path path2 = new Path(fixture, "Select * From table1, products Where column1_2 < 1 And expired = 1;", 2, false, dbOutput2);
+        Path path3 = new Path(fixture, "Select * From table1, products Where column1_2 >= 1 And expired = 0;", 3, false, dbOutput2);
+        Path path4 = new Path(fixture, "Select * From table1, products Where column1_2 >= 1 And expired = 1;", 4, true, dbOutput1);
 
         return new Result("Select * From table1, products Where column1_2 < 1 And expired = 0;",
                 Arrays.asList(path1, path2, path3, path4));

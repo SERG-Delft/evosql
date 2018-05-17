@@ -1,25 +1,26 @@
 package nl.tudelft.serg.evosql;
 
 import nl.tudelft.serg.evosql.fixture.Fixture;
+import nl.tudelft.serg.evosql.metaheuristics.DatabaseOutput;
 
 public class PathResult {
 	private int pathNo;
 	private String pathSql;
 	private Fixture data;
 	private boolean success;
-	private boolean productionSuccess;
+	private DatabaseOutput productionOutput;
 	private String message;
 	private long runtime;
 	private int generations;
 	private int individualCount;
 	private String exceptions;
 	
-	public PathResult(int pathNo, String pathSql, long runtime, Fixture data, boolean productionSuccess, int generations, int individualCount, String exceptions) {
+	public PathResult(int pathNo, String pathSql, long runtime, Fixture data, DatabaseOutput productionOutput, int generations, int individualCount, String exceptions) {
 		this.pathNo = pathNo;
 		this.pathSql = pathSql;
 		this.data = data;
 		this.success = true;
-		this.productionSuccess = productionSuccess;
+		this.productionOutput = productionOutput;
 		this.runtime = runtime;
 		this.message = "";
 		this.generations = generations;
@@ -31,7 +32,7 @@ public class PathResult {
 		this.pathNo = pathNo;
 		this.pathSql = pathSql;
 		this.success = false;
-		this.productionSuccess = false;
+		this.productionOutput = null;
 		this.message = message;
 		this.runtime = runtime;
 		this.generations = generations;
@@ -56,7 +57,11 @@ public class PathResult {
 	}
 
 	public boolean isProductionSuccess() {
-		return productionSuccess;
+		return productionOutput != null;
+	}
+
+	public DatabaseOutput getProductionOutput() {
+		return productionOutput;
 	}
 
 	public String getMessage() {

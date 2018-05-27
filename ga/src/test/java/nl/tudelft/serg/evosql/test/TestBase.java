@@ -95,6 +95,7 @@ public class TestBase {
 	@After
 	public void tearDown() {
 		population = new ArrayList<>();
+		maxGenerations = Integer.MAX_VALUE;
 		try {
 			genetic.Instrumenter.execute("SHUTDOWN");
 		} catch (SQLException e) {

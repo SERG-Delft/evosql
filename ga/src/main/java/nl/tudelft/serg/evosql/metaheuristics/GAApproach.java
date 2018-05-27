@@ -152,7 +152,7 @@ public class GAApproach extends Approach {
 			// Set the new population as the POPULATION_SIZE best
 			population = union.subList(0, populationSize);
 
-			log.debug("Generation = {}, best Fitness Function = {}", generations, population.get(0).getFitness());// + " for fixture: " + population.get(0));
+			log.debug("Generation = {}, best Fitness Function = {}, value = {}", generations, population.get(0).getFitness(), population.get(0).getFitness().getFitnessValue());// + " for fixture: " + population.get(0));
 			generations++;
 		}
 		/*
@@ -163,7 +163,7 @@ public class GAApproach extends Approach {
 		}
 		*/
 		log.info("Total generations: {}", generations);
-		log.info("Best Fitness Function = {}", population.get(0).getFitness());
+		log.info("Best Fitness Function = {}, Value = {}", population.get(0).getFitness(), population.get(0).getFitness().getFitnessValue());
 		return minimize(population.get(0));
 
 	}

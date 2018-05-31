@@ -5,12 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.*;
-import java.nio.Buffer;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * This class can read in queries and return them as a list of Strings.
@@ -18,7 +14,14 @@ import java.util.stream.Stream;
 @Data
 public class QueryReader {
 
-    public List<String> readQueries(File file, int lineNo) {
+    /**
+     * Reads all queries in the given file and returns them as a list of strings.
+     * Does not read in comment lines.
+     *
+     * @param file file to read
+     * @return all queries in file.
+     */
+    public List<String> readQueries(File file) {
         try {
             BufferedReader br = new BufferedReader(new FileReader(file));
             return br.lines()
@@ -29,6 +32,18 @@ public class QueryReader {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * Reads a single query from a file given by the line number.
+     * Takes line numbers counting from zero onwards.
+     *
+     * @param file   file to read
+     * @param lineNo line number to read
+     * @return query in file.
+     */
+    public String readQuery(File file, int lineNo) {
+        return readQueries(file).get(lineNo);
     }
 
 }

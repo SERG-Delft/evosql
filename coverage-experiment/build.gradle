@@ -13,6 +13,7 @@ apply plugin: 'findbugs'
 
 dependencies {
     implementation project(':ga')
+    implementation project(':brew')
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.1.1'

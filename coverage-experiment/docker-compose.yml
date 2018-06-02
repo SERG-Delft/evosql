@@ -1,0 +1,11 @@
+version: '3'
+services:
+  app:
+    build: ./docker/app
+    command: "/root/wait-for-it.sh db:5432 --timeout=0 -- echo Done!"
+    depends_on:
+      - 'db'
+  db:
+    build: ./docker/db
+    ports:
+      - '5432'

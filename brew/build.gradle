@@ -21,4 +21,7 @@ dependencies {
     // because they are used for code generation types.
     implementation 'junit:junit:4.12'
     implementation 'org.junit.jupiter:junit-jupiter-api:5.1.1'
+
+    compile 'mysql:mysql-connector-java:8.0.8-dmr'
+    compile 'org.postgresql:postgresql:42.2.2'
 }

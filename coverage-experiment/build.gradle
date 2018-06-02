@@ -17,3 +17,9 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.1.1'
 }
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'nl.tudelft.serg.evosql.experiment.Runner'
+    }
+}

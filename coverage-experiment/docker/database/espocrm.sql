@@ -22,12 +22,13 @@ SET row_security = off;
 -- Name: espocrm; Type: DATABASE; Schema: -; Owner: postgres
 --
 
-CREATE DATABASE espocrm WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'en_US.utf8' LC_CTYPE = 'en_US.utf8';
+CREATE DATABASE espocrm_test WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'en_US.utf8' LC_CTYPE = 'en_US.utf8';
+CREATE DATABASE espocrm_prod WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'en_US.utf8' LC_CTYPE = 'en_US.utf8';
 
 
-ALTER DATABASE espocrm OWNER TO postgres;
+ALTER DATABASE espocrm_prod OWNER TO postgres;
 
-\connect espocrm
+\connect espocrm_prod
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;

@@ -22,12 +22,13 @@ SET row_security = off;
 -- Name: suitecrm; Type: DATABASE; Schema: -; Owner: postgres
 --
 
-CREATE DATABASE suitecrm WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'en_US.utf8' LC_CTYPE = 'en_US.utf8';
+CREATE DATABASE suitecrm_test WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'en_US.utf8' LC_CTYPE = 'en_US.utf8';
+CREATE DATABASE suitecrm_prod WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'en_US.utf8' LC_CTYPE = 'en_US.utf8';
 
 
-ALTER DATABASE suitecrm OWNER TO postgres;
+ALTER DATABASE suitecrm_prod OWNER TO postgres;
 
-\connect suitecrm
+\connect suitecrm_prod
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;

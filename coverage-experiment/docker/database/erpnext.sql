@@ -22,12 +22,13 @@ SET row_security = off;
 -- Name: erpnext; Type: DATABASE; Schema: -; Owner: postgres
 --
 
-CREATE DATABASE erpnext WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'en_US.utf8' LC_CTYPE = 'en_US.utf8';
+CREATE DATABASE erpnext_test WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'en_US.utf8' LC_CTYPE = 'en_US.utf8';
+CREATE DATABASE erpnext_prod WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'en_US.utf8' LC_CTYPE = 'en_US.utf8';
 
 
-ALTER DATABASE erpnext OWNER TO postgres;
+ALTER DATABASE erpnext_prod OWNER TO postgres;
 
-\connect erpnext
+\connect erpnext_prod
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;

@@ -4,7 +4,7 @@ services:
     build:
       context: .
       dockerfile: ./docker/app/Dockerfile
-    command: "/root/wait-for-it.sh db:5432 --timeout=0 -- echo Done!"
+    command: "/root/wait-for-it.sh db:5432 --timeout=0 -- ce"
     depends_on:
       - 'db'
   db:

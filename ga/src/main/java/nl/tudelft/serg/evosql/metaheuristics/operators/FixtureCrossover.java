@@ -5,7 +5,6 @@ import nl.tudelft.serg.evosql.fixture.FixtureTable;
 import nl.tudelft.serg.evosql.util.random.Randomness;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class FixtureCrossover {
@@ -17,38 +16,50 @@ public class FixtureCrossover {
 
 	/**
 	 * Performs scattered crossover
-	 * @return a list with the two new offsprings
+	 * @return a list with the two new offspring
 	 */
-	public List<Fixture> crossover(Fixture parent1, Fixture parent2) {
+	public Fixture[] crossover(Fixture parent1, Fixture parent2) {
 
-		assert canBeDone(parent1, parent2) : "crossover can only happen if both parents have more than a single table";
+		if (parent1.getTables().size() < 1 || parent2.getTables().size() < 1 )
+			throw new IllegalArgumentException("Each solution must have at least one Table");
 
+		Fixture[] offspring = new Fixture[2];
 		List<FixtureTable> offspring1Tables = new ArrayList<>();
 		List<FixtureTable> offspring2Tables = new ArrayList<>();
 
-		// probability to send it to left or right is also random
-		double probability = random.nextDouble();
+		if (isApplicable(parent1, parent2)) {
+			// probability to send it to left or right is also random
+			double probability = random.nextDouble();
 
-		for(FixtureTable tableFromP1 : parent1.getTables()) {
-			// i do not trust on the unordered list, so that's why i' using table name and not indexes
-			FixtureTable tableFromP2 = parent2.getTable(tableFromP1.getName());
+			for (FixtureTable tableFromP1 : parent1.getTables()) {
+				// i do not trust on the unordered list, so that's why i' using table name and not indexes
+				FixtureTable tableFromP2 = parent2.getTable(tableFromP1.getName());
 
-			boolean left = random.nextDouble() < probability;
-			offspring1Tables.add(left ? tableFromP1.copy() : tableFromP2.copy());
-			offspring2Tables.add(left ? tableFromP2.copy() : tableFromP1.copy());
+				boolean left = random.nextDouble() < probability;
+				offspring1Tables.add(left ? tableFromP1.copy() : tableFromP2.copy());
+				offspring2Tables.add(left ? tableFromP2.copy() : tableFromP1.copy());
+			}
+
+			offspring[0] = new Fixture(offspring1Tables);
+			offspring[0].setChanged(true);
+			offspring[1] = new Fixture(offspring2Tables);
+			offspring[1].setChanged(true);
+		} else {
+			offspring[0] = parent1.copy();
+			offspring[1] = parent2.copy();
 		}
 
-		return Arrays.asList(
-				new Fixture(offspring1Tables),
-				new Fixture(offspring2Tables));
+		return offspring;
 
 	}
 
-	public boolean canBeDone(Fixture parent1, Fixture parent2) {
-		boolean parent1HasASingleTable = parent1.getTables().size() == 1;
-		boolean parent2HasASingleTable = parent2.getTables().size() == 1;
-
-		return !(parent1HasASingleTable || parent2HasASingleTable);
-
+	/**
+	 * The crossover can be applied only to Fixture with at least two Table each
+	 * @param parent1
+	 * @param parent2
+	 * @return true if the parents contain at least two Tables
+	 */
+	protected boolean isApplicable(Fixture parent1, Fixture parent2) {
+		return (parent1.getNumberOfTables()>1 && parent2.getNumberOfTables()>1);
 	}
 }

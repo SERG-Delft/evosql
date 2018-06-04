@@ -2,6 +2,7 @@ package nl.tudelft.serg.evosql.metaheuristics.operators;
 
 import java.util.Comparator;
 
+import genetic.QueryLevelData;
 import nl.tudelft.serg.evosql.fixture.Fixture;
 
 public class FixtureComparator implements Comparator<Fixture>{
@@ -13,7 +14,7 @@ public class FixtureComparator implements Comparator<Fixture>{
 	public int compare(Fixture o1, Fixture o2) {		
 		FixtureFitness f1 = o1.getFitness();
 		FixtureFitness f2 = o2.getFitness();
-		
+
 		// Check nulls
 		if (f1 == null && f2 == null)
 			return 0;
@@ -23,7 +24,7 @@ public class FixtureComparator implements Comparator<Fixture>{
 			return -1;
 
 		return Double.compare(f1.getFitnessValue(), f2.getFitnessValue());
-		/*
+/*
 		Original code:
 
 		// Compare max query levels, higher is better
@@ -43,6 +44,6 @@ public class FixtureComparator implements Comparator<Fixture>{
 		}
 		
 		return 0;
-		*/
+*/
 	}
 }

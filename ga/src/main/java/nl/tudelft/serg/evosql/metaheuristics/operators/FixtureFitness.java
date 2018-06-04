@@ -45,7 +45,7 @@ public class FixtureFitness {
 	 */
 	public double getFitnessValue() {
 		QueryLevelData qld = lastLevelData;
-		double fitness = Integer.MAX_VALUE;
+		double fitness;
 		double step_level = depthExtractor.getQueryDepth() - getQueryLevel();
 		if(step_level < 0) {
 			throw new EvoSQLException("Error in depth extractor while caculating fitness level (negative step_level: " + step_level + ")");

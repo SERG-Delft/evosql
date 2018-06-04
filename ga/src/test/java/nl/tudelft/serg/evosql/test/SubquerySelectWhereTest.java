@@ -7,7 +7,6 @@ import nl.tudelft.serg.evosql.fixture.Fixture;
 import nl.tudelft.serg.evosql.fixture.FixtureRow;
 import nl.tudelft.serg.evosql.fixture.FixtureTable;
 import nl.tudelft.serg.evosql.sql.TableSchema;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;

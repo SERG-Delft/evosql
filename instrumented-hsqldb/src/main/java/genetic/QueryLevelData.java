@@ -24,7 +24,11 @@ public class QueryLevelData implements Comparator<QueryLevelData> {
 			prevLevelData = prev.expandToQueryLevel(queryLevel - 1);
 		}
 	}
-	
+
+	public List<QueryLevelData> getSubLevelData() {
+		return subLevelData;
+	}
+
 	public QueryLevelData expandToQueryLevel(int queryLevel) {
 		QueryLevelData currentQFD = this;
 		while (currentQFD.queryLevel < queryLevel) {

@@ -44,13 +44,18 @@ public class FixtureFitness {
 	 * @return fitness value.
 	 */
 	public double getFitnessValue() {
+		QueryLevelData qld = lastLevelData;
 		double fitness = Integer.MAX_VALUE;
 		double step_level = depthExtractor.getQueryDepth() - getQueryLevel();
 		if(step_level < 0) {
 			throw new EvoSQLException("Error in depth extractor while caculating fitness level (negative step_level: " + step_level + ")");
 		}
+		while (qld.getSubLevelData() != null && qld.getSubLevelData().size() == 1 && qld.getSubLevelData().get(0).getDistance() > 0) {
+			qld = qld.getSubLevelData().get(0);
+		}
+
 		//Take absolute of distance
-		double step_distance = Math.max(0, lastLevelData.getDistance());
+		double step_distance = Math.max(0, qld.getDistance());
 
 		//φ(x)=x/(x+1), normalizing formula from paper
 		double branch_distance = step_distance / (step_distance + 1d);
@@ -58,13 +63,20 @@ public class FixtureFitness {
 		//d(T,r) = step_level(T,r) + step_level (T, L)
 		fitness = step_level + branch_distance;
 
-		//log.debug("Step level = {}, Distance = {}, Step distance = {}, Branch distance = {}, Fitness value = {}", step_level, lastLevelData.getDistance(), step_distance, branch_distance, fitness);
+		//log.debug("Step level = {}, Distance = {}, Step distance = {}, Branch distance = {}, Fitness value = {}", step_level, qld.getDistance(), step_distance, branch_distance, fitness);
 
 		return fitness;
 	}
 	
-	public int getQueryLevel() {
-		return lastLevelData.getQueryLevel();
+	public int
+	getQueryLevel() {
+	    int level = 1;
+	    QueryLevelData qld = lastLevelData;
+	    while(qld.getSubLevelData() != null && !qld.getSubLevelData().isEmpty()) {
+	        level++;
+            qld = qld.getSubLevelData().get(0);
+        }
+		return level;
 	}
 
 	public int getMaxRangeVariableIndex(int i) {

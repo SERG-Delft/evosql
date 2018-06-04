@@ -88,7 +88,7 @@ public class SubquerySelectWhereTest extends TestBase {
         tables.add(productDetailsTable);
 
         population = Arrays.asList(fixture);
-        maxGenerations = 2;
+        maxGenerations = 500;
 
 		assertTrue(testExecutePath("SELECT * FROM PRODUCTS T WHERE T.PRICE < (SELECT MAX(TYPE) FROM (SELECT NAME, TYPE FROM PRODUCT_DETAIL WHERE LENGTH(NAME) = 2) T2 WHERE T.PRODUCT = T2.NAME)"));
 	}

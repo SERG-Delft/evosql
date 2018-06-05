@@ -7,4 +7,4 @@ project(':instrumented-hsqldb').projectDir = "$rootDir/instrumented-hsqldb" as F
 project(':ga').projectDir = "$rootDir/ga" as File
 project(':evaluation').projectDir = "$rootDir/evaluation" as File
 include 'brew'
-
+include 'coverage-experiment'

@@ -1,5 +1,13 @@
 package nl.tudelft.serg.evosql.experiment;
 
+import java.io.File;
+import java.nio.file.Paths;
+
+/**
+ * Main runner class. Implementation depends on whether it will be used as a client for
+ * a web server which hands out jobs or whether it should be autonomous and read a portion
+ * of the queries.
+ */
 public class Runner {
 
     public static void main(String[] args) {
@@ -15,4 +23,13 @@ public class Runner {
         // 5. Execute all tests that shouldn't pass and store results
         // 6. Output final results
     }
+
+    public QueryExperimentResult runForQuery(String filePath, int lineNo) {
+        QueryReader queryReader = new QueryReader();
+        String query = queryReader.readQuery(new File(filePath), lineNo);
+
+
+        return null;
+    }
+
 }

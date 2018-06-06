@@ -77,7 +77,7 @@ public class GAApproach extends Approach {
 
 	private void initialize() throws SQLException {
 		//1. Initial population
-		if(!skipInitialGeneration)
+		if (!skipInitialGeneration)
 			generateInitialPopulation();
 		
 		calculateFitness(population);
@@ -177,34 +177,47 @@ public class GAApproach extends Approach {
 	}
 
 	private void generateInitialPopulation() {
-		int currentPopulationSize = 0;
-		Random rand = new Random();
+		if (population == null)
+			population = new ArrayList<>();
+
 		List<Fixture> newPopulation = new ArrayList<>();
-		// If we have a previous population fed by EvoSQL, clone some of these
-		if (population != null && !population.isEmpty()) {
+
+		if (!population.isEmpty()){
+			Random rand = new Random();
+
 			// Order by fitness (the previous population should have fitness values)
 			Collections.sort(population, new FixtureComparator());
-			
+
 			// Select random individuals
-			boolean includesSolution = false;
 			for (int i = 0; i < population.size(); i++){
 				Fixture fixture = population.get(i);
-				if ((fixture.getFitness() != null && fixture.getFitness().getDistance() == 0 && !includesSolution) || // Always add one solution if there is one
+				if ((fixture.getFitness() != null && fixture.getFitness().getDistance() == 0 && i==0) || // Always add one solution if there is one
 						rand.nextDouble() <= EvoSQLConfiguration.P_CLONE_POPULATION) {
-					if (fixture.getFitness() != null && fixture.getFitness().getDistance() == 0) includesSolution = true;
 					// Get a copy of this fixture that matches the current path
 					Fixture newFixture = fixture.copy();
-					newFixture.setFitness(null); // make sure fitness is gone
+					newFixture.setFitness(fixture.getFitness()); // make sure fitness is gone
 					fixFixture(newFixture); // make sure all tables are present in the individual, and no more
 					newPopulation.add(newFixture);
-					currentPopulationSize++;
 				}
 			}
 		}
 
-		log.debug("Generating random initial population...");
+		newPopulation.addAll(generateRandomSolutions(populationSize - newPopulation.size()));
 
-		for(; currentPopulationSize < populationSize; currentPopulationSize++) {
+		log.debug("Generated random population with {} fixtures", newPopulation.size());
+
+		// Store the new population in the list given by EvoSQL
+		population = newPopulation;
+	}
+
+	/**
+	 * This utility methods creates a list of randomly generated Fixtures (solutions)
+	 * @param nSolutions number of solutions/fixtures to generate
+	 * @return list of newly genrated Fixtures
+	 */
+	protected List<Fixture> generateRandomSolutions(int nSolutions){
+		List<Fixture> solutions = new ArrayList<>();
+		while(solutions.size() < nSolutions) {
 			List<FixtureTable> tables = new ArrayList<FixtureTable>();
 			for (TableSchema tableSchema : tableSchemas.values()) {
 				tables.add(createFixtureTable(tableSchema, tables));
@@ -212,14 +225,11 @@ public class GAApproach extends Approach {
 
 			Fixture fixture = new Fixture(tables);
 			log.debug("Fixture created: {}", fixture);
-			newPopulation.add(fixture);
+			solutions.add(fixture);
 		}
-		log.debug("Generated random population with {} fixtures", newPopulation.size());
-
-		// Store the new population in the list given by EvoSQL
-		population.clear();
-		population.addAll(newPopulation);
+		return solutions;
 	}
+
 
 	public void calculateFitness(List<Fixture> solutions) throws SQLException{
 		for(Fixture fixture : population) {
@@ -245,7 +255,7 @@ public class GAApproach extends Approach {
 		
 		// Execute the path
 		genetic.Instrumenter.execute(pathToTest);
-		
+
 		FixtureFitness ff = new FixtureFitness(genetic.Instrumenter.getFitness(), depthExtractor);
 		fixture.setFitness(ff);
 		

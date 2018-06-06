@@ -46,6 +46,7 @@ public class TestBase {
 	static String database = "PUBLIC";
 	static String schema = "PUBLIC";
 	static String pwd = "";
+	static boolean skipInitialPopulation = false;
 	
 	static {
 		// Load HSQLDB driver
@@ -66,6 +67,16 @@ public class TestBase {
 	}
 
 	/**
+	 * Enables injection of initial population
+	 * @param newPopulation new population
+	 */
+	static void setPopulation(List<Fixture> newPopulation, boolean useMockito) {
+		population = newPopulation;
+		skipInitialPopulation = useMockito;
+	}
+
+
+	/**
 	 * Deletes the Database files in mem, then creates a new database with the necessary schema.
 	 */
 	@Before
@@ -77,6 +88,7 @@ public class TestBase {
 		
 		createTableToPlayWithStrings();
 		population = new ArrayList<>();
+		skipInitialPopulation = false;
 	}
 	
 	private void createTableToPlayWithStrings() {
@@ -152,7 +164,7 @@ public class TestBase {
 			}
 			
 			for (int i = 0; i < EvoSQLConfiguration.TEST_MAX_ITERATIONS; i++) {
-				GAApproach ga = new GAApproach(population, tableSchemas, sqlToBeTested, seeds, maxGenerations, !population.isEmpty());
+				GAApproach ga = new GAApproach(population, tableSchemas, sqlToBeTested, seeds, maxGenerations, skipInitialPopulation);
 				generatedFixture = ga.execute(time / EvoSQLConfiguration.TEST_MAX_ITERATIONS); //We want to hold the max time limit
 
 				log.info("For path: " + sqlToBeTested);

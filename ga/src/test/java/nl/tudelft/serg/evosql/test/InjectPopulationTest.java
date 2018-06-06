@@ -91,7 +91,7 @@ public class InjectPopulationTest extends TestBase {
         Mockito.when(ff.getFitnessValue()).thenReturn(0.d);
         injectedPopulation.add(fixture);
         fixture.setFitness(ff);
-        setPopulation(injectedPopulation);
+        setPopulation(injectedPopulation,true);
         assertTrue(testExecutePath(QueryDepthExtractorTest.TEST_TWO_SUBQUERIES));
     }
 
@@ -143,7 +143,7 @@ public class InjectPopulationTest extends TestBase {
         Mockito.when(ff.getFitnessValue()).thenReturn(0.d);
         injectedPopulation.add(fixture);
         fixture.setFitness(ff);
-        setPopulation(injectedPopulation);
+        setPopulation(injectedPopulation,true);
         assertTrue(testExecutePath("SELECT * FROM Products t WHERE t.Price < (SELECT MAX(Type) FROM (SELECT Name, Type FROM Product_Detail WHERE LENGTH(Name) = 2) t2 WHERE t.Product = t2.Name)"));
     }
 
@@ -193,7 +193,7 @@ public class InjectPopulationTest extends TestBase {
         Mockito.when(ff.getFitnessValue()).thenReturn(0.d);
         injectedPopulation.add(fixture);
         fixture.setFitness(ff);
-        setPopulation(injectedPopulation);
+        setPopulation(injectedPopulation,true);
         assertTrue(testExecutePath("SELECT * FROM Products t WHERE t.Price < (SELECT MAX(Type) FROM (SELECT Name, Type FROM Product_Detail t3 WHERE LENGTH(Name) < t.ID) t2 WHERE t.Product = t2.Name)"));
     }
 

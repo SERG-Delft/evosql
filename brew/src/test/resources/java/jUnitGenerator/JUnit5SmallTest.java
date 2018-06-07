@@ -59,7 +59,7 @@ public class JUnit5SmallTest {
       }
     } catch (SQLException sqlException) {
       sqlException.printStackTrace();
-      return 0;
+      return -1;
     }
   }
 

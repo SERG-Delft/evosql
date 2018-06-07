@@ -20,6 +20,7 @@ import java.nio.file.Path;
  * <p>
  * This class also requires specified {@link ConnectionData} for both a production and a test database.
  */
+// TODO: Get the results of the GA centrally and invoke the ExistingDataRunner for both the original and mutated query.
 public class BrewExecutor {
     //Connection data to production database, this is where the schema is extracted from by the GA
     private ConnectionData connectionDataProd;
@@ -47,7 +48,7 @@ public class BrewExecutor {
      * @param fileName     name of the test file
      */
     public Result executeBrew(String queryToRun, Path pathToOutput, String fileName) {
-        //Configure jUnitGenerator, perhaps remove code duplication with the other method in the future
+        //Configure jUnitGenerator, TODO: perhaps remove code duplication with the other method in the future
         JUnitGeneratorSettings jUnitGeneratorSettings = new JUnitGeneratorSettings(
                 connectionDataTest,
                 filePackage,
@@ -85,7 +86,7 @@ public class BrewExecutor {
      * @param fileName     name of the test class
      */
     public void brewWithMutatedQuery(String mutatedQuery, Result result, Path pathToOutput, String fileName) {
-        //Configure jUnitGenerator, perhaps remove code duplication with the other method in the future
+        //Configure jUnitGenerator, TODO: perhaps remove code duplication with the other method in the future
         JUnitGeneratorSettings jUnitGeneratorSettings = new JUnitGeneratorSettings(
                 connectionDataTest,
                 filePackage,

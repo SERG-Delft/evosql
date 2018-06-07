@@ -140,7 +140,7 @@ public abstract class JUnitGenerator implements Generator {
                     .endControlFlow()
                     .nextControlFlow("catch ($T sqlException)", SQLException.class)
                     .addStatement("sqlException.printStackTrace()")
-                    .addStatement("return 0")
+                    .addStatement("return -1")
                     .endControlFlow();
         } else {
             runSQL.addJavadoc(""
@@ -151,7 +151,7 @@ public abstract class JUnitGenerator implements Generator {
                     + "@param  isUpdate Whether the query is a data modification statement.\n"
                     + "@return Whether the query execution has succeeded.\n")
                     .addComment("TODO: Implement method stub")
-                    .addStatement("return 0");
+                    .addStatement("return -1");
         }
 
         return runSQL.build();

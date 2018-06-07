@@ -27,9 +27,14 @@ public class BrewExecutor {
     //Connection data to test database, this is where the test cases make a connection to
     private ConnectionData connectionDataTest;
 
-    public BrewExecutor(ConnectionData connectionDataProd, ConnectionData connectionDataTest) {
+    private String filePackage;
+
+    public BrewExecutor(ConnectionData connectionDataProd,
+                        ConnectionData connectionDataTest,
+                        String filePackage) {
         this.connectionDataProd = connectionDataProd;
         this.connectionDataTest = connectionDataTest;
+        this.filePackage = filePackage;
     }
 
     /**
@@ -45,8 +50,7 @@ public class BrewExecutor {
         //Configure jUnitGenerator, perhaps remove code duplication with the other method in the future
         JUnitGeneratorSettings jUnitGeneratorSettings = new JUnitGeneratorSettings(
                 connectionDataTest,
-                //TODO: Change the file package
-                "nl.tudelft.serg.evosql.experiment.Demo",
+                filePackage,
                 fileName,
                 true,
                 true,
@@ -84,8 +88,7 @@ public class BrewExecutor {
         //Configure jUnitGenerator, perhaps remove code duplication with the other method in the future
         JUnitGeneratorSettings jUnitGeneratorSettings = new JUnitGeneratorSettings(
                 connectionDataTest,
-                //TODO: Change the file package
-                "nl.tudelft.serg.evosql.experiment.Demo",
+                filePackage,
                 fileName,
                 true,
                 true,

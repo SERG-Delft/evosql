@@ -1,6 +1,13 @@
 package nl.tudelft.serg.evosql.experiment;
 
+import nl.tudelft.serg.evosql.brew.data.Result;
+import nl.tudelft.serg.evosql.brew.db.ConnectionData;
+import org.junit.runner.JUnitCore;
+
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.file.Paths;
 
 /**
@@ -24,12 +31,61 @@ public class Runner {
         // 6. Output final results
     }
 
-    public QueryExperimentResult runForQuery(String filePath, int lineNo) {
+    public QueryExperimentResult runForQuery(String filePath,
+                                             int lineNo,
+                                             ConnectionData connectionDataProd,
+                                             ConnectionData connectionDataTest) {
         QueryReader queryReader = new QueryReader();
         String query = queryReader.readQuery(new File(filePath), lineNo);
+        BrewExecutor brewExecutor = new BrewExecutor(connectionDataProd, connectionDataTest);
+        Result result = brewExecutor.executeBrew(query, Paths.get("../test"), "query1_original.java");
+
+        String mutatedQuery = QueryMutator.mutateQuery(query);
+        brewExecutor.brewWithMutatedQuery(query, result, Paths.get("../test"), "query1_mutated.java");
+
+        org.junit.runner.Result[] results = testClassRunner(
+                "../test",
+                "query1_original.java",
+                "query1_mutated.java"
+        );
+
+        QueryExperimentResult experimentResult = new QueryExperimentResult(
+                query,
+                mutatedQuery,
+                filePath,
+                lineNo,
+                results[0].wasSuccessful(),
+                results[1].wasSuccessful()
+        );
+
+        return experimentResult;
+    }
 
 
-        return null;
+    public org.junit.runner.Result[] testClassRunner(String folderPath,
+                                                 String originalQueryClassName,
+                                                 String mutatedQueryClassName) {
+        URLClassLoader loader;
+        org.junit.runner.Result[] results = new org.junit.runner.Result[2];
+        try {
+            loader = new URLClassLoader(new URL[]{
+                    new URL("file://" + folderPath)
+            });
+            Class originalQueryTestClass;
+            Class mutatedQueryTestClass;
+            try {
+                originalQueryTestClass = loader.loadClass(originalQueryClassName);
+                mutatedQueryTestClass = loader.loadClass(mutatedQueryClassName);
+                results[0] = JUnitCore.runClasses(originalQueryTestClass);
+                results[1] = JUnitCore.runClasses(mutatedQueryTestClass);
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return results;
     }
 
 }

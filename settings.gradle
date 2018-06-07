@@ -1,10 +1,13 @@
 rootProject.name = 'evosql'
+
 include ':instrumented-hsqldb'
 include ':ga'
 include ':evaluation'
+include ':brew'
+include ':coverage-experiment'
 
 project(':instrumented-hsqldb').projectDir = "$rootDir/instrumented-hsqldb" as File
 project(':ga').projectDir = "$rootDir/ga" as File
 project(':evaluation').projectDir = "$rootDir/evaluation" as File
-include 'brew'
-include 'coverage-experiment'
+project(':brew').projectDir = "$rootDir/brew" as File
+project(':coverage-experiment').projectDir = "$rootDir/coverage-experiment" as File

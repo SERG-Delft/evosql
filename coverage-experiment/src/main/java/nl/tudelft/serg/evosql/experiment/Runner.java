@@ -43,19 +43,20 @@ public class Runner {
     public QueryExperimentResult runForQuery(String filePath,
                                              int lineNo,
                                              ConnectionData connectionDataProd,
-                                             ConnectionData connectionDataTest) {
+                                             ConnectionData connectionDataTest,
+                                             String queryClassName) {
         QueryReader queryReader = new QueryReader();
         String query = queryReader.readQuery(new File(filePath), lineNo);
         BrewExecutor brewExecutor = new BrewExecutor(connectionDataProd, connectionDataTest);
-        Result result = brewExecutor.executeBrew(query, Paths.get("../test"), "query1_original.java");
+        Result result = brewExecutor.executeBrew(query, Paths.get("../test"), queryClassName + "_original.java");
 
         String mutatedQuery = QueryMutator.mutateQuery(query);
-        brewExecutor.brewWithMutatedQuery(query, result, Paths.get("../test"), "query1_mutated.java");
+        brewExecutor.brewWithMutatedQuery(query, result, Paths.get("../test"), queryClassName + "_mutated.java");
 
         org.junit.runner.Result[] results = testClassRunner(
-                "../test",
-                "query1_original.java",
-                "query1_mutated.java"
+                Paths.get("../test").toAbsolutePath().toString(),
+                queryClassName + "_original.java",
+                queryClassName + "_mutated.java"
         );
 
         QueryExperimentResult experimentResult = new QueryExperimentResult(

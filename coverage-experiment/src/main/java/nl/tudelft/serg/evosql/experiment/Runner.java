@@ -18,16 +18,17 @@ import java.nio.file.Paths;
 public class Runner {
 
     public static void main(String[] args) {
+        // TODO: Implement pipeline for doing the experiment on multiple queries using input args
         // 1. Read in queries
         // 2. Build schema's for DB
-        // 3. For each query:
+        // 3. For each query (see runForQuery method):
         //     3a. Execute GA on given query
         //     3b. Store fixture that GA outputs
         //     3c. Construct test class with fixture for original query
         //     3d. Mutate query
         //     3e. Construct test class with fixture for mutated query
-        // 4. Execute all tests that should pass and store results
-        // 5. Execute all tests that shouldn't pass and store results
+        //     3f. Execute all tests that should pass and store results
+        //     3g. Execute all tests that shouldn't pass and store results
         // 6. Output final results
     }
 
@@ -47,12 +48,15 @@ public class Runner {
                                              String queryClassName) {
         QueryReader queryReader = new QueryReader();
         String query = queryReader.readQuery(new File(filePath), lineNo);
-        BrewExecutor brewExecutor = new BrewExecutor(connectionDataProd, connectionDataTest);
+        // TODO: Get file package
+        BrewExecutor brewExecutor = new BrewExecutor(connectionDataProd, connectionDataTest, "");
+        // TODO: Pass a good folder name which is useable
         Result result = brewExecutor.executeBrew(query, Paths.get("../test"), queryClassName + "_original.java");
 
         String mutatedQuery = QueryMutator.mutateQuery(query);
         brewExecutor.brewWithMutatedQuery(query, result, Paths.get("../test"), queryClassName + "_mutated.java");
 
+        // TODO: Get right path
         org.junit.runner.Result[] results = testClassRunner(
                 Paths.get("../test").toAbsolutePath().toString(),
                 queryClassName + "_original.java",

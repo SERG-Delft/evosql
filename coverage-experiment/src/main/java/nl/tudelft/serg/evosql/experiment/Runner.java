@@ -31,6 +31,15 @@ public class Runner {
         // 6. Output final results
     }
 
+    /**
+     * End to end execution of experiment for a single query.
+     *
+     * @param filePath           path to file from which to read queries
+     * @param lineNo             linenumber of query
+     * @param connectionDataProd data of db connection for production database
+     * @param connectionDataTest data of db connection for test database
+     * @return a datastructure containing results of execution of test  classes for the queries.
+     */
     public QueryExperimentResult runForQuery(String filePath,
                                              int lineNo,
                                              ConnectionData connectionDataProd,
@@ -62,9 +71,17 @@ public class Runner {
     }
 
 
+    /**
+     * Runs generated test classes and returns a jUnit result datastructure.
+     *
+     * @param folderPath             absolute path containing the test classes to run
+     * @param originalQueryClassName test class name of the 'correct' query
+     * @param mutatedQueryClassName  test class name of the mutated query
+     * @return test results, first index is the original query result, second index is the mutated query result.
+     */
     public org.junit.runner.Result[] testClassRunner(String folderPath,
-                                                 String originalQueryClassName,
-                                                 String mutatedQueryClassName) {
+                                                     String originalQueryClassName,
+                                                     String mutatedQueryClassName) {
         URLClassLoader loader;
         org.junit.runner.Result[] results = new org.junit.runner.Result[2];
         try {

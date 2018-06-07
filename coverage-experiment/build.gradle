@@ -1,0 +1,19 @@
+plugins {
+    id "io.franzbecker.gradle-lombok" version "1.11"
+}
+
+lombok {
+    version = "1.16.20"
+    sha256 = ""
+}
+
+description = 'Infrastructure for experiment verifying coverage of GA.'
+
+apply plugin: 'findbugs'
+
+dependencies {
+    implementation project(':ga')
+
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.1.1'
+}

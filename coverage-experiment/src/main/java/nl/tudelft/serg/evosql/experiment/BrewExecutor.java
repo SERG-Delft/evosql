@@ -41,7 +41,7 @@ public class BrewExecutor {
      * @param pathToOutput path to output test file to
      * @param fileName     name of the test file
      */
-    public void executeBrew(String queryToRun, Path pathToOutput, String fileName) {
+    public Result executeBrew(String queryToRun, Path pathToOutput, String fileName) {
         //Configure jUnitGenerator, perhaps remove code duplication with the other method in the future
         JUnitGeneratorSettings jUnitGeneratorSettings = new JUnitGeneratorSettings(
                 connectionDataTest,
@@ -67,7 +67,7 @@ public class BrewExecutor {
                 .build();
 
         //Execute pipeline
-        pipeline.execute();
+        return pipeline.execute();
     }
 
     /**

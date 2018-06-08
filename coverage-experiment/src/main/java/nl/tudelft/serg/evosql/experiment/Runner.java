@@ -4,11 +4,17 @@ import nl.tudelft.serg.evosql.brew.data.Result;
 import nl.tudelft.serg.evosql.brew.db.ConnectionData;
 import org.junit.runner.JUnitCore;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Main runner class. Implementation depends on whether it will be used as a client for
@@ -19,42 +25,58 @@ public class Runner {
 
     public static void main(String[] args) {
         // TODO: Implement pipeline for doing the experiment on multiple queries using input args
-        // 1. Read in queries
-        // 2. Build schema's for DB
-        // 3. For each query (see runForQuery method):
-        //     3a. Execute GA on given query
-        //     3b. Store fixture that GA outputs
-        //     3c. Construct test class with fixture for original query
-        //     3d. Mutate query
-        //     3e. Construct test class with fixture for mutated query
-        //     3f. Execute all tests that should pass and store results
-        //     3g. Execute all tests that shouldn't pass and store results
-        // 6. Output final results
+        BufferedReader reader_erpnext = new BufferedReader(new InputStreamReader(
+                Runner.class.getResourceAsStream("sql/erpnext_queries.sql")));
+        Stream<String> erpnext = reader_erpnext.lines();
+
+        BufferedReader reader_espocrm = new BufferedReader(new InputStreamReader(
+                Runner.class.getResourceAsStream("sql/espocrm_queries.sql")));
+        Stream<String> espocrm = reader_espocrm.lines();
+
+        BufferedReader reader_suitecrm = new BufferedReader(new InputStreamReader(
+                Runner.class.getResourceAsStream("sql/suitecrm_queries.sql")));
+        Stream<String> suitecrm = reader_suitecrm.lines();
+
+
+        QueryReader queryReader = new QueryReader();
+        List<String> allQueries = queryReader.readQueries(erpnext, espocrm, suitecrm);
+
+        for (int i = 0; i < allQueries.size(); i++) {
+            runForQuery(
+                    allQueries.get(i),
+                    null,
+                    null,
+                    String.valueOf(i)
+            );
+        }
+
+        try {
+            reader_erpnext.close();
+            reader_espocrm.close();
+            reader_suitecrm.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
      * End to end execution of experiment for a single query.
      *
-     * @param filePath           path to file from which to read queries
-     * @param lineNo             linenumber of query
+     * @param query              query to execute
      * @param connectionDataProd data of db connection for production database
      * @param connectionDataTest data of db connection for test database
-     * @return a datastructure containing results of execution of test  classes for the queries.
      */
-    public QueryExperimentResult runForQuery(String filePath,
-                                             int lineNo,
+    public static QueryExperimentResult runForQuery(String query,
                                              ConnectionData connectionDataProd,
                                              ConnectionData connectionDataTest,
                                              String queryClassName) {
-        QueryReader queryReader = new QueryReader();
-        String query = queryReader.readQuery(new File(filePath), lineNo);
         // TODO: Get file package
         BrewExecutor brewExecutor = new BrewExecutor(connectionDataProd, connectionDataTest, "");
         // TODO: Pass a good folder name which is useable
-        Result result = brewExecutor.executeBrew(query, Paths.get("../test"), queryClassName + "_original.java");
+        brewExecutor.executeBrew(query, Paths.get("../test"), queryClassName + "_original.java");
 
         String mutatedQuery = QueryMutator.mutateQuery(query);
-        brewExecutor.brewWithMutatedQuery(query, result, Paths.get("../test"), queryClassName + "_mutated.java");
+        brewExecutor.brewWithMutatedQuery(query, brewExecutor.getQueryResult(), Paths.get("../test"), queryClassName + "_mutated.java");
 
         // TODO: Get right path
         org.junit.runner.Result[] results = testClassRunner(
@@ -66,8 +88,6 @@ public class Runner {
         QueryExperimentResult experimentResult = new QueryExperimentResult(
                 query,
                 mutatedQuery,
-                filePath,
-                lineNo,
                 results[0].wasSuccessful(),
                 results[1].wasSuccessful()
         );
@@ -84,7 +104,7 @@ public class Runner {
      * @param mutatedQueryClassName  test class name of the mutated query
      * @return test results, first index is the original query result, second index is the mutated query result.
      */
-    public org.junit.runner.Result[] testClassRunner(String folderPath,
+    public static org.junit.runner.Result[] testClassRunner(String folderPath,
                                                      String originalQueryClassName,
                                                      String mutatedQueryClassName) {
         URLClassLoader loader;

@@ -16,8 +16,6 @@ import lombok.Data;
 public class QueryExperimentResult {
     private String originalQuery;
     private String mutatedQuery;
-    private String file;
-    private int lineNo;
     private boolean initBrewPass;
     private boolean mutatedBrewPass;
 }

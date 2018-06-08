@@ -42,6 +42,12 @@ public class BrewExecutor {
 
         EvoSQLRunner evoSQLRunner = new EvoSQLRunner();
         queryResult = evoSQLRunner.runQuery(productionString, connectionDataProd);
+
+        this.existingDataRunner = new ExistingDataRunner(queryResult);
+    }
+
+    public Result getQueryResult() {
+        return queryResult;
     }
 
     /**

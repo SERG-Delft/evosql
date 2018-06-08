@@ -29,6 +29,9 @@ public class BrewExecutor {
     private ConnectionData connectionDataTest;
 
     private String filePackage;
+    private Result queryResult;
+    private String productionString;
+    private ExistingDataRunner existingDataRunner;
 
     public BrewExecutor(ConnectionData connectionDataProd,
                         ConnectionData connectionDataTest,
@@ -36,6 +39,9 @@ public class BrewExecutor {
         this.connectionDataProd = connectionDataProd;
         this.connectionDataTest = connectionDataTest;
         this.filePackage = filePackage;
+
+        EvoSQLRunner evoSQLRunner = new EvoSQLRunner();
+        queryResult = evoSQLRunner.runQuery(productionString, connectionDataProd);
     }
 
     /**
@@ -47,7 +53,8 @@ public class BrewExecutor {
      * @param pathToOutput path to output test file to
      * @param fileName     name of the test file
      */
-    public Result executeBrew(String queryToRun, Path pathToOutput, String fileName) {
+    public void executeBrew(String queryToRun, Path pathToOutput, String fileName) {
+        existingDataRunner.setResult(queryResult);
         //Configure jUnitGenerator, TODO: perhaps remove code duplication with the other method in the future
         JUnitGeneratorSettings jUnitGeneratorSettings = new JUnitGeneratorSettings(
                 connectionDataTest,
@@ -60,7 +67,7 @@ public class BrewExecutor {
                 true);
         //Construct Pipeline
         Pipeline pipeline = Pipeline.builder()
-                .queryRunner(new EvoSQLRunner())
+                .queryRunner(existingDataRunner)
                 .connectionData(connectionDataProd)
                 .sqlQuery(queryToRun)
                 //Process result to the given File
@@ -72,7 +79,7 @@ public class BrewExecutor {
                 .build();
 
         //Execute pipeline
-        return pipeline.execute();
+        pipeline.execute();
     }
 
     /**
@@ -86,6 +93,7 @@ public class BrewExecutor {
      * @param fileName     name of the test class
      */
     public void brewWithMutatedQuery(String mutatedQuery, Result result, Path pathToOutput, String fileName) {
+        existingDataRunner.setResult(result);
         //Configure jUnitGenerator, TODO: perhaps remove code duplication with the other method in the future
         JUnitGeneratorSettings jUnitGeneratorSettings = new JUnitGeneratorSettings(
                 connectionDataTest,
@@ -98,7 +106,7 @@ public class BrewExecutor {
                 true);
         //Construct Pipeline
         Pipeline pipeline = Pipeline.builder()
-                .queryRunner(new ExistingDataRunner(result))
+                .queryRunner(existingDataRunner)
                 .connectionData(connectionDataProd)
                 .sqlQuery(mutatedQuery)
                 .resultProcessor(new Pipeline.ResultProcessor(
@@ -107,6 +115,8 @@ public class BrewExecutor {
                         new FileConsumer(pathToOutput))
                 )
                 .build();
+
+        pipeline.execute();
     }
 
 

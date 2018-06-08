@@ -44,7 +44,7 @@ public class Pipeline {
     /**
      * Executes the pipeline.
      */
-    public Result execute() {
+    public void execute() {
         Result queryRunnerResult = queryRunner.runQuery(sqlQuery, connectionData);
 
         Map<Generator, List<Output>> outputCache = new HashMap<>();
@@ -62,7 +62,6 @@ public class Pipeline {
 
             rp.getOutputConsumer().consumeOutput(generatedOutputs);
         }
-        return queryRunnerResult;
     }
 
     @Value

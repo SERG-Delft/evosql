@@ -24,7 +24,8 @@ import java.util.stream.Stream;
 public class Runner {
 
     public static void main(String[] args) {
-        // TODO: Implement pipeline for doing the experiment on multiple queries using input args
+        int startIndex = Integer.valueOf(args[0]);
+        int stepSize = Integer.valueOf(args[1]);
         BufferedReader reader_erpnext = new BufferedReader(new InputStreamReader(
                 Runner.class.getResourceAsStream("sql/erpnext_queries.sql")));
         Stream<String> erpnext = reader_erpnext.lines();
@@ -41,7 +42,7 @@ public class Runner {
         QueryReader queryReader = new QueryReader();
         List<String> allQueries = queryReader.readQueries(erpnext, espocrm, suitecrm);
 
-        for (int i = 0; i < allQueries.size(); i++) {
+        for (int i = startIndex; i < allQueries.size(); i += stepSize) {
             runForQuery(
                     allQueries.get(i),
                     null,

@@ -15,6 +15,10 @@ import javax.lang.model.element.Modifier;
 import java.sql.*;
 import java.util.*;
 
+import static nl.tudelft.serg.evosql.brew.generator.junit.JUnitGeneratorHelper.NAME_DB_JDBC_URL;
+import static nl.tudelft.serg.evosql.brew.generator.junit.JUnitGeneratorHelper.NAME_DB_PASSWORD;
+import static nl.tudelft.serg.evosql.brew.generator.junit.JUnitGeneratorHelper.NAME_DB_USER;
+
 @RequiredArgsConstructor
 public abstract class JUnitGenerator implements Generator {
 
@@ -27,11 +31,7 @@ public abstract class JUnitGenerator implements Generator {
     @NonNull private final Class<?> afterEachAnnotation;
     @NonNull private final Class<?> assertionClass;
 
-    private static final String
-            NAME_DB_JDBC_URL = "DB_JDBC_URL",
-            NAME_DB_USER = "DB_USER",
-            NAME_DB_PASSWORD = "DB_PASSWORD",
-            NAME_PRODUCTION_QUERY = "PRODUCTION_QUERY";
+    private static final String NAME_PRODUCTION_QUERY = "PRODUCTION_QUERY";
 
     /**
      * Generates JUnit test suites based on the given result.

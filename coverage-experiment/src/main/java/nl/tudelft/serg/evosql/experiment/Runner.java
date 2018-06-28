@@ -42,6 +42,7 @@ public class Runner {
         QueryReader queryReader = new QueryReader();
         List<String> allQueries = queryReader.readQueries(erpnext, espocrm, suitecrm);
 
+        // TODO: Make connection data for separate databases...
         for (int i = startIndex; i < allQueries.size(); i += stepSize) {
             runForQuery(
                     allQueries.get(i),
@@ -76,7 +77,7 @@ public class Runner {
         // TODO: Pass a good folder name which is useable
         brewExecutor.executeBrew(query, Paths.get("../test"), queryClassName + "_original.java");
 
-        String mutatedQuery = QueryMutator.mutateQuery(query);
+        //String mutatedQuery = QueryMutator.mutateQuery(query);
         brewExecutor.brewWithMutatedQuery(query, brewExecutor.getQueryResult(), Paths.get("../test"), queryClassName + "_mutated.java");
 
         // TODO: Get right path
@@ -88,7 +89,7 @@ public class Runner {
 
         QueryExperimentResult experimentResult = new QueryExperimentResult(
                 query,
-                mutatedQuery,
+                "",
                 results[0].wasSuccessful(),
                 results[1].wasSuccessful()
         );

@@ -1,6 +1,8 @@
 package brew.test.generated;
 
 import java.lang.String;
+import java.util.HashMap;
+import java.util.Map;
 import javax.annotation.Generated;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -114,5 +116,16 @@ public class JUnit4MediumTest {
     int result = runSQL(PRODUCTION_QUERY, false);
     // Assert: verify that the expected number of rows is returned
     Assert.assertEquals(1, result);
+  }
+
+  /**
+   * Generates a string map from a list of strings.
+   */
+  private Map<String, String> makeMap(String... strings) {
+    Map<String, String> result = new HashMap<>();
+    for(int i = 0; i < strings.length; i += 2) {
+      result.put(strings[i], strings[i + 1]);
+    }
+    return result;
   }
 }

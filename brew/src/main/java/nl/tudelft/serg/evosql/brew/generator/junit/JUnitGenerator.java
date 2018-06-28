@@ -42,6 +42,7 @@ public abstract class JUnitGenerator implements Generator {
      */
     @Override
     public final List<Output> generate(Result result, VendorOptions vendorOptions) {
+        JUnitGeneratorHelper helper = new JUnitGeneratorHelper();
         AnnotationSpec generatedAnnotation = AnnotationSpec.builder(Generated.class)
                 .addMember("value", "$S", getClass().getCanonicalName())
                 .build();
@@ -74,6 +75,8 @@ public abstract class JUnitGenerator implements Generator {
         for (Path path : result.getPaths()) {
             typeSpecBuilder.addMethod(generatePathTest(path, vendorOptions));
         }
+
+        typeSpecBuilder.addMethod(helper.buildMapMaker());
 
         JavaFile javaFile = JavaFile.builder(jUnitGeneratorSettings.getFilePackage(), typeSpecBuilder.build()).build();
         Output output = new Output(jUnitGeneratorSettings.getClassName() + ".java", javaFile.toString());

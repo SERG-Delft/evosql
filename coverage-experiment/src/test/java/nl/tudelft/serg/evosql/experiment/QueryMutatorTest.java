@@ -1,6 +1,5 @@
 package nl.tudelft.serg.evosql.experiment;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

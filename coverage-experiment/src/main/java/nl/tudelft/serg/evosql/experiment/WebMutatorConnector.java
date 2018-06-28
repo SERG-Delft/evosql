@@ -3,6 +3,8 @@ package nl.tudelft.serg.evosql.experiment;
 
 import in2test.application.common.SQLToolsConfig;
 import in2test.application.services.SQLMutationWSFacade;
+import nl.tudelft.serg.evosql.db.ISchemaExtractor;
+import nl.tudelft.serg.evosql.db.SchemaExtractor;
 import nl.tudelft.serg.evosql.sql.parser.SqlSecurer;
 
 /**
@@ -13,10 +15,10 @@ public class WebMutatorConnector {
     private String secureSqlquery;
     private String schemaXml;
 
-    public WebMutatorConnector(String sqlQuery, String schema) {
+    public WebMutatorConnector(String sqlQuery, ISchemaExtractor schemaExtractor) {
         SqlSecurer sqlSecurer = new SqlSecurer(sqlQuery);
         secureSqlquery = sqlSecurer.getSecureSql();
-        schemaXml = getSchemaXml(schema);
+        schemaXml = getSchemaXml(secureSqlquery, schemaExtractor);
         SQLToolsConfig.configure();
     }
 
@@ -26,8 +28,8 @@ public class WebMutatorConnector {
      * @param schema schema of query
      * @return schema in XML format.
      */
-    private String getSchemaXml(String schema) {
-        return schema;
+    private String getSchemaXml(String schema, ISchemaExtractor schemaExtractor) {
+        return new SchemaXMLBuilder(secureSqlquery, schemaExtractor).getSchemaXml();
     }
 
 

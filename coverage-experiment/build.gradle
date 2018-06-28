@@ -13,6 +13,9 @@ apply plugin: 'findbugs'
 
 dependencies {
     implementation project(':ga')
+    implementation 'com.github.jsqlparser:jsqlparser:1.2'
+    implementation 'javax.xml.rpc:javax.xml.rpc-api:1.1.1'
+    implementation fileTree(dir: '../lib', includes: ['*.jar'])
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.1.1'

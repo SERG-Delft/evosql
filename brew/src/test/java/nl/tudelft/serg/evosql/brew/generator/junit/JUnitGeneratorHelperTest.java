@@ -20,4 +20,22 @@ public class JUnitGeneratorHelperTest {
                 "}\n";
         assertThat(helper.buildMapMaker().toString()).isEqualTo(expected);
     }
+
+
+    @Test
+    void getResultColumnsTest() {
+        JUnitGeneratorHelper helper = new JUnitGeneratorHelper();
+        String expected = "/**\n" +
+                " * Gets the columns of a statement result set.\n" +
+                " */\n" +
+                "private java.util.List<java.lang.String> getResultColumns(java.sql.ResultSet result) {\n" +
+                "  java.sql.ResultSetMetaData meta = result.getMetaData();\n" +
+                "  java.util.List<java.lang.String> columns = new java.util.ArrayList<>();\n" +
+                "  for (int i = 0; i <= meta.getColumnCount(); ++i) {\n" +
+                "    columns.add(meta.getColumnName(i));\n" +
+                "  }\n" +
+                "  return columns;\n" +
+                "}\n";
+        assertThat(helper.buildGetResultColumns().toString()).isEqualTo(expected);
+    }
 }

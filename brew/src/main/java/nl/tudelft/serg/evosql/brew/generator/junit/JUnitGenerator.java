@@ -22,14 +22,21 @@ import static nl.tudelft.serg.evosql.brew.generator.junit.JUnitGeneratorHelper.N
 @RequiredArgsConstructor
 public abstract class JUnitGenerator implements Generator {
 
-    @NonNull private final JUnitGeneratorSettings jUnitGeneratorSettings;
+    @NonNull
+    private final JUnitGeneratorSettings jUnitGeneratorSettings;
     private final boolean testMethodsPublic;
-    @NonNull private final Class<?> testAnnotation;
-    @NonNull private final Class<?> beforeAllAnnotation;
-    @NonNull private final Class<?> afterAllAnnotation;
-    @NonNull private final Class<?> beforeEachAnnotation;
-    @NonNull private final Class<?> afterEachAnnotation;
-    @NonNull private final Class<?> assertionClass;
+    @NonNull
+    private final Class<?> testAnnotation;
+    @NonNull
+    private final Class<?> beforeAllAnnotation;
+    @NonNull
+    private final Class<?> afterAllAnnotation;
+    @NonNull
+    private final Class<?> beforeEachAnnotation;
+    @NonNull
+    private final Class<?> afterEachAnnotation;
+    @NonNull
+    private final Class<?> assertionClass;
 
     private static final String NAME_PRODUCTION_QUERY = "PRODUCTION_QUERY";
 
@@ -62,7 +69,7 @@ public abstract class JUnitGenerator implements Generator {
             addConnectionDataFields(typeSpecBuilder);
         }
 
-        typeSpecBuilder.addMethod(generateRunSQL());
+        addRunMethods(typeSpecBuilder);
         typeSpecBuilder.addMethod(generateCreateTables(result, vendorOptions));
         typeSpecBuilder.addMethod(generateCleanTables(result, vendorOptions));
         typeSpecBuilder.addMethod(generateDropTables(result, vendorOptions));
@@ -75,8 +82,6 @@ public abstract class JUnitGenerator implements Generator {
         for (Path path : result.getPaths()) {
             typeSpecBuilder.addMethod(generatePathTest(path, vendorOptions));
         }
-
-        typeSpecBuilder.addMethod(helper.buildMapMaker());
 
         JavaFile javaFile = JavaFile.builder(jUnitGeneratorSettings.getFilePackage(), typeSpecBuilder.build()).build();
         Output output = new Output(jUnitGeneratorSettings.getClassName() + ".java", javaFile.toString());
@@ -107,57 +112,17 @@ public abstract class JUnitGenerator implements Generator {
     }
 
     /**
-     * Generates a method specification for the runSQL method.
-     *
-     * @return method.
+     * Adds suitable run methods.
      */
-    private MethodSpec generateRunSQL() {
-        MethodSpec.Builder runSQL = MethodSpec.methodBuilder("runSQL")
-                .addModifiers(Modifier.PRIVATE, Modifier.STATIC)
-                .returns(TypeName.INT)
-                .addParameter(String.class, "sql")
-                .addParameter(boolean.class, "isUpdate");
-
+    private void addRunMethods(TypeSpec.Builder typeSpecBuilder) {
+        JUnitGeneratorHelper helper = new JUnitGeneratorHelper();
         if (jUnitGeneratorSettings.isGenerateSqlExecutorImplementation()) {
-            runSQL.addJavadoc(""
-                    + "Executes an SQL query on the database.\n\n"
-                    + "@param  query    The SQL query to execute\n"
-                    + "@param  isUpdate Whether the query is a data modification statement.\n"
-                    + "@return Whether the query execution has succeeded.\n")
-                    .beginControlFlow("try")
-                    .addStatement(
-                            "$T connection = $T.getConnection($L, $L, $L)",
-                            Connection.class, DriverManager.class,
-                            NAME_DB_JDBC_URL, NAME_DB_USER, NAME_DB_PASSWORD)
-                    .addStatement("$T statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, " +
-                            "ResultSet.CONCUR_READ_ONLY)", Statement.class)
-                    .beginControlFlow("if (isUpdate == true)")
-                    .addStatement("return statement.executeUpdate(sql)")
-                    .nextControlFlow("else")
-                    .addStatement("$T resultSet = statement.executeQuery(sql)", ResultSet.class)
-                    .beginControlFlow("if(resultSet.last())")
-                    .addStatement("return resultSet.getRow()")
-                    .nextControlFlow("else")
-                    .addStatement("return 0")
-                    .endControlFlow()
-                    .endControlFlow()
-                    .nextControlFlow("catch ($T sqlException)", SQLException.class)
-                    .addStatement("sqlException.printStackTrace()")
-                    .addStatement("return -1")
-                    .endControlFlow();
+            typeSpecBuilder.addMethod(helper.buildRunSqlImplementation());
+            typeSpecBuilder.addMethod(helper.buildGetResultColumns());
+            typeSpecBuilder.addMethod(helper.buildMapMaker());
         } else {
-            runSQL.addJavadoc(""
-                    + "This method should connect to your database and execute the given query.\n"
-                    + "In order for the assertions to work correctly this method must return true in the case\n"
-                    + "that the query yields at least one result and false if there is no result.\n\n"
-                    + "@param  query    The SQL query to execute\n"
-                    + "@param  isUpdate Whether the query is a data modification statement.\n"
-                    + "@return Whether the query execution has succeeded.\n")
-                    .addComment("TODO: Implement method stub")
-                    .addStatement("return -1");
+            typeSpecBuilder.addMethod(helper.buildRunSqlEmpty());
         }
-
-        return runSQL.build();
     }
 
     /**
@@ -172,6 +137,7 @@ public abstract class JUnitGenerator implements Generator {
         MethodSpec.Builder createTables = MethodSpec.methodBuilder("createTables")
                 .addModifiers(Modifier.PRIVATE, Modifier.STATIC)
                 .returns(TypeName.VOID)
+                .addException(SQLException.class)
                 .addJavadoc("Creates tables required for queries.\n");
 
         // Create tables code
@@ -197,6 +163,7 @@ public abstract class JUnitGenerator implements Generator {
         MethodSpec.Builder cleanTables = MethodSpec.methodBuilder("cleanTables")
                 .addModifiers(Modifier.PRIVATE, Modifier.STATIC)
                 .returns(TypeName.VOID)
+                .addException(SQLException.class)
                 .addJavadoc("Truncates the tables.\n");
 
         // Create tables code
@@ -222,6 +189,7 @@ public abstract class JUnitGenerator implements Generator {
         MethodSpec.Builder dropTables = MethodSpec.methodBuilder("dropTables")
                 .addModifiers(Modifier.PRIVATE, Modifier.STATIC)
                 .returns(TypeName.VOID)
+                .addException(SQLException.class)
                 .addJavadoc("Drops the tables.\n");
 
         // Create tables code
@@ -244,6 +212,7 @@ public abstract class JUnitGenerator implements Generator {
         MethodSpec.Builder beforeAll = MethodSpec.methodBuilder("beforeAll")
                 .addModifiers(Modifier.STATIC)
                 .returns(TypeName.VOID)
+                .addException(SQLException.class)
                 .addAnnotation(beforeAllAnnotation);
 
         if (testMethodsPublic) {
@@ -264,6 +233,7 @@ public abstract class JUnitGenerator implements Generator {
     private MethodSpec generateBeforeEach() {
         MethodSpec.Builder beforeEach = MethodSpec.methodBuilder("beforeEach")
                 .returns(TypeName.VOID)
+                .addException(SQLException.class)
                 .addAnnotation(beforeEachAnnotation);
 
         if (testMethodsPublic) {
@@ -284,6 +254,7 @@ public abstract class JUnitGenerator implements Generator {
     private MethodSpec generateAfterEach() {
         MethodSpec.Builder afterEach = MethodSpec.methodBuilder("afterEach")
                 .returns(TypeName.VOID)
+                .addException(SQLException.class)
                 .addAnnotation(afterEachAnnotation);
 
         if (testMethodsPublic) {
@@ -305,6 +276,7 @@ public abstract class JUnitGenerator implements Generator {
         MethodSpec.Builder afterAll = MethodSpec.methodBuilder("afterAll")
                 .addModifiers(Modifier.STATIC)
                 .returns(TypeName.VOID)
+                .addException(SQLException.class)
                 .addAnnotation(afterAllAnnotation);
 
         if (testMethodsPublic) {
@@ -335,9 +307,10 @@ public abstract class JUnitGenerator implements Generator {
     private MethodSpec generatePathTest(Path path, VendorOptions vendorOptions) {
         // Method signature
         MethodSpec.Builder pTestBuilder = MethodSpec.methodBuilder(
-                String.format("generatedTest%d", path.getPathNumber()));
-        pTestBuilder.addModifiers(Modifier.PUBLIC)
+                String.format("generatedTest%d", path.getPathNumber()))
+                .addModifiers(Modifier.PUBLIC)
                 .returns(TypeName.VOID)
+                .addException(SQLException.class)
                 .addAnnotation(testAnnotation);
 
         // Arrange part

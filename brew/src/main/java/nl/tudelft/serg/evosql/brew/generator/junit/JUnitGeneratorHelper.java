@@ -18,17 +18,17 @@ public class JUnitGeneratorHelper {
     /**
      * The name of the map maker function.
      */
-    private static final String RUN_SQL_NAME = "runSql";
+    public static final String RUN_SQL_NAME = "runSql";
 
     /**
      * The name of the map maker function.
      */
-    private static final String MAP_MAKER_NAME = "makeMap";
+    public static final String MAP_MAKER_NAME = "makeMap";
 
     /**
      * The name of the result column getter function.
      */
-    private static final String GET_RESULT_COLUMNS_NAME = "getResultColumns";
+    public static final String GET_RESULT_COLUMNS_NAME = "getResultColumns";
 
     /**
      * The name of the JDBC URL constant.

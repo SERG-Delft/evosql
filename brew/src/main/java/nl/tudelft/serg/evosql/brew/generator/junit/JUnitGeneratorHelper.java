@@ -142,11 +142,11 @@ public class JUnitGeneratorHelper {
                 .varargs()
                 .addJavadoc("Generates a string map from a list of strings.\n");
 
-        mapMaker.addStatement("$T<$T, $T> result = new $T<>()", Map.class, String.class, String.class, HashMap.class);
-        mapMaker.beginControlFlow("for(int i = 0; i < strings.length; i += 2)")
+        mapMaker.addStatement("$T<$T, $T> result = new $T<>()", Map.class, String.class, String.class, HashMap.class)
+                .beginControlFlow("for(int i = 0; i < strings.length; i += 2)")
                 .addStatement("result.put(strings[i], strings[i + 1])")
-                .endControlFlow();
-        mapMaker.addStatement("return result");
+                .endControlFlow()
+                .addStatement("return result");
         return mapMaker.build();
     }
 
@@ -164,12 +164,13 @@ public class JUnitGeneratorHelper {
                         .addException(SQLException.class)
                         .addJavadoc("Gets the columns of a statement result set.\n");
 
-        getResultColumns.addStatement("$T meta = result.getMetaData()", ResultSetMetaData.class);
-        getResultColumns.addStatement("$T<$T> columns = new $T<>()", List.class, String.class, ArrayList.class);
-        getResultColumns.beginControlFlow("for (int i = 1; i <= meta.getColumnCount(); ++i)");
-        getResultColumns.addStatement("columns.add(meta.getColumnName(i))");
-        getResultColumns.endControlFlow();
-        getResultColumns.addStatement("return columns");
+        getResultColumns.addStatement("$T meta = result.getMetaData()", ResultSetMetaData.class)
+                .addStatement("$T<$T> columns = new $T<>()", List.class, String.class, ArrayList.class)
+                .addComment("Start at one; this is 1-indexed")
+                .beginControlFlow("for (int i = 1; i <= meta.getColumnCount(); ++i)")
+                .addStatement("columns.add(meta.getColumnName(i))")
+                .endControlFlow()
+                .addStatement("return columns");
 
         return getResultColumns.build();
     }

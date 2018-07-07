@@ -16,19 +16,19 @@ public class JUnitGeneratorHelperTest {
                 " *\n" +
                 " * @returns The resulting table, or null if the query is an update.\n" +
                 " */\n" +
-                "private java.util.Map<java.lang.String, java.lang.String> runSql(java.lang.String query,\n" +
-                "    boolean isUpdate) throws java.sql.SQLException {\n" +
+                "private static java.util.ArrayList<java.util.HashMap<java.lang.String, java.lang.String>> runSql(\n" +
+                "    java.lang.String query, boolean isUpdate) throws java.sql.SQLException {\n" +
                 "  java.sql.Connection connection = java.sql.DriverManager.getConnection(DB_JDBC_URL, DB_USER, DB_PASSWORD);\n" +
                 "  java.sql.Statement statement = connection.createStatement();\n" +
                 "  if (isUpdate == true) {\n" +
-                "    statement.executeUpdate(sql);\n" +
+                "    statement.executeUpdate(query);\n" +
                 "    return null;\n" +
                 "  } else {\n" +
-                "    java.util.List<java.util.Map<java.lang.String, java.lang.String>> tableStructure = new java.util.ArrayList<java.util.HashMap<java.lang.String, java.lang.String>>();\n" +
-                "    java.sql.ResultSet resultSet = statement.executeQuery(sql);\n" +
+                "    java.util.ArrayList<java.util.HashMap<java.lang.String, java.lang.String>> tableStructure = new java.util.ArrayList<java.util.HashMap<java.lang.String, java.lang.String>>();\n" +
+                "    java.sql.ResultSet resultSet = statement.executeQuery(query);\n" +
                 "    java.util.List<java.lang.String> columns = getResultColumns(resultSet);\n" +
                 "    while (resultSet.next()) {\n" +
-                "      java.util.Map<java.lang.String, java.lang.String> values = new java.util.HashMap<>();\n" +
+                "      java.util.HashMap<java.lang.String, java.lang.String> values = new java.util.HashMap<>();\n" +
                 "      for (String column : columns) {\n" +
                 "        values.put(column, resultSet.getObject(column).toString());\n" +
                 "      }\n" +
@@ -53,8 +53,8 @@ public class JUnitGeneratorHelperTest {
                 " *\n" +
                 " * @returns The resulting table, or null if the query is an update.\n" +
                 " */\n" +
-                "private java.util.Map<java.lang.String, java.lang.String> runSql(java.lang.String query,\n" +
-                "    boolean isUpdate) throws java.sql.SQLException {\n" +
+                "private static java.util.ArrayList<java.util.HashMap<java.lang.String, java.lang.String>> runSql(\n" +
+                "    java.lang.String query, boolean isUpdate) throws java.sql.SQLException {\n" +
                 "  // TODO: implement method stub.\n" +
                 "  return null;\n" +
                 "}\n";
@@ -67,7 +67,8 @@ public class JUnitGeneratorHelperTest {
         String expected = "/**\n" +
                 " * Generates a string map from a list of strings.\n" +
                 " */\n" +
-                "private java.util.Map<java.lang.String, java.lang.String> makeMap(java.lang.String... strings) {\n" +
+                "private static java.util.Map<java.lang.String, java.lang.String> makeMap(\n" +
+                "    java.lang.String... strings) {\n" +
                 "  java.util.Map<java.lang.String, java.lang.String> result = new java.util.HashMap<>();\n" +
                 "  for(int i = 0; i < strings.length; i += 2) {\n" +
                 "    result.put(strings[i], strings[i + 1]);\n" +
@@ -84,10 +85,12 @@ public class JUnitGeneratorHelperTest {
         String expected = "/**\n" +
                 " * Gets the columns of a statement result set.\n" +
                 " */\n" +
-                "private java.util.List<java.lang.String> getResultColumns(java.sql.ResultSet result) {\n" +
+                "private static java.util.List<java.lang.String> getResultColumns(java.sql.ResultSet result) throws\n" +
+                "    java.sql.SQLException {\n" +
                 "  java.sql.ResultSetMetaData meta = result.getMetaData();\n" +
                 "  java.util.List<java.lang.String> columns = new java.util.ArrayList<>();\n" +
-                "  for (int i = 0; i <= meta.getColumnCount(); ++i) {\n" +
+                "  // Start at one; this is 1-indexed\n" +
+                "  for (int i = 1; i <= meta.getColumnCount(); ++i) {\n" +
                 "    columns.add(meta.getColumnName(i));\n" +
                 "  }\n" +
                 "  return columns;\n" +

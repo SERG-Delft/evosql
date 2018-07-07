@@ -1,0 +1,4 @@
+FROM postgres:10
+
+COPY evosql_brew_prod.sql /docker-entrypoint-initdb.d/
+COPY evosql_brew_test.sql /docker-entrypoint-initdb.d/

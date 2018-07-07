@@ -16,6 +16,12 @@ SET check_function_bodies = false;
 SET client_min_messages = warning;
 SET row_security = off;
 
+
+CREATE DATABASE evosql_brew_test WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'en_US.utf8' LC_CTYPE = 'en_US.utf8';
+
+
+ALTER DATABASE evosql_brew_test OWNER TO postgres;
+
 --
 -- TOC entry 1 (class 3079 OID 12980)
 -- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 

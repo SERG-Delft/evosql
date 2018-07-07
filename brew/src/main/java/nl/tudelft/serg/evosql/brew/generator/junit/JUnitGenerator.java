@@ -15,9 +15,7 @@ import javax.lang.model.element.Modifier;
 import java.sql.*;
 import java.util.*;
 
-import static nl.tudelft.serg.evosql.brew.generator.junit.JUnitGeneratorHelper.NAME_DB_JDBC_URL;
-import static nl.tudelft.serg.evosql.brew.generator.junit.JUnitGeneratorHelper.NAME_DB_PASSWORD;
-import static nl.tudelft.serg.evosql.brew.generator.junit.JUnitGeneratorHelper.NAME_DB_USER;
+import static nl.tudelft.serg.evosql.brew.generator.junit.JUnitGeneratorHelper.*;
 
 @RequiredArgsConstructor
 public abstract class JUnitGenerator implements Generator {
@@ -145,7 +143,7 @@ public abstract class JUnitGenerator implements Generator {
         Set<String> tableCreateStrings = new HashSet<>();
         result.getPaths().stream().map(tableCreationBuilder::buildQueries).forEach(tableCreateStrings::addAll);
         for (String s : tableCreateStrings) {
-            createTables.addStatement("runSQL($S, true)", s);
+            createTables.addStatement("$L($S, true)", RUN_SQL_NAME, s);
         }
 
         return createTables.build();
@@ -171,7 +169,7 @@ public abstract class JUnitGenerator implements Generator {
         Set<String> tableCleanStrings = new HashSet<>();
         result.getPaths().stream().map(cleaningBuilder::buildQueries).forEach(tableCleanStrings::addAll);
         for (String s : tableCleanStrings) {
-            cleanTables.addStatement("runSQL($S, true)", s);
+            cleanTables.addStatement("$L($S, true)", RUN_SQL_NAME, s);
         }
 
         return cleanTables.build();
@@ -197,7 +195,7 @@ public abstract class JUnitGenerator implements Generator {
         Set<String> destructionStrings = new HashSet<>();
         result.getPaths().stream().map(destructionBuilder::buildQueries).forEach(destructionStrings::addAll);
         for (String s : destructionStrings) {
-            dropTables.addStatement("runSQL($S, true)", s);
+            dropTables.addStatement("$L($S, true)", RUN_SQL_NAME, s);
         }
 
         return dropTables.build();
@@ -317,16 +315,16 @@ public abstract class JUnitGenerator implements Generator {
         pTestBuilder.addComment("Arrange: set up the fixture data");
         InsertionBuilder insertionBuilder = new InsertionBuilder(vendorOptions);
         for (String s : insertionBuilder.buildQueries(path)) {
-            pTestBuilder.addStatement("runSQL($S, true)", s);
+            pTestBuilder.addStatement("$L($S, true)", RUN_SQL_NAME, s);
         }
 
         // Act
         pTestBuilder.addComment("Act: run a selection query on the database");
-        pTestBuilder.addStatement("$T result = runSQL($L, false)", int.class, NAME_PRODUCTION_QUERY);
+        pTestBuilder.addStatement("$T result = $L($L, false)", RUN_SQL_RETURN_TYPE, RUN_SQL_NAME, NAME_PRODUCTION_QUERY);
 
         // Assert
         pTestBuilder.addComment("Assert: verify that the expected number of rows is returned");
-        pTestBuilder.addStatement("$T.assertEquals($L, result)", assertionClass, path.getProductionOutput().size());
+        pTestBuilder.addStatement("$T.assertEquals($L, result.size())", assertionClass, path.getProductionOutput().size());
         return pTestBuilder.build();
     }
 }

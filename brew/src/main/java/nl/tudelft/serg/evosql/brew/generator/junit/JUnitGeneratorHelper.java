@@ -1,5 +1,6 @@
 package nl.tudelft.serg.evosql.brew.generator.junit;
 
+import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
@@ -19,6 +20,11 @@ public class JUnitGeneratorHelper {
      * The name of the map maker function.
      */
     public static final String RUN_SQL_NAME = "runSql";
+
+    /**
+     * The return type of the runSql method.
+     */
+    public static final ParameterizedTypeName RUN_SQL_RETURN_TYPE;
 
     /**
      * The name of the map maker function.
@@ -45,6 +51,13 @@ public class JUnitGeneratorHelper {
      */
     static final String NAME_DB_PASSWORD = "DB_PASSWORD";
 
+    static {
+        ParameterizedTypeName map = ParameterizedTypeName.get(HashMap.class,
+                String.class,
+                String.class);
+        RUN_SQL_RETURN_TYPE = ParameterizedTypeName.get(ClassName.get(ArrayList.class), map);
+    }
+
     /**
      * Builds a runSql implementation specification.
      *
@@ -52,8 +65,8 @@ public class JUnitGeneratorHelper {
      */
     public MethodSpec buildRunSqlImplementation() {
         MethodSpec.Builder runSql = MethodSpec.methodBuilder(RUN_SQL_NAME)
-                .addModifiers(Modifier.PRIVATE)
-                .returns(ParameterizedTypeName.get(Map.class, String.class, String.class))
+                .addModifiers(Modifier.PRIVATE, Modifier.STATIC)
+                .returns(RUN_SQL_RETURN_TYPE)
                 .addParameter(String.class, "query")
                 .addParameter(TypeName.BOOLEAN, "isUpdate")
                 .addException(SQLException.class)
@@ -68,18 +81,18 @@ public class JUnitGeneratorHelper {
                 NAME_DB_JDBC_URL, NAME_DB_USER, NAME_DB_PASSWORD)
                 .addStatement("$T statement = connection.createStatement()", Statement.class)
                 .beginControlFlow("if (isUpdate == true)")
-                .addStatement("statement.executeUpdate(sql)")
+                .addStatement("statement.executeUpdate(query)")
                 .addStatement("return null")
                 .nextControlFlow("else")
-                .addStatement("$T<$T<$T, $T>> tableStructure = new $T<$T<$T, $T>>()",
-                        List.class, Map.class, String.class, String.class,
-                        ArrayList.class, HashMap.class, String.class, String.class)
-                .addStatement("$T resultSet = statement.executeQuery(sql)", ResultSet.class)
-                .addStatement("$T<$T> columns = $L(resultSet)",
-                        List.class, String.class, GET_RESULT_COLUMNS_NAME)
+                .addStatement("$T tableStructure = new $T()",
+                        RUN_SQL_RETURN_TYPE,
+                        RUN_SQL_RETURN_TYPE)
+                .addStatement("$T resultSet = statement.executeQuery(query)", ResultSet.class)
+                .addStatement("$T columns = $L(resultSet)",
+                        ParameterizedTypeName.get(List.class, String.class), GET_RESULT_COLUMNS_NAME)
                 .beginControlFlow("while (resultSet.next())")
-                .addStatement("$T<$T, $T> values = new $T<>()",
-                        Map.class, String.class, String.class, HashMap.class)
+                .addStatement("$T values = new $T<>()",
+                        ParameterizedTypeName.get(HashMap.class, String.class, String.class), HashMap.class)
                 .beginControlFlow("for (String column : columns)")
                 .addStatement("values.put(column, resultSet.getObject(column).toString())")
                 .endControlFlow()
@@ -98,8 +111,8 @@ public class JUnitGeneratorHelper {
      */
     public MethodSpec buildRunSqlEmpty() {
         MethodSpec.Builder runSql = MethodSpec.methodBuilder(RUN_SQL_NAME)
-                .addModifiers(Modifier.PRIVATE)
-                .returns(ParameterizedTypeName.get(Map.class, String.class, String.class))
+                .addModifiers(Modifier.PRIVATE, Modifier.STATIC)
+                .returns(RUN_SQL_RETURN_TYPE)
                 .addParameter(String.class, "query")
                 .addParameter(TypeName.BOOLEAN, "isUpdate")
                 .addException(SQLException.class)
@@ -123,7 +136,7 @@ public class JUnitGeneratorHelper {
      */
     public MethodSpec buildMapMaker() {
         MethodSpec.Builder mapMaker = MethodSpec.methodBuilder(MAP_MAKER_NAME)
-                .addModifiers(Modifier.PRIVATE)
+                .addModifiers(Modifier.PRIVATE, Modifier.STATIC)
                 .returns(ParameterizedTypeName.get(Map.class, String.class, String.class))
                 .addParameter(String[].class, "strings")
                 .varargs()
@@ -145,14 +158,15 @@ public class JUnitGeneratorHelper {
     public MethodSpec buildGetResultColumns() {
         MethodSpec.Builder getResultColumns =
                 MethodSpec.methodBuilder(GET_RESULT_COLUMNS_NAME)
-                        .addModifiers(Modifier.PRIVATE)
+                        .addModifiers(Modifier.PRIVATE, Modifier.STATIC)
                         .returns(ParameterizedTypeName.get(List.class, String.class))
                         .addParameter(ResultSet.class, "result")
+                        .addException(SQLException.class)
                         .addJavadoc("Gets the columns of a statement result set.\n");
 
         getResultColumns.addStatement("$T meta = result.getMetaData()", ResultSetMetaData.class);
         getResultColumns.addStatement("$T<$T> columns = new $T<>()", List.class, String.class, ArrayList.class);
-        getResultColumns.beginControlFlow("for (int i = 0; i <= meta.getColumnCount(); ++i)");
+        getResultColumns.beginControlFlow("for (int i = 1; i <= meta.getColumnCount(); ++i)");
         getResultColumns.addStatement("columns.add(meta.getColumnName(i))");
         getResultColumns.endControlFlow();
         getResultColumns.addStatement("return columns");

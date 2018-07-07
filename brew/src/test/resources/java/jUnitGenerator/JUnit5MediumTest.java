@@ -27,7 +27,7 @@ public class JUnit5MediumTest {
    */
   private static int runSQL(String sql, boolean isUpdate) {
     // TODO: Implement method stub
-    return 0;
+    return -1;
   }
 
   /**

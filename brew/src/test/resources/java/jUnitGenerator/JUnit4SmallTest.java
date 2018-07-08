@@ -10,7 +10,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.annotation.Generated;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -87,8 +86,8 @@ public class JUnit4SmallTest {
   /**
    * Generates a string map from a list of strings.
    */
-  private static Map<String, String> makeMap(String... strings) {
-    Map<String, String> result = new HashMap<>();
+  private static HashMap<String, String> makeMap(String... strings) {
+    HashMap<String, String> result = new HashMap<>();
     for(int i = 0; i < strings.length; i += 2) {
       result.put(strings[i], strings[i + 1]);
     }

@@ -67,9 +67,9 @@ public class JUnitGeneratorHelperTest {
         String expected = "/**\n" +
                 " * Generates a string map from a list of strings.\n" +
                 " */\n" +
-                "private static java.util.Map<java.lang.String, java.lang.String> makeMap(\n" +
+                "private static java.util.HashMap<java.lang.String, java.lang.String> makeMap(\n" +
                 "    java.lang.String... strings) {\n" +
-                "  java.util.Map<java.lang.String, java.lang.String> result = new java.util.HashMap<>();\n" +
+                "  java.util.HashMap<java.lang.String, java.lang.String> result = new java.util.HashMap<>();\n" +
                 "  for(int i = 0; i < strings.length; i += 2) {\n" +
                 "    result.put(strings[i], strings[i + 1]);\n" +
                 "  }\n" +

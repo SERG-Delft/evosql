@@ -10,7 +10,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Builds helper methods for the JUnit generator.
@@ -137,12 +136,12 @@ public class JUnitGeneratorHelper {
     public MethodSpec buildMapMaker() {
         MethodSpec.Builder mapMaker = MethodSpec.methodBuilder(MAP_MAKER_NAME)
                 .addModifiers(Modifier.PRIVATE, Modifier.STATIC)
-                .returns(ParameterizedTypeName.get(Map.class, String.class, String.class))
+                .returns(ParameterizedTypeName.get(HashMap.class, String.class, String.class))
                 .addParameter(String[].class, "strings")
                 .varargs()
                 .addJavadoc("Generates a string map from a list of strings.\n");
 
-        mapMaker.addStatement("$T<$T, $T> result = new $T<>()", Map.class, String.class, String.class, HashMap.class)
+        mapMaker.addStatement("$T<$T, $T> result = new $T<>()", HashMap.class, String.class, String.class, HashMap.class)
                 .beginControlFlow("for(int i = 0; i < strings.length; i += 2)")
                 .addStatement("result.put(strings[i], strings[i + 1])")
                 .endControlFlow()

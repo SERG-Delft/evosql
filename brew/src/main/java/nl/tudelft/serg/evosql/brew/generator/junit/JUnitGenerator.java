@@ -47,7 +47,6 @@ public abstract class JUnitGenerator implements Generator {
      */
     @Override
     public final List<Output> generate(Result result, VendorOptions vendorOptions) {
-        JUnitGeneratorHelper helper = new JUnitGeneratorHelper();
         AnnotationSpec generatedAnnotation = AnnotationSpec.builder(Generated.class)
                 .addMember("value", "$S", getClass().getCanonicalName())
                 .build();
@@ -55,13 +54,13 @@ public abstract class JUnitGenerator implements Generator {
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(generatedAnnotation);
 
-        FieldSpec fieldSpec = FieldSpec.builder(String.class, NAME_PRODUCTION_QUERY)
+        FieldSpec productionQuery = FieldSpec.builder(String.class, NAME_PRODUCTION_QUERY)
                 .addModifiers(Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL)
                 .initializer("$S", result.getInputQuery())
                 .addJavadoc("The production query used to test the generated fixtures on.\n")
                 .build();
 
-        typeSpecBuilder.addField(fieldSpec);
+        typeSpecBuilder.addField(productionQuery);
 
         if (jUnitGeneratorSettings.isGenerateSqlExecutorImplementation()) {
             addConnectionDataFields(typeSpecBuilder);

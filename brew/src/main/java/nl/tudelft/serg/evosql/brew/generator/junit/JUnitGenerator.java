@@ -14,6 +14,7 @@ import javax.annotation.Generated;
 import javax.lang.model.element.Modifier;
 import java.sql.*;
 import java.util.*;
+import java.util.function.Consumer;
 
 import static nl.tudelft.serg.evosql.brew.generator.junit.JUnitGeneratorHelper.*;
 
@@ -201,25 +202,45 @@ public abstract class JUnitGenerator implements Generator {
     }
 
     /**
+     * Creates a standard JUnit test infrastructure method.
+     *
+     * @param name        The name of the method.
+     * @param annotation  The JUnit annotation to add.
+     * @param isStatic    Whether the method should be static.
+     * @param bodyBuilder The consumer governing the body of the method.
+     * @return A JUnit infrastructure method.
+     */
+    private MethodSpec makeTestMethod(String name, Class<?> annotation, boolean isStatic,
+                                      Consumer<MethodSpec.Builder> bodyBuilder) {
+        MethodSpec.Builder method = MethodSpec.methodBuilder(name)
+                .returns(TypeName.VOID)
+                .addException(SQLException.class)
+                .addAnnotation(annotation);
+
+        if (isStatic) {
+            method.addModifiers(Modifier.STATIC);
+        }
+        if (testMethodsPublic) {
+            method.addModifiers(Modifier.PUBLIC);
+        }
+
+        bodyBuilder.accept(method);
+        return method.build();
+    }
+
+    /**
      * Generates a method specification for a before all test method.
      *
      * @return A method specification for a before all test method.
      */
     private MethodSpec generateBeforeAll() {
-        MethodSpec.Builder beforeAll = MethodSpec.methodBuilder("beforeAll")
-                .addModifiers(Modifier.STATIC)
-                .returns(TypeName.VOID)
-                .addException(SQLException.class)
-                .addAnnotation(beforeAllAnnotation);
-
-        if (testMethodsPublic) {
-            beforeAll.addModifiers(Modifier.PUBLIC);
-        }
-
-        if (jUnitGeneratorSettings.isCreateTablesBeforeRunning()) {
-            beforeAll.addStatement("createTables()");
-        }
-        return beforeAll.build();
+        return makeTestMethod("beforeAll", beforeAllAnnotation, true,
+                m -> {
+                    if (jUnitGeneratorSettings.isCreateTablesBeforeRunning()) {
+                        m.addStatement("createTables()");
+                    }
+                }
+        );
     }
 
     /**
@@ -228,19 +249,13 @@ public abstract class JUnitGenerator implements Generator {
      * @return A method specification for a before each test method.
      */
     private MethodSpec generateBeforeEach() {
-        MethodSpec.Builder beforeEach = MethodSpec.methodBuilder("beforeEach")
-                .returns(TypeName.VOID)
-                .addException(SQLException.class)
-                .addAnnotation(beforeEachAnnotation);
-
-        if (testMethodsPublic) {
-            beforeEach.addModifiers(Modifier.PUBLIC);
-        }
-
-        if (jUnitGeneratorSettings.isCleanTablesBeforeEachRun()) {
-            beforeEach.addStatement("cleanTables()");
-        }
-        return beforeEach.build();
+        return makeTestMethod("beforeEach", beforeEachAnnotation, false,
+                m -> {
+                    if (jUnitGeneratorSettings.isCleanTablesBeforeEachRun()) {
+                        m.addStatement("cleanTables()");
+                    }
+                }
+        );
     }
 
     /**
@@ -249,19 +264,13 @@ public abstract class JUnitGenerator implements Generator {
      * @return A method specification for an after each test method.
      */
     private MethodSpec generateAfterEach() {
-        MethodSpec.Builder afterEach = MethodSpec.methodBuilder("afterEach")
-                .returns(TypeName.VOID)
-                .addException(SQLException.class)
-                .addAnnotation(afterEachAnnotation);
-
-        if (testMethodsPublic) {
-            afterEach.addModifiers(Modifier.PUBLIC);
-        }
-
-        if (jUnitGeneratorSettings.isCleanTableAfterEachRun()) {
-            afterEach.addStatement("cleanTables()");
-        }
-        return afterEach.build();
+        return makeTestMethod("afterEach", afterEachAnnotation, false,
+                m -> {
+                    if (jUnitGeneratorSettings.isCleanTableAfterEachRun()) {
+                        m.addStatement("cleanTables()");
+                    }
+                }
+        );
     }
 
     /**
@@ -270,20 +279,13 @@ public abstract class JUnitGenerator implements Generator {
      * @return A method specification for an after all test method.
      */
     private MethodSpec generateAfterAll() {
-        MethodSpec.Builder afterAll = MethodSpec.methodBuilder("afterAll")
-                .addModifiers(Modifier.STATIC)
-                .returns(TypeName.VOID)
-                .addException(SQLException.class)
-                .addAnnotation(afterAllAnnotation);
-
-        if (testMethodsPublic) {
-            afterAll.addModifiers(Modifier.PUBLIC);
-        }
-
-        if (jUnitGeneratorSettings.isDropTablesAfterRunning()) {
-            afterAll.addStatement("dropTables()");
-        }
-        return afterAll.build();
+        return makeTestMethod("afterAll", afterAllAnnotation, true,
+                m -> {
+                    if (jUnitGeneratorSettings.isDropTablesAfterRunning()) {
+                        m.addStatement("dropTables()");
+                    }
+                }
+        );
     }
 
     /**

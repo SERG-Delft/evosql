@@ -336,14 +336,17 @@ public abstract class JUnitGenerator implements Generator {
         if (path.getProductionOutput().size() > 0) {
             pTestBuilder.addComment("Assert: verify that the results are correct");
             for (Map<String, String> output : path.getProductionOutput()) {
+                // create a pattern of "column1", "value1", "column2", "value2", etc.
                 List<String> mapSpec = output.entrySet().stream()
                         .flatMap(e -> Stream.of(e.getKey(), e.getValue()))
                         .collect(Collectors.toList());
 
+                // create a pattern of "$S", "$S", etc. to use in JavaPoet statement
                 String paramPlaceholder = IntStream.range(0, mapSpec.size())
                         .mapToObj(i -> "$S")
                         .collect(Collectors.joining(", "));
 
+                // create a list of arguments for JavaPoet
                 List<Object> arguments = new ArrayList<>(2 + mapSpec.size());
                 arguments.add(assertionClass);
                 arguments.add(MAP_MAKER_NAME);

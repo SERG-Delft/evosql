@@ -313,10 +313,13 @@ public abstract class JUnitGenerator implements Generator {
         // Method signature
         MethodSpec.Builder pTestBuilder = MethodSpec.methodBuilder(
                 String.format("generatedTest%d", path.getPathNumber()))
-                .addModifiers(Modifier.PUBLIC)
                 .returns(TypeName.VOID)
                 .addException(SQLException.class)
                 .addAnnotation(testAnnotation);
+
+        if (testMethodsPublic) {
+            pTestBuilder.addModifiers(Modifier.PUBLIC);
+        }
 
         // Arrange part
         pTestBuilder.addComment("Arrange: set up the fixture data");

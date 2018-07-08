@@ -78,7 +78,7 @@ public class JUnit5MediumTest {
   }
 
   @Test
-  public void generatedTest1() throws SQLException {
+  void generatedTest1() throws SQLException {
     // Arrange: set up the fixture data
     runSql("INSERT INTO `table1` (`column1_1`, `column1_2`) VALUES (1, 'String of row 1'), (2, 'String of row 2');", true);
     runSql("INSERT INTO `products` (`product_name`, `expired`, `expiry_date`) VALUES ('Milk', 0, '2018-03-22 00:00:00'), ('Yogurt', 1, '2018-03-15 00:00:00'), ('Salt', 0, '2025-12-31 23:59:59');", true);
@@ -91,7 +91,7 @@ public class JUnit5MediumTest {
   }
 
   @Test
-  public void generatedTest2() throws SQLException {
+  void generatedTest2() throws SQLException {
     // Arrange: set up the fixture data
     runSql("INSERT INTO `table1` (`column1_1`, `column1_2`) VALUES (1, 'String of row 1'), (2, 'String of row 2');", true);
     runSql("INSERT INTO `products` (`product_name`, `expired`, `expiry_date`) VALUES ('Milk', 0, '2018-03-22 00:00:00'), ('Yogurt', 1, '2018-03-15 00:00:00'), ('Salt', 0, '2025-12-31 23:59:59');", true);
@@ -102,7 +102,7 @@ public class JUnit5MediumTest {
   }
 
   @Test
-  public void generatedTest3() throws SQLException {
+  void generatedTest3() throws SQLException {
     // Arrange: set up the fixture data
     runSql("INSERT INTO `table1` (`column1_1`, `column1_2`) VALUES (1, 'String of row 1'), (2, 'String of row 2');", true);
     runSql("INSERT INTO `products` (`product_name`, `expired`, `expiry_date`) VALUES ('Milk', 0, '2018-03-22 00:00:00'), ('Yogurt', 1, '2018-03-15 00:00:00'), ('Salt', 0, '2025-12-31 23:59:59');", true);
@@ -113,7 +113,7 @@ public class JUnit5MediumTest {
   }
 
   @Test
-  public void generatedTest4() throws SQLException {
+  void generatedTest4() throws SQLException {
     // Arrange: set up the fixture data
     runSql("INSERT INTO `table1` (`column1_1`, `column1_2`) VALUES (1, 'String of row 1'), (2, 'String of row 2');", true);
     runSql("INSERT INTO `products` (`product_name`, `expired`, `expiry_date`) VALUES ('Milk', 0, '2018-03-22 00:00:00'), ('Yogurt', 1, '2018-03-15 00:00:00'), ('Salt', 0, '2025-12-31 23:59:59');", true);

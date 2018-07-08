@@ -134,7 +134,7 @@ public class JUnit5SmallTest {
   }
 
   @Test
-  public void generatedTest1() throws SQLException {
+  void generatedTest1() throws SQLException {
     // Arrange: set up the fixture data
     runSql("INSERT INTO `table1` (`column1_1`, `column1_2`, `column1_3`) VALUES (1, 0.5, 'The first row of table 1.'), (2, 1.5, 'The second row.');", true);
     // Act: run a selection query on the database
@@ -146,7 +146,7 @@ public class JUnit5SmallTest {
   }
 
   @Test
-  public void generatedTest2() throws SQLException {
+  void generatedTest2() throws SQLException {
     // Arrange: set up the fixture data
     runSql("INSERT INTO `table1` (`column1_1`, `column1_2`, `column1_3`) VALUES (1, 0.5, 'The first row of table 1.'), (2, 1.5, 'The second row.');", true);
     // Act: run a selection query on the database

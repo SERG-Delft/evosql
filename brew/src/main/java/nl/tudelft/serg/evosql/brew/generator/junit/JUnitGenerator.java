@@ -7,14 +7,20 @@ import nl.tudelft.serg.evosql.brew.data.Path;
 import nl.tudelft.serg.evosql.brew.data.Result;
 import nl.tudelft.serg.evosql.brew.generator.Generator;
 import nl.tudelft.serg.evosql.brew.generator.Output;
-import nl.tudelft.serg.evosql.brew.sql.*;
+import nl.tudelft.serg.evosql.brew.sql.CleaningBuilder;
+import nl.tudelft.serg.evosql.brew.sql.DestructionBuilder;
+import nl.tudelft.serg.evosql.brew.sql.InsertionBuilder;
+import nl.tudelft.serg.evosql.brew.sql.TableCreationBuilder;
 import nl.tudelft.serg.evosql.brew.sql.vendor.VendorOptions;
 
 import javax.annotation.Generated;
 import javax.lang.model.element.Modifier;
-import java.sql.*;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static nl.tudelft.serg.evosql.brew.generator.junit.JUnitGeneratorHelper.*;
 
@@ -326,6 +332,26 @@ public abstract class JUnitGenerator implements Generator {
         // Assert
         pTestBuilder.addComment("Assert: verify that the expected number of rows is returned");
         pTestBuilder.addStatement("$T.assertEquals($L, result.size())", assertionClass, path.getProductionOutput().size());
+
+        pTestBuilder.addComment("Assert: verify that the results are correct");
+        for (Map<String, String> output : path.getProductionOutput()) {
+            List<String> mapSpec = output.entrySet().stream()
+                    .flatMap(e -> Stream.of(e.getKey(), e.getValue()))
+                    .collect(Collectors.toList());
+
+            String paramPlaceholder = IntStream.range(0, mapSpec.size())
+                    .mapToObj(i -> "$S")
+                    .collect(Collectors.joining(", "));
+
+            List<Object> arguments = new ArrayList<>(2 + mapSpec.size());
+            arguments.add(assertionClass);
+            arguments.add(MAP_MAKER_NAME);
+            arguments.addAll(mapSpec);
+
+            pTestBuilder.addStatement("$T.assertTrue(result.contains($L(" + paramPlaceholder + ")))",
+                    arguments.toArray());
+        }
+
         return pTestBuilder.build();
     }
 }

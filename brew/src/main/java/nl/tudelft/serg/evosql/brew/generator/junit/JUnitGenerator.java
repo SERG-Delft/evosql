@@ -333,23 +333,25 @@ public abstract class JUnitGenerator implements Generator {
         pTestBuilder.addComment("Assert: verify that the expected number of rows is returned");
         pTestBuilder.addStatement("$T.assertEquals($L, result.size())", assertionClass, path.getProductionOutput().size());
 
-        pTestBuilder.addComment("Assert: verify that the results are correct");
-        for (Map<String, String> output : path.getProductionOutput()) {
-            List<String> mapSpec = output.entrySet().stream()
-                    .flatMap(e -> Stream.of(e.getKey(), e.getValue()))
-                    .collect(Collectors.toList());
+        if (path.getProductionOutput().size() > 0) {
+            pTestBuilder.addComment("Assert: verify that the results are correct");
+            for (Map<String, String> output : path.getProductionOutput()) {
+                List<String> mapSpec = output.entrySet().stream()
+                        .flatMap(e -> Stream.of(e.getKey(), e.getValue()))
+                        .collect(Collectors.toList());
 
-            String paramPlaceholder = IntStream.range(0, mapSpec.size())
-                    .mapToObj(i -> "$S")
-                    .collect(Collectors.joining(", "));
+                String paramPlaceholder = IntStream.range(0, mapSpec.size())
+                        .mapToObj(i -> "$S")
+                        .collect(Collectors.joining(", "));
 
-            List<Object> arguments = new ArrayList<>(2 + mapSpec.size());
-            arguments.add(assertionClass);
-            arguments.add(MAP_MAKER_NAME);
-            arguments.addAll(mapSpec);
+                List<Object> arguments = new ArrayList<>(2 + mapSpec.size());
+                arguments.add(assertionClass);
+                arguments.add(MAP_MAKER_NAME);
+                arguments.addAll(mapSpec);
 
-            pTestBuilder.addStatement("$T.assertTrue(result.contains($L(" + paramPlaceholder + ")))",
-                    arguments.toArray());
+                pTestBuilder.addStatement("$T.assertTrue(result.contains($L(" + paramPlaceholder + ")))",
+                        arguments.toArray());
+            }
         }
 
         return pTestBuilder.build();

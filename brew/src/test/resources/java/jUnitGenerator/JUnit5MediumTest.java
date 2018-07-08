@@ -86,6 +86,8 @@ public class JUnit5MediumTest {
     ArrayList<HashMap<String, String>> result = runSql(PRODUCTION_QUERY, false);
     // Assert: verify that the expected number of rows is returned
     Assertions.assertEquals(1, result.size());
+    // Assert: verify that the results are correct
+    Assertions.assertTrue(result.contains(makeMap()));
   }
 
   @Test
@@ -119,5 +121,7 @@ public class JUnit5MediumTest {
     ArrayList<HashMap<String, String>> result = runSql(PRODUCTION_QUERY, false);
     // Assert: verify that the expected number of rows is returned
     Assertions.assertEquals(1, result.size());
+    // Assert: verify that the results are correct
+    Assertions.assertTrue(result.contains(makeMap()));
   }
 }

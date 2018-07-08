@@ -142,6 +142,8 @@ public class JUnit5SmallTest {
     ArrayList<HashMap<String, String>> result = runSql(PRODUCTION_QUERY, false);
     // Assert: verify that the expected number of rows is returned
     Assertions.assertEquals(1, result.size());
+    // Assert: verify that the results are correct
+    Assertions.assertTrue(result.contains(makeMap("column1_1", "1", "column1_2", "0.5", "column1_3", "The first row of table 1.")));
   }
 
   @Test
@@ -152,5 +154,7 @@ public class JUnit5SmallTest {
     ArrayList<HashMap<String, String>> result = runSql(PRODUCTION_QUERY, false);
     // Assert: verify that the expected number of rows is returned
     Assertions.assertEquals(1, result.size());
+    // Assert: verify that the results are correct
+    Assertions.assertTrue(result.contains(makeMap("column1_1", "2", "column1_2", "1.5", "column1_3", "The second row.")));
   }
 }

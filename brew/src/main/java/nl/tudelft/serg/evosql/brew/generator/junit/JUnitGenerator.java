@@ -123,10 +123,10 @@ public abstract class JUnitGenerator implements Generator {
         if (jUnitGeneratorSettings.isGenerateSqlExecutorImplementation()) {
             typeSpecBuilder.addMethod(helper.buildRunSqlImplementation());
             typeSpecBuilder.addMethod(helper.buildGetResultColumns());
-            typeSpecBuilder.addMethod(helper.buildMapMaker());
         } else {
             typeSpecBuilder.addMethod(helper.buildRunSqlEmpty());
         }
+        typeSpecBuilder.addMethod(helper.buildMapMaker());
     }
 
     /**

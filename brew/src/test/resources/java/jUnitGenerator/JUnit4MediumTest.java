@@ -36,6 +36,17 @@ public class JUnit4MediumTest {
   }
 
   /**
+   * Generates a string map from a list of strings.
+   */
+  private static HashMap<String, String> makeMap(String... strings) {
+    HashMap<String, String> result = new HashMap<>();
+    for(int i = 0; i < strings.length; i += 2) {
+      result.put(strings[i], strings[i + 1]);
+    }
+    return result;
+  }
+
+  /**
    * Creates tables required for queries.
    */
   private static void createTables() throws SQLException {

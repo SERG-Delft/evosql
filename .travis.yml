@@ -21,7 +21,6 @@ script:
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
-  - ./gradlew coveralls          # uploads to Coveralls
 
 jdk:
   - oraclejdk8

@@ -21,8 +21,8 @@ public class JUnit4MediumTest {
 
   /**
    * This method should connect to your database and execute the given query.
-   * In order for the assertions to work correctly this method must return true in the case
-   * that the query yields at least one result and false if there is no result.
+   * In order for the assertions to work correctly this method must return a list of maps
+   * in the case that the query succeeds, or null if the query fails. The tests will assert the results.
    *
    * @param query    The query to execute.
    * @param isUpdate Whether the query is a data modification statement.

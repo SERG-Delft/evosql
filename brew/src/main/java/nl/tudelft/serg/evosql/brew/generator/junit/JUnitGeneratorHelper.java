@@ -116,8 +116,8 @@ public class JUnitGeneratorHelper {
                 .addParameter(TypeName.BOOLEAN, "isUpdate")
                 .addException(SQLException.class)
                 .addJavadoc("This method should connect to your database and execute the given query.\n" +
-                        "In order for the assertions to work correctly this method must return true in the case\n" +
-                        "that the query yields at least one result and false if there is no result.\n\n" +
+                        "In order for the assertions to work correctly this method must return a list of maps\n" +
+                        "in the case that the query succeeds, or null if the query fails. The tests will assert the results.\n\n" +
                         "@param query    The query to execute.\n" +
                         "@param isUpdate Whether the query is a data modification statement.\n\n" +
                         "@returns The resulting table, or null if the query is an update.\n");

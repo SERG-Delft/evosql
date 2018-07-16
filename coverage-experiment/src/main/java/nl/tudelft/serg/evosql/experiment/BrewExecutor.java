@@ -94,15 +94,15 @@ public class BrewExecutor {
      *
      * @param result       GA result of original query
      * @param pathToOutput path to output file to
-     * @param fileName     name of the test class
+     * @param className    name of the test class
      */
-    public void brewWithMutatedQuery(Result result, Path pathToOutput, String fileName) {
+    public void brewWithMutatedQuery(Result result, Path pathToOutput, String className) {
         existingDataRunner.setResult(result);
         //Configure jUnitGenerator, TODO: perhaps remove code duplication with the other method in the future
         JUnitGeneratorSettings jUnitGeneratorSettings = new JUnitGeneratorSettings(
                 connectionDataTest,
                 filePackage,
-                fileName,
+                className,
                 true,
                 true,
                 true,

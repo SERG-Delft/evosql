@@ -76,7 +76,6 @@ public class Runner {
         QueryReader queryReader = new QueryReader();
         List<String> allQueries = queryReader.readQueries(erpnext, espocrm, suitecrm);
 
-        // TODO: Make connection data for separate databases...
         ConnectionData connectionDataProd = CONNECTION_DATA_ERPNEXT_PROD;
         ConnectionData connectionDataTest = CONNECTION_DATA_ERPNEXT_TEST;
         for (int i = startIndex; i < allQueries.size(); i += stepSize) {
@@ -110,7 +109,6 @@ public class Runner {
                                                     ConnectionData connectionDataTest,
                                                     String packageName) {
 
-        // TODO: Implement method
 
         Path experimentPath = Paths.get(System.getProperty("user.home"), "experiment-projects", packageName);
         try {

@@ -72,64 +72,11 @@ public class Runner {
                                              ConnectionData connectionDataProd,
                                              ConnectionData connectionDataTest,
                                              String queryClassName) {
-        // TODO: Get file package
-        BrewExecutor brewExecutor = new BrewExecutor(connectionDataProd, connectionDataTest, query, "");
-        // TODO: Pass a good folder name which is useable
-        brewExecutor.executeBrew(Paths.get("../test"), queryClassName + "_original.java");
 
-        //String mutatedQuery = QueryMutator.mutateQuery(query);
-        brewExecutor.brewWithMutatedQuery(brewExecutor.getQueryResult(), Paths.get("../test"), queryClassName + "_mutated.java");
+        // TODO: Implement method
 
-        // TODO: Get right path
-        org.junit.runner.Result[] results = testClassRunner(
-                Paths.get("../test").toAbsolutePath().toString(),
-                queryClassName + "_original.java",
-                queryClassName + "_mutated.java"
-        );
-
-        QueryExperimentResult experimentResult = new QueryExperimentResult(
-                query,
-                "",
-                results[0].wasSuccessful(),
-                results[1].wasSuccessful()
-        );
-
-        return experimentResult;
+        return null;
     }
 
-
-    /**
-     * Runs generated test classes and returns a jUnit result datastructure.
-     *
-     * @param folderPath             absolute path containing the test classes to run
-     * @param originalQueryClassName test class name of the 'correct' query
-     * @param mutatedQueryClassName  test class name of the mutated query
-     * @return test results, first index is the original query result, second index is the mutated query result.
-     */
-    public static org.junit.runner.Result[] testClassRunner(String folderPath,
-                                                     String originalQueryClassName,
-                                                     String mutatedQueryClassName) {
-        URLClassLoader loader;
-        org.junit.runner.Result[] results = new org.junit.runner.Result[2];
-        try {
-            loader = new URLClassLoader(new URL[]{
-                    new URL("file://" + folderPath)
-            });
-            Class originalQueryTestClass;
-            Class mutatedQueryTestClass;
-            try {
-                originalQueryTestClass = loader.loadClass(originalQueryClassName);
-                mutatedQueryTestClass = loader.loadClass(mutatedQueryClassName);
-                results[0] = JUnitCore.runClasses(originalQueryTestClass);
-                results[1] = JUnitCore.runClasses(mutatedQueryTestClass);
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
-        return results;
-    }
 
 }

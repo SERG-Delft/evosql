@@ -1,44 +1,43 @@
 package nl.tudelft.serg.evosql.experiment;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Arrays;
+import org.junit.Ignore;
+import org.junit.Test;
+
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
+/**
+ * Tests end-to-end functionality of query mutation.
+ */
 public class QueryMutatorTest {
+// TODO: Make assertions more specific
 
-    private String mutatorXMLFile;
-
-    @BeforeEach
-    public void setup() {
-        String fileName = "MutatorXMLTest.xml";
-        ClassLoader classLoader = ClassLoader.getSystemClassLoader();
-        File file = new File(classLoader.getResource(fileName).getFile());
-        try {
-            mutatorXMLFile = new String(Files.readAllBytes(Paths.get(file.getAbsolutePath())), Charset.defaultCharset());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    @Ignore // We know that ErpNext fails since the schema XML is too large...
+    @Test
+    public void mutateQueryErpNext1Test() {
+        String query = "select * from `tabPOS Profile` where user = 'Administrator' and company = '_Test Company'";
+        QueryMutator queryMutator = new QueryMutator(query, "erpnext");
+        List<String> result = queryMutator.createMutants();
+        assertFalse(result.isEmpty());
     }
 
     @Test
-    public void parseMutantsTest1() {
-        List<String> expected = Arrays.asList("SELECT empname FROM staff WHERE empnum = 'E1'",
-                "SELECT DISTINCT empname FROM staff WHERE empnum = 'E1'",
-                "SELECT STAFF.EMPNUM FROM staff WHERE empnum = 'E1'");
-
-        QueryMutator queryMutator = new QueryMutator();
-        assertTrue(expected.equals(queryMutator.parseMutations(mutatorXMLFile)));
+    public void mutateQueryEspoCrm1Test() {
+        String query = "SELECT COUNT(role.id) AS AggregateValue FROM `role` WHERE role.id = '589dd9e072d8768c3' AND role.deleted = '0'";
+        QueryMutator queryMutator = new QueryMutator(query, "espocrm");
+        List<String> result = queryMutator.createMutants();
+        assertFalse(result.isEmpty());
     }
+
+    @Test
+    public void mutateQuerySuiteCrm1Test() {
+        String query = " SELECT  currencies.*  FROM currencies  where currencies.deleted=0 ORDER BY currencies.name";
+        QueryMutator queryMutator = new QueryMutator(query, "suitecrm");
+        List<String> result = queryMutator.createMutants();
+        assertFalse(result.isEmpty());
+    }
+
+
 }

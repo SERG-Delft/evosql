@@ -23,27 +23,17 @@ public class Runner {
                 Runner.class.getResourceAsStream("sql/erpnext_queries.sql")));
         Stream<String> erpnext = reader_erpnext.lines();
 
-        try {
-            reader_erpnext.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         BufferedReader reader_espocrm = new BufferedReader(new InputStreamReader(
                 Runner.class.getResourceAsStream("sql/espocrm_queries.sql")));
         Stream<String> espocrm = reader_espocrm.lines();
-
-        try {
-            reader_espocrm.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         BufferedReader reader_suitecrm = new BufferedReader(new InputStreamReader(
                 Runner.class.getResourceAsStream("sql/suitecrm_queries.sql")));
         Stream<String> suitecrm = reader_suitecrm.lines();
 
         try {
+            reader_erpnext.close();
+            reader_espocrm.close();
             reader_suitecrm.close();
         } catch (IOException e) {
             e.printStackTrace();

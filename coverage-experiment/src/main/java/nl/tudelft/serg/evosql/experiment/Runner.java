@@ -90,14 +90,31 @@ public class Runner {
             e.printStackTrace();
         } catch (URISyntaxException e) {
             e.printStackTrace();
+
         }
 
-        // TODO: Execute brew and output to project folder for original
+        // Create a path to output test classes to
+        Path testClassPath = Paths.get(experimentPath.toAbsolutePath().toString(), "src", "test", "java", packageName);
+        if (!Files.exists(testClassPath)) {
+            try {
+                Files.createDirectory(testClassPath);
+            } catch (IOException e) {
+                System.err.println(e);
+            }
+        }
 
-        // TODO: Create mutants
+        // Execute brew and output to project folder for original
+        BrewExecutor brewExecutor = new BrewExecutor(connectionDataProd, connectionDataTest, query, packageName);
+        brewExecutor.executeBrew(testClassPath, "Original.java");
 
-        // TODO: Execute brew and output to project folder for mutants
+        // Create mutants
+        QueryMutator queryMutator = new QueryMutator(query, connectionDataProd.getDatabase());
+        List<String> queryMutants = queryMutator.createMutants();
 
+        // Execute brew and output to project folder for mutants
+        for (int i = 0; i < queryMutants.size(); i++) {
+            brewExecutor.brewWithMutatedQuery(brewExecutor.getQueryResult(), testClassPath, "Mutated" + i + ".java");
+        }
 
         Process proc = null;
         try {

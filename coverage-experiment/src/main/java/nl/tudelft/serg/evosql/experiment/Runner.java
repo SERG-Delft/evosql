@@ -140,7 +140,7 @@ public class Runner {
 
         // Execute brew and output to project folder for original
         BrewExecutor brewExecutor = new BrewExecutor(connectionDataProd, connectionDataTest, query, packageName);
-        brewExecutor.executeBrew(testClassPath, "Original.java");
+        brewExecutor.executeBrew(testClassPath, "Original");
 
         // Create mutants
         QueryMutator queryMutator = new QueryMutator(query, connectionDataProd.getDatabase());
@@ -148,32 +148,26 @@ public class Runner {
 
         // Execute brew and output to project folder for mutants
         for (int i = 0; i < queryMutants.size(); i++) {
-            brewExecutor.brewWithMutatedQuery(brewExecutor.getQueryResult(), testClassPath, "Mutated" + i + ".java");
+            brewExecutor.brewWithMutatedQuery(brewExecutor.getQueryResult(), testClassPath, "Mutated" + i);
         }
 
-        Process proc = null;
         try {
 
             // TODO: Run tests of original query
             // TODO: Run tests of mutated query
 
-            proc = Runtime.getRuntime().exec("cd " + experimentPath.toAbsolutePath().toString());
-            // Run gradle
-            String className = "name"; // FIXME: Get right name
-            String command = ".\\gradlew test --tests " + className;
-            proc = Runtime.getRuntime().exec(command);
-
-
-            BufferedReader reader =
-                    new BufferedReader(new InputStreamReader(proc.getInputStream()));
-
-            String line = "";
-            while ((line = reader.readLine()) != null) {
-            }
-
-            // TODO: Find status code somewhere in here
-
+            Process proc;
+            // FIXME: get correct class name
+            ProcessBuilder pb = new ProcessBuilder("gradle", "test", "--tests", "*");
+            pb.directory(experimentPath.toFile());
+            proc = pb.start();
             proc.waitFor();
+
+            final int exitCode = proc.exitValue();
+
+            // FIXME: If exitCode == 0 it worked, otherwise tests failed
+            // FIXME: In theory, only the mutated tests should fail
+
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {

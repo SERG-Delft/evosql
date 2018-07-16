@@ -15,8 +15,8 @@ import java.net.URL;
  * from the SQLMutation web service.
  */
 public class WebMutatorConnector {
-    private String secureSqlquery;
-    private String schemaXml;
+    private final String secureSqlquery;
+    private final String schemaXml;
 
     public WebMutatorConnector(String sqlQuery, String dbName) {
         SqlSecurer sqlSecurer = new SqlSecurer(sqlQuery);

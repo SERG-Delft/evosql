@@ -21,6 +21,26 @@ import java.util.stream.Stream;
  */
 public class Runner {
 
+    static final ConnectionData CONNECTION_DATA_ERPNEXT = new ConnectionData(
+            "jdbc:postgresql://localhost:5432/erpnext",
+            "erpnext", "postgres", "");
+
+    static final ConnectionData CONNECTION_DATA_ESPOCRM = new ConnectionData(
+            "jdbc:postgresql://localhost:5432/espocrm",
+            "espocrm", "postgres", "");
+
+    static final ConnectionData CONNECTION_DATA_SUITECRM = new ConnectionData(
+            "jdbc:postgresql://localhost:5432/suitecrm",
+            "suitecrm", "postgres", "");
+
+    static final ConnectionData CONNECTION_DATA_TESTDB = new ConnectionData(
+            "jdbc:postgresql://localhost:5432/test",
+            "test", "postgres", "");
+
+    static final int AMOUNT_QUERIES_ERPNEXT = 1689;
+    static final int AMOUNT_QUERIES_ESPOCRM = 40;
+    static final int AMOUNT_QUERIES_SUITECRM = 280;
+
     public static void main(String[] args) {
         int startIndex = Integer.valueOf(args[0]);
         int stepSize = Integer.valueOf(args[1]);
@@ -48,7 +68,14 @@ public class Runner {
         List<String> allQueries = queryReader.readQueries(erpnext, espocrm, suitecrm);
 
         // TODO: Make connection data for separate databases...
+        ConnectionData connectionData = CONNECTION_DATA_ERPNEXT;
         for (int i = startIndex; i < allQueries.size(); i += stepSize) {
+            // Sorry for this...
+            if (i >= AMOUNT_QUERIES_ERPNEXT && i < AMOUNT_QUERIES_ERPNEXT + AMOUNT_QUERIES_ESPOCRM) {
+                connectionData = CONNECTION_DATA_ESPOCRM;
+            } else if (i >= AMOUNT_QUERIES_ERPNEXT + AMOUNT_QUERIES_ESPOCRM) {
+                connectionData = CONNECTION_DATA_SUITECRM;
+            }
             runForQuery(
                     allQueries.get(i),
                     null,
@@ -67,9 +94,9 @@ public class Runner {
      * @param connectionDataTest data of db connection for test database
      */
     public static QueryExperimentResult runForQuery(String query,
-                                             ConnectionData connectionDataProd,
-                                             ConnectionData connectionDataTest,
-                                             String packageName) {
+                                                    ConnectionData connectionDataProd,
+                                                    ConnectionData connectionDataTest,
+                                                    String packageName) {
 
         // TODO: Implement method
 
@@ -133,7 +160,8 @@ public class Runner {
                     new BufferedReader(new InputStreamReader(proc.getInputStream()));
 
             String line = "";
-            while ((line = reader.readLine()) != null) {}
+            while ((line = reader.readLine()) != null) {
+            }
 
             // TODO: Find status code somewhere in here
 
@@ -145,9 +173,7 @@ public class Runner {
         }
 
 
-
         // TODO: Store results
-
 
 
         return null;

@@ -21,21 +21,30 @@ import java.util.stream.Stream;
  */
 public class Runner {
 
-    static final ConnectionData CONNECTION_DATA_ERPNEXT = new ConnectionData(
-            "jdbc:postgresql://localhost:5432/erpnext",
-            "erpnext", "postgres", "");
+    static final ConnectionData CONNECTION_DATA_ERPNEXT_PROD = new ConnectionData(
+            "jdbc:postgresql://localhost:5432/erpnext_prod",
+            "erpnext_prod", "postgres", "");
 
-    static final ConnectionData CONNECTION_DATA_ESPOCRM = new ConnectionData(
-            "jdbc:postgresql://localhost:5432/espocrm",
-            "espocrm", "postgres", "");
+    static final ConnectionData CONNECTION_DATA_ESPOCRM_PROD = new ConnectionData(
+            "jdbc:postgresql://localhost:5432/espocrm_prod",
+            "espocrm_prod", "postgres", "");
 
-    static final ConnectionData CONNECTION_DATA_SUITECRM = new ConnectionData(
-            "jdbc:postgresql://localhost:5432/suitecrm",
-            "suitecrm", "postgres", "");
+    static final ConnectionData CONNECTION_DATA_SUITECRM_PROD = new ConnectionData(
+            "jdbc:postgresql://localhost:5432/suitecrm_prod",
+            "suitecrm_prod", "postgres", "");
 
-    static final ConnectionData CONNECTION_DATA_TESTDB = new ConnectionData(
-            "jdbc:postgresql://localhost:5432/test",
-            "test", "postgres", "");
+    static final ConnectionData CONNECTION_DATA_ERPNEXT_TEST = new ConnectionData(
+            "jdbc:postgresql://localhost:5432/erpnext_test",
+            "erpnext_test", "postgres", "");
+
+    static final ConnectionData CONNECTION_DATA_ESPOCRM_TEST = new ConnectionData(
+            "jdbc:postgresql://localhost:5432/espocrm_test",
+            "espocrm_test", "postgres", "");
+
+    static final ConnectionData CONNECTION_DATA_SUITECRM_TEST = new ConnectionData(
+            "jdbc:postgresql://localhost:5432/suitecrm_test",
+            "suitecrm_test", "postgres", "");
+
 
     static final int AMOUNT_QUERIES_ERPNEXT = 1689;
     static final int AMOUNT_QUERIES_ESPOCRM = 40;
@@ -68,18 +77,21 @@ public class Runner {
         List<String> allQueries = queryReader.readQueries(erpnext, espocrm, suitecrm);
 
         // TODO: Make connection data for separate databases...
-        ConnectionData connectionData = CONNECTION_DATA_ERPNEXT;
+        ConnectionData connectionDataProd = CONNECTION_DATA_ERPNEXT_PROD;
+        ConnectionData connectionDataTest = CONNECTION_DATA_ERPNEXT_TEST;
         for (int i = startIndex; i < allQueries.size(); i += stepSize) {
             // Sorry for this...
             if (i >= AMOUNT_QUERIES_ERPNEXT && i < AMOUNT_QUERIES_ERPNEXT + AMOUNT_QUERIES_ESPOCRM) {
-                connectionData = CONNECTION_DATA_ESPOCRM;
+                connectionDataProd = CONNECTION_DATA_ESPOCRM_PROD;
+                connectionDataTest = CONNECTION_DATA_ESPOCRM_TEST;
             } else if (i >= AMOUNT_QUERIES_ERPNEXT + AMOUNT_QUERIES_ESPOCRM) {
-                connectionData = CONNECTION_DATA_SUITECRM;
+                connectionDataProd = CONNECTION_DATA_SUITECRM_PROD;
+                connectionDataTest = CONNECTION_DATA_SUITECRM_TEST;
             }
             runForQuery(
                     allQueries.get(i),
-                    null,
-                    null,
+                    connectionDataProd,
+                    connectionDataTest,
                     String.valueOf(i)
             );
         }

@@ -30,7 +30,6 @@ public class BrewExecutor {
 
     private final String filePackage;
     private final Result queryResult;
-    private String productionString;
     private final ExistingDataRunner existingDataRunner;
 
     public BrewExecutor(ConnectionData connectionDataProd,

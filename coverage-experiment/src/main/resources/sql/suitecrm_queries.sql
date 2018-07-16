@@ -3,7 +3,7 @@ SELECT oauth_consumer.* FROM oauth_consumer  WHERE c_key = '' AND deleted=0 LIMI
 SELECT * FROM acl_actions WHERE name='access' AND category = 'Test' AND acltype='module' and deleted=0
 SELECT meetings.* from meetings_users,meetings  WHERE  meetings_users.meeting_id=meetings.id AND meetings_users.user_id='1' AND meetings.deleted=0 AND meetings_users.deleted=0
 SELECT addr.email_address FROM email_addresses addr,email_addr_bean_rel eb WHERE eb.deleted=0 AND addr.id=eb.email_address_id AND bean_id ='' AND primary_address = '1'
- SELECT  currencies.*  FROM currencies  where currencies.deleted=0 ORDER BY currencies.name
+SELECT  currencies.*  FROM currencies  where currencies.deleted=0 ORDER BY currencies.name
 SELECT documents.document_name, revision FROM documents, document_revisions where documents.id = 'dummy_id' AND document_revisions.id = documents.document_revision_id
 SELECT id FROM outbound_email WHERE type = 'system'
 SELECT account_id FROM accounts_contacts WHERE contact_id='2' LIMIT 0,1

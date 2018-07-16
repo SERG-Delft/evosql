@@ -1,6 +1,5 @@
 package nl.tudelft.serg.evosql.experiment;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
@@ -12,10 +11,9 @@ import lombok.Data;
  * boolean if it passed on the same test suite with the mutated query.
  */
 @Data
-@AllArgsConstructor
 public class QueryExperimentResult {
-    private String originalQuery;
-    private String mutatedQuery;
-    private boolean initBrewPass;
-    private boolean mutatedBrewPass;
+    private final String originalQuery;
+    private final String mutatedQuery;
+    private final boolean initBrewPass;
+    private final boolean mutatedBrewPass;
 }

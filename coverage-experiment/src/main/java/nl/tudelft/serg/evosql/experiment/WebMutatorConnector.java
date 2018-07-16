@@ -47,12 +47,14 @@ public class WebMutatorConnector {
      * Calls the SQLMutation web service in order to get the mutants of the query.
      * The mutants are in XML format.
      *
+     * Uses the <noequivalent/> option so that no duplicate mutants are created.
+     *
      * @return XML representation of the web service.
      */
     public String requestMutants() {
         String mutantsXml = "";
         SQLMutationWSFacade mutationWSFacade = new SQLMutationWSFacade();
-        mutantsXml = mutationWSFacade.getMutants(secureSqlquery, schemaXml, "<noequivalent>");
+        mutantsXml = mutationWSFacade.getMutants(secureSqlquery, schemaXml, "<options><noequivalent/></options>");
         return mutantsXml;
     }
 

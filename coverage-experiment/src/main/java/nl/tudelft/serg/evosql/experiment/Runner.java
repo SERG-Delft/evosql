@@ -23,27 +23,27 @@ public class Runner {
 
     static final ConnectionData CONNECTION_DATA_ERPNEXT_PROD = new ConnectionData(
             "jdbc:postgresql://localhost:5432/erpnext_prod",
-            "erpnext_prod", "postgres", "");
+            "erpnext", "postgres", "");
 
     static final ConnectionData CONNECTION_DATA_ESPOCRM_PROD = new ConnectionData(
             "jdbc:postgresql://localhost:5432/espocrm_prod",
-            "espocrm_prod", "postgres", "");
+            "espocrm", "postgres", "");
 
     static final ConnectionData CONNECTION_DATA_SUITECRM_PROD = new ConnectionData(
             "jdbc:postgresql://localhost:5432/suitecrm_prod",
-            "suitecrm_prod", "postgres", "");
+            "suitecrm", "postgres", "");
 
     static final ConnectionData CONNECTION_DATA_ERPNEXT_TEST = new ConnectionData(
             "jdbc:postgresql://localhost:5432/erpnext_test",
-            "erpnext_test", "postgres", "");
+            "erpnext", "postgres", "");
 
     static final ConnectionData CONNECTION_DATA_ESPOCRM_TEST = new ConnectionData(
             "jdbc:postgresql://localhost:5432/espocrm_test",
-            "espocrm_test", "postgres", "");
+            "espocrm", "postgres", "");
 
     static final ConnectionData CONNECTION_DATA_SUITECRM_TEST = new ConnectionData(
             "jdbc:postgresql://localhost:5432/suitecrm_test",
-            "suitecrm_test", "postgres", "");
+            "suitecrm", "postgres", "");
 
 
     static final int AMOUNT_QUERIES_ERPNEXT = 1689;
@@ -54,16 +54,22 @@ public class Runner {
         int startIndex = Integer.valueOf(args[0]);
         int stepSize = Integer.valueOf(args[1]);
         BufferedReader reader_erpnext = new BufferedReader(new InputStreamReader(
-                Runner.class.getResourceAsStream("sql/erpnext_queries.sql")));
+                Runner.class.getClassLoader().getResourceAsStream("sql/erpnext_queries.sql")));
         Stream<String> erpnext = reader_erpnext.lines();
 
         BufferedReader reader_espocrm = new BufferedReader(new InputStreamReader(
-                Runner.class.getResourceAsStream("sql/espocrm_queries.sql")));
+                Runner.class.getClassLoader().getResourceAsStream("sql/espocrm_queries.sql")));
         Stream<String> espocrm = reader_espocrm.lines();
 
         BufferedReader reader_suitecrm = new BufferedReader(new InputStreamReader(
-                Runner.class.getResourceAsStream("sql/suitecrm_queries.sql")));
+                Runner.class.getClassLoader().getResourceAsStream("sql/suitecrm_queries.sql")));
         Stream<String> suitecrm = reader_suitecrm.lines();
+
+
+
+        QueryReader queryReader = new QueryReader();
+        List<String> allQueries = queryReader.readQueries(erpnext, espocrm, suitecrm);
+
 
         try {
             reader_erpnext.close();
@@ -72,9 +78,6 @@ public class Runner {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        QueryReader queryReader = new QueryReader();
-        List<String> allQueries = queryReader.readQueries(erpnext, espocrm, suitecrm);
 
         ConnectionData connectionDataProd = CONNECTION_DATA_ERPNEXT_PROD;
         ConnectionData connectionDataTest = CONNECTION_DATA_ERPNEXT_TEST;
@@ -116,20 +119,23 @@ public class Runner {
         } catch (IOException e) {
             System.err.println(e);
         }
-        URL gradlePath = Runner.class.getResource("gradle/sample_build.gradle");
-
+        URL gradlePathURL = Runner.class.getClassLoader().getResource("gradle/sample_build.gradle");
+        Path gradlePath = null;
         try {
-            // Copies sample gradle file to new project folder
-            Files.copy(Paths.get(gradlePath.toURI().toString()), Paths.get(experimentPath.toUri().toString(), "build.gradle"));
-        } catch (IOException e) {
-            e.printStackTrace();
+            gradlePath = Paths.get(gradlePathURL.toURI());
         } catch (URISyntaxException e) {
             e.printStackTrace();
-
+        }
+        try {
+            // Copies sample gradle file to new project folder
+            Files.copy(Paths.get(gradlePath.toString()),
+                    Paths.get(experimentPath.toString(), "build.gradle"));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         // Create a path to output test classes to
-        Path testClassPath = Paths.get(experimentPath.toAbsolutePath().toString(), "src", "test", "java", packageName);
+        Path testClassPath = Paths.get(experimentPath.toAbsolutePath().toString(), "src", "test", "java", "query" + packageName);
         if (!Files.exists(testClassPath)) {
             try {
                 Files.createDirectories(testClassPath);
@@ -139,7 +145,7 @@ public class Runner {
         }
 
         // Execute brew and output to project folder for original
-        BrewExecutor brewExecutor = new BrewExecutor(connectionDataProd, connectionDataTest, query, packageName);
+        BrewExecutor brewExecutor = new BrewExecutor(connectionDataProd, connectionDataTest, query, "query" + packageName);
         brewExecutor.executeBrew(testClassPath, "Original");
 
         // Create mutants

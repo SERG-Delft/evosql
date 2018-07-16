@@ -1,11 +1,14 @@
 package nl.tudelft.serg.evosql.experiment;
 
 
+import com.google.common.base.Charsets;
+import com.google.common.io.Resources;
 import in2test.application.common.SQLToolsConfig;
 import in2test.application.services.SQLMutationWSFacade;
-import nl.tudelft.serg.evosql.db.ISchemaExtractor;
-import nl.tudelft.serg.evosql.db.SchemaExtractor;
 import nl.tudelft.serg.evosql.sql.parser.SqlSecurer;
+
+import java.io.IOException;
+import java.net.URL;
 
 /**
  * Class responsible for making a web request to retrieve the query mutations
@@ -15,21 +18,28 @@ public class WebMutatorConnector {
     private String secureSqlquery;
     private String schemaXml;
 
-    public WebMutatorConnector(String sqlQuery, ISchemaExtractor schemaExtractor) {
+    public WebMutatorConnector(String sqlQuery, String dbName) {
         SqlSecurer sqlSecurer = new SqlSecurer(sqlQuery);
         secureSqlquery = sqlSecurer.getSecureSql();
-        schemaXml = getSchemaXml(secureSqlquery, schemaExtractor);
+        schemaXml = fetchSchemaXml(dbName);
         SQLToolsConfig.configure();
     }
 
     /**
-     * Transforms the schema into XML format.
+     * Fetches the XML format of the DB schema from the corresponding resource file.
      *
-     * @param schema schema of query
+     * @param dbName database name of the given query
      * @return schema in XML format.
      */
-    private String getSchemaXml(String schema, ISchemaExtractor schemaExtractor) {
-        return new SchemaXMLBuilder(secureSqlquery, schemaExtractor).getSchemaXml();
+    private String fetchSchemaXml(String dbName) {
+        URL url = Resources.getResource("schema_xml/" + dbName + "_schema.xml");
+        try {
+            String text = Resources.toString(url, Charsets.UTF_8);
+            return text;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 
@@ -42,7 +52,7 @@ public class WebMutatorConnector {
     public String requestMutants() {
         String mutantsXml = "";
         SQLMutationWSFacade mutationWSFacade = new SQLMutationWSFacade();
-        mutantsXml = mutationWSFacade.getMutants(secureSqlquery, schemaXml, "");
+        mutantsXml = mutationWSFacade.getMutants(secureSqlquery, schemaXml, "<noequivalent>");
         return mutantsXml;
     }
 

@@ -33,16 +33,4 @@ public class QueryReader {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Reads a single query from a fileStream given by the line number.
-     * Takes line numbers counting from zero onwards.
-     *
-     * @param fileStream   fileStream to read
-     * @param lineNo line number to read
-     * @return query in fileStream.
-     */
-    public String readQuery(Stream<String> fileStream, int lineNo) {
-        return readQueries(fileStream).get(lineNo);
-    }
-
 }

@@ -101,12 +101,10 @@ public class Runner {
         // TODO: Implement method
 
         Path experimentPath = Paths.get(System.getProperty("user.home"), "experiment-projects", packageName);
-        if (!Files.exists(experimentPath)) {
-            try {
-                Files.createDirectory(experimentPath);
-            } catch (IOException e) {
-                System.err.println(e);
-            }
+        try {
+            Files.createDirectories(experimentPath);
+        } catch (IOException e) {
+            System.err.println(e);
         }
         URL gradlePath = Runner.class.getResource("gradle/sample_build.gradle");
 
@@ -124,7 +122,7 @@ public class Runner {
         Path testClassPath = Paths.get(experimentPath.toAbsolutePath().toString(), "src", "test", "java", packageName);
         if (!Files.exists(testClassPath)) {
             try {
-                Files.createDirectory(testClassPath);
+                Files.createDirectories(testClassPath);
             } catch (IOException e) {
                 System.err.println(e);
             }

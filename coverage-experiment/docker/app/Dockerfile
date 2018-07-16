@@ -30,4 +30,4 @@ RUN set -o errexit -o nounset \
     && mv "gradle-${GRADLE_VERSION}" "${GRADLE_HOME}/" \
     && ln --symbolic "${GRADLE_HOME}/bin/gradle" /usr/bin/gradle \
     \
-    && mkdir ~/.gradle \
+    && mkdir ~/.gradle

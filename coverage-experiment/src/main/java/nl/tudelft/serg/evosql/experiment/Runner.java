@@ -67,19 +67,17 @@ public class Runner {
      * @param connectionDataTest data of db connection for test database
      */
     public static QueryExperimentResult runForQuery(String query,
-                                             ConnectionData connectionDataProd,
-                                             ConnectionData connectionDataTest,
-                                             String packageName) {
+                                                    ConnectionData connectionDataProd,
+                                                    ConnectionData connectionDataTest,
+                                                    String packageName) {
 
         // TODO: Implement method
 
         Path experimentPath = Paths.get(System.getProperty("user.home"), "experiment-projects", packageName);
-        if (!Files.exists(experimentPath)) {
-            try {
-                Files.createDirectory(experimentPath);
-            } catch (IOException e) {
-                System.err.println(e);
-            }
+        try {
+            Files.createDirectories(experimentPath);
+        } catch (IOException e) {
+            System.err.println(e);
         }
         URL gradlePath = Runner.class.getResource("gradle/sample_build.gradle");
 
@@ -97,7 +95,7 @@ public class Runner {
         Path testClassPath = Paths.get(experimentPath.toAbsolutePath().toString(), "src", "test", "java", packageName);
         if (!Files.exists(testClassPath)) {
             try {
-                Files.createDirectory(testClassPath);
+                Files.createDirectories(testClassPath);
             } catch (IOException e) {
                 System.err.println(e);
             }
@@ -133,7 +131,8 @@ public class Runner {
                     new BufferedReader(new InputStreamReader(proc.getInputStream()));
 
             String line = "";
-            while ((line = reader.readLine()) != null) {}
+            while ((line = reader.readLine()) != null) {
+            }
 
             // TODO: Find status code somewhere in here
 
@@ -145,9 +144,7 @@ public class Runner {
         }
 
 
-
         // TODO: Store results
-
 
 
         return null;

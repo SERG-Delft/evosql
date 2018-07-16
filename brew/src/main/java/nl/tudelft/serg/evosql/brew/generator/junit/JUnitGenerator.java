@@ -93,21 +93,21 @@ public abstract class JUnitGenerator implements Generator {
     }
 
     private void addConnectionDataFields(TypeSpec.Builder typeSpecBuilder) {
-        FieldSpec jdbcUrlField = FieldSpec.builder(String.class, NAME_DB_JDBC_URL)
+        FieldSpec jdbcUrlField = FieldSpec.builder(String.class, FIELD_DB_JDBC_URL)
                 .addModifiers(Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL)
                 .initializer("$S", jUnitGeneratorSettings.getConnectionData().getConnectionString())
                 .addJavadoc("The JDBC url used to connect to the test database.\n")
                 .build();
         typeSpecBuilder.addField(jdbcUrlField);
 
-        FieldSpec jdbcUserField = FieldSpec.builder(String.class, NAME_DB_USER)
+        FieldSpec jdbcUserField = FieldSpec.builder(String.class, FIELD_DB_USER)
                 .addModifiers(Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL)
                 .initializer("$S", jUnitGeneratorSettings.getConnectionData().getUsername())
                 .addJavadoc("The username used to connect to the test database.\n")
                 .build();
         typeSpecBuilder.addField(jdbcUserField);
 
-        FieldSpec jdbcPasswordField = FieldSpec.builder(String.class, NAME_DB_PASSWORD)
+        FieldSpec jdbcPasswordField = FieldSpec.builder(String.class, FIELD_DB_PASSWORD)
                 .addModifiers(Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL)
                 .initializer("$S", jUnitGeneratorSettings.getConnectionData().getPassword())
                 .addJavadoc("The password used to connect to the test database.\n")
@@ -149,7 +149,7 @@ public abstract class JUnitGenerator implements Generator {
         Set<String> tableCreateStrings = new HashSet<>();
         result.getPaths().stream().map(tableCreationBuilder::buildQueries).forEach(tableCreateStrings::addAll);
         for (String s : tableCreateStrings) {
-            createTables.addStatement("$L($S, true)", RUN_SQL_NAME, s);
+            createTables.addStatement("$L($S, true)", METHOD_RUN_SQL, s);
         }
 
         return createTables.build();
@@ -175,7 +175,7 @@ public abstract class JUnitGenerator implements Generator {
         Set<String> tableCleanStrings = new HashSet<>();
         result.getPaths().stream().map(cleaningBuilder::buildQueries).forEach(tableCleanStrings::addAll);
         for (String s : tableCleanStrings) {
-            cleanTables.addStatement("$L($S, true)", RUN_SQL_NAME, s);
+            cleanTables.addStatement("$L($S, true)", METHOD_RUN_SQL, s);
         }
 
         return cleanTables.build();
@@ -201,7 +201,7 @@ public abstract class JUnitGenerator implements Generator {
         Set<String> destructionStrings = new HashSet<>();
         result.getPaths().stream().map(destructionBuilder::buildQueries).forEach(destructionStrings::addAll);
         for (String s : destructionStrings) {
-            dropTables.addStatement("$L($S, true)", RUN_SQL_NAME, s);
+            dropTables.addStatement("$L($S, true)", METHOD_RUN_SQL, s);
         }
 
         return dropTables.build();
@@ -325,12 +325,12 @@ public abstract class JUnitGenerator implements Generator {
         pTestBuilder.addComment("Arrange: set up the fixture data");
         InsertionBuilder insertionBuilder = new InsertionBuilder(vendorOptions);
         for (String s : insertionBuilder.buildQueries(path)) {
-            pTestBuilder.addStatement("$L($S, true)", RUN_SQL_NAME, s);
+            pTestBuilder.addStatement("$L($S, true)", METHOD_RUN_SQL, s);
         }
 
         // Act
         pTestBuilder.addComment("Act: run a selection query on the database");
-        pTestBuilder.addStatement("$T result = $L($L, false)", RUN_SQL_RETURN_TYPE, RUN_SQL_NAME, NAME_PRODUCTION_QUERY);
+        pTestBuilder.addStatement("$T result = $L($L, false)", RETURN_TYPE_RUN_SQL, METHOD_RUN_SQL, NAME_PRODUCTION_QUERY);
 
         // Assert
         pTestBuilder.addComment("Assert: verify that the expected number of rows is returned");
@@ -352,7 +352,7 @@ public abstract class JUnitGenerator implements Generator {
                 // create a list of arguments for JavaPoet
                 List<Object> arguments = new ArrayList<>(2 + mapSpec.size());
                 arguments.add(assertionClass);
-                arguments.add(MAP_MAKER_NAME);
+                arguments.add(METHOD_MAP_MAKER);
                 arguments.addAll(mapSpec);
 
                 pTestBuilder.addStatement("$T.assertTrue(result.contains($L(" + paramPlaceholder + ")))",

@@ -18,43 +18,43 @@ public class JUnitGeneratorHelper {
     /**
      * The name of the map maker function.
      */
-    public static final String RUN_SQL_NAME = "runSql";
+    public static final String METHOD_RUN_SQL = "runSql";
 
     /**
      * The return type of the runSql method.
      */
-    public static final ParameterizedTypeName RUN_SQL_RETURN_TYPE;
+    public static final ParameterizedTypeName RETURN_TYPE_RUN_SQL;
 
     /**
      * The name of the map maker function.
      */
-    public static final String MAP_MAKER_NAME = "makeMap";
+    public static final String METHOD_MAP_MAKER = "makeMap";
 
     /**
      * The name of the result column getter function.
      */
-    public static final String GET_RESULT_COLUMNS_NAME = "getResultColumns";
+    public static final String METHOD_GET_RESULT_COLUMNS = "getResultColumns";
 
     /**
      * The name of the JDBC URL constant.
      */
-    static final String NAME_DB_JDBC_URL = "DB_JDBC_URL";
+    static final String FIELD_DB_JDBC_URL = "DB_JDBC_URL";
 
     /**
      * The name of the database user constant.
      */
-    static final String NAME_DB_USER = "DB_USER";
+    static final String FIELD_DB_USER = "DB_USER";
 
     /**
      * The name of the database password constant.
      */
-    static final String NAME_DB_PASSWORD = "DB_PASSWORD";
+    static final String FIELD_DB_PASSWORD = "DB_PASSWORD";
 
     static {
         ParameterizedTypeName map = ParameterizedTypeName.get(HashMap.class,
                 String.class,
                 String.class);
-        RUN_SQL_RETURN_TYPE = ParameterizedTypeName.get(ClassName.get(ArrayList.class), map);
+        RETURN_TYPE_RUN_SQL = ParameterizedTypeName.get(ClassName.get(ArrayList.class), map);
     }
 
     /**
@@ -63,9 +63,9 @@ public class JUnitGeneratorHelper {
      * @return A runSql specification.
      */
     public MethodSpec buildRunSqlImplementation() {
-        MethodSpec.Builder runSql = MethodSpec.methodBuilder(RUN_SQL_NAME)
+        MethodSpec.Builder runSql = MethodSpec.methodBuilder(METHOD_RUN_SQL)
                 .addModifiers(Modifier.PRIVATE, Modifier.STATIC)
-                .returns(RUN_SQL_RETURN_TYPE)
+                .returns(RETURN_TYPE_RUN_SQL)
                 .addParameter(String.class, "query")
                 .addParameter(TypeName.BOOLEAN, "isUpdate")
                 .addException(SQLException.class)
@@ -77,18 +77,18 @@ public class JUnitGeneratorHelper {
         runSql.addStatement(
                 "$T connection = $T.getConnection($L, $L, $L)",
                 Connection.class, DriverManager.class,
-                NAME_DB_JDBC_URL, NAME_DB_USER, NAME_DB_PASSWORD)
+                FIELD_DB_JDBC_URL, FIELD_DB_USER, FIELD_DB_PASSWORD)
                 .addStatement("$T statement = connection.createStatement()", Statement.class)
                 .beginControlFlow("if (isUpdate == true)")
                 .addStatement("statement.executeUpdate(query)")
                 .addStatement("return null")
                 .nextControlFlow("else")
                 .addStatement("$T tableStructure = new $T()",
-                        RUN_SQL_RETURN_TYPE,
-                        RUN_SQL_RETURN_TYPE)
+                        RETURN_TYPE_RUN_SQL,
+                        RETURN_TYPE_RUN_SQL)
                 .addStatement("$T resultSet = statement.executeQuery(query)", ResultSet.class)
                 .addStatement("$T columns = $L(resultSet)",
-                        ParameterizedTypeName.get(List.class, String.class), GET_RESULT_COLUMNS_NAME)
+                        ParameterizedTypeName.get(List.class, String.class), METHOD_GET_RESULT_COLUMNS)
                 .beginControlFlow("while (resultSet.next())")
                 .addStatement("$T values = new $T<>()",
                         ParameterizedTypeName.get(HashMap.class, String.class, String.class), HashMap.class)
@@ -109,9 +109,9 @@ public class JUnitGeneratorHelper {
      * @return A runSql specification.
      */
     public MethodSpec buildRunSqlEmpty() {
-        MethodSpec.Builder runSql = MethodSpec.methodBuilder(RUN_SQL_NAME)
+        MethodSpec.Builder runSql = MethodSpec.methodBuilder(METHOD_RUN_SQL)
                 .addModifiers(Modifier.PRIVATE, Modifier.STATIC)
-                .returns(RUN_SQL_RETURN_TYPE)
+                .returns(RETURN_TYPE_RUN_SQL)
                 .addParameter(String.class, "query")
                 .addParameter(TypeName.BOOLEAN, "isUpdate")
                 .addException(SQLException.class)
@@ -134,7 +134,7 @@ public class JUnitGeneratorHelper {
      * @return An instance of a method specification for mapMaker.
      */
     public MethodSpec buildMapMaker() {
-        MethodSpec.Builder mapMaker = MethodSpec.methodBuilder(MAP_MAKER_NAME)
+        MethodSpec.Builder mapMaker = MethodSpec.methodBuilder(METHOD_MAP_MAKER)
                 .addModifiers(Modifier.PRIVATE, Modifier.STATIC)
                 .returns(ParameterizedTypeName.get(HashMap.class, String.class, String.class))
                 .addParameter(String[].class, "strings")
@@ -156,7 +156,7 @@ public class JUnitGeneratorHelper {
      */
     public MethodSpec buildGetResultColumns() {
         MethodSpec.Builder getResultColumns =
-                MethodSpec.methodBuilder(GET_RESULT_COLUMNS_NAME)
+                MethodSpec.methodBuilder(METHOD_GET_RESULT_COLUMNS)
                         .addModifiers(Modifier.PRIVATE, Modifier.STATIC)
                         .returns(ParameterizedTypeName.get(List.class, String.class))
                         .addParameter(ResultSet.class, "result")

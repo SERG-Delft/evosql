@@ -20,7 +20,6 @@ import java.nio.file.Path;
  * <p>
  * This class also requires specified {@link ConnectionData} for both a production and a test database.
  */
-// TODO: Get the results of the GA centrally and invoke the ExistingDataRunner for both the original and mutated query.
 public class BrewExecutor {
     //Connection data to production database, this is where the schema is extracted from by the GA
     private final ConnectionData connectionDataProd;

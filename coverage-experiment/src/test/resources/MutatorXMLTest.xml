@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqlmutationws>
+    <version>1.1.48.0</version>
+    <sql>SELECT empname FROM staff WHERE empnum = 'E1'</sql>
+    <mutants>
+        <mutant>
+            <id>1</id><category>SC</category><type>SEL</type><subtype>SLCT</subtype>
+            <equivalent/>
+            <sql>SELECT DISTINCT empname FROM staff WHERE empnum = 'E1'</sql>
+        </mutant>
+        <mutant>
+            <id>2</id><category>IR</category><type>IRC</type><subtype>IRCCS</subtype>
+            <sql>SELECT STAFF.EMPNUM FROM staff WHERE empnum = 'E1'</sql>
+        </mutant>
+    </mutants>
+</sqlmutationws>

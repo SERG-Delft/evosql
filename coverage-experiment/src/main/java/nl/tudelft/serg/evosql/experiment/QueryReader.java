@@ -5,8 +5,11 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * This class can read in queries and return them as a list of Strings.
@@ -15,35 +18,19 @@ import java.util.stream.Collectors;
 public class QueryReader {
 
     /**
-     * Reads all queries in the given file and returns them as a list of strings.
+     * Reads all queries in the given files and returns them as a list of strings.
      * Does not read in comment lines.
      *
-     * @param file file to read
-     * @return all queries in file.
+     * @param streams files to read
+     * @return all queries in files.
      */
-    public List<String> readQueries(File file) {
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            return br.lines()
-                    .map(String::trim)
-                    .filter(q -> !q.startsWith("#"))
-                    .collect(Collectors.toList());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    /**
-     * Reads a single query from a file given by the line number.
-     * Takes line numbers counting from zero onwards.
-     *
-     * @param file   file to read
-     * @param lineNo line number to read
-     * @return query in file.
-     */
-    public String readQuery(File file, int lineNo) {
-        return readQueries(file).get(lineNo);
+    @SafeVarargs
+    public final List<String> readQueries(Stream<String>... streams) {
+        return Arrays.stream(streams)
+                .flatMap(i -> i)
+                .map(String::trim)
+                .filter(q -> !q.startsWith("#"))
+                .collect(Collectors.toList());
     }
 
 }

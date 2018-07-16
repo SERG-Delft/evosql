@@ -23,15 +23,15 @@ import java.nio.file.Path;
 // TODO: Get the results of the GA centrally and invoke the ExistingDataRunner for both the original and mutated query.
 public class BrewExecutor {
     //Connection data to production database, this is where the schema is extracted from by the GA
-    private ConnectionData connectionDataProd;
+    private final ConnectionData connectionDataProd;
 
     //Connection data to test database, this is where the test cases make a connection to
-    private ConnectionData connectionDataTest;
+    private final ConnectionData connectionDataTest;
 
-    private String filePackage;
-    private Result queryResult;
+    private final String filePackage;
+    private final Result queryResult;
     private String productionString;
-    private ExistingDataRunner existingDataRunner;
+    private final ExistingDataRunner existingDataRunner;
 
     public BrewExecutor(ConnectionData connectionDataProd,
                         ConnectionData connectionDataTest,

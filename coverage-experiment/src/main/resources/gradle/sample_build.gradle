@@ -1,0 +1,5 @@
+description = 'Default gradle file for a project running auto-generated test classes.'
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.1.1'
+}

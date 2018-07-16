@@ -73,12 +73,12 @@ public class Runner {
                                              ConnectionData connectionDataTest,
                                              String queryClassName) {
         // TODO: Get file package
-        BrewExecutor brewExecutor = new BrewExecutor(connectionDataProd, connectionDataTest, "");
+        BrewExecutor brewExecutor = new BrewExecutor(connectionDataProd, connectionDataTest, query, "");
         // TODO: Pass a good folder name which is useable
-        brewExecutor.executeBrew(query, Paths.get("../test"), queryClassName + "_original.java");
+        brewExecutor.executeBrew(Paths.get("../test"), queryClassName + "_original.java");
 
         //String mutatedQuery = QueryMutator.mutateQuery(query);
-        brewExecutor.brewWithMutatedQuery(query, brewExecutor.getQueryResult(), Paths.get("../test"), queryClassName + "_mutated.java");
+        brewExecutor.brewWithMutatedQuery(brewExecutor.getQueryResult(), Paths.get("../test"), queryClassName + "_mutated.java");
 
         // TODO: Get right path
         org.junit.runner.Result[] results = testClassRunner(

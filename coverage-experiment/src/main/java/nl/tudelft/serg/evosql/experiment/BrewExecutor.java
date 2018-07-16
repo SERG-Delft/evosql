@@ -34,6 +34,7 @@ public class BrewExecutor {
 
     public BrewExecutor(ConnectionData connectionDataProd,
                         ConnectionData connectionDataTest,
+                        String productionString,
                         String filePackage) {
         this.connectionDataProd = connectionDataProd;
         this.connectionDataTest = connectionDataTest;
@@ -54,11 +55,10 @@ public class BrewExecutor {
      * Outputs results to test class file
      * with junit 5 tests and the given parameters.
      *
-     * @param queryToRun   query to run GA on
      * @param pathToOutput path to output test file to
      * @param fileName     name of the test file
      */
-    public void executeBrew(String queryToRun, Path pathToOutput, String fileName) {
+    public void executeBrew(Path pathToOutput, String fileName) {
         existingDataRunner.setResult(queryResult);
         //Configure jUnitGenerator, TODO: perhaps remove code duplication with the other method in the future
         JUnitGeneratorSettings jUnitGeneratorSettings = new JUnitGeneratorSettings(
@@ -73,8 +73,8 @@ public class BrewExecutor {
         //Construct Pipeline
         Pipeline pipeline = Pipeline.builder()
                 .queryRunner(existingDataRunner)
-                .connectionData(connectionDataProd)
-                .sqlQuery(queryToRun)
+                .connectionData(connectionDataProd) // not used by ExistingDataRunner
+                .sqlQuery("") // not used by ExistingDataRunner
                 //Process result to the given File
                 .resultProcessor(new Pipeline.ResultProcessor(
                         new JUnit5TestGenerator(jUnitGeneratorSettings),
@@ -92,12 +92,11 @@ public class BrewExecutor {
      * GA for this query but uses the {@link Result} of the original query and with that
      * information outputs a file consisting of junit 5 tests given the parameters.
      *
-     * @param mutatedQuery mutated query string
      * @param result       GA result of original query
      * @param pathToOutput path to output file to
      * @param fileName     name of the test class
      */
-    public void brewWithMutatedQuery(String mutatedQuery, Result result, Path pathToOutput, String fileName) {
+    public void brewWithMutatedQuery(Result result, Path pathToOutput, String fileName) {
         existingDataRunner.setResult(result);
         //Configure jUnitGenerator, TODO: perhaps remove code duplication with the other method in the future
         JUnitGeneratorSettings jUnitGeneratorSettings = new JUnitGeneratorSettings(
@@ -112,8 +111,8 @@ public class BrewExecutor {
         //Construct Pipeline
         Pipeline pipeline = Pipeline.builder()
                 .queryRunner(existingDataRunner)
-                .connectionData(connectionDataProd)
-                .sqlQuery(mutatedQuery)
+                .connectionData(connectionDataProd) // not used by ExistingDataRunner
+                .sqlQuery("") // not used by ExistingDataRunner
                 .resultProcessor(new Pipeline.ResultProcessor(
                         new JUnit5TestGenerator(jUnitGeneratorSettings),
                         new PostgreSQLOptions(),

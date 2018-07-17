@@ -1,5 +1,6 @@
 package nl.tudelft.serg.evosql.experiment;
 
+import nl.tudelft.serg.evosql.brew.data.Result;
 import nl.tudelft.serg.evosql.brew.db.ConnectionData;
 
 import java.io.BufferedReader;
@@ -155,7 +156,9 @@ public class Runner {
 
         // Execute brew and output to project folder for mutants
         for (int i = 0; i < queryMutants.size(); i++) {
-            brewExecutor.brewWithMutatedQuery(brewExecutor.getQueryResult(),
+            Result mutantResult = new Result(queryMutants.get(i),
+                    brewExecutor.getQueryResult().getPaths());
+            brewExecutor.brewWithMutatedQuery(mutantResult,
                     testClassPath, MUTANT_NAME + i);
         }
 

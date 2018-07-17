@@ -43,14 +43,12 @@ public class DBTypeSelector {
             case Types.LONGNVARCHAR:
                 return new DBString(EvoSQLConfiguration.MAX_STRING_LENGTH, "LONGNVARCHAR");
             case Types.CHAR:
-                return new DBString(length, "CHAR");
+                return new DBString(length, "CHAR(" + length + ")");
             case Types.NCHAR:
                 return new DBString(length, "NCHAR");
             // Boolean values
             case Types.BIT:
-                return new DBBoolean(); // HSQLDB doesn't support bit
-            case Types.BOOLEAN:
-                return new DBBoolean("BOOLEAN");
+                return new DBBoolean("BOOLEAN"); // HSQLDB doesn't support bit
             // Dates and times
             case Types.DATE:
                 return new DBDate();

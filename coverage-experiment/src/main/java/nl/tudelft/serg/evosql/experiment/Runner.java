@@ -2,7 +2,6 @@ package nl.tudelft.serg.evosql.experiment;
 
 import nl.tudelft.serg.evosql.brew.db.ConnectionData;
 
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -45,6 +44,9 @@ public class Runner {
             "jdbc:postgresql://localhost:5432/suitecrm_test",
             "suitecrm", "postgres", "");
 
+    static final String ORIGINAL_NAME = "Original";
+    static final String MUTANT_NAME = "Mutated";
+
 
     static final int AMOUNT_QUERIES_ERPNEXT = 1689;
     static final int AMOUNT_QUERIES_ESPOCRM = 40;
@@ -64,7 +66,6 @@ public class Runner {
         BufferedReader reader_suitecrm = new BufferedReader(new InputStreamReader(
                 Runner.class.getClassLoader().getResourceAsStream("sql/suitecrm_queries.sql")));
         Stream<String> suitecrm = reader_suitecrm.lines();
-
 
 
         QueryReader queryReader = new QueryReader();
@@ -146,7 +147,7 @@ public class Runner {
 
         // Execute brew and output to project folder for original
         BrewExecutor brewExecutor = new BrewExecutor(connectionDataProd, connectionDataTest, query, "query" + packageName);
-        brewExecutor.executeBrew(testClassPath, "Original");
+        brewExecutor.executeBrew(testClassPath, ORIGINAL_NAME);
 
         // Create mutants
         QueryMutator queryMutator = new QueryMutator(query, connectionDataProd.getDatabase());
@@ -154,29 +155,40 @@ public class Runner {
 
         // Execute brew and output to project folder for mutants
         for (int i = 0; i < queryMutants.size(); i++) {
-            brewExecutor.brewWithMutatedQuery(brewExecutor.getQueryResult(), testClassPath, "Mutated" + i);
+            brewExecutor.brewWithMutatedQuery(brewExecutor.getQueryResult(),
+                    testClassPath, MUTANT_NAME + i);
         }
 
         try {
 
-            // TODO: Run tests of original query
-            // TODO: Run tests of mutated query
+            // Run tests of original query
+            final Process originalProc;
+            final ProcessBuilder originalPb = new ProcessBuilder("gradle", "test", "--tests", "*." + ORIGINAL_NAME);
+            originalPb.directory(experimentPath.toFile());
+            originalProc = originalPb.start();
+            originalProc.waitFor();
+            final int originalExitCode = originalProc.exitValue();
 
-            Process proc;
-            // FIXME: get correct class name
-            ProcessBuilder pb = new ProcessBuilder("gradle", "test", "--tests", "*");
-            pb.directory(experimentPath.toFile());
-            proc = pb.start();
-            proc.waitFor();
+            System.out.printf("Original %s ", packageName);
+            System.out.println(originalExitCode == 0 ? "yes" : "no");
 
-            final int exitCode = proc.exitValue();
+            // Run tests of mutated query
+            for (int i = 0; i < queryMutants.size(); i++) {
+                final Process mutantProc;
+                final ProcessBuilder mutantPb = new ProcessBuilder("gradle", "test", "--tests", "*." + MUTANT_NAME + i);
+                mutantPb.directory(experimentPath.toFile());
+                mutantProc = mutantPb.start();
+                mutantProc.waitFor();
+                final int mutantExitCode = mutantProc.exitValue();
+
+                System.out.printf("Mutant %d ", i);
+                System.out.println(mutantExitCode != 0 ? "yes" : "no");
+            }
 
             // FIXME: If exitCode == 0 it worked, otherwise tests failed
             // FIXME: In theory, only the mutated tests should fail
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
 

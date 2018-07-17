@@ -8,6 +8,11 @@ repositories {
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.1.1'
+    testCompile 'org.junit.jupiter:junit-jupiter-api:5.1.1'
+    testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.1.1'
     compile group: 'org.postgresql', name: 'postgresql', version: '9.4-1200-jdbc41'
+}
+
+test {
+    useJUnitPlatform()
 }

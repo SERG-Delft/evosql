@@ -93,7 +93,7 @@ public class JUnitGeneratorHelper {
                 .addStatement("$T values = new $T<>()",
                         ParameterizedTypeName.get(HashMap.class, String.class, String.class), HashMap.class)
                 .beginControlFlow("for (String column : columns)")
-                .addStatement("Object value = res.getObject(column)")
+                .addStatement("Object value = resultSet.getObject(column)")
                 .addStatement("values.put(column, value != null ? value.toString() : \"NULL\")")
                 .endControlFlow()
                 .addStatement("tableStructure.add(values)")

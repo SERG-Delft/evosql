@@ -155,7 +155,7 @@ public class Runner {
         List<String> queryMutants = queryMutator.createMutants();
 
         // Execute brew and output to project folder for mutants
-        for (int i = 0; i < queryMutants.size(); i++) {
+        for (int i = 1; i < queryMutants.size(); i++) {
             Result mutantResult = new Result(queryMutants.get(i),
                     brewExecutor.getQueryResult().getPaths());
             brewExecutor.brewWithMutatedQuery(mutantResult,
@@ -176,7 +176,7 @@ public class Runner {
             System.out.println(originalExitCode == 0 ? "yes" : "no");
 
             // Run tests of mutated query
-            for (int i = 0; i < queryMutants.size(); i++) {
+            for (int i = 1; i < queryMutants.size(); i++) {
                 final Process mutantProc;
                 final ProcessBuilder mutantPb = new ProcessBuilder("gradle", "test", "--tests", "*." + MUTANT_NAME + i);
                 mutantPb.directory(experimentPath.toFile());

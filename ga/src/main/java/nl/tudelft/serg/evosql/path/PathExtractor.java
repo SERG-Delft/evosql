@@ -10,6 +10,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import nl.tudelft.serg.evosql.db.ISchemaExtractor;
+import nl.tudelft.serg.evosql.db.TableXMLFormatter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;
@@ -49,8 +50,9 @@ public class PathExtractor {
 		List<String> paths = new ArrayList<String>();
 		
 		String schemaXml;
+		TableXMLFormatter tableXMLFormatter = new TableXMLFormatter(schemaExtractor, query);
 		try {
-			schemaXml = getSchemaXml(query, schemaExtractor);
+			schemaXml = tableXMLFormatter.getSchemaXml();
 		} catch (Exception e) {
 			throw new Exception("Failed to extract the schema from the running database.", e);
 		}
@@ -63,73 +65,7 @@ public class PathExtractor {
 		return paths;
 	}
 	
-	/**
-	 * Builds the schema XML
-	 * @param query
-	 * @param schemaExtractor
-	 * @return
-	 */
-	protected String getSchemaXml(String query, ISchemaExtractor schemaExtractor) {
-		String result= "<schema>";
-		
-		Map<String, TableSchema> tableSchemas = schemaExtractor.getTablesFromQuery(query);
-		
-		for (TableSchema tableSchema : tableSchemas.values()) {
-			result += getTableSchemaXml(tableSchema);
-		}
-		
-		result += "</schema>";
-		
-		return result;
-	}
-	
-	protected String getTableSchemaXml(TableSchema tableSchema) {
-		String result = "<table name=\"" + tableSchema.getName() + "\">";
-		
-		for (ColumnSchema columnSchema : tableSchema.getColumns()) {
-			result += getColumnSchemaXml(columnSchema);
-		}
-		
-		result += "</table>";
-		
-		log.debug("xml to sqlfpc: " + result);
-		return result;
-	}
-	
-	protected String getColumnSchemaXml(ColumnSchema columnSchema) {
-		String result = "<column ";
-		
-		result += "name=\"" + columnSchema.getName() + "\" ";
-		result += "type=\"" + getTypeXml(columnSchema.getType()) + "\" ";
-		//TODO if we use primary keys
-		/*
-		if (columnSchema.isPrimaryKey()) {
-			result += "key=\"true\"";
-		}
-		*/
-		if (!columnSchema.isNullable()) {
-			result += "notnull=\"true\"";
-		}
-		
-		result += "/>";
-		
-		return result;
-	}
-	
-	/**
-	 * Converts evosql types to the correct string for SQLFpc
-	 * @param type
-	 * @return
-	 */
-	protected String getTypeXml(DBType type) {
-		String result = type.getNormalizedTypeString().toLowerCase();
-		
-		if (type instanceof DBString)
-			result = "varchar";
-		
-		return result;
-	}
-	
+
 	/**
 	 * Extracts all SQL paths into list
 	 * @param sqlfpcXml XML from the web service

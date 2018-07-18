@@ -62,7 +62,8 @@ public class JUnit5SmallTest {
       while (resultSet.next()) {
         HashMap<String, String> values = new HashMap<>();
         for (String column : columns) {
-          values.put(column, resultSet.getObject(column).toString());
+          Object value = resultSet.getObject(column);
+          values.put(column, value != null ? value.toString() : "NULL");
         }
         tableStructure.add(values);
       }
@@ -78,7 +79,7 @@ public class JUnit5SmallTest {
     List<String> columns = new ArrayList<>();
     // Start at one; this is 1-indexed
     for (int i = 1; i <= meta.getColumnCount(); ++i) {
-      columns.add(meta.getColumnName(i));
+      columns.add(meta.getColumnLabel(i));
     }
     return columns;
   }

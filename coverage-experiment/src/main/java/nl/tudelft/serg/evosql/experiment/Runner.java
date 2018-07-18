@@ -54,8 +54,8 @@ public class Runner {
     static final int AMOUNT_QUERIES_SUITECRM = 280;
 
     public static void main(String[] args) {
-        int startIndex = Integer.valueOf(args[0]);
-        int stepSize = Integer.valueOf(args[1]);
+        int startIndex = 2;
+        int stepSize = 500;
         BufferedReader reader_erpnext = new BufferedReader(new InputStreamReader(
                 Runner.class.getClassLoader().getResourceAsStream("sql/erpnext_queries.sql")));
         Stream<String> erpnext = reader_erpnext.lines();
@@ -151,7 +151,7 @@ public class Runner {
         brewExecutor.executeBrew(testClassPath, ORIGINAL_NAME);
 
         // Create mutants
-        QueryMutator queryMutator = new QueryMutator(query, connectionDataProd.getDatabase());
+        QueryMutator queryMutator = new QueryMutator(query, connectionDataProd);
         List<String> queryMutants = queryMutator.createMutants();
 
         // Execute brew and output to project folder for mutants

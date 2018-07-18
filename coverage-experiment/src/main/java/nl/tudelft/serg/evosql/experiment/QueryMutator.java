@@ -1,6 +1,7 @@
 package nl.tudelft.serg.evosql.experiment;
 
 import lombok.AllArgsConstructor;
+import nl.tudelft.serg.evosql.brew.db.ConnectionData;
 
 import javax.xml.ws.WebServiceException;
 import java.util.Arrays;
@@ -14,7 +15,7 @@ import java.util.stream.Collectors;
 public class QueryMutator {
     // FIXME: Make these attributes immutable?
     private String query;
-    private String dbName;
+    private ConnectionData connectionData;
 
     /**
      * Use the SQLMutation web service in order to create mutants of the query. We connect to
@@ -25,7 +26,7 @@ public class QueryMutator {
      * @return a list of query mutants.
      */
     public List<String> createMutants() {
-        WebMutatorConnector webMutatorConnector = new WebMutatorConnector(query, dbName);
+        WebMutatorConnector webMutatorConnector = new WebMutatorConnector(query, connectionData);
         String mutantsXML = webMutatorConnector.requestMutants();
         if (mutantsXML.contains("<error>")) {
             // FIXME: Implement proper error handling...

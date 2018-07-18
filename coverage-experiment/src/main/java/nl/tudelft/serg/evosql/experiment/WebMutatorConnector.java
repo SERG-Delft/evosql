@@ -5,6 +5,9 @@ import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 import in2test.application.common.SQLToolsConfig;
 import in2test.application.services.SQLMutationWSFacade;
+import nl.tudelft.serg.evosql.brew.db.ConnectionData;
+import nl.tudelft.serg.evosql.db.SchemaExtractor;
+import nl.tudelft.serg.evosql.db.TableXMLFormatter;
 import nl.tudelft.serg.evosql.sql.parser.SqlSecurer;
 
 import java.io.IOException;
@@ -18,28 +21,27 @@ public class WebMutatorConnector {
     private final String secureSqlquery;
     private final String schemaXml;
 
-    public WebMutatorConnector(String sqlQuery, String dbName) {
+    public WebMutatorConnector(String sqlQuery, ConnectionData connectionData) {
         SqlSecurer sqlSecurer = new SqlSecurer(sqlQuery);
         secureSqlquery = sqlSecurer.getSecureSql();
-        schemaXml = fetchSchemaXml(dbName);
+        schemaXml = fetchSchemaXml(connectionData);
         SQLToolsConfig.configure();
     }
 
     /**
      * Fetches the XML format of the DB schema from the corresponding resource file.
      *
-     * @param dbName database name of the given query
      * @return schema in XML format.
      */
-    private String fetchSchemaXml(String dbName) {
-        URL url = Resources.getResource("schema_xml/" + dbName + "_schema.xml");
-        try {
-            String text = Resources.toString(url, Charsets.UTF_8);
-            return text;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
+    private String fetchSchemaXml(ConnectionData connectionData) {
+        TableXMLFormatter tableXMLFormatter = new TableXMLFormatter(
+                new SchemaExtractor(connectionData.getConnectionString(),
+                                    connectionData.getDatabase(),
+                                    connectionData.getUsername(),
+                                    connectionData.getPassword()),
+                secureSqlquery);
+
+        return tableXMLFormatter.getSchemaXml();
     }
 
 

@@ -89,7 +89,7 @@ public abstract class Approach {
         // Extract column names
         List<String> columns = new ArrayList<>();
         for (int i = 1; i <= meta.getColumnCount(); i++) {
-            columns.add(meta.getColumnName(i));
+            columns.add(meta.getColumnLabel(i));
         }
 
         // For each row we make a map of values for each column

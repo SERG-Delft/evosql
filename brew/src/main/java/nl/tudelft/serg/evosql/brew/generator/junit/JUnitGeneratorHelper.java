@@ -168,7 +168,7 @@ public class JUnitGeneratorHelper {
                 .addStatement("$T<$T> columns = new $T<>()", List.class, String.class, ArrayList.class)
                 .addComment("Start at one; this is 1-indexed")
                 .beginControlFlow("for (int i = 1; i <= meta.getColumnCount(); ++i)")
-                .addStatement("columns.add(meta.getColumnName(i))")
+                .addStatement("columns.add(meta.getColumnLabel(i))")
                 .endControlFlow()
                 .addStatement("return columns");
 

@@ -4,7 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -21,11 +20,6 @@ import org.w3c.dom.NodeList;
 import in2test.application.common.SQLToolsConfig;
 import in2test.application.services.SQLFpcWSFacade;
 import nl.tudelft.serg.evosql.EvoSQLException;
-import nl.tudelft.serg.evosql.db.SchemaExtractor;
-import nl.tudelft.serg.evosql.fixture.type.DBString;
-import nl.tudelft.serg.evosql.fixture.type.DBType;
-import nl.tudelft.serg.evosql.sql.ColumnSchema;
-import nl.tudelft.serg.evosql.sql.TableSchema;
 import nl.tudelft.serg.evosql.sql.parser.SqlSecurer;
 
 public class PathExtractor {

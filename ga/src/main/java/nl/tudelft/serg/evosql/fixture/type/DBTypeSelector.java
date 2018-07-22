@@ -56,6 +56,8 @@ public class DBTypeSelector {
                 return new DBTime();
             case Types.TIMESTAMP:
                 return new DBDateTime("TIMESTAMP");
+            case Types.NUMERIC:
+                return new DBDouble("NUMERIC(18, 6)"); //FIXME: hotfix for erpnext schema
             // Other types
             case Types.ARRAY:
                 throw new UnsupportedOperationException("The ARRAY data type is currently not supported by EvoSQL.");

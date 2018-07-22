@@ -152,7 +152,12 @@ public class Runner {
 
         // Create mutants
         QueryMutator queryMutator = new QueryMutator(query, connectionDataProd);
-        List<String> queryMutants = queryMutator.createMutants();
+        List<String> queryMutants = null;
+        try {
+            queryMutants = queryMutator.createMutants();
+        } catch (MutationException e) {
+            e.printStackTrace();
+        }
 
         // Execute brew and output to project folder for mutants
         for (int i = 1; i < queryMutants.size(); i++) {

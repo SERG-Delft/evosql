@@ -5,6 +5,7 @@ import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 import in2test.application.common.SQLToolsConfig;
 import in2test.application.services.SQLMutationWSFacade;
+import lombok.Getter;
 import nl.tudelft.serg.evosql.brew.db.ConnectionData;
 import nl.tudelft.serg.evosql.db.SchemaExtractor;
 import nl.tudelft.serg.evosql.db.TableXMLFormatter;
@@ -19,6 +20,7 @@ import java.net.URL;
  */
 public class WebMutatorConnector {
     private final String secureSqlquery;
+    @Getter
     private final String schemaXml;
 
     public WebMutatorConnector(String sqlQuery, ConnectionData connectionData) {

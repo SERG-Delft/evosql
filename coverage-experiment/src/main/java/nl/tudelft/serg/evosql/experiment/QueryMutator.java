@@ -25,13 +25,13 @@ public class QueryMutator {
      *
      * @return a list of query mutants.
      */
-    public List<String> createMutants() {
+    public List<String> createMutants() throws MutationException {
         WebMutatorConnector webMutatorConnector = new WebMutatorConnector(query, connectionData);
         String mutantsXML = webMutatorConnector.requestMutants();
         if (mutantsXML.contains("<error>")) {
-            // FIXME: Implement proper error handling...
-            throw new WebServiceException(
-                    "An error occurred in retrieving the mutants, the error XML is:\n\n" + mutantsXML
+            throw new MutationException(
+                    "An error occurred in retrieving the mutants, the error XML is:\n\n" + mutantsXML +
+                            "\n\nSchema: " + webMutatorConnector.getSchemaXml()
             );
         }
         return parseMutations(mutantsXML);
@@ -44,11 +44,15 @@ public class QueryMutator {
      * @param xml XML representation of query mutants
      * @return list of mutants as query strings.
      */
-    public List<String> parseMutations(String xml) {
-        return Arrays.stream(xml.split("\n"))
+    public List<String> parseMutations(String xml) throws MutationException {
+        List<String> mutants = Arrays.stream(xml.split("\n"))
                 .filter(x -> x.contains("<sql>"))
                 .map(x -> x.replaceAll("<[^>]+>", ""))
                 .map(x -> x.trim())
                 .collect(Collectors.toList());
+        if (mutants.size() == 0) {
+            throw new MutationException("List of mutants is empty, please check the returned xml: " + xml);
+        }
+        return mutants;
     }
 }

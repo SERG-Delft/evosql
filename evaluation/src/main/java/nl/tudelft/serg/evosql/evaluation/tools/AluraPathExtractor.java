@@ -26,8 +26,9 @@ public class AluraPathExtractor extends PathExtractor {
 		List<String> encryptedPaths = new ArrayList<String>();
 		
 		String encryptedSchemaXml;
+		AluraTableXMLFormatter aluraTableXMLFormatter = new AluraTableXMLFormatter(schemaExtractor, query, crypto);
 		try {
-			encryptedSchemaXml = getSchemaXml(query, schemaExtractor);
+			encryptedSchemaXml = aluraTableXMLFormatter.getSchemaXml();
 		} catch (Exception e) {
 			throw new Exception("Failed to extract the schema from the running database.", e);
 		}
@@ -49,38 +50,5 @@ public class AluraPathExtractor extends PathExtractor {
 		return paths;
 	}
 
-	@Override
-	protected String getTableSchemaXml(TableSchema tableSchema) {
-		String result = "<table name=\"" + crypto.encryptName(tableSchema.getName().toUpperCase()) + "\">";
-		
-		for (ColumnSchema columnSchema : tableSchema.getColumns()) {
-			result += getColumnSchemaXml(columnSchema);
-		}
-		
-		result += "</table>";
-		
-		log.debug("xml to sqlfpc: " + result);
-		return result;
-	}
-	
-	@Override
-	protected String getColumnSchemaXml(ColumnSchema columnSchema) {
-		String result = "<column ";
-		
-		result += "name=\"" + crypto.encryptName(columnSchema.getName().toUpperCase()) + "\" ";
-		result += "type=\"" + getTypeXml(columnSchema.getType()) + "\" ";
-		//TODO if we use primary keys
-		/*
-		if (columnSchema.isPrimaryKey()) {
-			result += "key=\"true\"";
-		}
-		*/
-		if (!columnSchema.isNullable()) {
-			result += "notnull=\"true\"";
-		}
-		
-		result += "/>";
-		
-		return result;
-	}
+
 }

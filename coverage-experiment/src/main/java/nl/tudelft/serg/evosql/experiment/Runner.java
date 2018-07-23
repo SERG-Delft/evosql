@@ -23,27 +23,27 @@ import java.util.stream.Stream;
 public class Runner {
 
     static final ConnectionData CONNECTION_DATA_ERPNEXT_PROD = new ConnectionData(
-            "jdbc:postgresql://localhost:5432/erpnext_prod",
+            "jdbc:postgresql://db:5432/erpnext_prod",
             "erpnext", "postgres", "");
 
     static final ConnectionData CONNECTION_DATA_ESPOCRM_PROD = new ConnectionData(
-            "jdbc:postgresql://localhost:5432/espocrm_prod",
+            "jdbc:postgresql://db:5432/espocrm_prod",
             "espocrm", "postgres", "");
 
     static final ConnectionData CONNECTION_DATA_SUITECRM_PROD = new ConnectionData(
-            "jdbc:postgresql://localhost:5432/suitecrm_prod",
+            "jdbc:postgresql://db:5432/suitecrm_prod",
             "suitecrm", "postgres", "");
 
     static final ConnectionData CONNECTION_DATA_ERPNEXT_TEST = new ConnectionData(
-            "jdbc:postgresql://localhost:5432/erpnext_test",
+            "jdbc:postgresql://db:5432/erpnext_test",
             "erpnext", "postgres", "");
 
     static final ConnectionData CONNECTION_DATA_ESPOCRM_TEST = new ConnectionData(
-            "jdbc:postgresql://localhost:5432/espocrm_test",
+            "jdbc:postgresql://db:5432/espocrm_test",
             "espocrm", "postgres", "");
 
     static final ConnectionData CONNECTION_DATA_SUITECRM_TEST = new ConnectionData(
-            "jdbc:postgresql://localhost:5432/suitecrm_test",
+            "jdbc:postgresql://db:5432/suitecrm_test",
             "suitecrm", "postgres", "");
 
     static final String ORIGINAL_NAME = "Original";
@@ -55,8 +55,11 @@ public class Runner {
     static final int AMOUNT_QUERIES_SUITECRM = 280;
 
     public static void main(String[] args) {
-        int startIndex = 2;
-        int stepSize = 500;
+        int startIndex = Integer.valueOf(args[0]);
+        int stepSize = Integer.valueOf(args[1]);
+
+        System.out.printf("Running experiment... starting at %d and stepping %d\n", startIndex, stepSize);
+
         BufferedReader reader_erpnext = new BufferedReader(new InputStreamReader(
                 Runner.class.getClassLoader().getResourceAsStream("sql/erpnext_queries.sql")));
         Stream<String> erpnext = reader_erpnext.lines();

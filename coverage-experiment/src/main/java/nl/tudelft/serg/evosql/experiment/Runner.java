@@ -5,6 +5,7 @@ import nl.tudelft.serg.evosql.brew.db.ConnectionData;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -121,16 +122,11 @@ public class Runner {
         } catch (IOException e) {
             System.err.println(e);
         }
-        URL gradlePathURL = Runner.class.getClassLoader().getResource("gradle/sample_build.gradle");
-        Path gradlePath = null;
-        try {
-            gradlePath = Paths.get(gradlePathURL.toURI());
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
+        InputStream gradleTemplate = Runner.class.getClassLoader()
+                .getResourceAsStream("gradle/sample_build.gradle");
         try {
             // Copies sample gradle file to new project folder
-            Files.copy(Paths.get(gradlePath.toString()),
+            Files.copy(gradleTemplate,
                     Paths.get(experimentPath.toString(), "build.gradle"));
         } catch (IOException e) {
             e.printStackTrace();

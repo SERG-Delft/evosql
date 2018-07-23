@@ -4,7 +4,7 @@ FROM openjdk:8-jdk
 COPY build/libs/coverage-experiment*-all.jar /root/coverage-experiment-all.jar
 
 # Add a simple script that allows for easy invocation.
-RUN echo '#!/bin/sh\njava -jar /root/coverage-experiment-all.jar "$@"\n' > /usr/local/bin/ce && \
+RUN echo '#!/bin/sh\njava -jar /root/coverage-experiment-all.jar $COVERAGE_EXPERIMENT_START $COVERAGE_EXPERIMENT_STEP\n' > /usr/local/bin/ce && \
     chmod 700 /usr/local/bin/ce
 
 # Copy the wait-for-it script to the home directory of the root account,

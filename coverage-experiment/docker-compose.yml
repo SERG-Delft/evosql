@@ -7,6 +7,9 @@ services:
     command: "/root/wait-for-it.sh db:5432 --timeout=0 -- ce"
     depends_on:
       - 'db'
+    environment:
+      - COVERAGE_EXPERIMENT_START
+      - COVERAGE_EXPERIMENT_STEP
   db:
     build: ./docker/db
     ports:

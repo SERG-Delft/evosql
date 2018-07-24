@@ -2,14 +2,10 @@ package nl.tudelft.serg.evosql.experiment;
 
 import nl.tudelft.serg.evosql.brew.data.Result;
 import nl.tudelft.serg.evosql.brew.db.ConnectionData;
+import org.xml.sax.SAXException;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Files;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -153,18 +149,23 @@ public class Runner {
                     testClassPath, MUTANT_NAME + i);
         }
 
+        StringBuilder totalResult = new StringBuilder();
         try {
 
-            final int originalExitCode = GradleUtil.runTestClass(projectPath, ORIGINAL_NAME);
-            GradleUtil.saveTestResult(projectPath, packageName + "." + ORIGINAL_NAME);
+            { // in a block to scope "original" variables
+                final int originalExitCode = GradleUtil.runTestClass(projectPath, ORIGINAL_NAME);
+                Path original = GradleUtil.saveTestResult(projectPath, packageName + "." + ORIGINAL_NAME);
+                appendCsvLine(totalResult, 0, originalExitCode, original);
 
-            System.out.printf("Original %d ", queryIndex);
-            System.out.println(originalExitCode == 0 ? "yes" : "no");
+                System.out.printf("Original %d ", queryIndex);
+                System.out.println(originalExitCode == 0 ? "yes" : "no");
+            }
 
             // Run tests of mutated query
             for (int i = 1; i < queryMutants.size(); i++) {
                 final int mutantExitCode = GradleUtil.runTestClass(projectPath, MUTANT_NAME + i);
-                GradleUtil.saveTestResult(projectPath, packageName + "." + MUTANT_NAME + i);
+                Path mutant = GradleUtil.saveTestResult(projectPath, packageName + "." + MUTANT_NAME + i);
+                appendCsvLine(totalResult, i, mutantExitCode, mutant);
 
                 System.out.printf("Mutant %d ", i);
                 System.out.println(mutantExitCode != 0 ? "yes" : "no");
@@ -177,8 +178,29 @@ public class Runner {
             e.printStackTrace();
         }
 
+        Path storePath = Paths.get(projectPath.toString(), "result", "all.csv");
+        try (PrintStream store = new PrintStream(storePath.toFile())) {
+            store.print(totalResult.toString());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
-        // TODO: Store results
-
+    private static void appendCsvLine(StringBuilder builder, int mutant, int exitCode, Path filePath) {
+        try {
+            TestRunResult result = TestRunResult.fromGradleXmlFile(filePath);
+            builder.append(mutant);
+            builder.append(',');
+            builder.append(exitCode);
+            builder.append(',');
+            builder.append(result.isHadSuccesses());
+            builder.append(',');
+            builder.append(result.isHadAssertionFailures());
+            builder.append(',');
+            builder.append(result.isHadExceptionFailures());
+            builder.append('\n');
+        } catch (ParserConfigurationException | IOException | SAXException e) {
+            e.printStackTrace();
+        }
     }
 }

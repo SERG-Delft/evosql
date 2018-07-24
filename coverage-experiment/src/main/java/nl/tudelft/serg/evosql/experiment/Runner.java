@@ -115,10 +115,10 @@ public class Runner {
      * @param connectionDataProd data of db connection for production database
      * @param connectionDataTest data of db connection for test database
      */
-    public static QueryExperimentResult runForQuery(String query,
-                                                    ConnectionData connectionDataProd,
-                                                    ConnectionData connectionDataTest,
-                                                    int queryIndex) {
+    public static void runForQuery(String query,
+                                   ConnectionData connectionDataProd,
+                                   ConnectionData connectionDataTest,
+                                   int queryIndex) {
 
         String packageName = "query" + queryIndex;
         Path projectPath = Paths.get(EXPERIMENT_PATH.toString(), String.valueOf(queryIndex));
@@ -180,9 +180,5 @@ public class Runner {
 
         // TODO: Store results
 
-
-        return null;
     }
-
-
 }

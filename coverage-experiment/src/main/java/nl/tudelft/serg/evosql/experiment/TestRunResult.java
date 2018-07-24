@@ -17,13 +17,11 @@ import java.nio.file.Path;
  */
 @Data
 public class TestRunResult {
-    private final int mutantIndex;
-    private final int exitCode;
     private final boolean hadSuccesses;
     private final boolean hadAssertionFailures;
     private final boolean hadExceptionFailures;
 
-    public static TestRunResult fromGradleXmlFile(Path filePath, int exitCode)
+    public static TestRunResult fromGradleXmlFile(Path filePath)
             throws ParserConfigurationException, IOException, SAXException {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = dbFactory.newDocumentBuilder();
@@ -63,6 +61,6 @@ public class TestRunResult {
             }
         }
 
-        return new TestRunResult(0, exitCode, hadSuccesses, hadAssertFailures, hadExceptionFailures);
+        return new TestRunResult(hadSuccesses, hadAssertFailures, hadExceptionFailures);
     }
 }

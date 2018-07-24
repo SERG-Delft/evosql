@@ -121,29 +121,13 @@ public class Runner {
 
 
         Path projectPath = Paths.get(EXPERIMENT_PATH.toString(), packageName);
+
+        Path testClassPath = null;
         try {
-            Files.createDirectories(projectPath);
-        } catch (IOException e) {
-            System.err.println(e);
-        }
-        InputStream gradleTemplate = Runner.class.getClassLoader()
-                .getResourceAsStream("gradle/sample_build.gradle");
-        try {
-            // Copies sample gradle file to new project folder
-            Files.copy(gradleTemplate,
-                    Paths.get(projectPath.toString(), "build.gradle"));
+            testClassPath = GradleUtil
+                    .setupGradleTestProject(projectPath, "query" + packageName);
         } catch (IOException e) {
             e.printStackTrace();
-        }
-
-        // Create a path to output test classes to
-        Path testClassPath = Paths.get(projectPath.toAbsolutePath().toString(), "src", "test", "java", "query" + packageName);
-        if (!Files.exists(testClassPath)) {
-            try {
-                Files.createDirectories(testClassPath);
-            } catch (IOException e) {
-                System.err.println(e);
-            }
         }
 
         // Execute brew and output to project folder for original
@@ -169,25 +153,14 @@ public class Runner {
 
         try {
 
-            // Run tests of original query
-            final Process originalProc;
-            final ProcessBuilder originalPb = new ProcessBuilder("gradle", "test", "--tests", "*." + ORIGINAL_NAME);
-            originalPb.directory(projectPath.toFile());
-            originalProc = originalPb.start();
-            originalProc.waitFor();
-            final int originalExitCode = originalProc.exitValue();
+            final int originalExitCode = GradleUtil.runTestClass(projectPath, ORIGINAL_NAME);
 
             System.out.printf("Original %s ", packageName);
             System.out.println(originalExitCode == 0 ? "yes" : "no");
 
             // Run tests of mutated query
             for (int i = 1; i < queryMutants.size(); i++) {
-                final Process mutantProc;
-                final ProcessBuilder mutantPb = new ProcessBuilder("gradle", "test", "--tests", "*." + MUTANT_NAME + i);
-                mutantPb.directory(projectPath.toFile());
-                mutantProc = mutantPb.start();
-                mutantProc.waitFor();
-                final int mutantExitCode = mutantProc.exitValue();
+                final int mutantExitCode = GradleUtil.runTestClass(projectPath, MUTANT_NAME + i);
 
                 System.out.printf("Mutant %d ", i);
                 System.out.println(mutantExitCode != 0 ? "yes" : "no");

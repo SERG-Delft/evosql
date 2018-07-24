@@ -49,6 +49,7 @@ public class Runner {
     static final String ORIGINAL_NAME = "Original";
     static final String MUTANT_NAME = "Mutated";
 
+    static final Path EXPERIMENT_PATH = Paths.get(System.getProperty("user.home"), "experiment-projects");
 
     static final int AMOUNT_QUERIES_ERPNEXT = 1689;
     static final int AMOUNT_QUERIES_ESPOCRM = 40;
@@ -119,9 +120,9 @@ public class Runner {
                                                     String packageName) {
 
 
-        Path experimentPath = Paths.get(System.getProperty("user.home"), "experiment-projects", packageName);
+        Path projectPath = Paths.get(EXPERIMENT_PATH.toString(), packageName);
         try {
-            Files.createDirectories(experimentPath);
+            Files.createDirectories(projectPath);
         } catch (IOException e) {
             System.err.println(e);
         }
@@ -130,13 +131,13 @@ public class Runner {
         try {
             // Copies sample gradle file to new project folder
             Files.copy(gradleTemplate,
-                    Paths.get(experimentPath.toString(), "build.gradle"));
+                    Paths.get(projectPath.toString(), "build.gradle"));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         // Create a path to output test classes to
-        Path testClassPath = Paths.get(experimentPath.toAbsolutePath().toString(), "src", "test", "java", "query" + packageName);
+        Path testClassPath = Paths.get(projectPath.toAbsolutePath().toString(), "src", "test", "java", "query" + packageName);
         if (!Files.exists(testClassPath)) {
             try {
                 Files.createDirectories(testClassPath);
@@ -171,7 +172,7 @@ public class Runner {
             // Run tests of original query
             final Process originalProc;
             final ProcessBuilder originalPb = new ProcessBuilder("gradle", "test", "--tests", "*." + ORIGINAL_NAME);
-            originalPb.directory(experimentPath.toFile());
+            originalPb.directory(projectPath.toFile());
             originalProc = originalPb.start();
             originalProc.waitFor();
             final int originalExitCode = originalProc.exitValue();
@@ -183,7 +184,7 @@ public class Runner {
             for (int i = 1; i < queryMutants.size(); i++) {
                 final Process mutantProc;
                 final ProcessBuilder mutantPb = new ProcessBuilder("gradle", "test", "--tests", "*." + MUTANT_NAME + i);
-                mutantPb.directory(experimentPath.toFile());
+                mutantPb.directory(projectPath.toFile());
                 mutantProc = mutantPb.start();
                 mutantProc.waitFor();
                 final int mutantExitCode = mutantProc.exitValue();

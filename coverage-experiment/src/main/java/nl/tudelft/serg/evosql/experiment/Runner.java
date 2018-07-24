@@ -12,6 +12,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -137,7 +138,7 @@ public class Runner {
 
         // Create mutants
         QueryMutator queryMutator = new QueryMutator(query, connectionDataProd);
-        List<String> queryMutants = null;
+        List<String> queryMutants = new ArrayList<>();
         try {
             queryMutants = queryMutator.createMutants();
         } catch (MutationException e) {

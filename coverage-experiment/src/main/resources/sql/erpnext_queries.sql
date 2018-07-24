@@ -1642,41 +1642,41 @@ select `tabHoliday List`.`name` from `tabHoliday List` left join `tabholiday` on
 select name, from_time, to_time from `tabCourse Schedule` where `student_group`='TC-TP-2014-2015-2014-2015 (_Test Academic Term)' and schedule_date = '2017-02-09' and ( (from_time > '1:00:00' and from_time < '2:00:00') or (to_time > '1:00:00' and to_time < '2:00:00') or ('1:00:00' > from_time and '1:00:00' < to_time) or ('1:00:00' = from_time and '2:00:00' = to_time)) and name!='SH00025'
 select distinct sle.voucher_type, sle.voucher_no from `tabStock Ledger Entry` sle where timestamp(sle.posting_date, sle.posting_time) >= timestamp('2017-02-09', '12:25:27.397847') and item_code in ('_Test Item') and warehouse in ('_Test Warehouse - _TC') order by timestamp(sle.posting_date, sle.posting_time) asc, name asc
 select `name` from `tabPurchase Receipt` where `name` = 'PREC-00007' order by modified desc
-select `name` from `tabTimesheet` where `production_order` = 'PRO-00001' order by modified desc
+select `name` from `tabtimesheet` where `production_order` = 'PRO-00001' order by modified desc
 select role from tabUserRole where parent='Daily_test_employee@salary.com' and role not in ('All', 'Guest')
 select `name` from `tabPayment Request` where `docstatus` != 2 and `reference_doctype` = 'Sales Invoice' and `reference_name` = 'SINV-00021' order by modified desc
 select name, priority from `tabTax Rule` where ifnull(shipping_city, '') = '' and ifnull(company, '') = '_Test Company' and ifnull(shipping_state, '') = '' and ifnull(shipping_county, '') = '' and ifnull(supplier_type, '') = '' and ifnull(billing_country, '') = '' and ifnull(customer, '') = '_Test Customer' and ifnull(billing_city, '') = '' and ifnull(tax_type, '') = 'Sales' and ifnull(shipping_country, '') = '' and ifnull(supplier, '') = '' and ifnull(billing_county, '') = '' and ifnull(customer_group, '') = '' and ifnull(billing_state, '') = '' and ((from_date > '2015-01-03' and from_date < '2015-01-09') or (to_date > '2015-01-03' and to_date < '2015-01-09') or ('2015-01-03' > from_date and '2015-01-03' < to_date) or ('2015-01-03' = from_date and '2015-01-09' = to_date)) and name != 'TR0008'
-select `read`, `write`, `share` from `tabDocShare` where `share_doctype` = 'Event' and `user` = 'test1@example.com' and `share_name` = 'EV00013' order by modified desc
+select `read`, `write`, `share` from `tabdocshare` where `share_doctype` = 'Event' and `user` = 'test1@example.com' and `share_name` = 'EV00013' order by modified desc
 select name from `tabPurchase Order` where docstatus = 1 and name = 'PO-00001'
-select `name` from `tabDocShare` where `share_doctype` = 'User' and `user` = 'Bimonthly_test_employee@salary.com' and `share_name` = 'Bimonthly_test_employee@salary.com' order by modified desc
-select name from `tabUserRole` where parent='test2@example.com' and parenttype='User' and parentfield='user_roles' and name not in ('fb6624c2ad','7dcdf83959','64e9ede9fc','601d0f0531','a497314342','3ec1f4b70d')
-select `name` from `tabCustomer` where `name` = 'Government' order by modified desc
-select name, owner, creation, data from `tabVersion` where `tabVersion`.docname = 'EV00013' and `tabVersion`.ref_doctype = 'Event' order by creation desc limit 0, 10
-select `exp_start_date` from `tabTask` where `name` = 'TASK00013' order by modified desc
+select `name` from `tabdocshare` where `share_doctype` = 'User' and `user` = 'Bimonthly_test_employee@salary.com' and `share_name` = 'Bimonthly_test_employee@salary.com' order by modified desc
+select name from `tabuserrole` where parent='test2@example.com' and parenttype='User' and parentfield='user_roles' and name not in ('fb6624c2ad','7dcdf83959','64e9ede9fc','601d0f0531','a497314342','3ec1f4b70d')
+select `name` from `tabcustomer` where `name` = 'Government' order by modified desc
+select name, owner, creation, data from `tabversion` where `tabversion`.docname = 'EV00013' and `tabversion`.ref_doctype = 'Event' order by creation desc limit 0, 10
+select `exp_start_date` from `tabtask` where `name` = 'TASK00013' order by modified desc
 select distinct reference_doctype from `tabCommunication`
-select file_url from `tabFile` where name='7dd156ff10' or file_name='7dd156ff10'
+select file_url from `tabfile` where name='7dd156ff10' or file_name='7dd156ff10'
 select * from `tabBlog Post` where `name` = '-test-blog-post-2' order by modified desc
 select count(name) from tabItem where item_group = '_Test Item Group'
-select `name` from `tabWarehouse` where `warehouse_name` = 'Stores' order by modified desc
+select `name` from `tabwarehouse` where `warehouse_name` = 'Stores' order by modified desc
 select * from `tabProduction Plan Item` where `parenttype` = 'Production Planning Tool' and `parent` = 'Production Planning Tool' and `parentfield` = 'items' order by idx asc
 select advance_paid from `tabPurchase Order` where name='PO-00014'
 select `name`, `parent`, `parenttype`, `docstatus` from `tabPurchase Invoice Item` where `purchase_order` = 'PO-00002' order by modified desc
 select * from `tabItem Supplier` where `parenttype` = 'Item' and `parent` = 'Macbook Pro' and `parentfield` = 'supplier_items' order by idx asc
-select `name`, `parent`, `parenttype`, `docstatus` from `tabTimesheet` where `sales_invoice` = 'SINV-00016' order by modified desc
+select `name`, `parent`, `parenttype`, `docstatus` from `tabtimesheet` where `sales_invoice` = 'SINV-00016' order by modified desc
 select name, user from `tabPOS Profile` where ifnull(user, '') = NULL and name != '6125d62f89' and company = '_Test Company'
-select max(char_length(`parentfield`)) from `tabToDo`
+select max(char_length(`parentfield`)) from `tabtodo`
 select sum(debit_in_account_currency) - sum(credit_in_account_currency) from `tabGL Entry` where voucher_type = 'Journal Entry' and voucher_no = '_T-Journal Entry-00004' and account = '_Test Receivable - _TC' and (against_voucher is null or against_voucher='') and party_type='Customer' and party='_Test Customer'
 select count(*) from `tabSales Person` where ifnull(parent_sales_person, '')=''
 select `customer`, `company`, `project`, `currency` from `tabDelivery Note` where `name` = 'DN-00009' order by modified desc
 select `name` from `tabPayment Request` where `status` not in ('Initiated', 'Paid') and `reference_name` = 'SO-00034' and `name` != 'PR00001' and `docstatus` = 1 order by modified desc
-select `status` from `tabTimesheet` where `name` = 'TS-00015' order by modified desc
-select max(char_length(`username`)) from `tabUser`
+select `status` from `tabtimesheet` where `name` = 'TS-00015' order by modified desc
+select max(char_length(`username`)) from `tabuser`
 SELECT name from `tabGL Entry` where company = 'India - Chart of Accounts'
-select modified, docstatus from `tabQuotation` where name = 'QTN-00001' for update
-select bom_item.item_code, sum(bom_item.qty/ifnull(bom.quantity, 1)) * 2 as qty, item.stock_uom from `tabBOM Scrap Item` bom_item, `tabBOM` bom, `tabItem` item where bom_item.parent = bom.name and bom_item.docstatus < 2 and bom_item.parent = 'BOM-_Test FG Item-001' and item.name = bom_item.item_code and is_stock_item = 1 group by bom_item.item_code, item.stock_uom
-select * from `tabPricing Rule` where (item_code='_Test Item for Auto Price List' or ifnull(item_group, '') in ('All Item Groups', 'Products') or brand=NULL) and docstatus < 2 and disable = 0 and selling = 1 and ifnull(company, '') in ('_Test Company', '') and ifnull(customer, '') in ('_Test Customer', '') and ifnull(supplier, '') = '' and ifnull(supplier_type, '') = '' and ifnull(campaign, '') = '' and ifnull(sales_partner, '') = '' and ifnull(customer_group, '') in ('_Test Customer Group', 'All Customer Groups', '') and ifnull(territory, '') in ('_Test Territory', 'All Territories', '') and ifnull(for_price_list, '') in ('_Test Price List', '') order by priority desc, name desc
+select modified, docstatus from `tabquotation` where name = 'QTN-00001' for update
+select bom_item.item_code, sum(bom_item.qty/ifnull(bom.quantity, 1)) * 2 as qty, item.stock_uom from `tabBOM Scrap Item` bom_item, `tabbom` bom, `tabitem` item where bom_item.parent = bom.name and bom_item.docstatus < 2 and bom_item.parent = 'BOM-_Test FG Item-001' and item.name = bom_item.item_code and is_stock_item = 1 group by bom_item.item_code, item.stock_uom
+select * from `tabPricing Rule` where (item_code='_Test Item for Auto Price List' or ifnull(item_group, '') in ('All Item Groups', 'Products') or brand=NULL) and docstatus < 2 and `tabPricing Rule`."disable"= 0 and selling = 1 and ifnull(company, '') in ('_Test Company', '') and ifnull(customer, '') in ('_Test Customer', '') and ifnull(supplier, '') = '' and ifnull(supplier_type, '') = '' and ifnull(campaign, '') = '' and ifnull(sales_partner, '') = '' and ifnull(customer_group, '') in ('_Test Customer Group', 'All Customer Groups', '') and ifnull(territory, '') in ('_Test Territory', 'All Territories', '') and ifnull(for_price_list, '') in ('_Test Price List', '') order by priority desc, name desc
 select t1.name from `tabMaintenance Visit` t1, `tabMaintenance Visit Purpose` t2 where t2.parent=t1.name and t2.prevdoc_docname = 'SO-00033' and t1.docstatus = 1
-select `name` from `tabNewsletter` where `name` = '_Test Newsletter' order by modified desc
+select `name` from `tabnewsletter` where `name` = '_Test Newsletter' order by modified desc
 select block_date, reason from `tabLeave Block List Date` where parent='_Test Leave Block List' and block_date between '2013-01-01' and '2013-01-03'
 select *, timestamp(posting_date, posting_time) as "timestamp" from `tabStock Ledger Entry` where item_code = '_Test Item Home Desktop 100' and warehouse = '_Test Warehouse - _TC' and ifnull(is_cancelled, 'No')='No' and timestamp(posting_date, posting_time) > timestamp('2017-02-09', '12:26:28.301535') and name!='SLE/00000161' order by timestamp(posting_date, posting_time) asc, name asc for update
 select `name`, `parent`, `parenttype`, `docstatus` from `tabPayment Entry` where `amended_from` = 'PE-00003' order by modified desc

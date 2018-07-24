@@ -1,5 +1,6 @@
 package nl.tudelft.serg.evosql.experiment;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -57,5 +58,26 @@ public class GradleUtil {
         gradleProcess.waitFor();
 
         return gradleProcess.exitValue();
+    }
+
+    /**
+     * Saves a test result at a secure location.
+     *
+     * @param projectPath   The path to the project.
+     * @param fullClassName The fully qualified class name of the test.
+     * @return The path to the securely stored file.
+     * @throws IOException if a file operation fails.
+     */
+    public static Path saveTestResult(Path projectPath, String fullClassName) throws IOException {
+        String fileName = "TEST-" + fullClassName + ".xml";
+        Path testResult = Paths.get(projectPath.toString(),
+                "build", "test-results", "test", fileName);
+        Path resultDirectory = Paths.get(projectPath.toString(), "result");
+        Path savedResult = Paths.get(resultDirectory.toString(), fileName);
+
+        Files.createDirectories(resultDirectory);
+        Files.copy(testResult, savedResult);
+
+        return savedResult;
     }
 }

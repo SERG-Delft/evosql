@@ -101,7 +101,7 @@ public class Runner {
                     allQueries.get(i),
                     connectionDataProd,
                     connectionDataTest,
-                    String.valueOf(i)
+                    i
             );
         }
 
@@ -117,21 +117,21 @@ public class Runner {
     public static QueryExperimentResult runForQuery(String query,
                                                     ConnectionData connectionDataProd,
                                                     ConnectionData connectionDataTest,
-                                                    String packageName) {
+                                                    int queryIndex) {
 
-
-        Path projectPath = Paths.get(EXPERIMENT_PATH.toString(), packageName);
+        String packageName = "query" + queryIndex;
+        Path projectPath = Paths.get(EXPERIMENT_PATH.toString(), String.valueOf(queryIndex));
 
         Path testClassPath = null;
         try {
             testClassPath = GradleUtil
-                    .setupGradleTestProject(projectPath, "query" + packageName);
+                    .setupGradleTestProject(projectPath, packageName);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         // Execute brew and output to project folder for original
-        BrewExecutor brewExecutor = new BrewExecutor(connectionDataProd, connectionDataTest, query, "query" + packageName);
+        BrewExecutor brewExecutor = new BrewExecutor(connectionDataProd, connectionDataTest, query, packageName);
         brewExecutor.executeBrew(testClassPath, ORIGINAL_NAME);
 
         // Create mutants
@@ -154,13 +154,15 @@ public class Runner {
         try {
 
             final int originalExitCode = GradleUtil.runTestClass(projectPath, ORIGINAL_NAME);
+            GradleUtil.saveTestResult(projectPath, packageName + "." + ORIGINAL_NAME);
 
-            System.out.printf("Original %s ", packageName);
+            System.out.printf("Original %d ", queryIndex);
             System.out.println(originalExitCode == 0 ? "yes" : "no");
 
             // Run tests of mutated query
             for (int i = 1; i < queryMutants.size(); i++) {
                 final int mutantExitCode = GradleUtil.runTestClass(projectPath, MUTANT_NAME + i);
+                GradleUtil.saveTestResult(projectPath, packageName + "." + MUTANT_NAME + i);
 
                 System.out.printf("Mutant %d ", i);
                 System.out.println(mutantExitCode != 0 ? "yes" : "no");

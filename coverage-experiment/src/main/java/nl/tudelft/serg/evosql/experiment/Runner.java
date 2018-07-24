@@ -132,7 +132,8 @@ public class Runner {
 
         // Execute brew and output to project folder for original
         BrewExecutor brewExecutor = new BrewExecutor(connectionDataProd, connectionDataTest, query, packageName);
-        brewExecutor.executeBrew(testClassPath, ORIGINAL_NAME);
+        brewExecutor.executeBrew(brewExecutor.getQueryResult(),
+                testClassPath, ORIGINAL_NAME);
 
         // Create mutants
         QueryMutator queryMutator = new QueryMutator(query, connectionDataProd);
@@ -147,7 +148,7 @@ public class Runner {
         for (int i = 1; i < queryMutants.size(); i++) {
             Result mutantResult = new Result(queryMutants.get(i),
                     brewExecutor.getQueryResult().getPaths());
-            brewExecutor.brewWithMutatedQuery(mutantResult,
+            brewExecutor.executeBrew(mutantResult,
                     testClassPath, MUTANT_NAME + i);
         }
 

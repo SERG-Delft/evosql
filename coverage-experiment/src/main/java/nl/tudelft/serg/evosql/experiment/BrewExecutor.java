@@ -51,19 +51,20 @@ public class BrewExecutor {
 
     /**
      * Executes brew and the GA pipeline for the query.
-     * Outputs results to test class file
+     * Outputs the given result to a test class file
      * with junit 5 tests and the given parameters.
      *
+     * @param result       GA result of original query
      * @param pathToOutput path to output test file to
-     * @param fileName     name of the test file
+     * @param className    name of the test class
      */
-    public void executeBrew(Path pathToOutput, String fileName) {
-        existingDataRunner.setResult(queryResult);
+    public void executeBrew(Result result, Path pathToOutput, String className) {
+        existingDataRunner.setResult(result);
         //Configure jUnitGenerator, TODO: perhaps remove code duplication with the other method in the future
         JUnitGeneratorSettings jUnitGeneratorSettings = new JUnitGeneratorSettings(
                 connectionDataTest,
                 filePackage,
-                fileName,
+                className,
                 true,
                 true,
                 true,
@@ -83,42 +84,6 @@ public class BrewExecutor {
                 .build();
 
         //Execute pipeline
-        pipeline.execute();
-    }
-
-    /**
-     * This method generates a test class file with a mutated query. It does not run the
-     * GA for this query but uses the {@link Result} of the original query and with that
-     * information outputs a file consisting of junit 5 tests given the parameters.
-     *
-     * @param result       GA result of original query
-     * @param pathToOutput path to output file to
-     * @param className    name of the test class
-     */
-    public void brewWithMutatedQuery(Result result, Path pathToOutput, String className) {
-        existingDataRunner.setResult(result);
-        //Configure jUnitGenerator, TODO: perhaps remove code duplication with the other method in the future
-        JUnitGeneratorSettings jUnitGeneratorSettings = new JUnitGeneratorSettings(
-                connectionDataTest,
-                filePackage,
-                className,
-                true,
-                true,
-                true,
-                false,
-                true);
-        //Construct Pipeline
-        Pipeline pipeline = Pipeline.builder()
-                .queryRunner(existingDataRunner)
-                .connectionData(connectionDataProd) // not used by ExistingDataRunner
-                .sqlQuery("") // not used by ExistingDataRunner
-                .resultProcessor(new Pipeline.ResultProcessor(
-                        new JUnit5TestGenerator(jUnitGeneratorSettings),
-                        new PostgreSQLOptions(),
-                        new FileConsumer(pathToOutput))
-                )
-                .build();
-
         pipeline.execute();
     }
 }

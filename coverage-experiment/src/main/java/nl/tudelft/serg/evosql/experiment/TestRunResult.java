@@ -17,9 +17,11 @@ import java.nio.file.Path;
  */
 @Data
 public class TestRunResult {
-    private final boolean hadSuccesses;
-    private final boolean hadAssertionFailures;
-    private final boolean hadExceptionFailures;
+    private final int testCaseCount;
+    private final boolean successful;
+    private final boolean successPresent;
+    private final boolean assertionFailurePresent;
+    private final boolean exceptionFailurePresent;
 
     public static TestRunResult fromGradleXmlFile(Path filePath)
             throws ParserConfigurationException, IOException, SAXException {
@@ -27,6 +29,8 @@ public class TestRunResult {
         DocumentBuilder builder = dbFactory.newDocumentBuilder();
         Document doc = builder.parse(filePath.toFile());
 
+        int testCaseCount = 0;
+        boolean wasSuccessful = true;
         boolean hadSuccesses = false;
         boolean hadAssertFailures = false;
         boolean hadExceptionFailures = false;
@@ -39,9 +43,11 @@ public class TestRunResult {
             Node testCase = testCases.item(i);
             // Skip the node if it is not a test case
             if (!testCase.getNodeName().equals("testcase")) continue;
+            ++testCaseCount;
 
             if (testCase.hasChildNodes()) {
                 // If the node has child nodes, its test failed
+                wasSuccessful = false;
                 // Traverse nodes to find <failure>
                 NodeList failureContaining = testCase.getChildNodes();
                 Node failure = null;
@@ -61,6 +67,7 @@ public class TestRunResult {
             }
         }
 
-        return new TestRunResult(hadSuccesses, hadAssertFailures, hadExceptionFailures);
+        return new TestRunResult(testCaseCount, wasSuccessful, hadSuccesses,
+                hadAssertFailures, hadExceptionFailures);
     }
 }

@@ -197,11 +197,15 @@ public class Runner {
             builder.append(',');
             builder.append(exitCode);
             builder.append(',');
-            builder.append(result.isHadSuccesses());
+            builder.append(result.getTestCaseCount());
             builder.append(',');
-            builder.append(result.isHadAssertionFailures());
+            builder.append(result.isSuccessful());
             builder.append(',');
-            builder.append(result.isHadExceptionFailures());
+            builder.append(result.isSuccessPresent());
+            builder.append(',');
+            builder.append(result.isAssertionFailurePresent());
+            builder.append(',');
+            builder.append(result.isExceptionFailurePresent());
             builder.append('\n');
         } catch (ParserConfigurationException | IOException | SAXException e) {
             e.printStackTrace();

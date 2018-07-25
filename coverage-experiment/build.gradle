@@ -1,10 +1,15 @@
 plugins {
     id "io.franzbecker.gradle-lombok" version "1.11"
+    id 'com.github.johnrengelman.shadow' version '2.0.4'
 }
 
 lombok {
     version = "1.16.20"
     sha256 = ""
+}
+
+repositories {
+    mavenCentral()
 }
 
 description = 'Infrastructure for experiment verifying coverage of GA.'
@@ -13,7 +18,22 @@ apply plugin: 'findbugs'
 
 dependencies {
     implementation project(':ga')
+    implementation 'com.github.jsqlparser:jsqlparser:1.2'
+    implementation 'javax.xml.rpc:javax.xml.rpc-api:1.1.1'
+    implementation fileTree(dir: '../lib', includes: ['*.jar'])
+    implementation project(':brew')
+
 
     testImplementation 'junit:junit:4.12'
+    implementation project(':brew')
+
+    compile 'com.google.guava:guava:25.1-jre'
+
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.1.1'
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'nl.tudelft.serg.evosql.experiment.Runner'
+    }
 }

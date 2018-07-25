@@ -7,31 +7,43 @@ import nl.tudelft.serg.evosql.brew.data.Path;
 import nl.tudelft.serg.evosql.brew.data.Result;
 import nl.tudelft.serg.evosql.brew.generator.Generator;
 import nl.tudelft.serg.evosql.brew.generator.Output;
-import nl.tudelft.serg.evosql.brew.sql.*;
+import nl.tudelft.serg.evosql.brew.sql.CleaningBuilder;
+import nl.tudelft.serg.evosql.brew.sql.DestructionBuilder;
+import nl.tudelft.serg.evosql.brew.sql.InsertionBuilder;
+import nl.tudelft.serg.evosql.brew.sql.TableCreationBuilder;
 import nl.tudelft.serg.evosql.brew.sql.vendor.VendorOptions;
 
 import javax.annotation.Generated;
 import javax.lang.model.element.Modifier;
-import java.sql.*;
+import java.sql.SQLException;
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
+import static nl.tudelft.serg.evosql.brew.generator.junit.JUnitGeneratorHelper.*;
 
 @RequiredArgsConstructor
 public abstract class JUnitGenerator implements Generator {
 
-    @NonNull private final JUnitGeneratorSettings jUnitGeneratorSettings;
+    @NonNull
+    private final JUnitGeneratorSettings jUnitGeneratorSettings;
     private final boolean testMethodsPublic;
-    @NonNull private final Class<?> testAnnotation;
-    @NonNull private final Class<?> beforeAllAnnotation;
-    @NonNull private final Class<?> afterAllAnnotation;
-    @NonNull private final Class<?> beforeEachAnnotation;
-    @NonNull private final Class<?> afterEachAnnotation;
-    @NonNull private final Class<?> assertionClass;
+    @NonNull
+    private final Class<?> testAnnotation;
+    @NonNull
+    private final Class<?> beforeAllAnnotation;
+    @NonNull
+    private final Class<?> afterAllAnnotation;
+    @NonNull
+    private final Class<?> beforeEachAnnotation;
+    @NonNull
+    private final Class<?> afterEachAnnotation;
+    @NonNull
+    private final Class<?> assertionClass;
 
-    private static final String
-            NAME_DB_JDBC_URL = "DB_JDBC_URL",
-            NAME_DB_USER = "DB_USER",
-            NAME_DB_PASSWORD = "DB_PASSWORD",
-            NAME_PRODUCTION_QUERY = "PRODUCTION_QUERY";
+    private static final String NAME_PRODUCTION_QUERY = "PRODUCTION_QUERY";
 
     /**
      * Generates JUnit test suites based on the given result.
@@ -49,19 +61,19 @@ public abstract class JUnitGenerator implements Generator {
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(generatedAnnotation);
 
-        FieldSpec fieldSpec = FieldSpec.builder(String.class, NAME_PRODUCTION_QUERY)
+        FieldSpec productionQuery = FieldSpec.builder(String.class, NAME_PRODUCTION_QUERY)
                 .addModifiers(Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL)
                 .initializer("$S", result.getInputQuery())
                 .addJavadoc("The production query used to test the generated fixtures on.\n")
                 .build();
 
-        typeSpecBuilder.addField(fieldSpec);
+        typeSpecBuilder.addField(productionQuery);
 
         if (jUnitGeneratorSettings.isGenerateSqlExecutorImplementation()) {
             addConnectionDataFields(typeSpecBuilder);
         }
 
-        typeSpecBuilder.addMethod(generateRunSQL());
+        addRunMethods(typeSpecBuilder);
         typeSpecBuilder.addMethod(generateCreateTables(result, vendorOptions));
         typeSpecBuilder.addMethod(generateCleanTables(result, vendorOptions));
         typeSpecBuilder.addMethod(generateDropTables(result, vendorOptions));
@@ -81,21 +93,21 @@ public abstract class JUnitGenerator implements Generator {
     }
 
     private void addConnectionDataFields(TypeSpec.Builder typeSpecBuilder) {
-        FieldSpec jdbcUrlField = FieldSpec.builder(String.class, NAME_DB_JDBC_URL)
+        FieldSpec jdbcUrlField = FieldSpec.builder(String.class, FIELD_DB_JDBC_URL)
                 .addModifiers(Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL)
                 .initializer("$S", jUnitGeneratorSettings.getConnectionData().getConnectionString())
                 .addJavadoc("The JDBC url used to connect to the test database.\n")
                 .build();
         typeSpecBuilder.addField(jdbcUrlField);
 
-        FieldSpec jdbcUserField = FieldSpec.builder(String.class, NAME_DB_USER)
+        FieldSpec jdbcUserField = FieldSpec.builder(String.class, FIELD_DB_USER)
                 .addModifiers(Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL)
                 .initializer("$S", jUnitGeneratorSettings.getConnectionData().getUsername())
                 .addJavadoc("The username used to connect to the test database.\n")
                 .build();
         typeSpecBuilder.addField(jdbcUserField);
 
-        FieldSpec jdbcPasswordField = FieldSpec.builder(String.class, NAME_DB_PASSWORD)
+        FieldSpec jdbcPasswordField = FieldSpec.builder(String.class, FIELD_DB_PASSWORD)
                 .addModifiers(Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL)
                 .initializer("$S", jUnitGeneratorSettings.getConnectionData().getPassword())
                 .addJavadoc("The password used to connect to the test database.\n")
@@ -104,57 +116,17 @@ public abstract class JUnitGenerator implements Generator {
     }
 
     /**
-     * Generates a method specification for the runSQL method.
-     *
-     * @return method.
+     * Adds suitable run methods.
      */
-    private MethodSpec generateRunSQL() {
-        MethodSpec.Builder runSQL = MethodSpec.methodBuilder("runSQL")
-                .addModifiers(Modifier.PRIVATE, Modifier.STATIC)
-                .returns(TypeName.INT)
-                .addParameter(String.class, "sql")
-                .addParameter(boolean.class, "isUpdate");
-
+    private void addRunMethods(TypeSpec.Builder typeSpecBuilder) {
+        JUnitGeneratorHelper helper = new JUnitGeneratorHelper();
         if (jUnitGeneratorSettings.isGenerateSqlExecutorImplementation()) {
-            runSQL.addJavadoc(""
-                    + "Executes an SQL query on the database.\n\n"
-                    + "@param  query    The SQL query to execute\n"
-                    + "@param  isUpdate Whether the query is a data modification statement.\n"
-                    + "@return Whether the query execution has succeeded.\n")
-                    .beginControlFlow("try")
-                    .addStatement(
-                            "$T connection = $T.getConnection($L, $L, $L)",
-                            Connection.class, DriverManager.class,
-                            NAME_DB_JDBC_URL, NAME_DB_USER, NAME_DB_PASSWORD)
-                    .addStatement("$T statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, " +
-                            "ResultSet.CONCUR_READ_ONLY)", Statement.class)
-                    .beginControlFlow("if (isUpdate == true)")
-                    .addStatement("return statement.executeUpdate(sql)")
-                    .nextControlFlow("else")
-                    .addStatement("$T resultSet = statement.executeQuery(sql)", ResultSet.class)
-                    .beginControlFlow("if(resultSet.last())")
-                    .addStatement("return resultSet.getRow()")
-                    .nextControlFlow("else")
-                    .addStatement("return 0")
-                    .endControlFlow()
-                    .endControlFlow()
-                    .nextControlFlow("catch ($T sqlException)", SQLException.class)
-                    .addStatement("sqlException.printStackTrace()")
-                    .addStatement("return -1")
-                    .endControlFlow();
+            typeSpecBuilder.addMethod(helper.buildRunSqlImplementation());
+            typeSpecBuilder.addMethod(helper.buildGetResultColumns());
         } else {
-            runSQL.addJavadoc(""
-                    + "This method should connect to your database and execute the given query.\n"
-                    + "In order for the assertions to work correctly this method must return true in the case\n"
-                    + "that the query yields at least one result and false if there is no result.\n\n"
-                    + "@param  query    The SQL query to execute\n"
-                    + "@param  isUpdate Whether the query is a data modification statement.\n"
-                    + "@return Whether the query execution has succeeded.\n")
-                    .addComment("TODO: Implement method stub")
-                    .addStatement("return -1");
+            typeSpecBuilder.addMethod(helper.buildRunSqlEmpty());
         }
-
-        return runSQL.build();
+        typeSpecBuilder.addMethod(helper.buildMapMaker());
     }
 
     /**
@@ -169,6 +141,7 @@ public abstract class JUnitGenerator implements Generator {
         MethodSpec.Builder createTables = MethodSpec.methodBuilder("createTables")
                 .addModifiers(Modifier.PRIVATE, Modifier.STATIC)
                 .returns(TypeName.VOID)
+                .addException(SQLException.class)
                 .addJavadoc("Creates tables required for queries.\n");
 
         // Create tables code
@@ -176,7 +149,7 @@ public abstract class JUnitGenerator implements Generator {
         Set<String> tableCreateStrings = new HashSet<>();
         result.getPaths().stream().map(tableCreationBuilder::buildQueries).forEach(tableCreateStrings::addAll);
         for (String s : tableCreateStrings) {
-            createTables.addStatement("runSQL($S, true)", s);
+            createTables.addStatement("$L($S, true)", METHOD_RUN_SQL, s);
         }
 
         return createTables.build();
@@ -194,6 +167,7 @@ public abstract class JUnitGenerator implements Generator {
         MethodSpec.Builder cleanTables = MethodSpec.methodBuilder("cleanTables")
                 .addModifiers(Modifier.PRIVATE, Modifier.STATIC)
                 .returns(TypeName.VOID)
+                .addException(SQLException.class)
                 .addJavadoc("Truncates the tables.\n");
 
         // Create tables code
@@ -201,7 +175,7 @@ public abstract class JUnitGenerator implements Generator {
         Set<String> tableCleanStrings = new HashSet<>();
         result.getPaths().stream().map(cleaningBuilder::buildQueries).forEach(tableCleanStrings::addAll);
         for (String s : tableCleanStrings) {
-            cleanTables.addStatement("runSQL($S, true)", s);
+            cleanTables.addStatement("$L($S, true)", METHOD_RUN_SQL, s);
         }
 
         return cleanTables.build();
@@ -219,6 +193,7 @@ public abstract class JUnitGenerator implements Generator {
         MethodSpec.Builder dropTables = MethodSpec.methodBuilder("dropTables")
                 .addModifiers(Modifier.PRIVATE, Modifier.STATIC)
                 .returns(TypeName.VOID)
+                .addException(SQLException.class)
                 .addJavadoc("Drops the tables.\n");
 
         // Create tables code
@@ -226,10 +201,37 @@ public abstract class JUnitGenerator implements Generator {
         Set<String> destructionStrings = new HashSet<>();
         result.getPaths().stream().map(destructionBuilder::buildQueries).forEach(destructionStrings::addAll);
         for (String s : destructionStrings) {
-            dropTables.addStatement("runSQL($S, true)", s);
+            dropTables.addStatement("$L($S, true)", METHOD_RUN_SQL, s);
         }
 
         return dropTables.build();
+    }
+
+    /**
+     * Creates a standard JUnit test infrastructure method.
+     *
+     * @param name        The name of the method.
+     * @param annotation  The JUnit annotation to add.
+     * @param isStatic    Whether the method should be static.
+     * @param bodyBuilder The consumer governing the body of the method.
+     * @return A JUnit infrastructure method.
+     */
+    private MethodSpec makeTestMethod(String name, Class<?> annotation, boolean isStatic,
+                                      Consumer<MethodSpec.Builder> bodyBuilder) {
+        MethodSpec.Builder method = MethodSpec.methodBuilder(name)
+                .returns(TypeName.VOID)
+                .addException(SQLException.class)
+                .addAnnotation(annotation);
+
+        if (isStatic) {
+            method.addModifiers(Modifier.STATIC);
+        }
+        if (testMethodsPublic) {
+            method.addModifiers(Modifier.PUBLIC);
+        }
+
+        bodyBuilder.accept(method);
+        return method.build();
     }
 
     /**
@@ -238,19 +240,13 @@ public abstract class JUnitGenerator implements Generator {
      * @return A method specification for a before all test method.
      */
     private MethodSpec generateBeforeAll() {
-        MethodSpec.Builder beforeAll = MethodSpec.methodBuilder("beforeAll")
-                .addModifiers(Modifier.STATIC)
-                .returns(TypeName.VOID)
-                .addAnnotation(beforeAllAnnotation);
-
-        if (testMethodsPublic) {
-            beforeAll.addModifiers(Modifier.PUBLIC);
-        }
-
-        if (jUnitGeneratorSettings.isCreateTablesBeforeRunning()) {
-            beforeAll.addStatement("createTables()");
-        }
-        return beforeAll.build();
+        return makeTestMethod("beforeAll", beforeAllAnnotation, true,
+                m -> {
+                    if (jUnitGeneratorSettings.isCreateTablesBeforeRunning()) {
+                        m.addStatement("createTables()");
+                    }
+                }
+        );
     }
 
     /**
@@ -259,18 +255,13 @@ public abstract class JUnitGenerator implements Generator {
      * @return A method specification for a before each test method.
      */
     private MethodSpec generateBeforeEach() {
-        MethodSpec.Builder beforeEach = MethodSpec.methodBuilder("beforeEach")
-                .returns(TypeName.VOID)
-                .addAnnotation(beforeEachAnnotation);
-
-        if (testMethodsPublic) {
-            beforeEach.addModifiers(Modifier.PUBLIC);
-        }
-
-        if (jUnitGeneratorSettings.isCleanTablesBeforeEachRun()) {
-            beforeEach.addStatement("cleanTables()");
-        }
-        return beforeEach.build();
+        return makeTestMethod("beforeEach", beforeEachAnnotation, false,
+                m -> {
+                    if (jUnitGeneratorSettings.isCleanTablesBeforeEachRun()) {
+                        m.addStatement("cleanTables()");
+                    }
+                }
+        );
     }
 
     /**
@@ -279,18 +270,13 @@ public abstract class JUnitGenerator implements Generator {
      * @return A method specification for an after each test method.
      */
     private MethodSpec generateAfterEach() {
-        MethodSpec.Builder afterEach = MethodSpec.methodBuilder("afterEach")
-                .returns(TypeName.VOID)
-                .addAnnotation(afterEachAnnotation);
-
-        if (testMethodsPublic) {
-            afterEach.addModifiers(Modifier.PUBLIC);
-        }
-
-        if (jUnitGeneratorSettings.isCleanTableAfterEachRun()) {
-            afterEach.addStatement("cleanTables()");
-        }
-        return afterEach.build();
+        return makeTestMethod("afterEach", afterEachAnnotation, false,
+                m -> {
+                    if (jUnitGeneratorSettings.isCleanTableAfterEachRun()) {
+                        m.addStatement("cleanTables()");
+                    }
+                }
+        );
     }
 
     /**
@@ -299,19 +285,13 @@ public abstract class JUnitGenerator implements Generator {
      * @return A method specification for an after all test method.
      */
     private MethodSpec generateAfterAll() {
-        MethodSpec.Builder afterAll = MethodSpec.methodBuilder("afterAll")
-                .addModifiers(Modifier.STATIC)
-                .returns(TypeName.VOID)
-                .addAnnotation(afterAllAnnotation);
-
-        if (testMethodsPublic) {
-            afterAll.addModifiers(Modifier.PUBLIC);
-        }
-
-        if (jUnitGeneratorSettings.isDropTablesAfterRunning()) {
-            afterAll.addStatement("dropTables()");
-        }
-        return afterAll.build();
+        return makeTestMethod("afterAll", afterAllAnnotation, true,
+                m -> {
+                    if (jUnitGeneratorSettings.isDropTablesAfterRunning()) {
+                        m.addStatement("dropTables()");
+                    }
+                }
+        );
     }
 
     /**
@@ -332,25 +312,54 @@ public abstract class JUnitGenerator implements Generator {
     private MethodSpec generatePathTest(Path path, VendorOptions vendorOptions) {
         // Method signature
         MethodSpec.Builder pTestBuilder = MethodSpec.methodBuilder(
-                String.format("generatedTest%d", path.getPathNumber()));
-        pTestBuilder.addModifiers(Modifier.PUBLIC)
+                String.format("generatedTest%d", path.getPathNumber()))
                 .returns(TypeName.VOID)
+                .addException(SQLException.class)
                 .addAnnotation(testAnnotation);
+
+        if (testMethodsPublic) {
+            pTestBuilder.addModifiers(Modifier.PUBLIC);
+        }
 
         // Arrange part
         pTestBuilder.addComment("Arrange: set up the fixture data");
         InsertionBuilder insertionBuilder = new InsertionBuilder(vendorOptions);
         for (String s : insertionBuilder.buildQueries(path)) {
-            pTestBuilder.addStatement("runSQL($S, true)", s);
+            pTestBuilder.addStatement("$L($S, true)", METHOD_RUN_SQL, s);
         }
 
         // Act
         pTestBuilder.addComment("Act: run a selection query on the database");
-        pTestBuilder.addStatement("$T result = runSQL($L, false)", int.class, NAME_PRODUCTION_QUERY);
+        pTestBuilder.addStatement("$T result = $L($L, false)", RETURN_TYPE_RUN_SQL, METHOD_RUN_SQL, NAME_PRODUCTION_QUERY);
 
         // Assert
         pTestBuilder.addComment("Assert: verify that the expected number of rows is returned");
-        pTestBuilder.addStatement("$T.assertEquals($L, result)", assertionClass, path.getProductionOutput().size());
+        pTestBuilder.addStatement("$T.assertEquals($L, result.size())", assertionClass, path.getProductionOutput().size());
+
+        if (path.getProductionOutput().size() > 0) {
+            pTestBuilder.addComment("Assert: verify that the results are correct");
+            for (Map<String, String> output : path.getProductionOutput()) {
+                // create a pattern of "column1", "value1", "column2", "value2", etc.
+                List<String> mapSpec = output.entrySet().stream()
+                        .flatMap(e -> Stream.of(e.getKey(), e.getValue()))
+                        .collect(Collectors.toList());
+
+                // create a pattern of "$S", "$S", etc. to use in JavaPoet statement
+                String paramPlaceholder = IntStream.range(0, mapSpec.size())
+                        .mapToObj(i -> "$S")
+                        .collect(Collectors.joining(", "));
+
+                // create a list of arguments for JavaPoet
+                List<Object> arguments = new ArrayList<>(2 + mapSpec.size());
+                arguments.add(assertionClass);
+                arguments.add(METHOD_MAP_MAKER);
+                arguments.addAll(mapSpec);
+
+                pTestBuilder.addStatement("$T.assertTrue(result.contains($L(" + paramPlaceholder + ")))",
+                        arguments.toArray());
+            }
+        }
+
         return pTestBuilder.build();
     }
 }

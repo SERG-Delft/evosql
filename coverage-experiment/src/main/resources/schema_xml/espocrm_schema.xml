@@ -1,0 +1,1101 @@
+<schema dbms="MySQL">
+    <table name="account">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="name" type="VARCHAR" size="255" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="website" type="VARCHAR" size="255" default="NULL"/>
+        <column name="type" type="VARCHAR" size="255" default="''"/>
+        <column name="industry" type="VARCHAR" size="255" default="''"/>
+        <column name="sic_code" type="VARCHAR" size="40" default="NULL"/>
+        <column name="billing_address_street" type="VARCHAR" size="255" default="NULL"/>
+        <column name="billing_address_city" type="VARCHAR" size="255" default="NULL"/>
+        <column name="billing_address_state" type="VARCHAR" size="255" default="NULL"/>
+        <column name="billing_address_country" type="VARCHAR" size="255" default="NULL"/>
+        <column name="billing_address_postal_code" type="VARCHAR" size="255" default="NULL"/>
+        <column name="shipping_address_street" type="VARCHAR" size="255" default="NULL"/>
+        <column name="shipping_address_city" type="VARCHAR" size="255" default="NULL"/>
+        <column name="shipping_address_state" type="VARCHAR" size="255" default="NULL"/>
+        <column name="shipping_address_country" type="VARCHAR" size="255" default="NULL"/>
+        <column name="shipping_address_postal_code" type="VARCHAR" size="255" default="NULL"/>
+        <column name="description" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="created_at" type="DATETIME" default="NULL"/>
+        <column name="modified_at" type="DATETIME" default="NULL"/>
+        <column name="campaign_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="created_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="modified_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="assigned_user_id" type="VARCHAR" size="24" default="NULL"/>
+    </table>
+    <table name="account_contact">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="account_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="contact_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="role" type="VARCHAR" size="50" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+    </table>
+    <table name="account_document">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="account_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="document_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+    </table>
+    <table name="account_portal_user">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="user_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="account_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+    </table>
+    <table name="account_target_list">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="account_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="target_list_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="opted_out" type="BIT" default="0"/>
+        <column name="deleted" type="BIT" default="0"/>
+    </table>
+    <table name="attachment">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="name" type="VARCHAR" size="255" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="type" type="VARCHAR" size="100" default="NULL"/>
+        <column name="size" type="INT" default="NULL"/>
+        <column name="source_id" type="VARCHAR" size="36" default="NULL"/>
+        <column name="created_at" type="DATETIME" default="NULL"/>
+        <column name="role" type="VARCHAR" size="36" default="NULL"/>
+        <column name="storage" type="VARCHAR" size="24" default="NULL"/>
+        <column name="global" type="BIT" notnull="true" default="0"/>
+        <column name="parent_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="parent_type" type="VARCHAR" size="100" default="NULL"/>
+        <column name="related_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="related_type" type="VARCHAR" size="100" default="NULL"/>
+        <column name="created_by_id" type="VARCHAR" size="24" default="NULL"/>
+    </table>
+    <table name="auth_token">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="token" type="VARCHAR" size="36" default="NULL"/>
+        <column name="hash" type="VARCHAR" size="150" default="NULL"/>
+        <column name="user_id" type="VARCHAR" size="36" default="NULL"/>
+        <column name="ip_address" type="VARCHAR" size="36" default="NULL"/>
+        <column name="last_access" type="DATETIME" default="NULL"/>
+        <column name="created_at" type="DATETIME" default="NULL"/>
+        <column name="modified_at" type="DATETIME" default="NULL"/>
+        <column name="portal_id" type="VARCHAR" size="24" default="NULL"/>
+    </table>
+    <table name="autofollow">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="entity_type" type="VARCHAR" size="100" default="NULL"/>
+        <column name="user_id" type="VARCHAR" size="24" default="NULL"/>
+    </table>
+    <table name="call">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="name" type="VARCHAR" size="255" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="status" type="VARCHAR" size="255" default="'Planned'"/>
+        <column name="date_start" type="DATETIME" default="NULL"/>
+        <column name="date_end" type="DATETIME" default="NULL"/>
+        <column name="direction" type="VARCHAR" size="255" default="'Outbound'"/>
+        <column name="description" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="created_at" type="DATETIME" default="NULL"/>
+        <column name="modified_at" type="DATETIME" default="NULL"/>
+        <column name="parent_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="parent_type" type="VARCHAR" size="100" default="NULL"/>
+        <column name="account_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="created_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="modified_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="assigned_user_id" type="VARCHAR" size="24" default="NULL"/>
+    </table>
+    <table name="call_contact">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="call_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="contact_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="status" type="VARCHAR" size="36" default="'None'"/>
+        <column name="deleted" type="BIT" default="0"/>
+    </table>
+    <table name="call_lead">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="call_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="lead_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="status" type="VARCHAR" size="36" default="'None'"/>
+        <column name="deleted" type="BIT" default="0"/>
+    </table>
+    <table name="call_user">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="user_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="call_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="status" type="VARCHAR" size="36" default="'None'"/>
+        <column name="deleted" type="BIT" default="0"/>
+    </table>
+    <table name="campaign">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="name" type="VARCHAR" size="255" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="status" type="VARCHAR" size="255" default="'Planning'"/>
+        <column name="type" type="VARCHAR" size="255" default="'Email'"/>
+        <column name="start_date" type="DATE" default="NULL"/>
+        <column name="end_date" type="DATE" default="NULL"/>
+        <column name="description" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="created_at" type="DATETIME" default="NULL"/>
+        <column name="modified_at" type="DATETIME" default="NULL"/>
+        <column name="budget" type="DOUBLE" size="22" default="NULL"/>
+        <column name="budget_currency" type="VARCHAR" size="255" default="NULL"/>
+        <column name="created_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="modified_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="assigned_user_id" type="VARCHAR" size="24" default="NULL"/>
+    </table>
+    <table name="campaign_log_record">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="action" type="VARCHAR" size="50" default="NULL"/>
+        <column name="action_date" type="DATETIME" default="NULL"/>
+        <column name="data" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="string_data" type="VARCHAR" size="100" default="NULL"/>
+        <column name="string_additional_data" type="VARCHAR" size="100" default="NULL"/>
+        <column name="application" type="VARCHAR" size="36" default="'Espo'"/>
+        <column name="created_at" type="DATETIME" default="NULL"/>
+        <column name="is_test" type="BIT" notnull="true" default="0"/>
+        <column name="created_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="campaign_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="parent_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="parent_type" type="VARCHAR" size="100" default="NULL"/>
+        <column name="object_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="object_type" type="VARCHAR" size="100" default="NULL"/>
+        <column name="queue_item_id" type="VARCHAR" size="24" default="NULL"/>
+    </table>
+    <table name="campaign_target_list">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="campaign_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="target_list_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+    </table>
+    <table name="campaign_target_list_excluding">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="campaign_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="target_list_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+    </table>
+    <table name="campaign_tracking_url">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="name" type="VARCHAR" size="255" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="url" type="VARCHAR" size="255" default="NULL"/>
+        <column name="modified_at" type="DATETIME" default="NULL"/>
+        <column name="created_at" type="DATETIME" default="NULL"/>
+        <column name="campaign_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="modified_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="created_by_id" type="VARCHAR" size="24" default="NULL"/>
+    </table>
+    <table name="case">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="name" type="VARCHAR" size="255" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="number" type="INT" notnull="true"/>
+        <column name="status" type="VARCHAR" size="255" default="'New'"/>
+        <column name="priority" type="VARCHAR" size="255" default="'Normal'"/>
+        <column name="type" type="VARCHAR" size="255" default="''"/>
+        <column name="description" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="created_at" type="DATETIME" default="NULL"/>
+        <column name="modified_at" type="DATETIME" default="NULL"/>
+        <column name="account_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="lead_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="contact_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="inbound_email_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="created_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="modified_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="assigned_user_id" type="VARCHAR" size="24" default="NULL"/>
+    </table>
+    <table name="case_contact">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="case_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="contact_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+    </table>
+    <table name="case_knowledge_base_article">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="case_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="knowledge_base_article_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+    </table>
+    <table name="contact">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="salutation_name" type="VARCHAR" size="255" default="NULL"/>
+        <column name="first_name" type="VARCHAR" size="100" default="''"/>
+        <column name="last_name" type="VARCHAR" size="100" default="''"/>
+        <column name="account_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="description" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="do_not_call" type="BIT" notnull="true" default="0"/>
+        <column name="address_street" type="VARCHAR" size="255" default="NULL"/>
+        <column name="address_city" type="VARCHAR" size="255" default="NULL"/>
+        <column name="address_state" type="VARCHAR" size="255" default="NULL"/>
+        <column name="address_country" type="VARCHAR" size="255" default="NULL"/>
+        <column name="address_postal_code" type="VARCHAR" size="255" default="NULL"/>
+        <column name="created_at" type="DATETIME" default="NULL"/>
+        <column name="modified_at" type="DATETIME" default="NULL"/>
+        <column name="campaign_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="created_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="modified_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="assigned_user_id" type="VARCHAR" size="24" default="NULL"/>
+    </table>
+    <table name="contact_document">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="contact_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="document_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+    </table>
+    <table name="contact_meeting">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="contact_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="meeting_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="status" type="VARCHAR" size="36" default="'None'"/>
+        <column name="deleted" type="BIT" default="0"/>
+    </table>
+    <table name="contact_opportunity">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="contact_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="opportunity_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="role" type="VARCHAR" size="50" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+    </table>
+    <table name="contact_target_list">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="contact_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="target_list_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="opted_out" type="BIT" default="0"/>
+        <column name="deleted" type="BIT" default="0"/>
+    </table>
+    <table name="currency">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="rate" type="DOUBLE" size="22" default="NULL"/>
+    </table>
+    <table name="document">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="name" type="VARCHAR" size="255" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="status" type="VARCHAR" size="255" default="NULL"/>
+        <column name="source" type="VARCHAR" size="255" default="'Espo'"/>
+        <column name="type" type="VARCHAR" size="255" default="NULL"/>
+        <column name="publish_date" type="DATE" default="NULL"/>
+        <column name="expiration_date" type="DATE" default="NULL"/>
+        <column name="description" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="created_at" type="DATETIME" default="NULL"/>
+        <column name="modified_at" type="DATETIME" default="NULL"/>
+        <column name="created_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="modified_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="assigned_user_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="folder_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="file_id" type="VARCHAR" size="24" default="NULL"/>
+    </table>
+    <table name="document_folder">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="name" type="VARCHAR" size="255" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="description" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="created_at" type="DATETIME" default="NULL"/>
+        <column name="modified_at" type="DATETIME" default="NULL"/>
+        <column name="created_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="modified_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="parent_id" type="VARCHAR" size="24" default="NULL"/>
+    </table>
+    <table name="document_folder_path">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="ascendor_id" type="VARCHAR" size="100" default="NULL"/>
+        <column name="descendor_id" type="VARCHAR" size="24" default="NULL"/>
+    </table>
+    <table name="document_lead">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="document_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="lead_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+    </table>
+    <table name="document_opportunity">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="document_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="opportunity_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+    </table>
+    <table name="email">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="name" type="VARCHAR" size="255" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="from_name" type="VARCHAR" size="255" default="NULL"/>
+        <column name="from_string" type="VARCHAR" size="255" default="NULL"/>
+        <column name="reply_to_string" type="VARCHAR" size="255" default="NULL"/>
+        <column name="is_replied" type="BIT" notnull="true" default="0"/>
+        <column name="message_id" type="VARCHAR" size="255" default="NULL"/>
+        <column name="message_id_internal" type="VARCHAR" size="300" default="NULL"/>
+        <column name="body_plain" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="body" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="is_html" type="BIT" notnull="true" default="1"/>
+        <column name="status" type="VARCHAR" size="255" default="'Archived'"/>
+        <column name="has_attachment" type="BIT" notnull="true" default="0"/>
+        <column name="date_sent" type="DATETIME" default="NULL"/>
+        <column name="delivery_date" type="DATETIME" default="NULL"/>
+        <column name="created_at" type="DATETIME" default="NULL"/>
+        <column name="modified_at" type="DATETIME" default="NULL"/>
+        <column name="is_system" type="BIT" notnull="true" default="0"/>
+        <column name="from_email_address_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="parent_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="parent_type" type="VARCHAR" size="100" default="NULL"/>
+        <column name="created_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="sent_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="modified_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="assigned_user_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="replied_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="account_id" type="VARCHAR" size="24" default="NULL"/>
+    </table>
+    <table name="email_account">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="name" type="VARCHAR" size="255" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="email_address" type="VARCHAR" size="100" default="NULL"/>
+        <column name="status" type="VARCHAR" size="255" default="NULL"/>
+        <column name="host" type="VARCHAR" size="255" default="NULL"/>
+        <column name="port" type="VARCHAR" size="255" default="'143'"/>
+        <column name="ssl" type="BIT" notnull="true" default="0"/>
+        <column name="username" type="VARCHAR" size="255" default="NULL"/>
+        <column name="password" type="VARCHAR" size="255" default="NULL"/>
+        <column name="monitored_folders" type="VARCHAR" size="255" default="'INBOX'"/>
+        <column name="sent_folder" type="VARCHAR" size="255" default="NULL"/>
+        <column name="store_sent_emails" type="BIT" notnull="true" default="0"/>
+        <column name="keep_fetched_emails_unread" type="BIT" notnull="true" default="0"/>
+        <column name="fetch_since" type="DATE" default="NULL"/>
+        <column name="fetch_data" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="created_at" type="DATETIME" default="NULL"/>
+        <column name="modified_at" type="DATETIME" default="NULL"/>
+        <column name="use_smtp" type="BIT" notnull="true" default="0"/>
+        <column name="smtp_host" type="VARCHAR" size="255" default="NULL"/>
+        <column name="smtp_port" type="INT" default="25"/>
+        <column name="smtp_auth" type="BIT" notnull="true" default="0"/>
+        <column name="smtp_security" type="VARCHAR" size="255" default="NULL"/>
+        <column name="smtp_username" type="VARCHAR" size="255" default="NULL"/>
+        <column name="smtp_password" type="VARCHAR" size="255" default="NULL"/>
+        <column name="email_folder_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="assigned_user_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="created_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="modified_by_id" type="VARCHAR" size="24" default="NULL"/>
+    </table>
+    <table name="email_address">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="name" type="VARCHAR" size="255" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="lower" type="VARCHAR" size="255" default="NULL"/>
+        <column name="invalid" type="BIT" notnull="true" default="0"/>
+        <column name="opt_out" type="BIT" notnull="true" default="0"/>
+    </table>
+    <table name="email_email_account">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="email_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="email_account_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+    </table>
+    <table name="email_email_address">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="email_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="email_address_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="address_type" type="VARCHAR" size="4" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+    </table>
+    <table name="email_filter">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="name" type="VARCHAR" size="100" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="from" type="VARCHAR" size="255" default="NULL"/>
+        <column name="to" type="VARCHAR" size="255" default="NULL"/>
+        <column name="subject" type="VARCHAR" size="255" default="NULL"/>
+        <column name="body_contains" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="is_global" type="BIT" notnull="true" default="0"/>
+        <column name="action" type="VARCHAR" size="255" default="'Skip'"/>
+        <column name="created_at" type="DATETIME" default="NULL"/>
+        <column name="modified_at" type="DATETIME" default="NULL"/>
+        <column name="parent_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="parent_type" type="VARCHAR" size="100" default="NULL"/>
+        <column name="email_folder_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="created_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="modified_by_id" type="VARCHAR" size="24" default="NULL"/>
+    </table>
+    <table name="email_folder">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="name" type="VARCHAR" size="64" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="order" type="INT" default="NULL"/>
+        <column name="skip_notifications" type="BIT" notnull="true" default="0"/>
+        <column name="created_at" type="DATETIME" default="NULL"/>
+        <column name="modified_at" type="DATETIME" default="NULL"/>
+        <column name="assigned_user_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="created_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="modified_by_id" type="VARCHAR" size="24" default="NULL"/>
+    </table>
+    <table name="email_inbound_email">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="email_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="inbound_email_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+    </table>
+    <table name="email_queue_item">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="status" type="VARCHAR" size="255" default="NULL"/>
+        <column name="attempt_count" type="INT" default="0"/>
+        <column name="created_at" type="DATETIME" default="NULL"/>
+        <column name="sent_at" type="DATETIME" default="NULL"/>
+        <column name="email_address" type="VARCHAR" size="255" default="NULL"/>
+        <column name="is_test" type="BIT" notnull="true" default="0"/>
+        <column name="mass_email_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="target_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="target_type" type="VARCHAR" size="100" default="NULL"/>
+    </table>
+    <table name="email_template">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="name" type="VARCHAR" size="255" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="subject" type="VARCHAR" size="255" default="NULL"/>
+        <column name="body" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="is_html" type="BIT" notnull="true" default="1"/>
+        <column name="one_off" type="BIT" notnull="true" default="0"/>
+        <column name="created_at" type="DATETIME" default="NULL"/>
+        <column name="modified_at" type="DATETIME" default="NULL"/>
+        <column name="assigned_user_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="created_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="modified_by_id" type="VARCHAR" size="24" default="NULL"/>
+    </table>
+    <table name="email_user">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="email_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="user_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="is_read" type="BIT" default="0"/>
+        <column name="is_important" type="BIT" default="0"/>
+        <column name="in_trash" type="BIT" default="0"/>
+        <column name="folder_id" type="VARCHAR" size="255" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+    </table>
+    <table name="entity_email_address">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="entity_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="email_address_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="entity_type" type="VARCHAR" size="100" default="NULL"/>
+        <column name="primary" type="BIT" default="0"/>
+        <column name="deleted" type="BIT" default="0"/>
+    </table>
+    <table name="entity_phone_number">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="entity_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="phone_number_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="entity_type" type="VARCHAR" size="100" default="NULL"/>
+        <column name="primary" type="BIT" default="0"/>
+        <column name="deleted" type="BIT" default="0"/>
+    </table>
+    <table name="entity_team">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="entity_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="team_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="entity_type" type="VARCHAR" size="100" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+    </table>
+    <table name="entity_user">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="entity_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="user_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="entity_type" type="VARCHAR" size="100" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+    </table>
+    <table name="extension">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="name" type="VARCHAR" size="255" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="version" type="VARCHAR" size="50" default="NULL"/>
+        <column name="file_list" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="description" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="is_installed" type="BIT" notnull="true" default="0"/>
+        <column name="created_at" type="DATETIME" default="NULL"/>
+        <column name="created_by_id" type="VARCHAR" size="24" default="NULL"/>
+    </table>
+    <table name="external_account">
+        <column name="id" type="VARCHAR" size="64" key="true" notnull="true"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="data" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="enabled" type="BIT" notnull="true" default="0"/>
+    </table>
+    <table name="import">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="entity_type" type="VARCHAR" size="255" default="NULL"/>
+        <column name="status" type="VARCHAR" size="255" default="NULL"/>
+        <column name="created_at" type="DATETIME" default="NULL"/>
+        <column name="created_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="file_id" type="VARCHAR" size="24" default="NULL"/>
+    </table>
+    <table name="import_entity">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="entity_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="entity_type" type="VARCHAR" size="100" default="NULL"/>
+        <column name="import_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="is_imported" type="BIT" default="0"/>
+        <column name="is_updated" type="BIT" default="0"/>
+        <column name="is_duplicate" type="BIT" default="0"/>
+    </table>
+    <table name="inbound_email">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="name" type="VARCHAR" size="255" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="email_address" type="VARCHAR" size="100" default="NULL"/>
+        <column name="status" type="VARCHAR" size="255" default="NULL"/>
+        <column name="host" type="VARCHAR" size="255" default="NULL"/>
+        <column name="port" type="VARCHAR" size="255" default="'143'"/>
+        <column name="ssl" type="BIT" notnull="true" default="0"/>
+        <column name="username" type="VARCHAR" size="255" default="NULL"/>
+        <column name="password" type="VARCHAR" size="255" default="NULL"/>
+        <column name="monitored_folders" type="VARCHAR" size="255" default="'INBOX'"/>
+        <column name="fetch_since" type="DATE" default="NULL"/>
+        <column name="fetch_data" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="add_all_team_users" type="BIT" notnull="true" default="0"/>
+        <column name="create_case" type="BIT" notnull="true" default="0"/>
+        <column name="case_distribution" type="VARCHAR" size="255" default="'Direct-Assignment'"/>
+        <column name="target_user_position" type="VARCHAR" size="255" default="NULL"/>
+        <column name="reply" type="BIT" notnull="true" default="0"/>
+        <column name="reply_from_address" type="VARCHAR" size="255" default="NULL"/>
+        <column name="reply_to_address" type="VARCHAR" size="255" default="NULL"/>
+        <column name="reply_from_name" type="VARCHAR" size="255" default="NULL"/>
+        <column name="created_at" type="DATETIME" default="NULL"/>
+        <column name="modified_at" type="DATETIME" default="NULL"/>
+        <column name="assign_to_user_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="team_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="reply_email_template_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="created_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="modified_by_id" type="VARCHAR" size="24" default="NULL"/>
+    </table>
+    <table name="integration">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="data" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="enabled" type="BIT" notnull="true" default="0"/>
+    </table>
+    <table name="job">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="name" type="VARCHAR" size="255" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="status" type="VARCHAR" size="255" default="'Pending'"/>
+        <column name="execute_time" type="DATETIME" default="NULL"/>
+        <column name="service_name" type="VARCHAR" size="100" default="NULL"/>
+        <column name="method" type="VARCHAR" size="100" default="NULL"/>
+        <column name="data" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="attempts" type="INT" default="NULL"/>
+        <column name="target_id" type="VARCHAR" size="48" default="NULL"/>
+        <column name="target_type" type="VARCHAR" size="64" default="NULL"/>
+        <column name="failed_attempts" type="INT" default="NULL"/>
+        <column name="created_at" type="DATETIME" default="NULL"/>
+        <column name="modified_at" type="DATETIME" default="NULL"/>
+        <column name="scheduled_job_id" type="VARCHAR" size="24" default="NULL"/>
+    </table>
+    <table name="knowledge_base_article">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="name" type="VARCHAR" size="255" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="status" type="VARCHAR" size="255" default="'Draft'"/>
+        <column name="language" type="VARCHAR" size="255" default="''"/>
+        <column name="type" type="VARCHAR" size="255" default="NULL"/>
+        <column name="publish_date" type="DATE" default="NULL"/>
+        <column name="expiration_date" type="DATE" default="NULL"/>
+        <column name="order" type="INT" default="NULL"/>
+        <column name="description" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="created_at" type="DATETIME" default="NULL"/>
+        <column name="modified_at" type="DATETIME" default="NULL"/>
+        <column name="body" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="created_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="modified_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="assigned_user_id" type="VARCHAR" size="24" default="NULL"/>
+    </table>
+    <table name="knowledge_base_article_knowledge_base_category">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="knowledge_base_article_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="knowledge_base_category_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+    </table>
+    <table name="knowledge_base_article_portal">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="portal_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="knowledge_base_article_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+    </table>
+    <table name="knowledge_base_category">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="name" type="VARCHAR" size="255" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="description" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="created_at" type="DATETIME" default="NULL"/>
+        <column name="modified_at" type="DATETIME" default="NULL"/>
+        <column name="order" type="INT" default="NULL"/>
+        <column name="created_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="modified_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="parent_id" type="VARCHAR" size="24" default="NULL"/>
+    </table>
+    <table name="knowledge_base_category_path">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="ascendor_id" type="VARCHAR" size="100" default="NULL"/>
+        <column name="descendor_id" type="VARCHAR" size="24" default="NULL"/>
+    </table>
+    <table name="lead">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="salutation_name" type="VARCHAR" size="255" default="NULL"/>
+        <column name="first_name" type="VARCHAR" size="100" default="''"/>
+        <column name="last_name" type="VARCHAR" size="100" default="''"/>
+        <column name="title" type="VARCHAR" size="100" default="NULL"/>
+        <column name="status" type="VARCHAR" size="255" default="'New'"/>
+        <column name="source" type="VARCHAR" size="255" default="''"/>
+        <column name="industry" type="VARCHAR" size="255" default="''"/>
+        <column name="opportunity_amount" type="DOUBLE" size="22" default="NULL"/>
+        <column name="website" type="VARCHAR" size="255" default="NULL"/>
+        <column name="address_street" type="VARCHAR" size="255" default="NULL"/>
+        <column name="address_city" type="VARCHAR" size="255" default="NULL"/>
+        <column name="address_state" type="VARCHAR" size="255" default="NULL"/>
+        <column name="address_country" type="VARCHAR" size="255" default="NULL"/>
+        <column name="address_postal_code" type="VARCHAR" size="255" default="NULL"/>
+        <column name="do_not_call" type="BIT" notnull="true" default="0"/>
+        <column name="description" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="created_at" type="DATETIME" default="NULL"/>
+        <column name="modified_at" type="DATETIME" default="NULL"/>
+        <column name="account_name" type="VARCHAR" size="255" default="NULL"/>
+        <column name="opportunity_amount_currency" type="VARCHAR" size="255" default="NULL"/>
+        <column name="created_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="modified_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="assigned_user_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="campaign_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="created_account_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="created_contact_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="created_opportunity_id" type="VARCHAR" size="24" default="NULL"/>
+    </table>
+    <table name="lead_meeting">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="lead_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="meeting_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="status" type="VARCHAR" size="36" default="'None'"/>
+        <column name="deleted" type="BIT" default="0"/>
+    </table>
+    <table name="lead_target_list">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="lead_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="target_list_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="opted_out" type="BIT" default="0"/>
+        <column name="deleted" type="BIT" default="0"/>
+    </table>
+    <table name="mass_email">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="name" type="VARCHAR" size="255" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="status" type="VARCHAR" size="255" default="'Pending'"/>
+        <column name="store_sent_emails" type="BIT" notnull="true" default="0"/>
+        <column name="opt_out_entirely" type="BIT" notnull="true" default="0"/>
+        <column name="from_address" type="VARCHAR" size="255" default="NULL"/>
+        <column name="from_name" type="VARCHAR" size="255" default="NULL"/>
+        <column name="reply_to_address" type="VARCHAR" size="255" default="NULL"/>
+        <column name="reply_to_name" type="VARCHAR" size="255" default="NULL"/>
+        <column name="start_at" type="DATETIME" default="NULL"/>
+        <column name="created_at" type="DATETIME" default="NULL"/>
+        <column name="modified_at" type="DATETIME" default="NULL"/>
+        <column name="email_template_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="campaign_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="inbound_email_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="created_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="modified_by_id" type="VARCHAR" size="24" default="NULL"/>
+    </table>
+    <table name="mass_email_target_list">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="mass_email_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="target_list_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+    </table>
+    <table name="mass_email_target_list_excluding">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="mass_email_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="target_list_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+    </table>
+    <table name="meeting">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="name" type="VARCHAR" size="255" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="status" type="VARCHAR" size="255" default="'Planned'"/>
+        <column name="date_start" type="DATETIME" default="NULL"/>
+        <column name="date_end" type="DATETIME" default="NULL"/>
+        <column name="description" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="created_at" type="DATETIME" default="NULL"/>
+        <column name="modified_at" type="DATETIME" default="NULL"/>
+        <column name="parent_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="parent_type" type="VARCHAR" size="100" default="NULL"/>
+        <column name="account_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="created_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="modified_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="assigned_user_id" type="VARCHAR" size="24" default="NULL"/>
+    </table>
+    <table name="meeting_user">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="user_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="meeting_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="status" type="VARCHAR" size="36" default="'None'"/>
+        <column name="deleted" type="BIT" default="0"/>
+    </table>
+    <table name="next_number">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="entity_type" type="VARCHAR" size="255" default="NULL"/>
+        <column name="field_name" type="VARCHAR" size="255" default="NULL"/>
+        <column name="value" type="INT" default="1"/>
+    </table>
+    <table name="note">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="post" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="data" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="type" type="VARCHAR" size="255" default="NULL"/>
+        <column name="target_type" type="VARCHAR" size="255" default="NULL"/>
+        <column name="number" type="INT" notnull="true"/>
+        <column name="is_global" type="BIT" notnull="true" default="0"/>
+        <column name="is_internal" type="BIT" notnull="true" default="0"/>
+        <column name="created_at" type="DATETIME" default="NULL"/>
+        <column name="modified_at" type="DATETIME" default="NULL"/>
+        <column name="parent_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="parent_type" type="VARCHAR" size="100" default="NULL"/>
+        <column name="related_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="related_type" type="VARCHAR" size="100" default="NULL"/>
+        <column name="created_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="modified_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="super_parent_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="super_parent_type" type="VARCHAR" size="100" default="NULL"/>
+    </table>
+    <table name="note_portal">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="note_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="portal_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+    </table>
+    <table name="note_team">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="note_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="team_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+    </table>
+    <table name="note_user">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="note_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="user_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+    </table>
+    <table name="notification">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="number" type="INT" notnull="true"/>
+        <column name="data" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="type" type="VARCHAR" size="255" default="NULL"/>
+        <column name="read" type="BIT" notnull="true" default="0"/>
+        <column name="email_is_processed" type="BIT" notnull="true" default="0"/>
+        <column name="created_at" type="DATETIME" default="NULL"/>
+        <column name="message" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="user_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="related_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="related_type" type="VARCHAR" size="100" default="NULL"/>
+        <column name="related_parent_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="related_parent_type" type="VARCHAR" size="100" default="NULL"/>
+    </table>
+    <table name="opportunity">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="name" type="VARCHAR" size="255" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="amount" type="DOUBLE" size="22" default="NULL"/>
+        <column name="stage" type="VARCHAR" size="255" default="'Prospecting'"/>
+        <column name="probability" type="INT" default="NULL"/>
+        <column name="lead_source" type="VARCHAR" size="255" default="''"/>
+        <column name="close_date" type="DATE" default="NULL"/>
+        <column name="description" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="created_at" type="DATETIME" default="NULL"/>
+        <column name="modified_at" type="DATETIME" default="NULL"/>
+        <column name="amount_currency" type="VARCHAR" size="255" default="NULL"/>
+        <column name="account_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="campaign_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="created_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="modified_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="assigned_user_id" type="VARCHAR" size="24" default="NULL"/>
+    </table>
+    <table name="password_change_request">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="request_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="url" type="VARCHAR" size="255" default="NULL"/>
+        <column name="created_at" type="DATETIME" default="NULL"/>
+        <column name="user_id" type="VARCHAR" size="24" default="NULL"/>
+    </table>
+    <table name="phone_number">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="name" type="VARCHAR" size="36" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="type" type="VARCHAR" size="255" default="NULL"/>
+    </table>
+    <table name="portal">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="name" type="VARCHAR" size="100" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="custom_id" type="VARCHAR" size="36" default="NULL"/>
+        <column name="is_active" type="BIT" notnull="true" default="1"/>
+        <column name="tab_list" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="quick_create_list" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="theme" type="VARCHAR" size="255" default="''"/>
+        <column name="language" type="VARCHAR" size="255" default="''"/>
+        <column name="time_zone" type="VARCHAR" size="255" default="NULL"/>
+        <column name="date_format" type="VARCHAR" size="255" default="''"/>
+        <column name="time_format" type="VARCHAR" size="255" default="''"/>
+        <column name="week_start" type="INT" default="-1"/>
+        <column name="default_currency" type="VARCHAR" size="255" default="''"/>
+        <column name="dashboard_layout" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="dashlets_options" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="custom_url" type="VARCHAR" size="255" default="NULL"/>
+        <column name="modified_at" type="DATETIME" default="NULL"/>
+        <column name="created_at" type="DATETIME" default="NULL"/>
+        <column name="modified_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="created_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="logo_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="company_logo_id" type="VARCHAR" size="24" default="NULL"/>
+    </table>
+    <table name="portal_portal_role">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="portal_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="portal_role_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+    </table>
+    <table name="portal_role">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="name" type="VARCHAR" size="150" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="data" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="field_data" type="TEXT" size="2147483647" default="NULL"/>
+    </table>
+    <table name="portal_role_user">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="portal_role_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="user_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+    </table>
+    <table name="portal_user">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="portal_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="user_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+    </table>
+    <table name="preferences">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="time_zone" type="VARCHAR" size="255" default="NULL"/>
+        <column name="date_format" type="VARCHAR" size="255" default="''"/>
+        <column name="time_format" type="VARCHAR" size="255" default="''"/>
+        <column name="week_start" type="INT" default="-1"/>
+        <column name="default_currency" type="VARCHAR" size="255" default="''"/>
+        <column name="thousand_separator" type="VARCHAR" size="1" default="','"/>
+        <column name="decimal_mark" type="VARCHAR" size="1" default="'.'"/>
+        <column name="dashboard_layout" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="dashlets_options" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="shared_calendar_user_list" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="preset_filters" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="smtp_server" type="VARCHAR" size="255" default="NULL"/>
+        <column name="smtp_port" type="INT" default="25"/>
+        <column name="smtp_auth" type="BIT" notnull="true" default="0"/>
+        <column name="smtp_security" type="VARCHAR" size="255" default="NULL"/>
+        <column name="smtp_username" type="VARCHAR" size="255" default="NULL"/>
+        <column name="smtp_password" type="VARCHAR" size="255" default="NULL"/>
+        <column name="language" type="VARCHAR" size="255" default="''"/>
+        <column name="export_delimiter" type="VARCHAR" size="1" default="','"/>
+        <column name="receive_assignment_email_notifications" type="BIT" notnull="true" default="1"/>
+        <column name="receive_mention_email_notifications" type="BIT" notnull="true" default="1"/>
+        <column name="receive_stream_email_notifications" type="BIT" notnull="true" default="1"/>
+        <column name="signature" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="default_reminders" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="theme" type="VARCHAR" size="255" default="NULL"/>
+        <column name="use_custom_tab_list" type="BIT" notnull="true" default="0"/>
+        <column name="tab_list" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="email_reply_to_all_by_default" type="BIT" notnull="true" default="1"/>
+        <column name="email_reply_force_html" type="BIT" notnull="true" default="0"/>
+        <column name="do_not_fill_assigned_user_if_not_required" type="BIT" notnull="true" default="0"/>
+    </table>
+    <table name="reminder">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="remind_at" type="DATETIME" default="NULL"/>
+        <column name="start_at" type="DATETIME" default="NULL"/>
+        <column name="type" type="VARCHAR" size="36" default="'Popup'"/>
+        <column name="seconds" type="INT" default="0"/>
+        <column name="entity_type" type="VARCHAR" size="100" default="NULL"/>
+        <column name="entity_id" type="VARCHAR" size="50" default="NULL"/>
+        <column name="user_id" type="VARCHAR" size="50" default="NULL"/>
+    </table>
+    <table name="role">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="name" type="VARCHAR" size="150" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="assignment_permission" type="VARCHAR" size="255" default="'not-set'"/>
+        <column name="user_permission" type="VARCHAR" size="255" default="'not-set'"/>
+        <column name="portal_permission" type="VARCHAR" size="255" default="'not-set'"/>
+        <column name="data" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="field_data" type="TEXT" size="2147483647" default="NULL"/>
+    </table>
+    <table name="role_team">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="role_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="team_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+    </table>
+    <table name="role_user">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="role_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="user_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+    </table>
+    <table name="scheduled_job">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="name" type="VARCHAR" size="255" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="job" type="VARCHAR" size="255" default="NULL"/>
+        <column name="status" type="VARCHAR" size="255" default="NULL"/>
+        <column name="scheduling" type="VARCHAR" size="255" default="NULL"/>
+        <column name="last_run" type="DATETIME" default="NULL"/>
+        <column name="created_at" type="DATETIME" default="NULL"/>
+        <column name="modified_at" type="DATETIME" default="NULL"/>
+        <column name="created_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="modified_by_id" type="VARCHAR" size="24" default="NULL"/>
+    </table>
+    <table name="scheduled_job_log_record">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="name" type="VARCHAR" size="255" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="status" type="VARCHAR" size="255" default="NULL"/>
+        <column name="execution_time" type="DATETIME" default="NULL"/>
+        <column name="created_at" type="DATETIME" default="NULL"/>
+        <column name="scheduled_job_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="target_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="target_type" type="VARCHAR" size="255" default="NULL"/>
+    </table>
+    <table name="subscription">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="entity_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="entity_type" type="VARCHAR" size="100" default="NULL"/>
+        <column name="user_id" type="VARCHAR" size="24" default="NULL"/>
+    </table>
+    <table name="target">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="salutation_name" type="VARCHAR" size="255" default="NULL"/>
+        <column name="first_name" type="VARCHAR" size="100" default="''"/>
+        <column name="last_name" type="VARCHAR" size="100" default="''"/>
+        <column name="title" type="VARCHAR" size="100" default="NULL"/>
+        <column name="account_name" type="VARCHAR" size="100" default="NULL"/>
+        <column name="website" type="VARCHAR" size="255" default="NULL"/>
+        <column name="address_street" type="VARCHAR" size="255" default="NULL"/>
+        <column name="address_city" type="VARCHAR" size="255" default="NULL"/>
+        <column name="address_state" type="VARCHAR" size="255" default="NULL"/>
+        <column name="address_country" type="VARCHAR" size="255" default="NULL"/>
+        <column name="address_postal_code" type="VARCHAR" size="255" default="NULL"/>
+        <column name="do_not_call" type="BIT" notnull="true" default="0"/>
+        <column name="description" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="created_at" type="DATETIME" default="NULL"/>
+        <column name="modified_at" type="DATETIME" default="NULL"/>
+        <column name="created_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="modified_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="assigned_user_id" type="VARCHAR" size="24" default="NULL"/>
+    </table>
+    <table name="target_list">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="name" type="VARCHAR" size="255" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="description" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="created_at" type="DATETIME" default="NULL"/>
+        <column name="modified_at" type="DATETIME" default="NULL"/>
+        <column name="created_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="modified_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="assigned_user_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="campaigns_id" type="VARCHAR" size="24" default="NULL"/>
+    </table>
+    <table name="target_list_user">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="user_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="target_list_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="opted_out" type="BIT" default="0"/>
+        <column name="deleted" type="BIT" default="0"/>
+    </table>
+    <table name="task">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="name" type="VARCHAR" size="255" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="status" type="VARCHAR" size="255" default="'Not Started'"/>
+        <column name="priority" type="VARCHAR" size="255" default="'Normal'"/>
+        <column name="date_start" type="DATETIME" default="NULL"/>
+        <column name="date_end" type="DATETIME" default="NULL"/>
+        <column name="date_start_date" type="DATE" default="NULL"/>
+        <column name="date_end_date" type="DATE" default="NULL"/>
+        <column name="date_completed" type="DATETIME" default="NULL"/>
+        <column name="description" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="created_at" type="DATETIME" default="NULL"/>
+        <column name="modified_at" type="DATETIME" default="NULL"/>
+        <column name="parent_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="parent_type" type="VARCHAR" size="100" default="NULL"/>
+        <column name="account_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="created_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="modified_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="assigned_user_id" type="VARCHAR" size="24" default="NULL"/>
+    </table>
+    <table name="team">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="name" type="VARCHAR" size="100" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="position_list" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="created_at" type="DATETIME" default="NULL"/>
+    </table>
+    <table name="team_user">
+        <column name="id" type="INT" key="true" notnull="true"/>
+        <column name="team_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="user_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="role" type="VARCHAR" size="100" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+    </table>
+    <table name="template">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="name" type="VARCHAR" size="255" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="body" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="header" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="footer" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="entity_type" type="VARCHAR" size="255" default="NULL"/>
+        <column name="left_margin" type="DOUBLE" size="22" default="10"/>
+        <column name="right_margin" type="DOUBLE" size="22" default="10"/>
+        <column name="top_margin" type="DOUBLE" size="22" default="10"/>
+        <column name="bottom_margin" type="DOUBLE" size="22" default="25"/>
+        <column name="print_footer" type="BIT" notnull="true" default="0"/>
+        <column name="footer_position" type="DOUBLE" size="22" default="15"/>
+        <column name="created_at" type="DATETIME" default="NULL"/>
+        <column name="modified_at" type="DATETIME" default="NULL"/>
+        <column name="created_by_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="modified_by_id" type="VARCHAR" size="24" default="NULL"/>
+    </table>
+    <table name="unique_id">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="name" type="VARCHAR" size="255" default="NULL"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="data" type="TEXT" size="2147483647" default="NULL"/>
+        <column name="created_at" type="DATETIME" default="NULL"/>
+        <column name="created_by_id" type="VARCHAR" size="24" default="NULL"/>
+    </table>
+    <table name="user">
+        <column name="id" type="VARCHAR" size="24" key="true" notnull="true"/>
+        <column name="deleted" type="BIT" default="0"/>
+        <column name="is_admin" type="BIT" notnull="true" default="0"/>
+        <column name="user_name" type="VARCHAR" size="50" default="NULL"/>
+        <column name="password" type="VARCHAR" size="150" default="NULL"/>
+        <column name="salutation_name" type="VARCHAR" size="255" default="NULL"/>
+        <column name="first_name" type="VARCHAR" size="100" default="''"/>
+        <column name="last_name" type="VARCHAR" size="100" default="''"/>
+        <column name="is_active" type="BIT" notnull="true" default="1"/>
+        <column name="is_portal_user" type="BIT" notnull="true" default="0"/>
+        <column name="is_super_admin" type="BIT" notnull="true" default="0"/>
+        <column name="title" type="VARCHAR" size="100" default="NULL"/>
+        <column name="gender" type="VARCHAR" size="255" default="''"/>
+        <column name="created_at" type="DATETIME" default="NULL"/>
+        <column name="default_team_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="contact_id" type="VARCHAR" size="24" default="NULL"/>
+        <column name="avatar_id" type="VARCHAR" size="24" default="NULL"/>
+    </table>
+</schema>

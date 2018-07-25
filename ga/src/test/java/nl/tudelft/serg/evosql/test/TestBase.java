@@ -21,7 +21,7 @@ import nl.tudelft.serg.evosql.db.SchemaExtractor;
 import nl.tudelft.serg.evosql.db.SeedExtractor;
 import nl.tudelft.serg.evosql.db.Seeds;
 import nl.tudelft.serg.evosql.fixture.Fixture;
-import nl.tudelft.serg.evosql.metaheuristics.GAApproach;
+import nl.tudelft.serg.evosql.metaheuristics.StandardGA;
 import nl.tudelft.serg.evosql.sql.ColumnSchema;
 import nl.tudelft.serg.evosql.sql.TableSchema;
 import nl.tudelft.serg.evosql.sql.parser.UsedColumnExtractor;
@@ -132,7 +132,7 @@ public class TestBase {
 			
 			for (int i = 0; i < EvoSQLConfiguration.TEST_MAX_ITERATIONS; i++) {
 				List<Fixture> population = new ArrayList<Fixture>();
-				GAApproach ga = new GAApproach(population, tableSchemas, sqlToBeTested, seeds);
+				StandardGA ga = new StandardGA(population, tableSchemas, sqlToBeTested, seeds);
 				generatedFixture = ga.execute(time);
 
 				log.info("For path: " + sqlToBeTested);

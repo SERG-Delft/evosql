@@ -9,6 +9,8 @@ public class Fixture implements Cloneable{
 
 	/** To keep track of its fitness value **/
 	private FixtureFitness fitness = null;
+
+	private boolean isChanged = false;
 	
 	private List<FixtureTable> tables;
 
@@ -146,5 +148,17 @@ public class Fixture implements Cloneable{
 		int result = fitness != null ? fitness.hashCode() : 0;
 		result = 31 * result + (tables != null ? tables.hashCode() : 0);
 		return result;
+	}
+
+	public boolean isChanged() {
+		return isChanged;
+	}
+
+	public void setChanged(boolean changed) {
+		isChanged = changed;
+	}
+
+	public int getNumberOfTables(){
+		return this.getTables().size();
 	}
 }

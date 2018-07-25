@@ -56,7 +56,8 @@ public class Runner {
         int startIndex = Integer.valueOf(args[0]);
         int stepSize = Integer.valueOf(args[1]);
 
-        System.out.printf("Running experiment... starting at %d and stepping %d\n", startIndex, stepSize);
+        System.out.printf("Running experiment, starting at %d and stepping %d...", startIndex, stepSize);
+        System.out.println();
 
         BufferedReader reader_erpnext = new BufferedReader(new InputStreamReader(
                 Runner.class.getClassLoader().getResourceAsStream("sql/erpnext_queries.sql")));
@@ -102,6 +103,7 @@ public class Runner {
             );
         }
 
+        System.out.println("Experiment run complete.");
     }
 
     /**
@@ -153,22 +155,24 @@ public class Runner {
         try {
 
             { // in a block to scope "original" variables
+                System.out.printf("Query %d, original... ", queryIndex);
                 final int originalExitCode = GradleUtil.runTestClass(projectPath, ORIGINAL_NAME);
                 Path original = GradleUtil.saveTestResult(projectPath, packageName + "." + ORIGINAL_NAME);
                 appendCsvLine(totalResult, 0, originalExitCode, original);
 
-                System.out.printf("Original %d ", queryIndex);
-                System.out.println(originalExitCode == 0 ? "yes" : "no");
+                System.out.printf("done. Exited with %d.", originalExitCode);
+                System.out.println();
             }
 
             // Run tests of mutated query
             for (int i = 1; i < queryMutants.size(); i++) {
+                System.out.printf("Query %d, mutant %d... ", queryIndex, i);
                 final int mutantExitCode = GradleUtil.runTestClass(projectPath, MUTANT_NAME + i);
                 Path mutant = GradleUtil.saveTestResult(projectPath, packageName + "." + MUTANT_NAME + i);
                 appendCsvLine(totalResult, i, mutantExitCode, mutant);
 
-                System.out.printf("Mutant %d ", i);
-                System.out.println(mutantExitCode != 0 ? "yes" : "no");
+                System.out.printf("done. Exited with %d", mutantExitCode);
+                System.out.println();
             }
 
             // FIXME: If exitCode == 0 it worked, otherwise tests failed

@@ -101,7 +101,7 @@ public class StandardGA extends Approach {
 
 					Fixture[] generatedOffspring = this.crossover.crossover(parent1, parent2);
 					offspring1 = generatedOffspring[0];
-					offspring2 = generatedOffspring[0];
+					offspring2 = generatedOffspring[1];
 
 			        log.debug("Crossover applied");
 			    } else {

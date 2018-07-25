@@ -95,12 +95,23 @@ public class Runner {
                 connectionDataProd = CONNECTION_DATA_SUITECRM_PROD;
                 connectionDataTest = CONNECTION_DATA_SUITECRM_TEST;
             }
-            runForQuery(
-                    allQueries.get(i),
-                    connectionDataProd,
-                    connectionDataTest,
-                    i
-            );
+
+            try {
+                runForQuery(
+                        allQueries.get(i),
+                        connectionDataProd,
+                        connectionDataTest,
+                        i
+                );
+            } catch (Exception e) {
+                try (PrintStream logger = new PrintStream(Paths.get(EXPERIMENT_PATH.toString(), "failure_" + i).toFile())) {
+                    logger.printf("Query %d has failed due to an exception. The stack trace is listed below:", i);
+                    logger.println(); logger.println();
+                    e.printStackTrace(logger);
+                } catch (FileNotFoundException e2) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         System.out.println("Experiment run complete.");

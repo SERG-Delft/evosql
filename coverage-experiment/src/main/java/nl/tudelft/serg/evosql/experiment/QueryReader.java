@@ -17,6 +17,34 @@ import java.util.stream.Stream;
 @Data
 public class QueryReader {
 
+    public List<String> readExperimentQueries() {
+        BufferedReader reader_erpnext = new BufferedReader(new InputStreamReader(
+                Runner.class.getClassLoader().getResourceAsStream("sql/erpnext_queries.sql")));
+        Stream<String> erpnext = reader_erpnext.lines();
+
+        BufferedReader reader_espocrm = new BufferedReader(new InputStreamReader(
+                Runner.class.getClassLoader().getResourceAsStream("sql/espocrm_queries.sql")));
+        Stream<String> espocrm = reader_espocrm.lines();
+
+        BufferedReader reader_suitecrm = new BufferedReader(new InputStreamReader(
+                Runner.class.getClassLoader().getResourceAsStream("sql/suitecrm_queries.sql")));
+        Stream<String> suitecrm = reader_suitecrm.lines();
+
+
+        QueryReader queryReader = new QueryReader();
+        List<String> allQueries = queryReader.readQueries(erpnext, espocrm, suitecrm);
+
+        try {
+            reader_erpnext.close();
+            reader_espocrm.close();
+            reader_suitecrm.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return allQueries;
+    }
+
     /**
      * Reads all queries in the given files and returns them as a list of strings.
      * Does not read in comment lines.

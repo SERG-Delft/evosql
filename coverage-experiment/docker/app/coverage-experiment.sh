@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Run the experiment
-java -jar /root/coverage-experiment-all.jar $COVERAGE_EXPERIMENT_START $COVERAGE_EXPERIMENT_STEP
+java -jar /root/coverage-experiment-all.jar $COVERAGE_EXPERIMENT_START $COVERAGE_EXPERIMENT_STEP $COVERAGE_EXPERIMENT_STOP
 
 # Package all experiment generated files into
 # one archive to allow easy copying and portability

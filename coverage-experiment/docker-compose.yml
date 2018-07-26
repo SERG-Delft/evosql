@@ -10,6 +10,7 @@ services:
     environment:
       - COVERAGE_EXPERIMENT_START
       - COVERAGE_EXPERIMENT_STEP
+      - COVERAGE_EXPERIMENT_STOP
   db:
     build: ./docker/db
     ports:

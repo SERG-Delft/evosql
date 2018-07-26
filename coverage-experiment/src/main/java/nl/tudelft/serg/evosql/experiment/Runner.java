@@ -84,7 +84,8 @@ public class Runner {
             } catch (Exception e) {
                 try (PrintStream logger = new PrintStream(Paths.get(EXPERIMENT_PATH.toString(), "failure_" + i).toFile())) {
                     logger.printf("Query %d has failed due to an exception. The stack trace is listed below:", i);
-                    logger.println(); logger.println();
+                    logger.println();
+                    logger.println();
                     e.printStackTrace(logger);
                 } catch (FileNotFoundException e2) {
                     e.printStackTrace();
@@ -140,14 +141,15 @@ public class Runner {
                     testClassPath, MUTANT_NAME + i);
         }
 
-        StringBuilder totalResult = new StringBuilder();
+        CsvMaker totalResult = new CsvMaker();
         try {
 
             { // in a block to scope "original" variables
                 System.out.printf("Query %d, original... ", queryIndex);
                 final int originalExitCode = GradleUtil.runTestClass(projectPath, ORIGINAL_NAME);
                 Path original = GradleUtil.saveTestResult(projectPath, packageName + "." + ORIGINAL_NAME);
-                appendCsvLine(totalResult, 0, originalExitCode, original);
+                totalResult.appendCsvLine(connectionDataProd.getDatabase(),
+                        queryIndex, query, 0, query, original);
 
                 System.out.printf("done. Exited with %d.", originalExitCode);
                 System.out.println();
@@ -158,7 +160,8 @@ public class Runner {
                 System.out.printf("Query %d, mutant %d... ", queryIndex, i);
                 final int mutantExitCode = GradleUtil.runTestClass(projectPath, MUTANT_NAME + i);
                 Path mutant = GradleUtil.saveTestResult(projectPath, packageName + "." + MUTANT_NAME + i);
-                appendCsvLine(totalResult, i, mutantExitCode, mutant);
+                totalResult.appendCsvLine(connectionDataProd.getDatabase(),
+                        queryIndex, query, i, queryMutants.get(i), mutant);
 
                 System.out.printf("done. Exited with %d", mutantExitCode);
                 System.out.println();
@@ -175,28 +178,6 @@ public class Runner {
         try (PrintStream store = new PrintStream(storePath.toFile())) {
             store.print(totalResult.toString());
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static void appendCsvLine(StringBuilder builder, int mutant, int exitCode, Path filePath) {
-        try {
-            TestRunResult result = TestRunResult.fromGradleXmlFile(filePath);
-            builder.append(mutant);
-            builder.append(',');
-            builder.append(exitCode);
-            builder.append(',');
-            builder.append(result.getTestCaseCount());
-            builder.append(',');
-            builder.append(result.isSuccessful());
-            builder.append(',');
-            builder.append(result.isSuccessPresent());
-            builder.append(',');
-            builder.append(result.isAssertionFailurePresent());
-            builder.append(',');
-            builder.append(result.isExceptionFailurePresent());
-            builder.append('\n');
-        } catch (ParserConfigurationException | IOException | SAXException e) {
             e.printStackTrace();
         }
     }

@@ -34,8 +34,20 @@ The Docker container executing the experiment will generate a `.tar.gz` archive 
 ## Analysing experiment results
 An analysis of the results of the experiment can be performed by combining the `all.csv` files of all the queries the experiment was run on which should be easily parseable by _R_ or _MATLAB_. The structure of the `all.csv` files is as follows:
 
-<!-- TODO: Structure needs to be added once it is finished -->
-`STRUCTURE`
+| Field             | Type    | Description                                                                                        |
+|-------------------|---------|----------------------------------------------------------------------------------------------------|
+| project           | string  | The name of the project this query belongs to.                                                     |
+| query id          | integer | The zero-based index of the query in the total list of queries.                                    |
+| query             | string  | The original query.                                                                                |
+| mutant id         | integer | The index of the mutant with respect to the original query. Mutant 0 indicates the original query. |
+| mutant            | string  | The mutated query.                                                                                 |
+| test cases        | integer | The number of executed test cases. Should be the same across all mutants of a query.               |
+| successful        | boolean | Whether all test cases were successful.                                                            |
+| sucess present    | boolean | Whether some test cases were successful.                                                           |
+| assertion error   | boolean | Whether some test cases threw an assertion error.                                                  |
+| exception failure | boolean | Whether some test cases threw a non-assertive exception.                                           |
+
+String types are surrounded by double quotes (`"`). Any occurrence of `"` in the string itself is replaced by `""`, as is common in CSV formats.
 
 If exceptions should be analyzed the `.xml` files should be considered and parsed. The following structure can be expected:
 

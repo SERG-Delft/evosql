@@ -21,7 +21,7 @@ import nl.tudelft.serg.evosql.metaheuristics.operators.TournamentSelection;
 import nl.tudelft.serg.evosql.sql.TableSchema;
 import nl.tudelft.serg.evosql.util.random.Randomness;
 
-public class GAApproach extends Approach {
+public class StandardGA extends Approach {
 	private boolean isInitialized;
 
 	/** Current Population **/
@@ -47,7 +47,7 @@ public class GAApproach extends Approach {
 
 	private int populationSize;
 
-	public GAApproach(List<Fixture> population, Map<String, TableSchema> pTableSchemas, String pPathToBeTested, Seeds seeds){
+	public StandardGA(List<Fixture> population, Map<String, TableSchema> pTableSchemas, String pPathToBeTested, Seeds seeds){
 		super(pTableSchemas, pPathToBeTested);
 		
 		this.seeds = seeds;
@@ -87,7 +87,7 @@ public class GAApproach extends Approach {
 				&& System.currentTimeMillis() - startTime < pathTime
 				//&& generations < maxGenerations
 		){
-			List<Fixture> offsprings = new ArrayList<Fixture>(populationSize);
+			List<Fixture> offspring_population = new ArrayList<Fixture>(populationSize);
 			for (int index=0; index < populationSize; index += 2){
 				// Get two parents through selection operator
 				Fixture parent1 = selection.getFixture(population);
@@ -95,49 +95,45 @@ public class GAApproach extends Approach {
 
 				Fixture offspring1;
 				Fixture offspring2;
-				boolean o1Changed = false, o2Changed = false;
 				
 				// Use the crossover operator
-			    if (crossover.canBeDone(parent1, parent2) && random.nextDouble() < EvoSQLConfiguration.P_CROSSOVER) {
+			    if (random.nextDouble() < EvoSQLConfiguration.P_CROSSOVER) {
 
-					List<Fixture> generatedOffsprings = this.crossover.crossover(parent1, parent2);
-					offspring1 = generatedOffsprings.get(0);
-					offspring2 = generatedOffsprings.get(1);
+					Fixture[] generatedOffspring = this.crossover.crossover(parent1, parent2);
+					offspring1 = generatedOffspring[0];
+					offspring2 = generatedOffspring[1];
 
 			        log.debug("Crossover applied");
-			        o1Changed = true;
-			        o2Changed = true;
 			    } else {
 					offspring1 = parent1.copy();
 					offspring2 = parent2.copy();
 				}
 			    
 			    // Mutate
-			    if(mutation.mutate(offspring1))
-			    	o1Changed = true;
-
-			    if(mutation.mutate(offspring2))
-			    	o2Changed = true;
+			    mutation.mutate(offspring1);
+			    mutation.mutate(offspring2);
 			    
-			    // Calculate fitness if needed
-			    if (o1Changed) {
+			    // Calculate fitness and add offspring to the offspring_population if needed
+			    if (offspring1.isChanged()) {
 			    	calculateFitness(offspring1);
 					log.debug("Fitness = {}", offspring1.getFitness());
+
+					// we add only changed solutions (to avoid clones in the new population)
+					offspring_population.add(offspring1);
 			    }
-			    if (o2Changed) {
+			    if (offspring2.isChanged()) {
 			    	calculateFitness(offspring2);
 					log.debug("Fitness = {}", offspring2.getFitness());
+
+					// we add only changed solutions (to avoid clones in the new population)
+					offspring_population.add(offspring2);
 			    }
-			    
-			    // add offsprings to the offspring_population
-			    offsprings.add(offspring1);
-			    offsprings.add(offspring2);
 			}
 			
 			// Combine original and offspring population
 			List<Fixture> union = new ArrayList<Fixture>();
 			union.addAll(population);
-			union.addAll(offsprings);
+			union.addAll(offspring_population);
 
 			// Order by fitness
 			Collections.sort(union, fc);
@@ -241,6 +237,9 @@ public class GAApproach extends Approach {
 		
 		// Stop instrumenter
 		genetic.Instrumenter.stopInstrumenting();
+
+		// set the fixture as "not changed" to avoid future fitness function computation
+		fixture.setChanged(false);
 	}
 	
 	private FixtureTable createFixtureTable(TableSchema tableSchema, List<FixtureTable> tables) {

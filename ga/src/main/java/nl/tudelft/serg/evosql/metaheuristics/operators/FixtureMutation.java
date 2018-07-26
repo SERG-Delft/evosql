@@ -31,9 +31,8 @@ public class FixtureMutation {
 	/**
 	 * Mutate without knowledge of conditions
 	 * @param solution
-	 * @return True if a mutation took place, false if none
 	 */
-	public boolean mutate(Fixture solution) {
+	public void mutate(Fixture solution) {
 		double mutation_prob = 0.0;
 		boolean didMutate = false;
 
@@ -80,7 +79,8 @@ public class FixtureMutation {
 			}
 		}
 		
-		return didMutate;
+		if(didMutate)
+			solution.setChanged(true);
 	}
 
 	public boolean mutateRow(FixtureRow row, Fixture solution) {

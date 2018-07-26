@@ -16,7 +16,7 @@ import nl.tudelft.serg.evosql.db.SeedExtractor;
 import nl.tudelft.serg.evosql.db.Seeds;
 import nl.tudelft.serg.evosql.fixture.Fixture;
 import nl.tudelft.serg.evosql.metaheuristics.Approach;
-import nl.tudelft.serg.evosql.metaheuristics.GAApproach;
+import nl.tudelft.serg.evosql.metaheuristics.StandardGA;
 import nl.tudelft.serg.evosql.metaheuristics.RandomApproach;
 import nl.tudelft.serg.evosql.path.PathExtractor;
 import nl.tudelft.serg.evosql.sql.ColumnSchema;
@@ -149,7 +149,7 @@ public class EvoSQL {
 					if (baseline)
 						pathState.approach = new RandomApproach(tableSchemas, pathSql, seeds);
 					else
-						pathState.approach = new GAApproach(population, tableSchemas, pathSql, seeds);
+						pathState.approach = new StandardGA(population, tableSchemas, pathSql, seeds);
 				} else {
 					// Find table schemas from approach
 					tableSchemas = pathState.approach.getTableSchemas();

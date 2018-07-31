@@ -62,8 +62,9 @@ public class EvoSQLConfiguration {
 	public static boolean USE_SEEDED_RANDOM_BASELINE = true;
 	
 	/** Evaluation time **/
-	public static long MS_EXECUTION_TIME = 1800000; // Half an hour = 1800000 ms
-	
+	// Originally: Half an hour = 1800000 ms
+	public static long MS_EXECUTION_TIME = 300000;
+
 	/** Testing, should this be moved to special testing classes? **/
 	public static int TEST_MAX_ITERATIONS = 5;
 

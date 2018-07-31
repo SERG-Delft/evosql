@@ -167,9 +167,6 @@ public class Runner {
                 System.out.println();
             }
 
-            // FIXME: If exitCode == 0 it worked, otherwise tests failed
-            // FIXME: In theory, only the mutated tests should fail
-
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }

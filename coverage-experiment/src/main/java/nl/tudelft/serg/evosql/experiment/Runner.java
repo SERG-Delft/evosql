@@ -71,17 +71,12 @@ public class Runner {
         System.out.printf("The maximum query that will be executed is %d.", stopIndex - 1);
         System.out.println();
 
-        ConnectionData connectionDataProd = CONNECTION_DATA_ERPNEXT_PROD;
-        ConnectionData connectionDataTest = CONNECTION_DATA_ERPNEXT_TEST;
+        ConnectionData connectionDataProd;
+        ConnectionData connectionDataTest;
         for (int i = startIndex; i < stopIndex; i += stepSize) {
             // Sorry for this...
-            if (i >= AMOUNT_QUERIES_ERPNEXT && i < AMOUNT_QUERIES_ERPNEXT + AMOUNT_QUERIES_ESPOCRM) {
-                connectionDataProd = CONNECTION_DATA_ESPOCRM_PROD;
-                connectionDataTest = CONNECTION_DATA_ESPOCRM_TEST;
-            } else if (i >= AMOUNT_QUERIES_ERPNEXT + AMOUNT_QUERIES_ESPOCRM) {
-                connectionDataProd = CONNECTION_DATA_SUITECRM_PROD;
-                connectionDataTest = CONNECTION_DATA_SUITECRM_TEST;
-            }
+            connectionDataProd = assignConnectionDataProd(i);
+            connectionDataTest = assignConnectionDataTest(i);
 
             try {
                 runForQuery(
@@ -104,6 +99,7 @@ public class Runner {
 
         System.out.println("Experiment run complete.");
     }
+
 
     /**
      * End to end execution of experiment for a single query.
@@ -185,4 +181,25 @@ public class Runner {
             e.printStackTrace();
         }
     }
+
+    private static ConnectionData assignConnectionDataProd(int i) {
+        if (i < AMOUNT_QUERIES_ERPNEXT) {
+            return CONNECTION_DATA_ERPNEXT_PROD;
+        } else if (i < AMOUNT_QUERIES_ERPNEXT + AMOUNT_QUERIES_ESPOCRM) {
+            return CONNECTION_DATA_ESPOCRM_PROD;
+        } else {
+            return CONNECTION_DATA_SUITECRM_PROD;
+        }
+    }
+
+    private static ConnectionData assignConnectionDataTest(int i) {
+        if (i < AMOUNT_QUERIES_ERPNEXT) {
+            return CONNECTION_DATA_ERPNEXT_TEST;
+        } else if (i < AMOUNT_QUERIES_ERPNEXT + AMOUNT_QUERIES_ESPOCRM) {
+            return CONNECTION_DATA_ESPOCRM_TEST;
+        } else {
+            return CONNECTION_DATA_SUITECRM_TEST;
+        }
+    }
+
 }

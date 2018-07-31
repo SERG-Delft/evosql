@@ -115,7 +115,7 @@ public class Runner {
     public static void runForQuery(String query,
                                    ConnectionData connectionDataProd,
                                    ConnectionData connectionDataTest,
-                                   int queryIndex) {
+                                   int queryIndex) throws MutationException {
 
         String packageName = "query" + queryIndex;
         Path projectPath = Paths.get(EXPERIMENT_PATH.toString(), String.valueOf(queryIndex));
@@ -135,12 +135,7 @@ public class Runner {
 
         // Create mutants
         QueryMutator queryMutator = new QueryMutator(query, connectionDataProd);
-        List<String> queryMutants = new ArrayList<>();
-        try {
-            queryMutants = queryMutator.createMutants();
-        } catch (MutationException e) {
-            e.printStackTrace();
-        }
+        List<String> queryMutants =  queryMutator.createMutants();
 
         // Execute brew and output to project folder for mutants
         for (int i = 1; i < queryMutants.size(); i++) {

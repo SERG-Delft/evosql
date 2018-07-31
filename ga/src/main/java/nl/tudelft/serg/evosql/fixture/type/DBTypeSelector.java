@@ -48,7 +48,7 @@ public class DBTypeSelector {
                 return new DBString(length, "NCHAR");
             // Boolean values
             case Types.BIT:
-                return new DBBoolean("BOOLEAN"); // HSQLDB doesn't support bit
+                return new DBBoolean("BIT"); // HSQLDB doesn't support bit
             case Types.BOOLEAN:
                 return new DBBoolean("BOOLEAN");
             // Dates and times

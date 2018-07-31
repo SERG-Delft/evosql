@@ -66,3 +66,5 @@ If exceptions should be analyzed the `.xml` files should be considered and parse
   <system-err><![CDATA[]]></system-err>
 </testsuite>
 ```
+
+Exceptions in the data are *typically* caused by a fault in either EvoSQL/Brew or invalid syntax within the queries. However there are some cases where the Mutations have invalid syntax (e.g. a boolean is compared to a date type).

@@ -1,0 +1,18 @@
+apply plugin: 'maven'
+apply plugin: 'java'
+
+description = 'Default gradle file for a project running auto-generated test classes.'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile 'org.junit.jupiter:junit-jupiter-api:5.1.1'
+    testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.1.1'
+    compile group: 'org.postgresql', name: 'postgresql', version: '9.4-1200-jdbc41'
+}
+
+test {
+    useJUnitPlatform()
+}

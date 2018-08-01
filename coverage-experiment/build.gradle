@@ -29,6 +29,9 @@ dependencies {
 
     compile 'com.google.guava:guava:25.1-jre'
 
+    // ONLY FOR MANUAL TESTING
+    compile group: 'postgresql', name: 'postgresql', version: '9.0-801.jdbc4'
+
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.1.1'
 }
 

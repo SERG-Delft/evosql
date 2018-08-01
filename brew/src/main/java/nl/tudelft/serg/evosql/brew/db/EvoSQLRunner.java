@@ -43,7 +43,10 @@ public class EvoSQLRunner implements QueryRunner {
     Result convertResult(nl.tudelft.serg.evosql.Result evoSqlResult) {
         return new Result(
                 evoSqlResult.getInputQuery(),
-                evoSqlResult.getPathResults().stream().map(this::convertPathResult).collect(Collectors.toList())
+                evoSqlResult.getPathResults().stream()
+                        .filter(pr -> pr.getFixture() != null)
+                        .map(this::convertPathResult)
+                        .collect(Collectors.toList())
         );
     }
 

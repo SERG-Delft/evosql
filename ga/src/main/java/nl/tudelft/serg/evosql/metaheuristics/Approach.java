@@ -1,5 +1,12 @@
 package nl.tudelft.serg.evosql.metaheuristics;
 
+import nl.tudelft.serg.evosql.fixture.Fixture;
+import nl.tudelft.serg.evosql.fixture.FixtureTable;
+import nl.tudelft.serg.evosql.sql.TableSchema;
+import nl.tudelft.serg.evosql.util.random.Randomness;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -8,17 +15,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import nl.tudelft.serg.evosql.fixture.Fixture;
-import nl.tudelft.serg.evosql.fixture.FixtureTable;
-import nl.tudelft.serg.evosql.sql.TableSchema;
-import nl.tudelft.serg.evosql.util.random.Randomness;
 
 public abstract class Approach {
 	protected static Logger log = LogManager.getLogger(Approach.class);
@@ -93,14 +89,15 @@ public abstract class Approach {
         // Extract column names
         List<String> columns = new ArrayList<>();
         for (int i = 1; i <= meta.getColumnCount(); i++) {
-            columns.add(meta.getColumnName(i));
+            columns.add(meta.getColumnLabel(i));
         }
 
         // For each row we make a map of values for each column
         while(res.next()) {
             Map<String, String> values = new HashMap<>();
             for (String column : columns) {
-                values.put(column, res.getObject(column).toString());
+            	Object value = res.getObject(column);
+                values.put(column, value != null ? value.toString() : "NULL");
             }
             dbOutput.add(values);
         }

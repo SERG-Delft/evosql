@@ -30,7 +30,8 @@ public class JUnitGeneratorHelperTest {
                 "    while (resultSet.next()) {\n" +
                 "      java.util.HashMap<java.lang.String, java.lang.String> values = new java.util.HashMap<>();\n" +
                 "      for (String column : columns) {\n" +
-                "        values.put(column, resultSet.getObject(column).toString());\n" +
+                "        Object value = resultSet.getObject(column);\n" +
+                "        values.put(column, value != null ? value.toString() : \"NULL\");\n" +
                 "      }\n" +
                 "      tableStructure.add(values);\n" +
                 "    }\n" +
@@ -91,7 +92,7 @@ public class JUnitGeneratorHelperTest {
                 "  java.util.List<java.lang.String> columns = new java.util.ArrayList<>();\n" +
                 "  // Start at one; this is 1-indexed\n" +
                 "  for (int i = 1; i <= meta.getColumnCount(); ++i) {\n" +
-                "    columns.add(meta.getColumnName(i));\n" +
+                "    columns.add(meta.getColumnLabel(i));\n" +
                 "  }\n" +
                 "  return columns;\n" +
                 "}\n";

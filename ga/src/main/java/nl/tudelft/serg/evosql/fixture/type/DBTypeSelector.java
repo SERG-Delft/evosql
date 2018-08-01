@@ -43,12 +43,12 @@ public class DBTypeSelector {
             case Types.LONGNVARCHAR:
                 return new DBString(EvoSQLConfiguration.MAX_STRING_LENGTH, "LONGNVARCHAR");
             case Types.CHAR:
-                return new DBString(length, "CHAR");
+                return new DBString(length, "CHAR(" + length + ")");
             case Types.NCHAR:
                 return new DBString(length, "NCHAR");
             // Boolean values
             case Types.BIT:
-                return new DBBoolean(); // HSQLDB doesn't support bit
+                return new DBBoolean("BIT"); // HSQLDB doesn't support bit
             case Types.BOOLEAN:
                 return new DBBoolean("BOOLEAN");
             // Dates and times
@@ -58,6 +58,8 @@ public class DBTypeSelector {
                 return new DBTime();
             case Types.TIMESTAMP:
                 return new DBDateTime("TIMESTAMP");
+            case Types.NUMERIC:
+                return new DBDouble("NUMERIC(18, 6)"); //FIXME: hotfix for erpnext schema
             // Other types
             case Types.ARRAY:
                 throw new UnsupportedOperationException("The ARRAY data type is currently not supported by EvoSQL.");

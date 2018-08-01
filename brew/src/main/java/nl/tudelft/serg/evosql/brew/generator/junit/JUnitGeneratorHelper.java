@@ -93,7 +93,8 @@ public class JUnitGeneratorHelper {
                 .addStatement("$T values = new $T<>()",
                         ParameterizedTypeName.get(HashMap.class, String.class, String.class), HashMap.class)
                 .beginControlFlow("for (String column : columns)")
-                .addStatement("values.put(column, resultSet.getObject(column).toString())")
+                .addStatement("Object value = resultSet.getObject(column)")
+                .addStatement("values.put(column, value != null ? value.toString() : \"NULL\")")
                 .endControlFlow()
                 .addStatement("tableStructure.add(values)")
                 .endControlFlow()
@@ -167,7 +168,7 @@ public class JUnitGeneratorHelper {
                 .addStatement("$T<$T> columns = new $T<>()", List.class, String.class, ArrayList.class)
                 .addComment("Start at one; this is 1-indexed")
                 .beginControlFlow("for (int i = 1; i <= meta.getColumnCount(); ++i)")
-                .addStatement("columns.add(meta.getColumnName(i))")
+                .addStatement("columns.add(meta.getColumnLabel(i))")
                 .endControlFlow()
                 .addStatement("return columns");
 

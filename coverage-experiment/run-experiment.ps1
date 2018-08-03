@@ -9,4 +9,4 @@ $env:COVERAGE_EXPERIMENT_STOP = 2008;
 docker-compose up --build --abort-on-container-exit --force-recreate;
 
 # Copy results
-docker cp "$(docker-compose ps -q app):/experiment-output.tar.gz" experiment-output.tar.gz
+docker cp "$(docker-compose ps -q app):~/experiment-output.tar.gz" experiment-output.tar.gz

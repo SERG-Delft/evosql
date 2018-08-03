@@ -55,18 +55,15 @@ public class Runner {
     public static void main(String[] args) {
         if (args.length < 2) return;
 
-        final int startIndex = Integer.valueOf(args[0]);
-        final int stepSize = Integer.valueOf(args[1]);
-        int stopIndex = Integer.MAX_VALUE;
+        final int runIndex = Integer.valueOf(args[0]);
 
-        if (args.length > 2) stopIndex = Integer.valueOf(args[2]);
-
-        System.out.printf("Running experiment, starting at %d and stepping %d...", startIndex, stepSize);
+        System.out.printf("Running experiment, executing query %d...", runIndex);
         System.out.println();
 
         QueryReader queryReader = new QueryReader();
         List<String> allQueries = queryReader.readExperimentQueries();
 
+<<<<<<< HEAD
         stopIndex = Math.min(stopIndex, allQueries.size());
         System.out.printf("The maximum query that will be executed is %d.", stopIndex - 1);
         System.out.println();
@@ -77,23 +74,35 @@ public class Runner {
             // Sorry for this...
             connectionDataProd = assignConnectionDataProd(i);
             connectionDataTest = assignConnectionDataTest(i);
+=======
+        ConnectionData connectionDataProd = assignConnectionDataProd(runIndex);
+        ConnectionData connectionDataTest = assignConnectionDataTest(runIndex);
+>>>>>>> 8f2829b... Run only a single query
 
-            try {
-                runForQuery(
-                        allQueries.get(i),
-                        connectionDataProd,
-                        connectionDataTest,
-                        i
-                );
-            } catch (Exception e) {
-                try (PrintStream logger = new PrintStream(Paths.get(EXPERIMENT_PATH.toString(), "failure_" + i).toFile())) {
-                    logger.printf("Query %d has failed due to an exception. The stack trace is listed below:", i);
-                    logger.println();
-                    logger.println();
-                    e.printStackTrace(logger);
-                } catch (FileNotFoundException e2) {
-                    e.printStackTrace();
-                }
+        // Sorry for this...
+        if (runIndex >= AMOUNT_QUERIES_ERPNEXT && runIndex < AMOUNT_QUERIES_ERPNEXT + AMOUNT_QUERIES_ESPOCRM) {
+            connectionDataProd = CONNECTION_DATA_ESPOCRM_PROD;
+            connectionDataTest = CONNECTION_DATA_ESPOCRM_TEST;
+        } else if (runIndex >= AMOUNT_QUERIES_ERPNEXT + AMOUNT_QUERIES_ESPOCRM) {
+            connectionDataProd = CONNECTION_DATA_SUITECRM_PROD;
+            connectionDataTest = CONNECTION_DATA_SUITECRM_TEST;
+        }
+
+        try {
+            runForQuery(
+                    allQueries.get(runIndex),
+                    connectionDataProd,
+                    connectionDataTest,
+                    runIndex
+            );
+        } catch (Exception e) {
+            try (PrintStream logger = new PrintStream(Paths.get(EXPERIMENT_PATH.toString(), "failure_" + runIndex).toFile())) {
+                logger.printf("Query %d has failed due to an exception. The stack trace is listed below:", runIndex);
+                logger.println();
+                logger.println();
+                e.printStackTrace(logger);
+            } catch (FileNotFoundException e2) {
+                e.printStackTrace();
             }
         }
 

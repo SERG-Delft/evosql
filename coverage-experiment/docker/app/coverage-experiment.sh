@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Output values for debugging
 echo COVERAGE_EXPERIMENT_START is $COVERAGE_EXPERIMENT_START
@@ -6,9 +6,12 @@ echo COVERAGE_EXPERIMENT_STEP is $COVERAGE_EXPERIMENT_STEP
 echo COVERAGE_EXPERIMENT_STOP is $COVERAGE_EXPERIMENT_STOP
 
 # Run the experiment
-for i in {$COVERAGE_EXPERIMENT_START..$COVERAGE_EXPERIMENT_STOP..$COVERAGE_EXPERIMENT_STEP}
+i=$COVERAGE_EXPERIMENT_START
+while [ $i -le $COVERAGE_EXPERIMENT_STOP ]
 do
+    echo "SHELL: executing query $i"
     java -jar /root/coverage-experiment-all.jar $i
+    i=$((i+1))
 done
 
 # Package all experiment generated files into

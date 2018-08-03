@@ -53,8 +53,6 @@ public class Runner {
     static final int AMOUNT_QUERIES_SUITECRM = 280;
 
     public static void main(String[] args) {
-        if (args.length < 2) return;
-
         final int runIndex = Integer.valueOf(args[0]);
 
         System.out.printf("Running experiment, executing query %d...", runIndex);

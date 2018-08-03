@@ -10,7 +10,7 @@ i=$COVERAGE_EXPERIMENT_START
 while [ $i -le $COVERAGE_EXPERIMENT_STOP ]
 do
     echo "SHELL: executing query $i"
-    java -jar /root/coverage-experiment-all.jar $i
+    java -Xmx512m -jar /root/coverage-experiment-all.jar $i
     i=$((i+1))
 done
 

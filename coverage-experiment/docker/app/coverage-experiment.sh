@@ -11,7 +11,7 @@ while [ $i -le $COVERAGE_EXPERIMENT_STOP ]
 do
     echo "SHELL: executing query $i"
     java -Xmx512m -jar /root/coverage-experiment-all.jar $i
-    i=$((i+1))
+    i=$((i+$COVERAGE_EXPERIMENT_STEP))
 done
 
 # Package all experiment generated files into

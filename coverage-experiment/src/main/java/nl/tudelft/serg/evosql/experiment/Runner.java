@@ -61,21 +61,8 @@ public class Runner {
         QueryReader queryReader = new QueryReader();
         List<String> allQueries = queryReader.readExperimentQueries();
 
-<<<<<<< HEAD
-        stopIndex = Math.min(stopIndex, allQueries.size());
-        System.out.printf("The maximum query that will be executed is %d.", stopIndex - 1);
-        System.out.println();
-
-        ConnectionData connectionDataProd;
-        ConnectionData connectionDataTest;
-        for (int i = startIndex; i < stopIndex; i += stepSize) {
-            // Sorry for this...
-            connectionDataProd = assignConnectionDataProd(i);
-            connectionDataTest = assignConnectionDataTest(i);
-=======
         ConnectionData connectionDataProd = assignConnectionDataProd(runIndex);
         ConnectionData connectionDataTest = assignConnectionDataTest(runIndex);
->>>>>>> 8f2829b... Run only a single query
 
         // Sorry for this...
         if (runIndex >= AMOUNT_QUERIES_ERPNEXT && runIndex < AMOUNT_QUERIES_ERPNEXT + AMOUNT_QUERIES_ESPOCRM) {

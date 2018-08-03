@@ -2,8 +2,8 @@
 $env:COVERAGE_EXPERIMENT_START = 0;
 # Step size
 $env:COVERAGE_EXPERIMENT_STEP = 1;
-# Exclusive end index (uncomment to enable)
-# $env:COVERAGE_EXPERIMENT_STOP = 10;
+# Inclusive end index
+$env:COVERAGE_EXPERIMENT_STOP = 2008;
 
 # Run the experiment
 docker-compose up --build --abort-on-container-exit --force-recreate;

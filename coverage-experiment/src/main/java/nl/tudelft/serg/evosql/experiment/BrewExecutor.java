@@ -40,7 +40,9 @@ public class BrewExecutor {
         this.filePackage = filePackage;
 
         EvoSQLRunner evoSQLRunner = new EvoSQLRunner();
+        System.out.println("Running GA on query...");
         queryResult = evoSQLRunner.runQuery(productionString, connectionDataProd);
+        System.out.println("GA done.");
 
         this.existingDataRunner = new ExistingDataRunner(queryResult);
     }

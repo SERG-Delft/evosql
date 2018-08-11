@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Configuration status="INFO">
+<Configuration status="WARN">
   <Appenders>
     <Console name="Console" target="SYSTEM_OUT">
       <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
@@ -10,10 +10,10 @@
       <AppenderRef ref="Console"/>
     </Root>
     
-	<Logger name="nl.tudelft.serg.evosql" level="debug" additivity="false">
+	<Logger name="nl.tudelft.serg.evosql" level="warn" additivity="false">
       <AppenderRef ref="Console"/>
     </Logger>
-	<Logger name="genetic" level="debug" additivity="false">
+	<Logger name="genetic" level="warn" additivity="false">
       <AppenderRef ref="Console"/>
     </Logger>
 

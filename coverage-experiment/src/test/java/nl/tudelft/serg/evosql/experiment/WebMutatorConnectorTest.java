@@ -2,6 +2,9 @@ package nl.tudelft.serg.evosql.experiment;
 
 import org.junit.Test;
 
+import static nl.tudelft.serg.evosql.experiment.Runner.CONNECTION_DATA_ERPNEXT_TEST;
+import static nl.tudelft.serg.evosql.experiment.Runner.CONNECTION_DATA_ESPOCRM_TEST;
+import static nl.tudelft.serg.evosql.experiment.Runner.CONNECTION_DATA_SUITECRM_TEST;
 import static org.junit.Assert.assertFalse;
 
 /**
@@ -12,7 +15,7 @@ public class WebMutatorConnectorTest {
     @Test
     public void webRequestErpNextTest() {
         String sqlQuery = "select name, is_group from `tabWarehouse` where `tabWarehouse`.company = '_Test Company' order by `tabWarehouse`.`modified` desc";
-        WebMutatorConnector webMutatorConnector = new WebMutatorConnector(sqlQuery, "erpnext");
+        WebMutatorConnector webMutatorConnector = new WebMutatorConnector(sqlQuery, CONNECTION_DATA_ERPNEXT_TEST);
         String result = webMutatorConnector.requestMutants();
         System.out.println(result);
         assertFalse(result.isEmpty());
@@ -21,7 +24,7 @@ public class WebMutatorConnectorTest {
     @Test
     public void webRequestEspoCrmTest() {
         String sqlQuery = "SELECT COUNT(role.id) AS AggregateValue FROM `role` WHERE role.id = '589dd9e072d8768c3' AND role.deleted = '0'";
-        WebMutatorConnector webMutatorConnector = new WebMutatorConnector(sqlQuery, "espocrm");
+        WebMutatorConnector webMutatorConnector = new WebMutatorConnector(sqlQuery, CONNECTION_DATA_ESPOCRM_TEST);
         String result = webMutatorConnector.requestMutants();
         System.out.println(result);
         assertFalse(result.isEmpty());
@@ -30,7 +33,7 @@ public class WebMutatorConnectorTest {
     @Test
     public void webRequestSuiteCrmTest() {
         String sqlQuery = "SELECT meetings.* from meetings_users,meetings  WHERE  meetings_users.meeting_id=meetings.id AND meetings_users.user_id='1' AND meetings.deleted=0 AND meetings_users.deleted=0";
-        WebMutatorConnector webMutatorConnector = new WebMutatorConnector(sqlQuery, "suitecrm");
+        WebMutatorConnector webMutatorConnector = new WebMutatorConnector(sqlQuery, CONNECTION_DATA_SUITECRM_TEST);
         String result = webMutatorConnector.requestMutants();
         System.out.println(result);
         assertFalse(result.isEmpty());

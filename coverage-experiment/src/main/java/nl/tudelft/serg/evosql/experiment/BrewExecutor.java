@@ -11,6 +11,8 @@ import nl.tudelft.serg.evosql.brew.generator.junit.JUnitGeneratorSettings;
 import nl.tudelft.serg.evosql.brew.sql.vendor.PostgreSQLOptions;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class responsible for executing brew and generating the test files.
@@ -34,18 +36,20 @@ public class BrewExecutor {
     public BrewExecutor(ConnectionData connectionDataProd,
                         ConnectionData connectionDataTest,
                         String productionString,
-                        String filePackage) {
+                        String filePackage,
+                        List<String> allPaths) {
         this.connectionDataProd = connectionDataProd;
         this.connectionDataTest = connectionDataTest;
         this.filePackage = filePackage;
 
-        EvoSQLRunner evoSQLRunner = new EvoSQLRunner();
+        EvoSQLRunner evoSQLRunner = new EvoSQLRunner(allPaths);
         System.out.println("Running GA on query...");
         queryResult = evoSQLRunner.runQuery(productionString, connectionDataProd);
         System.out.println("GA done.");
 
         this.existingDataRunner = new ExistingDataRunner(queryResult);
     }
+
 
     public Result getQueryResult() {
         return queryResult;

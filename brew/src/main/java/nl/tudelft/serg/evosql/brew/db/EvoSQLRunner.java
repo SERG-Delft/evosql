@@ -2,19 +2,23 @@ package nl.tudelft.serg.evosql.brew.db;
 
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import nl.tudelft.serg.evosql.EvoSQL;
 import nl.tudelft.serg.evosql.PathResult;
 import nl.tudelft.serg.evosql.brew.data.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
  * A class for obtaining test fixtures from a database, using the
  * EvoSQL algorithm from the GA package.
  */
+@RequiredArgsConstructor
 public class EvoSQLRunner implements QueryRunner {
+    private final List<String> allPaths;
 
     /**
      * The EvoSQL class factory used.
@@ -36,7 +40,7 @@ public class EvoSQLRunner implements QueryRunner {
     @Override
     public Result runQuery(@NonNull String sqlQuery, @NonNull ConnectionData connectionData) {
         EvoSQL evoSQL = evoSQLFactory.createEvoSQL(connectionData);
-        nl.tudelft.serg.evosql.Result evoSQLResult = evoSQL.execute(sqlQuery);
+        nl.tudelft.serg.evosql.Result evoSQLResult = evoSQL.execute(sqlQuery, allPaths);
         return convertResult(evoSQLResult);
     }
 

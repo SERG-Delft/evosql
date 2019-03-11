@@ -11,6 +11,7 @@ import nl.tudelft.serg.evosql.fixture.type.DBString;
 import nl.tudelft.serg.evosql.metaheuristics.DatabaseOutput;
 import nl.tudelft.serg.evosql.sql.ColumnSchema;
 import nl.tudelft.serg.evosql.sql.TableSchema;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -24,10 +25,10 @@ public class EvoSQLRunnerTest {
     @Test
     void testRunQueryFail() {
         assertThatNullPointerException().isThrownBy(() -> {
-            new EvoSQLRunner().runQuery(null, Mockito.mock(ConnectionData.class));
+            new EvoSQLRunner(null).runQuery(null, Mockito.mock(ConnectionData.class));
         });
         assertThatNullPointerException().isThrownBy(() -> {
-            new EvoSQLRunner().runQuery("Select * From all", null);
+            new EvoSQLRunner(null).runQuery("Select * From all", null);
         });
     }
 
@@ -40,7 +41,7 @@ public class EvoSQLRunnerTest {
         result.getPathResults().add(buildPathResult(1));
         result.getPathResults().add(buildPathResult(2));
 
-        EvoSQLRunner evoSQLRunner = new EvoSQLRunner();
+        EvoSQLRunner evoSQLRunner = new EvoSQLRunner(null);
         nl.tudelft.serg.evosql.brew.data.Result brewResult = evoSQLRunner.convertResult(result);
 
         assertThat(brewResult.getInputQuery()).isEqualTo("Select * From table");
@@ -66,7 +67,7 @@ public class EvoSQLRunnerTest {
         Mockito.when(evoSQL.execute(Mockito.anyString())).thenReturn(result);
         ConnectionData connectionData = new ConnectionData("cs", "db", "user", "pass");
 
-        EvoSQLRunner evoSQLRunner = new EvoSQLRunner();
+        EvoSQLRunner evoSQLRunner = new EvoSQLRunner(null);
         evoSQLRunner.setEvoSQLFactory(evoSQLFactory);
         evoSQLRunner.runQuery("Select * From all;", connectionData);
 

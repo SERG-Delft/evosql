@@ -43,6 +43,12 @@ public class Runner {
             "jdbc:postgresql://db:5432/suitecrm_test",
             "suitecrm", "postgres", "");
 
+
+    // Load cached paths for queries
+    static final List<QueryPathList> CACHED_PATHS_ERPNEXT = CacheReader.loadCacheErpNext();
+    static final List<QueryPathList> CACHED_PATHS_ESPOCRM = CacheReader.loadCacheEspoCrm();
+    static final List<QueryPathList> CACHED_PATHS_SUITECRM = CacheReader.loadCacheSuiteCrm();
+
     static final String ORIGINAL_NAME = "Original";
     static final String MUTANT_NAME = "Mutated";
 
@@ -54,31 +60,46 @@ public class Runner {
 
     public static void main(String[] args) {
         final int runIndex = Integer.valueOf(args[0]);
-
+        int queryNo = runIndex + 1;
         System.out.printf("Running experiment, executing query %d...", runIndex);
         System.out.println();
 
         QueryReader queryReader = new QueryReader();
         List<String> allQueries = queryReader.readExperimentQueries();
 
+        List<QueryPathList> cachedPaths = CACHED_PATHS_ERPNEXT;
+
         ConnectionData connectionDataProd = CONNECTION_DATA_ERPNEXT_PROD;
         ConnectionData connectionDataTest = CONNECTION_DATA_ERPNEXT_TEST;
 
         // Sorry for this...
         if (runIndex >= AMOUNT_QUERIES_ERPNEXT && runIndex < AMOUNT_QUERIES_ERPNEXT + AMOUNT_QUERIES_ESPOCRM) {
+            queryNo -= AMOUNT_QUERIES_ERPNEXT;
             connectionDataProd = CONNECTION_DATA_ESPOCRM_PROD;
             connectionDataTest = CONNECTION_DATA_ESPOCRM_TEST;
+            cachedPaths = CACHED_PATHS_ESPOCRM;
         } else if (runIndex >= AMOUNT_QUERIES_ERPNEXT + AMOUNT_QUERIES_ESPOCRM) {
+            queryNo -= AMOUNT_QUERIES_ERPNEXT + AMOUNT_QUERIES_ESPOCRM;
             connectionDataProd = CONNECTION_DATA_SUITECRM_PROD;
             connectionDataTest = CONNECTION_DATA_SUITECRM_TEST;
+            cachedPaths = CACHED_PATHS_SUITECRM;
         }
+
+        // Find matching cache for query
+        int finalQueryNo = queryNo;
+        List<String> allPaths = cachedPaths.stream()
+                .filter(x -> x.queryNo == finalQueryNo)
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("No cache found for current query."))
+                .pathList;
 
         try {
             runForQuery(
                     allQueries.get(runIndex),
                     connectionDataProd,
                     connectionDataTest,
-                    runIndex
+                    runIndex,
+                    allPaths
             );
         } catch (Exception e) {
             try (PrintStream logger = new PrintStream(Paths.get(EXPERIMENT_PATH.toString(), "failure_" + runIndex).toFile())) {
@@ -104,7 +125,8 @@ public class Runner {
     public static void runForQuery(String query,
                                    ConnectionData connectionDataProd,
                                    ConnectionData connectionDataTest,
-                                   int queryIndex) {
+                                   int queryIndex,
+                                   List<String> allPaths) {
 
         String packageName = "query" + queryIndex;
         Path projectPath = Paths.get(EXPERIMENT_PATH.toString(), String.valueOf(queryIndex));
@@ -118,7 +140,7 @@ public class Runner {
         }
 
         // Execute brew and output to project folder for original
-        BrewExecutor brewExecutor = new BrewExecutor(connectionDataProd, connectionDataTest, query, packageName);
+        BrewExecutor brewExecutor = new BrewExecutor(connectionDataProd, connectionDataTest, query, packageName, allPaths);
         brewExecutor.executeBrew(brewExecutor.getQueryResult(),
                 testClassPath, ORIGINAL_NAME);
 

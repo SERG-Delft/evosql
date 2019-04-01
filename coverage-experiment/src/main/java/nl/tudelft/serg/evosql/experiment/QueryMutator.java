@@ -19,6 +19,12 @@ public class QueryMutator {
     // FIXME: Make these attributes immutable?
     private String query;
 
+    /**
+     * Parses the original query in the jSQL format, so it can be used for comparison later.
+     *
+     * @param query original query in jSQL statement format
+     * @return parsed query in string representation.
+     */
     public String parseOriginalQuery(Select query) {
         StringBuilder buffer = new StringBuilder();
         SelectDeParser selectDeparser = new SelectDeParser();
@@ -30,7 +36,13 @@ public class QueryMutator {
     }
 
     /**
-     * @return a list of query mutants.
+     * Given the original query, mutants are generated based on flipping conditions. Using a counter, these conditions
+     * are flipped one at a time so that each condition is flipped exactly once. A generated mutant will not
+     * contain multiple flipped conditions, this allows us to isolate results based on these mutants for certain
+     * conditions.
+     *
+     * @return a list of mutants with flipped conditions, does <i>NOT</i> include original query).
+     * @throws JSQLParserException in case the query has syntax errors.
      */
     public List<String> createMutants() throws JSQLParserException {
         Select selectStatement = (Select) CCJSqlParserUtil.parse(query);
@@ -39,7 +51,7 @@ public class QueryMutator {
         StringBuilder buffer = new StringBuilder();
         SelectDeParser selectDeparser = new SelectDeParser();
         selectDeparser.setBuffer(buffer);
-        QueryMutatorVisitor visitor = new QueryMutatorVisitor(selectDeparser, buffer,0,globalCounter);
+        QueryMutatorVisitor visitor = new QueryMutatorVisitor(selectDeparser, buffer, 0, globalCounter);
         selectDeparser.setExpressionVisitor(visitor);
 
         String parsedOriginalQuery = parseOriginalQuery(selectStatement);

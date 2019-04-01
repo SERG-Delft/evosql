@@ -7,6 +7,14 @@ import net.sf.jsqlparser.expression.operators.relational.EqualsTo;
 import net.sf.jsqlparser.util.deparser.ExpressionDeParser;
 import net.sf.jsqlparser.util.deparser.SelectDeParser;
 
+// FIXME: implement more mutations
+
+/**
+ * The visitor visits expressions and adds each expression to a buffer in String format. For certain, conditions
+ * we check if we can do a bitflip based on the counters. Once the local counter is equal to the global counter, then
+ * it is allowed to do a bitflip. The global counter is then incremented in the higher-level method so that the next
+ * iteration mutates a different condition.
+ */
 public class QueryMutatorVisitor extends ExpressionDeParser {
 
     @Getter

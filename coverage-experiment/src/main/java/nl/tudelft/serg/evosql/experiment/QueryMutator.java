@@ -1,23 +1,15 @@
 package nl.tudelft.serg.evosql.experiment;
 
 import lombok.AllArgsConstructor;
-import nl.tudelft.serg.evosql.brew.db.ConnectionData;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
+import net.sf.jsqlparser.JSQLParserException;
+import net.sf.jsqlparser.parser.CCJSqlParserUtil;
+import net.sf.jsqlparser.statement.select.Select;
+import net.sf.jsqlparser.util.deparser.ExpressionDeParser;
+import net.sf.jsqlparser.util.deparser.SelectDeParser;
+import net.sf.jsqlparser.util.deparser.StatementDeParser;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.ws.WebServiceException;
-import java.io.IOException;
-import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Class responsible for mutating the conditions in the query.
@@ -26,67 +18,51 @@ import java.util.stream.Collectors;
 public class QueryMutator {
     // FIXME: Make these attributes immutable?
     private String query;
-    private ConnectionData connectionData;
+
+    public String parseOriginalQuery(Select query) {
+        StringBuilder buffer = new StringBuilder();
+        SelectDeParser selectDeparser = new SelectDeParser();
+        selectDeparser.setBuffer(buffer);
+        ExpressionDeParser expressionDeParser = new ExpressionDeParser(selectDeparser, buffer);
+        selectDeparser.setExpressionVisitor(expressionDeParser);
+        query.getSelectBody().accept(selectDeparser);
+        return selectDeparser.getBuffer().toString();
+    }
 
     /**
-     * Use the SQLMutation web service in order to create mutants of the query. We connect to
-     * the web service with a connector class {@link WebMutatorConnector} which also makes the
-     * request and secures the query string to the right format. The connector also fetches
-     * the right schema XML from the resource files.
-     *
      * @return a list of query mutants.
      */
-    public List<String> createMutants() throws MutationException {
-        WebMutatorConnector webMutatorConnector = new WebMutatorConnector(query, connectionData);
-        String mutantsXML = webMutatorConnector.requestMutants();
-        if (mutantsXML.contains("<error>")) {
-            throw new MutationException(
-                    "An error occurred in retrieving the mutants, the error XML is:\n\n" + mutantsXML +
-                            "\n\nSchema: " + webMutatorConnector.getSchemaXml()
-            );
-        }
-        return parseMutations(mutantsXML);
-    }
+    public List<String> createMutants() throws JSQLParserException {
+        Select selectStatement = (Select) CCJSqlParserUtil.parse(query);
+        int globalCounter = 0;
 
+        StringBuilder buffer = new StringBuilder();
+        SelectDeParser selectDeparser = new SelectDeParser();
+        selectDeparser.setBuffer(buffer);
+        QueryMutatorVisitor visitor = new QueryMutatorVisitor(selectDeparser, buffer,0,globalCounter);
+        selectDeparser.setExpressionVisitor(visitor);
 
-    /**
-     * Parses the XML of the mutants in a very naive way to a list of query strings without XML tags.
-     *
-     * @param xml XML representation of query mutants
-     * @return list of mutants as query strings.
-     */
-    public List<String> parseMutations(String xml) throws MutationException {
+        String parsedOriginalQuery = parseOriginalQuery(selectStatement);
         List<String> mutants = new ArrayList<>();
+        String mutatedQuery;
 
-        try {
-            // Setup for parser
-            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            InputSource is = new InputSource(new StringReader(xml));
+        do {
+            visitor.setLocalCounter(0);
+            selectStatement.getSelectBody().accept(selectDeparser);
+            // run the visitor
 
-            // Parse string
-            Document doc = dBuilder.parse(is);
-            doc.getDocumentElement().normalize();
+            mutatedQuery = visitor.getBuffer().toString();
+            mutants.add(mutatedQuery);
 
-            NodeList mutantNodeList = doc.getElementsByTagName("sql");
-            for (int i = 0; i < mutantNodeList.getLength(); i++) {
-                Node mutantNode = mutantNodeList.item(i);
-                mutants.add(mutantNode.getFirstChild().getNodeValue().trim());
-            }
+            StringBuilder newBuffer = new StringBuilder();
+            visitor.setBuffer(newBuffer);
+            selectDeparser.setBuffer(newBuffer);
 
+            globalCounter++;
+            visitor.setGlobalCounter(globalCounter);
+        } while (!parsedOriginalQuery.equals(mutatedQuery));
 
-
-        } catch (SAXException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        }
-
-        if (mutants.size() == 0 || mutants.get(0) == null) {
-            throw new MutationException("List of mutants is invalid, please check the returned xml: " + xml);
-        }
         return mutants;
     }
+
 }

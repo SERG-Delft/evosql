@@ -1,5 +1,6 @@
 package nl.tudelft.serg.evosql.experiment;
 
+import net.sf.jsqlparser.JSQLParserException;
 import nl.tudelft.serg.evosql.brew.data.Result;
 import nl.tudelft.serg.evosql.brew.db.ConnectionData;
 import org.xml.sax.SAXException;
@@ -145,11 +146,11 @@ public class Runner {
                 testClassPath, ORIGINAL_NAME);
 
         // Create mutants
-        QueryMutator queryMutator = new QueryMutator(query, connectionDataProd);
+        QueryMutator queryMutator = new QueryMutator(query);
         List<String> queryMutants = new ArrayList<>();
         try {
             queryMutants = queryMutator.createMutants();
-        } catch (MutationException e) {
+        } catch (JSQLParserException e) {
             e.printStackTrace();
         }
 

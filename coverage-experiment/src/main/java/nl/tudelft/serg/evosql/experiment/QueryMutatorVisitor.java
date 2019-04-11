@@ -1,11 +1,14 @@
 package nl.tudelft.serg.evosql.experiment;
 
-import lombok.*;
-import net.sf.jsqlparser.expression.operators.conditional.AndExpression;
-import net.sf.jsqlparser.expression.operators.conditional.OrExpression;
-import net.sf.jsqlparser.expression.operators.relational.EqualsTo;
+import lombok.Getter;
+import net.sf.jsqlparser.expression.Expression;
+import net.sf.jsqlparser.expression.operators.relational.*;
 import net.sf.jsqlparser.util.deparser.ExpressionDeParser;
 import net.sf.jsqlparser.util.deparser.SelectDeParser;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 // FIXME: implement more mutations
 
@@ -18,23 +21,50 @@ import net.sf.jsqlparser.util.deparser.SelectDeParser;
 public class QueryMutatorVisitor extends ExpressionDeParser {
 
     @Getter
-    @Setter
-    private int localCounter;
-    @Getter
-    @Setter
-    private int globalCounter;
+    private List<StringBuilder> buffers = new ArrayList<>();
+    private ExpressionDeParser cleanDeParser;
+    private StringBuilder sharedBuffer;
+    private int lastSharedPosition;
 
-    public QueryMutatorVisitor(SelectDeParser selectVisitor, StringBuilder buffer, int localCounter, int globalCounter) {
-        super(selectVisitor, buffer);
-        this.localCounter = localCounter;
-        this.globalCounter = globalCounter;
+    public QueryMutatorVisitor(SelectDeParser selectVisitor) {
+        super();
+        sharedBuffer = selectVisitor.getBuffer();
+        lastSharedPosition = sharedBuffer.length();
+        cleanDeParser = new ExpressionDeParser(selectVisitor, sharedBuffer);
+
+        this.setSelectVisitor(selectVisitor);
+        this.setBuffer(sharedBuffer);
     }
 
+    private void enterVisit(Expression expr) {
+        String added = sharedBuffer.substring(lastSharedPosition);
+        lastSharedPosition = sharedBuffer.length();
 
+        for (StringBuilder buffer : buffers) {
+            buffer.append(added);
+            cleanDeParser.setBuffer(buffer);
+            expr.accept(cleanDeParser);
+        }
+        cleanDeParser.setBuffer(sharedBuffer);
+    }
+
+    private void exitVisit(Expression expr) {
+        cleanDeParser.setBuffer(sharedBuffer);
+        expr.accept(cleanDeParser);
+        lastSharedPosition = sharedBuffer.length();
+        super.setBuffer(sharedBuffer);
+    }
+
+    private void visitComparison(ComparisonOperator expr, String operator) {
+        StringBuilder buf = new StringBuilder(sharedBuffer);
+        buffers.add(buf);
+        super.setBuffer(buf);
+        super.visitOldOracleJoinBinaryExpression(expr, operator);
+    }
 
 //    @Override
 //    public void visit(BitwiseRightShift aThis) {
-//
+//        // FIXME: override or remove
 //    }
 //
 //    @Override
@@ -127,33 +157,33 @@ public class QueryMutatorVisitor extends ExpressionDeParser {
 //        // FIXME: override or remove
 //    }
 //
-    @Override
-    public void visit(AndExpression andExpression) {
-        if (localCounter == globalCounter) {
-            localCounter++;
-            OrExpression orExpression = new OrExpression(
-                    andExpression.getLeftExpression(),
-                    andExpression.getRightExpression());
-            super.visit(orExpression);
-        } else {
-            localCounter++;
-            super.visit(andExpression);
-        }
-    }
+//    @Override
+//    public void visit(AndExpression andExpression) {
+//        if (localCounter == globalCounter) {
+//            localCounter++;
+//            OrExpression orExpression = new OrExpression(
+//                    andExpression.getLeftExpression(),
+//                    andExpression.getRightExpression());
+//            super.visit(orExpression);
+//        } else {
+//            localCounter++;
+//            super.visit(andExpression);
+//        }
+//    }
 
-    @Override
-    public void visit(OrExpression orExpression) {
-        if (localCounter == globalCounter) {
-            localCounter++;
-            AndExpression andExpression = new AndExpression(
-                    orExpression.getLeftExpression(),
-                    orExpression.getRightExpression());
-            super.visit(andExpression);
-        } else {
-            localCounter++;
-            super.visit(orExpression);
-        }
-    }
+//    @Override
+//    public void visit(OrExpression orExpression) {
+//        if (localCounter == globalCounter) {
+//            localCounter++;
+//            AndExpression andExpression = new AndExpression(
+//                    orExpression.getLeftExpression(),
+//                    orExpression.getRightExpression());
+//            super.visit(andExpression);
+//        } else {
+//            localCounter++;
+//            super.visit(orExpression);
+//        }
+//    }
 //
 //    @Override
 //    public void visit(Between between) {
@@ -162,24 +192,33 @@ public class QueryMutatorVisitor extends ExpressionDeParser {
 //
     @Override
     public void visit(EqualsTo equalsTo) {
-        if (localCounter == globalCounter) {
-            localCounter++;
-            visitOldOracleJoinBinaryExpression(equalsTo, " != ");
-        } else {
-            localCounter++;
-            super.visit(equalsTo);
-        }
+        enterVisit(equalsTo);
+
+        Arrays.asList(" <> ", " < ", " <= ", " > ", " >= ")
+                .forEach(op -> visitComparison(equalsTo, op));
+
+        exitVisit(equalsTo);
     }
-//
-//    @Override
-//    public void visit(GreaterThan greaterThan) {
-//        // FIXME: override or remove
-//    }
-//
-//    @Override
-//    public void visit(GreaterThanEquals greaterThanEquals) {
-//        // FIXME: override or remove
-//    }
+
+    @Override
+    public void visit(GreaterThan greaterThan) {
+        enterVisit(greaterThan);
+
+        Arrays.asList(" == ", " <> ", " < ", " <= ", " >= ")
+                .forEach(op -> visitComparison(greaterThan, op));
+
+        exitVisit(greaterThan);
+    }
+
+    @Override
+    public void visit(GreaterThanEquals greaterThanEquals) {
+        enterVisit(greaterThanEquals);
+
+        Arrays.asList(" == ", " <> ", " < ", " <= ", " > ")
+                .forEach(op -> visitComparison(greaterThanEquals, op));
+
+        exitVisit(greaterThanEquals);
+    }
 //
 //    @Override
 //    public void visit(InExpression inExpression) {
@@ -196,15 +235,25 @@ public class QueryMutatorVisitor extends ExpressionDeParser {
 //        // FIXME: override or remove
 //    }
 //
-//    @Override
-//    public void visit(MinorThan minorThan) {
-//        // FIXME: override or remove
-//    }
-//
-//    @Override
-//    public void visit(MinorThanEquals minorThanEquals) {
-//        // FIXME: override or remove
-//    }
+    @Override
+    public void visit(MinorThan minorThan) {
+        enterVisit(minorThan);
+
+        Arrays.asList(" == ", " <> ", " <= ", " > ", " >= ")
+                .forEach(op -> visitComparison(minorThan, op));
+
+        exitVisit(minorThan);
+    }
+
+    @Override
+    public void visit(MinorThanEquals minorThanEquals) {
+        enterVisit(minorThanEquals);
+
+        Arrays.asList(" == ", " <> ", " < ", " > ", " >= ")
+                .forEach(op -> visitComparison(minorThanEquals, op));
+
+        exitVisit(minorThanEquals);
+    }
 //
 //    @Override
 //    public void visit(NotEqualsTo notEqualsTo) {

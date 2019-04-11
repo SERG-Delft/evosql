@@ -6,10 +6,9 @@ import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.statement.select.Select;
 import net.sf.jsqlparser.util.deparser.ExpressionDeParser;
 import net.sf.jsqlparser.util.deparser.SelectDeParser;
-import net.sf.jsqlparser.util.deparser.StatementDeParser;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Class responsible for mutating the conditions in the query.
@@ -46,33 +45,21 @@ public class QueryMutator {
      */
     public List<String> createMutants() throws JSQLParserException {
         Select selectStatement = (Select) CCJSqlParserUtil.parse(query);
-        int globalCounter = 0;
 
         StringBuilder buffer = new StringBuilder();
         SelectDeParser selectDeparser = new SelectDeParser();
         selectDeparser.setBuffer(buffer);
-        QueryMutatorVisitor visitor = new QueryMutatorVisitor(selectDeparser, buffer, 0, globalCounter);
+        QueryMutatorVisitor visitor = new QueryMutatorVisitor(selectDeparser);
         selectDeparser.setExpressionVisitor(visitor);
 
-        String parsedOriginalQuery = parseOriginalQuery(selectStatement);
-        List<String> mutants = new ArrayList<>();
-        String mutatedQuery;
+        // run the visitor
+        selectStatement.getSelectBody().accept(selectDeparser);
 
-        do {
-            visitor.setLocalCounter(0);
-            selectStatement.getSelectBody().accept(selectDeparser);
-            // run the visitor
-
-            mutatedQuery = visitor.getBuffer().toString();
-            mutants.add(mutatedQuery);
-
-            StringBuilder newBuffer = new StringBuilder();
-            visitor.setBuffer(newBuffer);
-            selectDeparser.setBuffer(newBuffer);
-
-            globalCounter++;
-            visitor.setGlobalCounter(globalCounter);
-        } while (!parsedOriginalQuery.equals(mutatedQuery));
+        List<String> mutants = visitor
+                .getBuffers()
+                .stream()
+                .map(StringBuilder::toString)
+                .collect(Collectors.toList());
 
         return mutants;
     }

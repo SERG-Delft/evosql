@@ -56,6 +56,7 @@ public class QueryMutator {
         selectStatement.getSelectBody().accept(selectDeparser);
 
         List<String> mutants = visitor
+                .finalizeBuffers()
                 .getBuffers()
                 .stream()
                 .map(StringBuilder::toString)

@@ -48,12 +48,19 @@ public class QueryMutatorVisitor extends ExpressionDeParser {
         cleanDeParser.setBuffer(buffer);
     }
 
-    private void enterVisit(Expression expr) {
+    private void appendMissedToBuffers() {
         String added = sharedBuffer.substring(lastSharedPosition);
         lastSharedPosition = sharedBuffer.length();
 
         for (StringBuilder buffer : buffers) {
             buffer.append(added);
+        }
+    }
+
+    private void enterVisit(Expression expr) {
+        appendMissedToBuffers();
+
+        for (StringBuilder buffer : buffers) {
             setCleanDeParserBuffer(buffer);
             expr.accept(cleanDeParser);
         }
@@ -72,6 +79,11 @@ public class QueryMutatorVisitor extends ExpressionDeParser {
         buffers.add(buf);
         setDeParserBuffers(buf);
         super.visitOldOracleJoinBinaryExpression(expr, operator);
+    }
+
+    public QueryMutatorVisitor finalizeBuffers() {
+        appendMissedToBuffers();
+        return this;
     }
 
 //    @Override

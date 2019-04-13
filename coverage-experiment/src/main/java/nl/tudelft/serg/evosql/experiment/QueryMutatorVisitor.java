@@ -25,6 +25,7 @@ public class QueryMutatorVisitor extends ExpressionDeParser {
     private ExpressionDeParser cleanDeParser;
     private StringBuilder sharedBuffer;
     private int lastSharedPosition;
+    private SelectDeParser selectDeParser;
 
     public QueryMutatorVisitor(SelectDeParser selectVisitor) {
         super();
@@ -32,8 +33,19 @@ public class QueryMutatorVisitor extends ExpressionDeParser {
         lastSharedPosition = sharedBuffer.length();
         cleanDeParser = new ExpressionDeParser(selectVisitor, sharedBuffer);
 
+        this.selectDeParser = selectVisitor;
         this.setSelectVisitor(selectVisitor);
         this.setBuffer(sharedBuffer);
+    }
+
+    private void setDeParserBuffers(StringBuilder buffer) {
+        super.buffer = buffer;
+        this.selectDeParser.setBuffer(buffer);
+    }
+
+    private void setCleanDeParserBuffer(StringBuilder buffer) {
+        setDeParserBuffers(buffer);
+        cleanDeParser.setBuffer(buffer);
     }
 
     private void enterVisit(Expression expr) {
@@ -42,23 +54,23 @@ public class QueryMutatorVisitor extends ExpressionDeParser {
 
         for (StringBuilder buffer : buffers) {
             buffer.append(added);
-            cleanDeParser.setBuffer(buffer);
+            setCleanDeParserBuffer(buffer);
             expr.accept(cleanDeParser);
         }
-        cleanDeParser.setBuffer(sharedBuffer);
+        setCleanDeParserBuffer(sharedBuffer);
     }
 
     private void exitVisit(Expression expr) {
-        cleanDeParser.setBuffer(sharedBuffer);
+        setCleanDeParserBuffer(sharedBuffer);
         expr.accept(cleanDeParser);
         lastSharedPosition = sharedBuffer.length();
-        super.setBuffer(sharedBuffer);
+        setDeParserBuffers(sharedBuffer);
     }
 
     private void visitComparison(ComparisonOperator expr, String operator) {
         StringBuilder buf = new StringBuilder(sharedBuffer);
         buffers.add(buf);
-        super.setBuffer(buf);
+        setDeParserBuffers(buf);
         super.visitOldOracleJoinBinaryExpression(expr, operator);
     }
 

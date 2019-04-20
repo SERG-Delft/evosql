@@ -7,6 +7,7 @@ import net.sf.jsqlparser.statement.select.Select;
 import net.sf.jsqlparser.util.deparser.ExpressionDeParser;
 import net.sf.jsqlparser.util.deparser.SelectDeParser;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,23 +47,12 @@ public class QueryMutator {
     public List<String> createMutants() throws JSQLParserException {
         Select selectStatement = (Select) CCJSqlParserUtil.parse(query);
 
-        StringBuilder buffer = new StringBuilder();
-        SelectDeParser selectDeparser = new SelectDeParser();
-        selectDeparser.setBuffer(buffer);
-        QueryMutatorVisitor visitor = new QueryMutatorVisitor(selectDeparser);
-        selectDeparser.setExpressionVisitor(visitor);
+        QueryMutatorVisitor visitor = new QueryMutatorVisitor(new MutatorContext(new StringBuilder(), new ArrayList<>()));
 
         // run the visitor
-        selectStatement.getSelectBody().accept(selectDeparser);
+        selectStatement.getSelectBody().accept(visitor);
 
-        List<String> mutants = visitor
-                .finalizeBuffers()
-                .getBuffers()
-                .stream()
-                .map(StringBuilder::toString)
-                .collect(Collectors.toList());
-
-        return mutants;
+        return visitor.getMutatorContext().exportMutants();
     }
 
 }

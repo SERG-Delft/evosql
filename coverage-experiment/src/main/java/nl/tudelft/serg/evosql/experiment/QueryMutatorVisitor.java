@@ -22,7 +22,8 @@ import java.util.List;
  * updates every single buffer and thus hides the complexity of branching mutants. Whenever a new mutant is added, the
  * class should get the clean buffer from the MutatorContext and: 1. construct a new buffer based on the clean buffer,
  * 2. append the mutated clause to the new buffer, 3. add the buffer to the {@link MutatorContext} by calling the
- * {@link MutatorContext#branch(StringBuilder)} method.
+ * {@link MutatorContext#branch(StringBuilder)} method.it push
+ *
  */
 public class QueryMutatorVisitor implements SelectVisitor, SelectItemVisitor, FromItemVisitor, PivotVisitor, ExpressionVisitor, ItemsListVisitor {
 
@@ -43,7 +44,22 @@ public class QueryMutatorVisitor implements SelectVisitor, SelectItemVisitor, Fr
 
     @Override
     public void visit(AndExpression andExpression) {
-        visitBinaryExpression(andExpression, " AND ");
+        StringBuilder clean = new StringBuilder(mutatorContext.getCleanBuffer());
+
+        andExpression.getLeftExpression().accept(this);
+        mutatorContext.write(" AND ");
+        andExpression.getRightExpression().accept(this);
+
+        StringBuilder mutant = new StringBuilder(clean);
+        mutant.append("TRUE ");
+        mutatorContext.branch(mutant);
+
+        mutant = new StringBuilder(clean);
+        mutant.append("FALSE ");
+        mutatorContext.branch(mutant);
+
+        //TODO: branch only left expr
+        //TODO: branch only right expr
     }
 
     @Override
@@ -97,6 +113,8 @@ public class QueryMutatorVisitor implements SelectVisitor, SelectItemVisitor, Fr
     }
 
     public void visitOldOracleJoinBinaryExpression(OldOracleJoinBinaryExpression expression, String operator) {
+        StringBuilder clean = new StringBuilder(mutatorContext.getCleanBuffer());
+
         if (expression.isNot()) {
             mutatorContext.write(NOT);
         }
@@ -108,6 +126,43 @@ public class QueryMutatorVisitor implements SelectVisitor, SelectItemVisitor, Fr
         expression.getRightExpression().accept(this);
         if (expression.getOldOracleJoinSyntax() == EqualsTo.ORACLE_JOIN_LEFT) {
             mutatorContext.write("(+)");
+        }
+
+        StringBuilder mutant;
+        if (!operator.equals("<>")) {
+            mutant = new StringBuilder(clean);
+            mutant.append("<>");
+            mutatorContext.branch(mutant);
+        }
+        if (!operator.equals("==")) {
+            mutant = new StringBuilder(clean);
+            mutant.append("==");
+            mutatorContext.branch(mutant);
+        }
+        if (!operator.equals(">=")) {
+            mutant = new StringBuilder(clean);
+            mutant.append(">=");
+            mutatorContext.branch(mutant);
+        }
+        if (!operator.equals("<=")) {
+            mutant = new StringBuilder(clean);
+            mutant.append("<=");
+            mutatorContext.branch(mutant);
+        }
+        if (!operator.equals(">=")) {
+            mutant = new StringBuilder(clean);
+            mutant.append(">=");
+            mutatorContext.branch(mutant);
+        }
+        if (!operator.equals(">")) {
+            mutant = new StringBuilder(clean);
+            mutant.append(">");
+            mutatorContext.branch(mutant);
+        }
+        if (!operator.equals("<")) {
+            mutant = new StringBuilder(clean);
+            mutant.append("<");
+            mutatorContext.branch(mutant);
         }
     }
 

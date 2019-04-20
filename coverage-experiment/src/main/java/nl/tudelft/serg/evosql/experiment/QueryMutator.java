@@ -36,10 +36,7 @@ public class QueryMutator {
     }
 
     /**
-     * Given the original query, mutants are generated based on flipping conditions. Using a counter, these conditions
-     * are flipped one at a time so that each condition is flipped exactly once. A generated mutant will not
-     * contain multiple flipped conditions, this allows us to isolate results based on these mutants for certain
-     * conditions.
+     * Given the original query, mutants are generated based on mutating conditions according to the Tuva et al. paper.
      *
      * @return a list of mutants with flipped conditions, does <i>NOT</i> include original query).
      * @throws JSQLParserException in case the query has syntax errors.

@@ -53,8 +53,45 @@ public class QueryMutatorTest {
    }
 
     @Test
-    void simpleEqualsTest() throws JSQLParserException {
+    void simpleANDEqualsTest() throws JSQLParserException {
         String sql = "SELECT * FROM myTable WHERE age = 5 AND year > 2019";
+        QueryMutator queryMutator = new QueryMutator(sql);
+        MutationResult result = queryMutator.createMutants();
+        result.print();
+        assertFalse(result.getMutants().isEmpty());
+    }
+
+    @Test
+    void simpleOREqualsTest() throws JSQLParserException {
+        String sql = "SELECT * FROM myTable WHERE age = 5 OR year > 2019";
+        QueryMutator queryMutator = new QueryMutator(sql);
+        MutationResult result = queryMutator.createMutants();
+        result.print();
+        assertFalse(result.getMutants().isEmpty());
+    }
+
+
+    @Test
+    void simpleORArithmeticTest() throws JSQLParserException {
+        String sql = "SELECT * FROM myTable WHERE age + year = 5";
+        QueryMutator queryMutator = new QueryMutator(sql);
+        MutationResult result = queryMutator.createMutants();
+        result.print();
+        assertFalse(result.getMutants().isEmpty());
+    }
+
+    @Test
+    void simpleDoubleTest() throws JSQLParserException {
+        String sql = "SELECT * FROM myTable WHERE age = 5.0";
+        QueryMutator queryMutator = new QueryMutator(sql);
+        MutationResult result = queryMutator.createMutants();
+        result.print();
+        assertFalse(result.getMutants().isEmpty());
+    }
+
+    @Test
+    void simpleLongTest() throws JSQLParserException {
+        String sql = "SELECT * FROM myTable WHERE age = 5";
         QueryMutator queryMutator = new QueryMutator(sql);
         MutationResult result = queryMutator.createMutants();
         result.print();

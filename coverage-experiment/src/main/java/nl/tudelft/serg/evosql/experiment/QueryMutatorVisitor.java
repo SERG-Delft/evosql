@@ -85,7 +85,7 @@ public class QueryMutatorVisitor implements SelectVisitor, SelectItemVisitor, Fr
 
     @Override
     public void visit(Addition addition) {
-        visitBinaryExpression(addition, " + ");
+        visitArithmeticExpression(addition, " + ");
     }
 
     @Override
@@ -136,12 +136,26 @@ public class QueryMutatorVisitor implements SelectVisitor, SelectItemVisitor, Fr
 
     @Override
     public void visit(Division division) {
-        visitBinaryExpression(division, " / ");
+        visitArithmeticExpression(division, " / ");
     }
 
     @Override
     public void visit(DoubleValue doubleValue) {
+        StringBuilder clean = new StringBuilder(mutatorContext.getCleanBuffer());
+
         mutatorContext.write(doubleValue.toString());
+
+        StringBuilder mutant = new StringBuilder(clean);
+        mutant.append(-doubleValue.getValue());
+        mutatorContext.branch(mutant);
+
+        mutant = new StringBuilder(clean);
+        mutant.append(doubleValue.getValue() + 1);
+        mutatorContext.branch(mutant);
+
+        mutant = new StringBuilder(clean);
+        mutant.append(doubleValue.getValue() - 1);
+        mutatorContext.branch(mutant);
     }
 
     @Override
@@ -272,7 +286,21 @@ public class QueryMutatorVisitor implements SelectVisitor, SelectItemVisitor, Fr
 
     @Override
     public void visit(LongValue longValue) {
-        mutatorContext.write(longValue.getStringValue());
+        StringBuilder clean = new StringBuilder(mutatorContext.getCleanBuffer());
+
+        mutatorContext.write(longValue.toString());
+
+        StringBuilder mutant = new StringBuilder(clean);
+        mutant.append(-longValue.getValue());
+        mutatorContext.branch(mutant);
+
+        mutant = new StringBuilder(clean);
+        mutant.append(longValue.getValue() + 1);
+        mutatorContext.branch(mutant);
+
+        mutant = new StringBuilder(clean);
+        mutant.append(longValue.getValue() - 1);
+        mutatorContext.branch(mutant);
 
     }
 
@@ -290,7 +318,7 @@ public class QueryMutatorVisitor implements SelectVisitor, SelectItemVisitor, Fr
 
     @Override
     public void visit(Multiplication multiplication) {
-        visitBinaryExpression(multiplication, " * ");
+        visitArithmeticExpression(multiplication, " * ");
 
     }
 
@@ -308,7 +336,29 @@ public class QueryMutatorVisitor implements SelectVisitor, SelectItemVisitor, Fr
 
     @Override
     public void visit(OrExpression orExpression) {
-        visitBinaryExpression(orExpression, " OR ");
+        visitUnit(() -> {
+            StringBuilder mutant = new StringBuilder(mutatorContext.getCleanBuffer());
+            mutant.append("TRUE ");
+            mutatorContext.branch(mutant);
+
+            mutant = new StringBuilder(mutatorContext.getCleanBuffer());
+            mutant.append("FALSE ");
+            mutatorContext.branch(mutant);
+
+            visitNestedExpression(() -> {
+                orExpression.getLeftExpression().accept(this);
+            });
+
+            visitNestedExpression(() -> {
+                orExpression.getRightExpression().accept(this);
+            });
+
+            visitNestedExpression(() -> {
+                orExpression.getLeftExpression().accept(this);
+                mutatorContext.write(" OR ");
+                orExpression.getRightExpression().accept(this);
+            }, true);
+        });
 
     }
 
@@ -335,7 +385,7 @@ public class QueryMutatorVisitor implements SelectVisitor, SelectItemVisitor, Fr
 
     @Override
     public void visit(Subtraction subtraction) {
-        visitBinaryExpression(subtraction, " - ");
+        visitArithmeticExpression(subtraction, " - ");
     }
 
     private void visitBinaryExpression(BinaryExpression binaryExpression, String operator) {
@@ -346,6 +396,39 @@ public class QueryMutatorVisitor implements SelectVisitor, SelectItemVisitor, Fr
         mutatorContext.write(operator);
         binaryExpression.getRightExpression().accept(this);
 
+    }
+
+    private void visitArithmeticExpression(BinaryExpression binaryExpression, String operator) {
+        String trimmedOperator = operator.trim();
+
+        visitUnit(() -> {
+            Arrays.asList("+", "-", "/", "%", "*").forEach(op -> {
+                if (!trimmedOperator.equals(op)) {
+                    visitNestedExpression(() -> {
+                        binaryExpression.getLeftExpression().accept(this);
+                        this.mutatorContext.write(" " + op + " ");
+                        binaryExpression.getRightExpression().accept(this);
+                    });
+                }
+
+            });
+
+            visitNestedExpression(() -> {
+                binaryExpression.getLeftExpression().accept(this);
+            });
+
+            visitNestedExpression(() -> {
+                binaryExpression.getRightExpression().accept(this);
+            });
+
+            visitCleanOnly(() -> {
+                visitNestedExpression(() -> {
+                    binaryExpression.getLeftExpression().accept(this);
+                    mutatorContext.write(operator);
+                    binaryExpression.getRightExpression().accept(this);
+                });
+            });
+        });
     }
 
     @Override
@@ -604,7 +687,7 @@ public class QueryMutatorVisitor implements SelectVisitor, SelectItemVisitor, Fr
 
     @Override
     public void visit(Modulo modulo) {
-        visitBinaryExpression(modulo, " % ");
+        visitArithmeticExpression(modulo, " % ");
     }
 
     @Override

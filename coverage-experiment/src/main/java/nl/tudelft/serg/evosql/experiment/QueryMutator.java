@@ -8,7 +8,6 @@ import net.sf.jsqlparser.util.deparser.ExpressionDeParser;
 import net.sf.jsqlparser.util.deparser.SelectDeParser;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -41,15 +40,24 @@ public class QueryMutator {
      * @return a list of mutants with flipped conditions, does <i>NOT</i> include original query).
      * @throws JSQLParserException in case the query has syntax errors.
      */
-    public List<String> createMutants() throws JSQLParserException {
+    public MutationResult createMutants() throws JSQLParserException {
         Select selectStatement = (Select) CCJSqlParserUtil.parse(query);
 
-        QueryMutatorVisitor visitor = new QueryMutatorVisitor(new MutatorContext(new StringBuilder(), new ArrayList<>()));
+        MutatorContext context = new MutatorContext(new StringBuilder(), new ArrayList<>());
+        QueryMutatorVisitor visitor = new QueryMutatorVisitor(context);
 
         // run the visitor
         selectStatement.getSelectBody().accept(visitor);
 
-        return visitor.getMutatorContext().exportMutants();
+        String original = context.getCleanBuffer().toString();
+        return new MutationResult(
+                original,
+                context.exportMutants()
+                        .stream()
+                        .filter(m -> !m.equals(original))
+                        .distinct()
+                        .collect(Collectors.toList())
+        );
     }
 
 }

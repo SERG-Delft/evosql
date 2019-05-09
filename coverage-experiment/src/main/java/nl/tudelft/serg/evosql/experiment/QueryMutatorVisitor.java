@@ -10,9 +10,10 @@ import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.schema.Table;
 import net.sf.jsqlparser.statement.select.*;
 import net.sf.jsqlparser.statement.values.ValuesStatement;
-import net.sf.jsqlparser.util.deparser.*;
+import net.sf.jsqlparser.util.deparser.LimitDeparser;
+import net.sf.jsqlparser.util.deparser.ValuesStatementDeParser;
 
-
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -37,6 +38,50 @@ public class QueryMutatorVisitor implements SelectVisitor, SelectItemVisitor, Fr
         this.mutatorContext = mutatorContext;
     }
 
+    private void visitUnit(Runnable inContext) {
+        int numberToUpdate = mutatorContext.getBuffers().size();
+        int cleanLength = mutatorContext.getCleanBuffer().length();
+
+        inContext.run();
+
+        if (mutatorContext.getCleanBuffer().length() > cleanLength) {
+            String diff = mutatorContext.getCleanBuffer().substring(cleanLength);
+            mutatorContext.getBuffers()
+                    .stream()
+                    .limit(numberToUpdate)
+                    .forEach(b -> b.append(diff));
+        }
+    }
+
+    private void visitNestedExpression(Runnable inContext) {
+        visitNestedExpression(inContext, false);
+    }
+
+    private void visitNestedExpression(Runnable inContext, boolean updateClean) {
+        MutatorContext context = this.mutatorContext;
+        ArrayList<StringBuilder> newBuffers = new ArrayList<>();
+        newBuffers.add(new StringBuilder(context.getCleanBuffer()));
+        MutatorContext newContext = new MutatorContext(
+                new StringBuilder(context.getCleanBuffer()),
+                newBuffers
+        );
+        this.mutatorContext = newContext;
+
+        inContext.run();
+
+        if ((updateClean || context.isWriteToCleanOnly()) && context.getCleanBuffer().length() < newContext.getCleanBuffer().length()) {
+            context.getCleanBuffer().append(newContext.getCleanBuffer().substring(context.getCleanBuffer().length()));
+        }
+        context.getBuffers().addAll(newContext.getBuffers());
+        this.mutatorContext = context;
+    }
+
+    private void visitCleanOnly(Runnable inContext) {
+        this.mutatorContext.setWriteToCleanOnly(true);
+        inContext.run();
+        this.mutatorContext.setWriteToCleanOnly(false);
+    }
+
     @Override
     public void visit(Addition addition) {
         visitBinaryExpression(addition, " + ");
@@ -44,22 +89,29 @@ public class QueryMutatorVisitor implements SelectVisitor, SelectItemVisitor, Fr
 
     @Override
     public void visit(AndExpression andExpression) {
-        StringBuilder clean = new StringBuilder(mutatorContext.getCleanBuffer());
+        visitUnit(() -> {
+            StringBuilder mutant = new StringBuilder(mutatorContext.getCleanBuffer());
+            mutant.append("TRUE ");
+            mutatorContext.branch(mutant);
 
-        andExpression.getLeftExpression().accept(this);
-        mutatorContext.write(" AND ");
-        andExpression.getRightExpression().accept(this);
+            mutant = new StringBuilder(mutatorContext.getCleanBuffer());
+            mutant.append("FALSE ");
+            mutatorContext.branch(mutant);
 
-        StringBuilder mutant = new StringBuilder(clean);
-        mutant.append("TRUE ");
-        mutatorContext.branch(mutant);
+            visitNestedExpression(() -> {
+                andExpression.getLeftExpression().accept(this);
+            });
 
-        mutant = new StringBuilder(clean);
-        mutant.append("FALSE ");
-        mutatorContext.branch(mutant);
+            visitNestedExpression(() -> {
+                andExpression.getRightExpression().accept(this);
+            });
 
-        //TODO: branch only left expr
-        //TODO: branch only right expr
+            visitNestedExpression(() -> {
+                andExpression.getLeftExpression().accept(this);
+                mutatorContext.write(" AND ");
+                andExpression.getRightExpression().accept(this);
+            }, true);
+        });
     }
 
     @Override
@@ -113,57 +165,76 @@ public class QueryMutatorVisitor implements SelectVisitor, SelectItemVisitor, Fr
     }
 
     public void visitOldOracleJoinBinaryExpression(OldOracleJoinBinaryExpression expression, String operator) {
-        StringBuilder clean = new StringBuilder(mutatorContext.getCleanBuffer());
+        String trimmedOperator = operator.trim();
 
-        if (expression.isNot()) {
-            mutatorContext.write(NOT);
-        }
-        expression.getLeftExpression().accept(this);
-        if (expression.getOldOracleJoinSyntax() == EqualsTo.ORACLE_JOIN_RIGHT) {
-            mutatorContext.write("(+)");
-        }
-        mutatorContext.write(operator);
-        expression.getRightExpression().accept(this);
-        if (expression.getOldOracleJoinSyntax() == EqualsTo.ORACLE_JOIN_LEFT) {
-            mutatorContext.write("(+)");
-        }
+        visitUnit(() -> {
+            if (!trimmedOperator.equals("<>")) {
+                visitNestedExpression(() -> {
+                    expression.getLeftExpression().accept(this);
+                    this.mutatorContext.write(" <> ");
+                    expression.getRightExpression().accept(this);
+                });
+            }
+            if (!trimmedOperator.equals("=")) {
+                visitNestedExpression(() -> {
+                    expression.getLeftExpression().accept(this);
+                    this.mutatorContext.write(" = ");
+                    expression.getRightExpression().accept(this);
+                });
+            }
+            if (!trimmedOperator.equals(">=")) {
+                visitNestedExpression(() -> {
+                    expression.getLeftExpression().accept(this);
+                    this.mutatorContext.write(" >= ");
+                    expression.getRightExpression().accept(this);
+                });
+            }
+            if (!trimmedOperator.equals("<=")) {
+                visitNestedExpression(() -> {
+                    expression.getLeftExpression().accept(this);
+                    this.mutatorContext.write(" <= ");
+                    expression.getRightExpression().accept(this);
+                });
+            }
+            if (!trimmedOperator.equals(">=")) {
+                visitNestedExpression(() -> {
+                    expression.getLeftExpression().accept(this);
+                    this.mutatorContext.write(" >= ");
+                    expression.getRightExpression().accept(this);
+                });
+            }
+            if (!trimmedOperator.equals(">")) {
+                visitNestedExpression(() -> {
+                    expression.getLeftExpression().accept(this);
+                    this.mutatorContext.write(" > ");
+                    expression.getRightExpression().accept(this);
+                });
+            }
+            if (!trimmedOperator.equals("<")) {
+                visitNestedExpression(() -> {
+                    expression.getLeftExpression().accept(this);
+                    this.mutatorContext.write(" < ");
+                    expression.getRightExpression().accept(this);
+                });
+            }
 
-        StringBuilder mutant;
-        if (!operator.equals("<>")) {
-            mutant = new StringBuilder(clean);
-            mutant.append("<>");
-            mutatorContext.branch(mutant);
-        }
-        if (!operator.equals("==")) {
-            mutant = new StringBuilder(clean);
-            mutant.append("==");
-            mutatorContext.branch(mutant);
-        }
-        if (!operator.equals(">=")) {
-            mutant = new StringBuilder(clean);
-            mutant.append(">=");
-            mutatorContext.branch(mutant);
-        }
-        if (!operator.equals("<=")) {
-            mutant = new StringBuilder(clean);
-            mutant.append("<=");
-            mutatorContext.branch(mutant);
-        }
-        if (!operator.equals(">=")) {
-            mutant = new StringBuilder(clean);
-            mutant.append(">=");
-            mutatorContext.branch(mutant);
-        }
-        if (!operator.equals(">")) {
-            mutant = new StringBuilder(clean);
-            mutant.append(">");
-            mutatorContext.branch(mutant);
-        }
-        if (!operator.equals("<")) {
-            mutant = new StringBuilder(clean);
-            mutant.append("<");
-            mutatorContext.branch(mutant);
-        }
+            visitCleanOnly(() -> {
+                if (expression.isNot()) {
+                    mutatorContext.getCleanBuffer().append(NOT);
+                }
+                visitNestedExpression(() -> {
+                    expression.getLeftExpression().accept(this);
+                    if (expression.getOldOracleJoinSyntax() == EqualsTo.ORACLE_JOIN_RIGHT) {
+                        mutatorContext.write("(+)");
+                    }
+                    mutatorContext.write(operator);
+                    expression.getRightExpression().accept(this);
+                    if (expression.getOldOracleJoinSyntax() == EqualsTo.ORACLE_JOIN_LEFT) {
+                        mutatorContext.write("(+)");
+                    }
+                });
+            });
+        });
     }
 
     @Override

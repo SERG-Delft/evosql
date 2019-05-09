@@ -1,16 +1,23 @@
 package nl.tudelft.serg.evosql.experiment;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@AllArgsConstructor
 public class MutatorContext {
     @Getter
     private StringBuilder cleanBuffer;
+    @Getter
     private List<StringBuilder> buffers;
+    @Getter @Setter
+    private boolean writeToCleanOnly;
+
+    public MutatorContext(StringBuilder cleanBuffer, List<StringBuilder> buffers) {
+        this.cleanBuffer = cleanBuffer;
+        this.buffers = buffers;
+    }
 
     /**
      * Appends the given clause to all buffers.
@@ -19,8 +26,10 @@ public class MutatorContext {
      */
     public MutatorContext write(String clause) {
         cleanBuffer.append(clause);
-        for (StringBuilder buffer : buffers) {
-            buffer.append(clause);
+        if (!writeToCleanOnly) {
+            for (StringBuilder buffer : buffers) {
+                buffer.append(clause);
+            }
         }
         return this;
     }
@@ -50,4 +59,8 @@ public class MutatorContext {
         return mutants;
     }
 
+    @Override
+    public String toString() {
+        return cleanBuffer.toString();
+    }
 }

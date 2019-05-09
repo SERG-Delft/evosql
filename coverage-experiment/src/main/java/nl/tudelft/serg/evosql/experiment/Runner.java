@@ -3,15 +3,14 @@ package nl.tudelft.serg.evosql.experiment;
 import net.sf.jsqlparser.JSQLParserException;
 import nl.tudelft.serg.evosql.brew.data.Result;
 import nl.tudelft.serg.evosql.brew.db.ConnectionData;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 /**
  * Main runner class. Implementation depends on whether it will be used as a client for
@@ -149,7 +148,7 @@ public class Runner {
         QueryMutator queryMutator = new QueryMutator(query);
         List<String> queryMutants = new ArrayList<>();
         try {
-            queryMutants = queryMutator.createMutants();
+            queryMutants = queryMutator.createMutants().getMutants();
         } catch (JSQLParserException e) {
             e.printStackTrace();
         }

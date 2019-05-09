@@ -14,6 +14,7 @@ import net.sf.jsqlparser.util.deparser.LimitDeparser;
 import net.sf.jsqlparser.util.deparser.ValuesStatementDeParser;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -168,70 +169,21 @@ public class QueryMutatorVisitor implements SelectVisitor, SelectItemVisitor, Fr
         String trimmedOperator = operator.trim();
 
         visitUnit(() -> {
-            if (!trimmedOperator.equals("<>")) {
-                visitNestedExpression(() -> {
-                    expression.getLeftExpression().accept(this);
-                    this.mutatorContext.write(" <> ");
-                    expression.getRightExpression().accept(this);
-                });
-            }
-            if (!trimmedOperator.equals("=")) {
-                visitNestedExpression(() -> {
-                    expression.getLeftExpression().accept(this);
-                    this.mutatorContext.write(" = ");
-                    expression.getRightExpression().accept(this);
-                });
-            }
-            if (!trimmedOperator.equals(">=")) {
-                visitNestedExpression(() -> {
-                    expression.getLeftExpression().accept(this);
-                    this.mutatorContext.write(" >= ");
-                    expression.getRightExpression().accept(this);
-                });
-            }
-            if (!trimmedOperator.equals("<=")) {
-                visitNestedExpression(() -> {
-                    expression.getLeftExpression().accept(this);
-                    this.mutatorContext.write(" <= ");
-                    expression.getRightExpression().accept(this);
-                });
-            }
-            if (!trimmedOperator.equals(">=")) {
-                visitNestedExpression(() -> {
-                    expression.getLeftExpression().accept(this);
-                    this.mutatorContext.write(" >= ");
-                    expression.getRightExpression().accept(this);
-                });
-            }
-            if (!trimmedOperator.equals(">")) {
-                visitNestedExpression(() -> {
-                    expression.getLeftExpression().accept(this);
-                    this.mutatorContext.write(" > ");
-                    expression.getRightExpression().accept(this);
-                });
-            }
-            if (!trimmedOperator.equals("<")) {
-                visitNestedExpression(() -> {
-                    expression.getLeftExpression().accept(this);
-                    this.mutatorContext.write(" < ");
-                    expression.getRightExpression().accept(this);
-                });
-            }
+            Arrays.asList("=", "<>", ">=", "<=", ">", "<").forEach(op -> {
+                if (!trimmedOperator.equals(op)) {
+                    visitNestedExpression(() -> {
+                        expression.getLeftExpression().accept(this);
+                        this.mutatorContext.write(" " + op + " ");
+                        expression.getRightExpression().accept(this);
+                    });
+                }
+            });
 
             visitCleanOnly(() -> {
-                if (expression.isNot()) {
-                    mutatorContext.getCleanBuffer().append(NOT);
-                }
                 visitNestedExpression(() -> {
                     expression.getLeftExpression().accept(this);
-                    if (expression.getOldOracleJoinSyntax() == EqualsTo.ORACLE_JOIN_RIGHT) {
-                        mutatorContext.write("(+)");
-                    }
                     mutatorContext.write(operator);
                     expression.getRightExpression().accept(this);
-                    if (expression.getOldOracleJoinSyntax() == EqualsTo.ORACLE_JOIN_LEFT) {
-                        mutatorContext.write("(+)");
-                    }
                 });
             });
         });

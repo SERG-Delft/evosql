@@ -513,7 +513,7 @@ public class UsedColumnExtractorVisitor implements ExpressionVisitor, FromItemVi
 			Column col2 = (Column)arg0.getRightExpression();
 			String table2Name = null;
 			if (col2.getTable() != null) {
-				if (col1.getTable().getAlias() != null)
+				if (col2.getTable().getAlias() != null)
 					table2Name = col2.getTable().getAlias().getName();
 				else 
 					table2Name = col2.getTable().getName();

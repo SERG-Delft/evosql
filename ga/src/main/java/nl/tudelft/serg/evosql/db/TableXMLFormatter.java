@@ -8,8 +8,6 @@ import nl.tudelft.serg.evosql.sql.TableSchema;
 import java.util.Map;
 
 /**
- * Originally contained in class {@link nl.tudelft.serg.evosql.path.PathExtractor}.
- *
  * This class finds all the tables in a query and converts it into XML format compatible with
  * SQLFpc and SQLMutation.
  */

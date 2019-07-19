@@ -1,11 +1,7 @@
 package nl.tudelft.serg.evosql.evaluation.query;
 
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.PrintStream;
-import java.io.StringReader;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
@@ -14,22 +10,12 @@ import java.util.Map.Entry;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.util.KeyValuePair;
 
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.statement.select.Select;
-import nl.tudelft.serg.evosql.Result;
-import nl.tudelft.serg.evosql.db.SchemaExtractor;
 import nl.tudelft.serg.evosql.evaluation.Evaluation;
-import nl.tudelft.serg.evosql.evaluation.ScriptRunner;
-import nl.tudelft.serg.evosql.evaluation.tools.AluraPathExtractor;
-import nl.tudelft.serg.evosql.evaluation.tools.Crypto;
-import nl.tudelft.serg.evosql.path.PathExtractor;
-import nl.tudelft.serg.evosql.sql.TableSchema;
 import nl.tudelft.serg.evosql.sql.parser.SqlSecurer;
-import nl.tudelft.serg.evosql.sql.parser.SqlSecurerVisitor;
-import nl.tudelft.serg.evosql.sql.parser.UsedColumnExtractor;
 
 /**
  * Takes a set of queries, parses them

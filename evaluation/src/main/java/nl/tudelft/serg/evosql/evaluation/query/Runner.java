@@ -57,9 +57,6 @@ public class Runner {
 				queries, 
 				output,
 				objOut);
-		if (projectName.equals("alura")) {
-			c.useAluraPathExtractor();
-		}
 		
 		c.perform(useSQLFpc);
 

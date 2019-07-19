@@ -14,13 +14,11 @@ import nl.tudelft.serg.evosql.sql.TableSchema;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.engine.jdbc.internal.BasicFormatterImpl;
-import org.mockito.Mockito;
 
 import nl.tudelft.serg.evosql.EvoSQL;
 import nl.tudelft.serg.evosql.PathResult;
 import nl.tudelft.serg.evosql.Result;
 import nl.tudelft.serg.evosql.evaluation.tools.QueryPathReader;
-import nl.tudelft.serg.evosql.path.PathExtractor;
 
 public class Evaluation {
 
@@ -246,11 +244,11 @@ public class Evaluation {
 
 			if (paths != null) {
 				// Mock path extractor
-				PathExtractor pe = Mockito.mock(PathExtractor.class);
+				//PathExtractor pe = Mockito.mock(PathExtractor.class);
 
-				Mockito.when(pe.getPaths(Mockito.anyString())).thenReturn(paths);
+				//Mockito.when(pe.getPaths(Mockito.anyString())).thenReturn(paths);
 				
-				evoSQL.setPathExtractor(pe);
+				//evoSQL.setPathExtractor(pe);
 			}
 			return evoSQL.execute(query);
 		} catch (Exception e) {

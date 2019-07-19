@@ -7,9 +7,11 @@ import java.io.StringReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.github.sergdelft.sqlcorgi.SQLCorgi;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -19,9 +21,7 @@ import net.sf.jsqlparser.statement.select.Select;
 import nl.tudelft.serg.evosql.db.SchemaExtractor;
 import nl.tudelft.serg.evosql.evaluation.Evaluation;
 import nl.tudelft.serg.evosql.evaluation.ScriptRunner;
-import nl.tudelft.serg.evosql.evaluation.tools.AluraPathExtractor;
 import nl.tudelft.serg.evosql.evaluation.tools.Crypto;
-import nl.tudelft.serg.evosql.path.PathExtractor;
 import nl.tudelft.serg.evosql.sql.TableSchema;
 import nl.tudelft.serg.evosql.sql.parser.SqlSecurer;
 import nl.tudelft.serg.evosql.sql.parser.UsedColumnExtractor;
@@ -47,7 +47,6 @@ public class Classification {
 	private String schema;
 	
 	private SchemaExtractor extractor;
-	private PathExtractor pathExtractor;
 	private Crypto crypto;
 
 	public Classification(String connectionString, String database, String schema, String user, String pwd,
@@ -62,12 +61,7 @@ public class Classification {
 		this.output = output;
 		this.objOutput = objOutput;
 		extractor = new SchemaExtractor(connectionString, database, user, pwd);
-		pathExtractor = new PathExtractor(extractor);
 		crypto = new Crypto();
-	}
-	
-	public void useAluraPathExtractor() {
-		pathExtractor = new AluraPathExtractor(extractor, crypto);
 	}
 	
 	public void perform(boolean useSQLFpc) throws IOException, SQLException {
@@ -124,14 +118,8 @@ public class Classification {
 		// Get the paths from SQLFpc
 		if (useSQLFpc) {
 			// A path is a SQL query that only passes a certain condition set.
-			List<String> allPaths;
-			try {
-				pathExtractor.initialize();
-				allPaths = pathExtractor.getPaths(query);
-			} catch (Exception e) {
-				log.error("Could not extract the paths, ensure that you are connected to the internet. Message: " + e.getMessage(), e);
-				return null;
-			}
+			List<String> allPaths = new ArrayList<>(SQLCorgi.generateRules(query, null));
+
 			metrics.paths = allPaths.size();
 			metrics.pathList = allPaths;
 		} else {

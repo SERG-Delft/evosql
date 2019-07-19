@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
+import com.github.sergdelft.sqlcorgi.SQLCorgi;
 import nl.tudelft.serg.evosql.db.ISchemaExtractor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,7 +19,6 @@ import nl.tudelft.serg.evosql.fixture.Fixture;
 import nl.tudelft.serg.evosql.metaheuristics.Approach;
 import nl.tudelft.serg.evosql.metaheuristics.StandardGA;
 import nl.tudelft.serg.evosql.metaheuristics.RandomApproach;
-import nl.tudelft.serg.evosql.path.PathExtractor;
 import nl.tudelft.serg.evosql.sql.ColumnSchema;
 import nl.tudelft.serg.evosql.sql.TableSchema;
 import nl.tudelft.serg.evosql.sql.parser.SqlSecurer;
@@ -49,7 +49,6 @@ public class EvoSQL {
 	}
 	
 	private ISchemaExtractor schemaExtractor;
-	private PathExtractor pathExtractor;
 
 	private boolean baseline;
 	
@@ -59,7 +58,6 @@ public class EvoSQL {
 
 	public EvoSQL(ISchemaExtractor se, boolean baseline) {
 		this.schemaExtractor = se;
-		pathExtractor = new PathExtractor(schemaExtractor);
 		this.baseline = baseline;
 	}
 
@@ -79,14 +77,8 @@ public class EvoSQL {
 		log.info("SQL to be tested: " + sqlToBeTested);
 		
 		// A path is a SQL query that only passes a certain condition set.
-		List<String> allPaths;
-		try {
-			pathExtractor.initialize();
-			allPaths = pathExtractor.getPaths(sqlToBeTested);
-		} catch (Exception e) {
-			log.error("Could not extract the paths, ensure that you are connected to the internet. Message: " + e.getMessage(), e);
-			return null;
-		}
+		List<String> allPaths = new ArrayList<>(SQLCorgi.generateRules(sqlToBeTested, null));
+
 		log.info("Found " + allPaths.size() + " paths");
 		allPaths.stream().forEach(path -> log.info(path));
 		
@@ -98,7 +90,8 @@ public class EvoSQL {
 		int   pathNo
 			, totalPaths = allPaths.size()
 			, coveredPaths = 0;
-		
+
+		// FIXME: SQLCorgi generates paths that cannot be satisfied, e.g. when a column is not nullable.
 		long eachPathTime = (long)( EvoSQLConfiguration.MS_EXECUTION_TIME / (double)totalPaths );
 		
 		Result result = new Result(sqlToBeTested, System.currentTimeMillis());
@@ -272,9 +265,5 @@ public class EvoSQL {
 		genetic.Instrumenter.stopDatabase();
 		
 		return result;
-	}
-	
-	public void setPathExtractor(PathExtractor pe) {
-		this.pathExtractor = pe;
 	}
 }

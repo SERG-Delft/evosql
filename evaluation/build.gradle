@@ -7,9 +7,7 @@ dependencies {
     implementation 'org.apache.logging.log4j:log4j-core:2.6.2'
     implementation 'org.apache.axis:axis:1.4'
     implementation 'mysql:mysql-connector-java:6.0.5'
-    implementation('com.github.jsqlparser:jsqlparser:0.9.6') {
-        force = true
-    }
+    implementation 'com.github.jsqlparser:jsqlparser:2.1'
     implementation 'com.github.serg-delft:sqlcorgi:1.0.1'
     implementation 'org.hibernate:hibernate-core:5.2.10.Final'
 

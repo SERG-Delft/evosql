@@ -60,7 +60,7 @@ public class SchemaExtractor implements ISchemaExtractor {
 
             DatabaseMetaData metaData = con.getMetaData();
 
-            ResultSet result = metaData.getTables(null, null, null, new String[]{"TABLE"});
+            ResultSet result = metaData.getTables(null, null, "%", new String[]{"TABLE"});
             while (result.next()) {
                 String tableName = result.getString(3);
                 if (!tableName.toUpperCase().equals(table.toUpperCase())) continue;

@@ -3,6 +3,7 @@ language: java
 cache:
   directories:
     - ~/.gradle
+    - ~/.evosql-libs-cache
 
 notifications:
   email: false

@@ -1,6 +1,5 @@
 package nl.tudelft.serg.evosql.evaluation.query;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /** Class to store metrics for a query **/

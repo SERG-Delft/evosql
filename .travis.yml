@@ -3,13 +3,9 @@ language: java
 cache:
   directories:
     - ~/.gradle
-    - ~/.evosql-libs-cache
 
 notifications:
   email: false
-
-before_install:
-  - (cd lib; bash get-sqlfpc.sh --ci-cache)
 
 script:
   - ./gradlew :ga:check          # runs verification tasks

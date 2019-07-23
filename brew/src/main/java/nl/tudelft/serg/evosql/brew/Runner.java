@@ -90,7 +90,7 @@ public class Runner {
      */
     public static void main(String[] args) {
 
-        if (args.length < 7) { //TODO: package and class name
+        if (args.length < 7) {
             throw new IllegalArgumentException("Usage: evosql queryfile.sql testformat jdbcString username pw=pwd [output]");
         }
 

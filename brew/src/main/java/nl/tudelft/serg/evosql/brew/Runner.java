@@ -1,10 +1,14 @@
 package nl.tudelft.serg.evosql.brew;
 
+import nl.tudelft.serg.evosql.brew.consumer.FileConsumer;
+import nl.tudelft.serg.evosql.brew.consumer.OutputConsumer;
 import nl.tudelft.serg.evosql.brew.consumer.PrintConsumer;
 import nl.tudelft.serg.evosql.brew.db.ConnectionData;
 import nl.tudelft.serg.evosql.brew.db.EvoSQLRunner;
-import nl.tudelft.serg.evosql.brew.db.QueryRunner;
+import nl.tudelft.serg.evosql.brew.generator.Generator;
+import nl.tudelft.serg.evosql.brew.generator.junit.JUnit4TestGenerator;
 import nl.tudelft.serg.evosql.brew.generator.junit.JUnit5TestGenerator;
+import nl.tudelft.serg.evosql.brew.generator.junit.JUnitGenerator;
 import nl.tudelft.serg.evosql.brew.generator.junit.JUnitGeneratorSettings;
 import nl.tudelft.serg.evosql.brew.sql.vendor.PostgreSQLOptions;
 
@@ -19,19 +23,14 @@ import java.util.Scanner;
 
 public class Runner {
 
-    private enum TestFormat {
-        JUNIT4,
-        JUNIT5,
-    }
-
-    private static TestFormat parseTestFormat(String testFormat) {
+    private static Generator parseTestFormat(String testFormat, ConnectionData conData, String pakkage, String clazz) {
 
         switch (testFormat) {
             case "junit5":
-                return TestFormat.JUNIT5;
+                return new JUnit5TestGenerator(JUnitGeneratorSettings.getDefault(conData, pakkage, clazz));
             case "junit4":
             case "junit":
-                return TestFormat.JUNIT4;
+                return new JUnit4TestGenerator(JUnitGeneratorSettings.getDefault(conData, pakkage, clazz));
             default:
                 throw new IllegalArgumentException("Invalid test format: " + testFormat);
         }
@@ -61,44 +60,70 @@ public class Runner {
             return password.substring(3);
         }
 
-        throw new IllegalArgumentException("Password should be given as follows (without the quotes): pw=\"my_password\"");
+        throw new IllegalArgumentException("Password should be given as follows (without quotes): pw=\"my_password\"");
+    }
+
+    private static String parsePackage(String pkg) {
+
+        if (pkg.startsWith("pkg=")) {
+            return pkg.substring(4);
+        }
+
+        throw new IllegalArgumentException("Package name should be given as follows (without quotes): "
+                + "pkg=\"package\"");
+    }
+
+    private static String parseClass(String clazz) {
+
+        if (clazz.startsWith("cls=")) {
+            String className = clazz.substring(4);
+            return className.isEmpty() ? "SQLTest" : className;
+        }
+
+        throw new IllegalArgumentException("Class name should be given as follows (without quotes): "
+                + "cls=\"class_name\"");
     }
 
     /**
      * TODO
-     * @param args evosql queryfile.sql testformat jdbcString username pwd [output]
+     * @param args queryfile.sql testformat jdbcString username pwd pkg=package cls=class_name [output]
      */
     public static void main(String[] args) {
 
-        if (args.length < 5) { //TODO: package and class name
-            System.out.println("Usage: evosql queryfile.sql testformat jdbcString username pw=pwd [output]");
+        if (args.length < 7) { //TODO: package and class name
+            throw new IllegalArgumentException("Usage: evosql queryfile.sql testformat jdbcString username pw=pwd [output]");
         }
 
-        TestFormat testFormat = parseTestFormat(args[0]);
-        // check if valid option
+        List<String> queries = readQueries(args[0]);
 
-        List<String> queries = new ArrayList<>();//readQueries(args[1]);
-queries.add("SELECT * FROM PRODUCTS WHERE PRICE > 123");
         String jdbcString = args[2];
         String username = args[3];
         String password = parsePassword(args[4]);
+        ConnectionData connectionData = new ConnectionData(jdbcString, "", username, password);
+
+        String pakkage = parsePackage(args[5]);
+        String clazz = parseClass(args[6]);
+
+        JUnitGenerator generator = (JUnitGenerator) parseTestFormat(args[1], connectionData, pakkage, clazz);
+
+        OutputConsumer outputConsumer = args.length < 8 ? new PrintConsumer() :
+                new FileConsumer(new File(args[7]).toPath());
 
         EvoSQLRunner evoSQLRunner = new EvoSQLRunner();
-        ConnectionData connectionData = new ConnectionData(jdbcString, "", username, password);
+
         List<Pipeline.ResultProcessor> resultProcessors = new ArrayList<>();
-        Pipeline.ResultProcessor e = new Pipeline.ResultProcessor(
-            new JUnit5TestGenerator(JUnitGeneratorSettings.getDefault(connectionData, "", "SQLTest")),
-            new PostgreSQLOptions(),
-            new PrintConsumer()
-        );
-        resultProcessors.add(e);
+        // TODO: Vendor options
+        resultProcessors.add(new Pipeline.ResultProcessor(generator, new PostgreSQLOptions(), outputConsumer));
 
         Pipeline pipeline = new Pipeline(evoSQLRunner, null, connectionData, resultProcessors);
 
-        // TODO: Prevent overwriting generated classes
+        JUnitGeneratorSettings jUnitGeneratorSettings = generator.getJUnitGeneratorSettings();
+        long queryCounter = 0;
         for (String query : queries) {
             pipeline.setSqlQuery(query);
             pipeline.execute();
+            ++queryCounter;
+            jUnitGeneratorSettings.setClassName(clazz + queryCounter);
         }
     }
 

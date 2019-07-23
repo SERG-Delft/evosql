@@ -91,7 +91,6 @@ public class EvoSQL {
 			, totalPaths = allPaths.size()
 			, coveredPaths = 0;
 
-		// FIXME: SQLCorgi generates paths that cannot be satisfied, e.g. when a column is not nullable.
 		long eachPathTime = (long)( EvoSQLConfiguration.MS_EXECUTION_TIME / (double)totalPaths );
 		
 		Result result = new Result(sqlToBeTested, System.currentTimeMillis());

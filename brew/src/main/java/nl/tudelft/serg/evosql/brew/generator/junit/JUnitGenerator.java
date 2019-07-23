@@ -1,6 +1,7 @@
 package nl.tudelft.serg.evosql.brew.generator.junit;
 
 import com.squareup.javapoet.*;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import nl.tudelft.serg.evosql.brew.data.Path;
@@ -27,6 +28,7 @@ import static nl.tudelft.serg.evosql.brew.generator.junit.JUnitGeneratorHelper.*
 @RequiredArgsConstructor
 public abstract class JUnitGenerator implements Generator {
 
+    @Getter
     @NonNull
     private final JUnitGeneratorSettings jUnitGeneratorSettings;
     private final boolean testMethodsPublic;

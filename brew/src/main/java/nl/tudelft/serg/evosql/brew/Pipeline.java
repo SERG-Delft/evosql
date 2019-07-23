@@ -28,8 +28,8 @@ public class Pipeline {
     /**
      * The SQL query to execute.
      */
-    @NonNull
-    private final String sqlQuery;
+    @Setter
+    private String sqlQuery;
     /**
      * The connection data used to connect to the database.
      */

@@ -8,7 +8,9 @@ import java.util.Queue;
 import java.util.Set;
 
 import com.github.sergdelft.sqlcorgi.SQLCorgi;
+import com.github.sergdelft.sqlcorgi.schema.Schema;
 import nl.tudelft.serg.evosql.db.ISchemaExtractor;
+import nl.tudelft.serg.evosql.db.SchemaConverter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -75,9 +77,12 @@ public class EvoSQL {
 		}
 		
 		log.info("SQL to be tested: " + sqlToBeTested);
+
+		SchemaConverter schemaConverter = new SchemaConverter(schemaExtractor, sqlToBeTested);
+		Schema schema = schemaConverter.getSchema();
 		
 		// A path is a SQL query that only passes a certain condition set.
-		List<String> allPaths = new ArrayList<>(SQLCorgi.generateRules(sqlToBeTested, null));
+		List<String> allPaths = new ArrayList<>(SQLCorgi.generateRules(sqlToBeTested, schema));
 
 		log.info("Found " + allPaths.size() + " paths");
 		allPaths.stream().forEach(path -> log.info(path));

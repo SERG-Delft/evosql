@@ -39,13 +39,12 @@ public class SchemaConverter {
      */
     public Schema getSchema() {
         Map<String, TableSchema> tableSchemas = schemaExtractor.getTablesFromQuery(query);
-        List<Table> tables = new ArrayList<>();
+        Schema schema = new Schema();
         for (TableSchema tableSchema : tableSchemas.values()) {
-            tables.add(new Table(tableSchema.getName(), convertColumns(tableSchema.getColumns())));
+            schema.addTable(new Table(tableSchema.getName(), convertColumns(tableSchema.getColumns())));
         }
 
-        // TODO remove schema name from new instance.
-        return new Schema("", tables);
+        return schema;
     }
 
     /**
@@ -72,7 +71,7 @@ public class SchemaConverter {
     // TODO: change INTEGER to NUM
     private DataType convertType(DBType type) {
         if (type instanceof DBInteger || type instanceof DBDouble) {
-            return DataType.INTEGER;
+            return DataType.NUM;
         } else {
             return DataType.STRING;
         }

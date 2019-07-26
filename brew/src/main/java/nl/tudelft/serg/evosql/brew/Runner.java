@@ -91,7 +91,9 @@ public class Runner {
     public static void main(String[] args) {
 
         if (args.length < 7) {
-            throw new IllegalArgumentException("Usage: evosql queryfile.sql testformat jdbcString username pw=pwd [output]");
+            throw new IllegalArgumentException("Usage: evosql queryfile.sql testformat jdbcString username pw=pwd "
+                    + "pkg=package_name cls=class_name [output]\ntestformat must be one of the following: junit4, "
+                    + "junit5");
         }
 
         List<String> queries = readQueries(args[0]);

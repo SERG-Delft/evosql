@@ -68,7 +68,6 @@ public class SchemaConverter {
      * @param type The type to be converted.
      * @return The correct DataType based on the DBType.
      */
-    // TODO: change INTEGER to NUM
     private DataType convertType(DBType type) {
         if (type instanceof DBInteger || type instanceof DBDouble) {
             return DataType.NUM;

@@ -4,7 +4,7 @@ dependencies {
 
     implementation 'org.apache.logging.log4j:log4j-core:2.6.2'
     implementation 'com.github.jsqlparser:jsqlparser:2.1'
-    implementation 'com.github.serg-delft:sqlcorgi:1.0.1'
+    implementation 'com.github.serg-delft:sqlcorgi:1.1.0'
 
     // Have the static API and the test engine as dependencies (JUnit 4, 5 vintage runtime)
     testImplementation 'junit:junit:4.12'

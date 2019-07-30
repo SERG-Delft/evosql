@@ -64,11 +64,11 @@ public class Classification {
 		crypto = new Crypto();
 	}
 	
-	public void perform(boolean useSQLFpc) throws IOException, SQLException {
-		perform(0, useSQLFpc);
+	public void perform(boolean useSQLCorgi) throws IOException, SQLException {
+		perform(0, useSQLCorgi);
 	}
 	
-	public void perform(int skip, boolean useSQLFpc) throws IOException, SQLException {
+	public void perform(int skip, boolean useSQLCorgi) throws IOException, SQLException {
 		loadSchema();
 		// Print CSV header
 		output.println("queryNo|tables|conditions|subqueries|joins|paths|functions|total columns|used columns|query");
@@ -88,14 +88,14 @@ public class Classification {
 			
 			crypto.renewKey();
 			
-			metrics = classifyQuery(queryNo, query, useSQLFpc);
+			metrics = classifyQuery(queryNo, query, useSQLCorgi);
 			output.printf("%d|%d|%d|%d|%d|%d|%d|%d|%d|%s\n", queryNo
 				, metrics.tables, metrics.conditions, metrics.subqueries, metrics.joins, metrics.paths, metrics.functions
 				, metrics.totalColumns, metrics.usedColumns
 				, query);
 			
 			// Write the path list with query number to the object stream
-			if (useSQLFpc) {
+			if (useSQLCorgi) {
 				QueryPathList qpl = new QueryPathList(queryNo, metrics.pathList);
 				objOutput.writeObject(qpl);
 	
@@ -108,15 +108,15 @@ public class Classification {
 		}
 	}
 	
-	private QueryMetrics classifyQuery(int queryNo, String query, boolean useSQLFpc) {
+	private QueryMetrics classifyQuery(int queryNo, String query, boolean useSQLCorgi) {
 		log.info("Q: {}, {}", queryNo, query);
 		QueryMetrics metrics = new QueryMetrics(query);
 
 		// Secure it for JSqlParser
 		query = new SqlSecurer(query).getSecureSql();
 		
-		// Get the paths from SQLFpc
-		if (useSQLFpc) {
+		// Get the paths from SQLCorgi
+		if (useSQLCorgi) {
 			// A path is a SQL query that only passes a certain condition set.
 			List<String> allPaths = new ArrayList<>(SQLCorgi.generateRules(query, null));
 

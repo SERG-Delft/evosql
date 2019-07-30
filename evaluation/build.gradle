@@ -8,7 +8,7 @@ dependencies {
     implementation 'org.apache.axis:axis:1.4'
     implementation 'mysql:mysql-connector-java:6.0.5'
     implementation 'com.github.jsqlparser:jsqlparser:2.1'
-    implementation 'com.github.serg-delft:sqlcorgi:1.0.1'
+    implementation 'com.github.serg-delft:sqlcorgi:1.1.0'
     implementation 'org.hibernate:hibernate-core:5.2.10.Final'
 
     // This dependency is not a testCompile since it is used in src/main/java, not src/test/java

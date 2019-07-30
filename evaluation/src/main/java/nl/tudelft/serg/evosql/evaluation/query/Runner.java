@@ -24,7 +24,7 @@ public class Runner {
 	public static void main(String[] args) throws IOException, ClassNotFoundException, SQLException {
 		// Set the project to evaluate. That's the only config you need.
 		String projectName = "alura";
-		boolean useSQLFpc = true;
+		boolean useSQLCoRGi = true;
 		
 		// You can ignore from here!
 		String path = null;
@@ -58,7 +58,7 @@ public class Runner {
 				output,
 				objOut);
 		
-		c.perform(useSQLFpc);
+		c.perform(useSQLCoRGi);
 
 		objOut.close();
 		fout.close();

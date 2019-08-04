@@ -284,6 +284,8 @@ public class EvoSQL {
 		try {
 			Class.forName("org.postgresql.Driver");
 			Class.forName("com.mysql.cj.jdbc.Driver");
+			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+			Class.forName("com.ibm.db2.jcc.DB2Driver");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}

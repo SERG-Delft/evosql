@@ -43,7 +43,7 @@ public class SchemaExtractor implements ISchemaExtractor {
         this.user = user;
         this.pwd = pwd;
 
-        knownTables = new HashMap<String, TableSchema>();
+        knownTables = new HashMap<>();
         dbTypeSelector = new DBTypeSelector();
     }
 
@@ -105,7 +105,7 @@ public class SchemaExtractor implements ISchemaExtractor {
 
     @Override
     public Map<String, TableSchema> getTablesFromQuery(String pathToBeTested) {
-        Map<String, TableSchema> tableSchemas = new HashMap<String, TableSchema>();
+        Map<String, TableSchema> tableSchemas = new HashMap<>();
 
         // Get a list of table names from the query
         Statement stmt;

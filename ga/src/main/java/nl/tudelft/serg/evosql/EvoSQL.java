@@ -66,6 +66,8 @@ public class EvoSQL {
 	public Result execute(String sqlToBeTested) {
 		genetic.Instrumenter.startDatabase();
 
+		registerDrivers();
+
 		// Check if query can be parsed
 		try {
 			// Make sql safe
@@ -75,53 +77,53 @@ public class EvoSQL {
 			e.printStackTrace();
 			return null;
 		}
-		
+
 		log.info("SQL to be tested: " + sqlToBeTested);
 
 		SchemaConverter schemaConverter = new SchemaConverter(schemaExtractor, sqlToBeTested);
 		Schema schema = schemaConverter.getSchema();
-		
+
 		// A path is a SQL query that only passes a certain condition set.
 		List<String> allPaths = new ArrayList<>(SQLCorgi.generateRules(sqlToBeTested, schema));
 
 		log.info("Found " + allPaths.size() + " paths");
 		allPaths.stream().forEach(path -> log.info(path));
-		
+
 		Map<String, TableSchema> tableSchemas;
 		Seeds seeds;
-		
+
 		long start, end = -1;
-		
+
 		int   pathNo
 			, totalPaths = allPaths.size()
 			, coveredPaths = 0;
 
 		long eachPathTime = (long)( EvoSQLConfiguration.MS_EXECUTION_TIME / (double)totalPaths );
-		
+
 		Result result = new Result(sqlToBeTested, System.currentTimeMillis());
-		
+
 		List<Fixture> population = new ArrayList<Fixture>();
-		
+
 		// Holds all paths not yet solved and not tried in the current cycle
 		Queue<PathState> unattemptedPaths = new LinkedList<PathState>();
-		
+
 		for (int iPathNo = 1; iPathNo <= allPaths.size(); iPathNo++) {
 			String path = allPaths.get(iPathNo - 1);
 			unattemptedPaths.add(new PathState(iPathNo, path, null, 0, null, eachPathTime));
 		}
-		
+
 		// Holds all paths that have been attempted but are not yet solved
 		List<PathState> attemptedPaths = new ArrayList<PathState>();
-		
+
 		while(!unattemptedPaths.isEmpty()) {
 			PathState pathState = unattemptedPaths.poll();
-			
+
 			// Check if there is time budget right now
 			if (pathState.timeBudget <= 0) {
 				attemptedPaths.add(pathState);
 				continue;
 			}
-			
+
 			String pathSql = pathState.path;
 			pathNo = pathState.pathNo;
 			log.info("Testing " + pathSql);
@@ -130,12 +132,12 @@ public class EvoSQL {
 
 			// Secure sql
 			pathSql = new SqlSecurer(pathSql).getSecureSql();
-			
-			try {	
+
+			try {
 				if (pathState.approach == null) {
 					// Get all table schema's for current path
 					tableSchemas = schemaExtractor.getTablesFromQuery(pathSql);
-					
+
 					if (EvoSQLConfiguration.USE_LITERAL_SEEDING || (baseline && EvoSQLConfiguration.USE_SEEDED_RANDOM_BASELINE)) {
 						// Get the seeds for the current path
 						seeds = new SeedExtractor(pathSql).extract();
@@ -150,15 +152,15 @@ public class EvoSQL {
 				} else {
 					// Find table schemas from approach
 					tableSchemas = pathState.approach.getTableSchemas();
-					
+
 					// Set the current population to where it left off
 					population = pathState.population;
 				}
 
-				
+
 				// Reset table schema usedness
 				tableSchemas.forEach((name, ts) -> ts.resetUsed());
-				
+
 				// Set used columns
 				if (EvoSQLConfiguration.USE_USED_COLUMN_EXTRACTION) {
 					// Get the used columns in the current path
@@ -178,19 +180,19 @@ public class EvoSQL {
 						}
 					}
 				}
-				
+
 				// Create schema on instrumenter
 				for (TableSchema ts : tableSchemas.values()) {
 					genetic.Instrumenter.execute(ts.getDropSQL());
 					genetic.Instrumenter.execute(ts.getCreateSQL());
 				}
-				
+
 				Fixture generatedFixture = pathState.approach.execute(pathState.timeBudget);
-				
+
 				// Store some vars
 				end = System.currentTimeMillis();
 				pathState.timePassed += (end - start);
-				
+
 				log.debug("Generated fixture for this path: {}", generatedFixture);
 
 				// Done with path
@@ -200,7 +202,7 @@ public class EvoSQL {
 							, pathState.approach.fetchOutput(generatedFixture, sqlToBeTested)
 							, pathState.approach.getGenerations(), pathState.approach.getIndividualCount()
 							, pathState.approach.getExceptions());
-					
+
 					// Update coverage
 					coveredPaths++;
 					result.addCoveragePercentage(100 * ((double)coveredPaths) / totalPaths);
@@ -211,7 +213,7 @@ public class EvoSQL {
 						pathState.population = new ArrayList<Fixture>(population); // new list pointing to the last population
 						attemptedPaths.add(pathState);
 					}
-					
+
 					String msg = "Has no output, distance is ";
 					if (generatedFixture.getFitness() != null)
 						msg += generatedFixture.getFitness().getDistance();
@@ -235,7 +237,7 @@ public class EvoSQL {
 						, pathState.approach.getGenerations(), pathState.approach.getIndividualCount()
 						, pathState.approach.getExceptions());
 			}
-			
+
 			// If it took shorter than given time budget, redistribute the time accordingly
 			long timediff = (end - start);
 			if (timediff < pathState.timeBudget) {
@@ -250,7 +252,7 @@ public class EvoSQL {
 				}
 			}
 			pathState.timeBudget -= timediff;
-			
+
 			// If all paths are done, there are unsolved paths and we have time left, add the unsolved paths back in
 			if (unattemptedPaths.size() == 0 && !attemptedPaths.isEmpty()) {
 				// Check if any attempted paths have time left, if not stop
@@ -259,15 +261,31 @@ public class EvoSQL {
 					if (ps.timeBudget > 0)
 						timeLeft = true;
 				}
-				
+
 				if (timeLeft)
 					unattemptedPaths.addAll(attemptedPaths);
 				attemptedPaths.clear();
-			}	
+			}
 		}
-		
+
 		genetic.Instrumenter.stopDatabase();
-		
+
 		return result;
+	}
+
+	/**
+	 * Registers JDBC drivers for the following database systems:
+	 * <ul>
+	 * 	<li>PostgreSQL</li>
+	 * 	<li>MySQL</li>
+	 * </ul>
+	 */
+	private void registerDrivers() {
+		try {
+			Class.forName("org.postgresql.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 }

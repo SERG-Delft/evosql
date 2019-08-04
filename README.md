@@ -19,8 +19,8 @@ Make sure the Lombok plugin has been installed and annotation processing is enab
 3. Go to `evosql > brew > build > libs`. Here you will find `evosql.jar`
 4. Open the command line window and go to the directory where the jar is located on your machine.
 4. Execute the jar in the following format: 
-`java -jar evosql.jar yourSQLqueries.sql theJdbcString username pw=yourpassword pkg=packagename cls=classname [pathForOutputFile]`
-where `pkg` and `cls` are the package name and class name of the to be generated test file. This test data will be printed in the command line window if the `pathForOutputFile` is empty.
+`java -jar evosql.jar yourSQLqueries.sql junitFormat theJdbcString username pw=yourpassword pkg=packagename cls=classname [pathForOutputFile]`
+where `pkg` and `cls` are the package name and class name of the to be generated test file. This test data will be printed in the command line window if the `pathForOutputFile` is not specified.
 
 ## Authors
 

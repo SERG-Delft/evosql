@@ -29,3 +29,7 @@ Mozhan Soltani, Annibale Panichella, and Arie van Deursen.
 
 Other contributors: Paul van der Stel, Daniel van Gelder.
 
+## License
+
+This software is licensed under the Apache 2.0 License.
+

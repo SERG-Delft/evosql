@@ -9,8 +9,8 @@ dependencies {
     // JDBC drivers
     implementation 'postgresql:postgresql:9.1-901-1.jdbc4'
     implementation 'mysql:mysql-connector-java:8.0.17'
-    compile('com.microsoft.sqlserver:mssql-jdbc:7.4.0.jre8')
-    compile('com.ibm.db2:jcc:11.5.0.0')
+    implementation 'com.microsoft.sqlserver:mssql-jdbc:7.4.0.jre8'
+    implementation 'com.ibm.db2:jcc:11.5.0.0'
 
     // Have the static API and the test engine as dependencies (JUnit 4, 5 vintage runtime)
     testImplementation 'junit:junit:4.12'

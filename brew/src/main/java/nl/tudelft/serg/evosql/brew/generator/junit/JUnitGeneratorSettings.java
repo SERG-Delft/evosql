@@ -1,6 +1,7 @@
 package nl.tudelft.serg.evosql.brew.generator.junit;
 
 import lombok.*;
+import lombok.experimental.NonFinal;
 import nl.tudelft.serg.evosql.brew.db.ConnectionData;
 
 /**
@@ -21,6 +22,8 @@ public class JUnitGeneratorSettings {
     /**
      * The name of the test class.
      */
+    @Setter
+    @NonFinal
     @NonNull String className;
     /**
      * Whether an implementation of a method for executing

@@ -43,7 +43,7 @@ public class SchemaExtractor implements ISchemaExtractor {
         this.user = user;
         this.pwd = pwd;
 
-        knownTables = new HashMap<String, TableSchema>();
+        knownTables = new HashMap<>();
         dbTypeSelector = new DBTypeSelector();
     }
 
@@ -60,12 +60,12 @@ public class SchemaExtractor implements ISchemaExtractor {
 
             DatabaseMetaData metaData = con.getMetaData();
 
-            ResultSet result = metaData.getTables(database, null, "%", new String[]{"TABLE"});
+            ResultSet result = metaData.getTables(null, null, "%", new String[]{"TABLE"});
             while (result.next()) {
                 String tableName = result.getString(3);
                 if (!tableName.toUpperCase().equals(table.toUpperCase())) continue;
 
-                ResultSet columns = metaData.getColumns(database, null, tableName, null);
+                ResultSet columns = metaData.getColumns(null, null, tableName, null);
 
                 List<ColumnSchema> parsedColumns = new ArrayList<>();
                 TableSchema ts = new TableSchema(tableName, parsedColumns);
@@ -105,7 +105,7 @@ public class SchemaExtractor implements ISchemaExtractor {
 
     @Override
     public Map<String, TableSchema> getTablesFromQuery(String pathToBeTested) {
-        Map<String, TableSchema> tableSchemas = new HashMap<String, TableSchema>();
+        Map<String, TableSchema> tableSchemas = new HashMap<>();
 
         // Get a list of table names from the query
         Statement stmt;

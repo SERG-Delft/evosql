@@ -1,91 +1,17 @@
 package nl.tudelft.serg.evosql.evaluation.query;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.print.attribute.standard.MediaSize.ISO;
-
-import net.sf.jsqlparser.expression.AllComparisonExpression;
-import net.sf.jsqlparser.expression.AnalyticExpression;
-import net.sf.jsqlparser.expression.AnyComparisonExpression;
-import net.sf.jsqlparser.expression.CaseExpression;
-import net.sf.jsqlparser.expression.CastExpression;
-import net.sf.jsqlparser.expression.DateTimeLiteralExpression;
-import net.sf.jsqlparser.expression.DateValue;
-import net.sf.jsqlparser.expression.DoubleValue;
-import net.sf.jsqlparser.expression.ExpressionVisitor;
-import net.sf.jsqlparser.expression.ExtractExpression;
-import net.sf.jsqlparser.expression.Function;
-import net.sf.jsqlparser.expression.HexValue;
-import net.sf.jsqlparser.expression.IntervalExpression;
-import net.sf.jsqlparser.expression.JdbcNamedParameter;
-import net.sf.jsqlparser.expression.JdbcParameter;
-import net.sf.jsqlparser.expression.JsonExpression;
-import net.sf.jsqlparser.expression.KeepExpression;
-import net.sf.jsqlparser.expression.LongValue;
-import net.sf.jsqlparser.expression.MySQLGroupConcat;
-import net.sf.jsqlparser.expression.NullValue;
-import net.sf.jsqlparser.expression.NumericBind;
-import net.sf.jsqlparser.expression.OracleHierarchicalExpression;
-import net.sf.jsqlparser.expression.OracleHint;
-import net.sf.jsqlparser.expression.Parenthesis;
-import net.sf.jsqlparser.expression.RowConstructor;
-import net.sf.jsqlparser.expression.SignedExpression;
-import net.sf.jsqlparser.expression.StringValue;
-import net.sf.jsqlparser.expression.TimeKeyExpression;
-import net.sf.jsqlparser.expression.TimeValue;
-import net.sf.jsqlparser.expression.TimestampValue;
-import net.sf.jsqlparser.expression.UserVariable;
-import net.sf.jsqlparser.expression.WhenClause;
-import net.sf.jsqlparser.expression.WithinGroupExpression;
-import net.sf.jsqlparser.expression.operators.arithmetic.Addition;
-import net.sf.jsqlparser.expression.operators.arithmetic.BitwiseAnd;
-import net.sf.jsqlparser.expression.operators.arithmetic.BitwiseOr;
-import net.sf.jsqlparser.expression.operators.arithmetic.BitwiseXor;
-import net.sf.jsqlparser.expression.operators.arithmetic.Concat;
-import net.sf.jsqlparser.expression.operators.arithmetic.Division;
-import net.sf.jsqlparser.expression.operators.arithmetic.Modulo;
-import net.sf.jsqlparser.expression.operators.arithmetic.Multiplication;
-import net.sf.jsqlparser.expression.operators.arithmetic.Subtraction;
+import net.sf.jsqlparser.expression.*;
+import net.sf.jsqlparser.expression.operators.arithmetic.*;
 import net.sf.jsqlparser.expression.operators.conditional.AndExpression;
 import net.sf.jsqlparser.expression.operators.conditional.OrExpression;
-import net.sf.jsqlparser.expression.operators.relational.Between;
-import net.sf.jsqlparser.expression.operators.relational.EqualsTo;
-import net.sf.jsqlparser.expression.operators.relational.ExistsExpression;
-import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
-import net.sf.jsqlparser.expression.operators.relational.GreaterThan;
-import net.sf.jsqlparser.expression.operators.relational.GreaterThanEquals;
-import net.sf.jsqlparser.expression.operators.relational.InExpression;
-import net.sf.jsqlparser.expression.operators.relational.IsNullExpression;
-import net.sf.jsqlparser.expression.operators.relational.ItemsListVisitor;
-import net.sf.jsqlparser.expression.operators.relational.LikeExpression;
-import net.sf.jsqlparser.expression.operators.relational.Matches;
-import net.sf.jsqlparser.expression.operators.relational.MinorThan;
-import net.sf.jsqlparser.expression.operators.relational.MinorThanEquals;
-import net.sf.jsqlparser.expression.operators.relational.MultiExpressionList;
-import net.sf.jsqlparser.expression.operators.relational.NotEqualsTo;
-import net.sf.jsqlparser.expression.operators.relational.RegExpMatchOperator;
-import net.sf.jsqlparser.expression.operators.relational.RegExpMySQLOperator;
+import net.sf.jsqlparser.expression.operators.relational.*;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.schema.Table;
-import net.sf.jsqlparser.statement.select.AllColumns;
-import net.sf.jsqlparser.statement.select.AllTableColumns;
-import net.sf.jsqlparser.statement.select.FromItemVisitor;
-import net.sf.jsqlparser.statement.select.LateralSubSelect;
-import net.sf.jsqlparser.statement.select.PlainSelect;
-import net.sf.jsqlparser.statement.select.SelectBody;
-import net.sf.jsqlparser.statement.select.SelectExpressionItem;
-import net.sf.jsqlparser.statement.select.SelectItem;
-import net.sf.jsqlparser.statement.select.SelectItemVisitor;
-import net.sf.jsqlparser.statement.select.SelectVisitor;
-import net.sf.jsqlparser.statement.select.SetOperationList;
-import net.sf.jsqlparser.statement.select.SubJoin;
-import net.sf.jsqlparser.statement.select.SubSelect;
-import net.sf.jsqlparser.statement.select.TableFunction;
-import net.sf.jsqlparser.statement.select.ValuesList;
-import net.sf.jsqlparser.statement.select.WithItem;
+import net.sf.jsqlparser.statement.select.*;
+import net.sf.jsqlparser.statement.values.ValuesStatement;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class FunctionClassifierVisitor implements ExpressionVisitor, FromItemVisitor, ItemsListVisitor, SelectVisitor, SelectItemVisitor {
 	public int aggregateFunctions;
@@ -97,22 +23,31 @@ public class FunctionClassifierVisitor implements ExpressionVisitor, FromItemVis
 		aggregateFunctions = 0;
 		otherFunctions = 0;
 		isOuterSelect = true;
-		functionMap = new HashMap<String, Integer>();
+		functionMap = new HashMap<>();
 	}
 	
 	private boolean isAggregate(Function arg0) {
 		String funName = arg0.getName();
-		if (funName.equalsIgnoreCase("COUNT") ||
-			funName.equalsIgnoreCase("AVG")||
-			funName.equalsIgnoreCase("MAX")||
-			funName.equalsIgnoreCase("MIN")||
-			funName.equalsIgnoreCase("SUM")||
-			funName.equalsIgnoreCase("MEDIAN")) {
-			return true;
-		}
-		return false;
+		return "COUNT".equalsIgnoreCase(funName)
+				|| "AVG".equalsIgnoreCase(funName)
+				|| "MAX".equalsIgnoreCase(funName)
+				|| "MIN".equalsIgnoreCase(funName)
+				|| "SUM".equalsIgnoreCase(funName)
+				|| "MEDIAN".equalsIgnoreCase(funName);
 	}
-	
+
+	@Override
+	public void visit(BitwiseRightShift aThis) {
+		aThis.getLeftExpression().accept(this);
+		aThis.getRightExpression().accept(this);
+	}
+
+	@Override
+	public void visit(BitwiseLeftShift aThis) {
+		aThis.getLeftExpression().accept(this);
+		aThis.getRightExpression().accept(this);
+	}
+
 	@Override
 	public void visit(NullValue arg0) {
 	}
@@ -134,6 +69,7 @@ public class FunctionClassifierVisitor implements ExpressionVisitor, FromItemVis
 
 	@Override
 	public void visit(SignedExpression arg0) {
+		arg0.getExpression().accept(this);
 	}
 
 	@Override
@@ -323,6 +259,8 @@ public class FunctionClassifierVisitor implements ExpressionVisitor, FromItemVis
 
 	@Override
 	public void visit(Concat arg0) {
+		arg0.getLeftExpression().accept(this);
+		arg0.getRightExpression().accept(this);
 	}
 
 	@Override
@@ -355,16 +293,12 @@ public class FunctionClassifierVisitor implements ExpressionVisitor, FromItemVis
 
 	@Override
 	public void visit(Modulo arg0) {
+		arg0.getLeftExpression().accept(this);
+		arg0.getRightExpression().accept(this);
 	}
 
 	@Override
 	public void visit(AnalyticExpression arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void visit(WithinGroupExpression arg0) {
 		// TODO Auto-generated method stub
 
 	}
@@ -400,6 +334,11 @@ public class FunctionClassifierVisitor implements ExpressionVisitor, FromItemVis
 	}
 
 	@Override
+	public void visit(JsonOperator jsonExpr) {
+
+	}
+
+	@Override
 	public void visit(RegExpMySQLOperator arg0) {
 		// TODO Auto-generated method stub
 
@@ -430,6 +369,11 @@ public class FunctionClassifierVisitor implements ExpressionVisitor, FromItemVis
 	}
 
 	@Override
+	public void visit(ValueListExpression valueList) {
+
+	}
+
+	@Override
 	public void visit(RowConstructor arg0) {
 		// TODO Auto-generated method stub
 
@@ -451,6 +395,27 @@ public class FunctionClassifierVisitor implements ExpressionVisitor, FromItemVis
 	public void visit(DateTimeLiteralExpression arg0) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void visit(NotExpression aThis) {
+		aThis.getExpression().accept(this);
+	}
+
+	@Override
+	public void visit(NextValExpression aThis) {
+
+	}
+
+	@Override
+	public void visit(CollateExpression aThis) {
+
+	}
+
+	@Override
+	public void visit(SimilarToExpression aThis) {
+		aThis.getLeftExpression().accept(this);
+		aThis.getRightExpression().accept(this);
 	}
 
 	@Override
@@ -481,8 +446,18 @@ public class FunctionClassifierVisitor implements ExpressionVisitor, FromItemVis
 	}
 
 	@Override
+	public void visit(ParenthesisFromItem aThis) {
+		aThis.getFromItem().accept(this);
+	}
+
+	@Override
 	public void visit(ExpressionList arg0) {
 		arg0.getExpressions().stream().forEach(x -> x.accept(this));
+	}
+
+	@Override
+	public void visit(NamedExpressionList namedExpressionList) {
+		namedExpressionList.getExpressions().forEach(expression -> expression.accept(this));
 	}
 
 	@Override
@@ -518,6 +493,11 @@ public class FunctionClassifierVisitor implements ExpressionVisitor, FromItemVis
 	public void visit(WithItem arg0) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void visit(ValuesStatement aThis) {
+
 	}
 
 	@Override

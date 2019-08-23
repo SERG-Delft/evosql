@@ -10,9 +10,6 @@ notifications:
 build:
   verbosity: detailed
 
-install:
-  - powershell "cd lib; .\get-sqlfpc.ps1 -CICache"
-
 build_script:
   - gradlew.bat assemble --no-daemon
 

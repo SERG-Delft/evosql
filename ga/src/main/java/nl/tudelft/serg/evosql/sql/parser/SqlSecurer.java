@@ -7,7 +7,7 @@ import net.sf.jsqlparser.statement.select.Select;
 
 /**
  * This class takes a SQL select statement and capitalizes and enquotes all column names and table names
- * So that the queries are runnable on HSQLDB and can be used by SQLFpc
+ * So that the queries are runnable on HSQLDB.
  *
  */
 public class SqlSecurer {

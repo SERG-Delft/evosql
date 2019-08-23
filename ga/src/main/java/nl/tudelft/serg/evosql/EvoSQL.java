@@ -64,6 +64,7 @@ public class EvoSQL {
 	}
 
 	public Result execute(String sqlToBeTested) {
+		String originalQuery = sqlToBeTested;
 		genetic.Instrumenter.startDatabase();
 
 		registerDrivers();
@@ -100,7 +101,7 @@ public class EvoSQL {
 
 		long eachPathTime = (long)( EvoSQLConfiguration.MS_EXECUTION_TIME / (double)totalPaths );
 
-		Result result = new Result(sqlToBeTested, System.currentTimeMillis());
+		Result result = new Result(originalQuery, System.currentTimeMillis());
 
 		List<Fixture> population = new ArrayList<Fixture>();
 

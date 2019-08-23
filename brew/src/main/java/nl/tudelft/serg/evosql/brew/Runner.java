@@ -10,6 +10,7 @@ import nl.tudelft.serg.evosql.brew.generator.junit.JUnit4TestGenerator;
 import nl.tudelft.serg.evosql.brew.generator.junit.JUnit5TestGenerator;
 import nl.tudelft.serg.evosql.brew.generator.junit.JUnitGenerator;
 import nl.tudelft.serg.evosql.brew.generator.junit.JUnitGeneratorSettings;
+import nl.tudelft.serg.evosql.brew.sql.vendor.MySQLOptions;
 import nl.tudelft.serg.evosql.brew.sql.vendor.PostgreSQLOptions;
 
 import java.io.BufferedReader;
@@ -43,7 +44,10 @@ public class Runner {
 
             Scanner scanner = new Scanner(new BufferedReader(new FileReader(new File(file))));
             while (scanner.hasNextLine()) {
-                queries.add(scanner.nextLine());
+                String sqlQuery = scanner.nextLine();
+                if(!sqlQuery.isEmpty()) {
+                    queries.add(sqlQuery);
+                }
             }
             scanner.close();
 
@@ -115,7 +119,7 @@ public class Runner {
 
         List<Pipeline.ResultProcessor> resultProcessors = new ArrayList<>();
         // TODO: Vendor options
-        resultProcessors.add(new Pipeline.ResultProcessor(generator, new PostgreSQLOptions(), outputConsumer));
+        resultProcessors.add(new Pipeline.ResultProcessor(generator, new MySQLOptions(), outputConsumer));
 
         Pipeline pipeline = new Pipeline(evoSQLRunner, null, connectionData, resultProcessors);
 

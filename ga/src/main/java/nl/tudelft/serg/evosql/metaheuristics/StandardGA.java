@@ -152,7 +152,8 @@ public class StandardGA extends Approach {
 		}
 		*/
 		log.info("Total generations: {}", generations);
-		log.info("Best Fitness Function = {}", population.get(0).getFitness());
+		log.debug("Best Fitness Function = {}", population.get(0).getFitness());
+
 		return minimize(population.get(0));
 
 	}

@@ -10,10 +10,10 @@
       <AppenderRef ref="Console"/>
     </Root>
     
-	<Logger name="nl.tudelft.serg.evosql" level="debug" additivity="false">
+	<Logger name="nl.tudelft.serg.evosql" level="info" additivity="false">
       <AppenderRef ref="Console"/>
     </Logger>
-	<Logger name="genetic" level="debug" additivity="false">
+	<Logger name="genetic" level="info" additivity="false">
       <AppenderRef ref="Console"/>
     </Logger>
 

@@ -81,11 +81,11 @@ public class EvoSQL {
 
 		log.info("SQL to be tested: " + sqlToBeTested);
 
-		SchemaConverter schemaConverter = new SchemaConverter(schemaExtractor, sqlToBeTested);
+		SchemaConverter schemaConverter = new SchemaConverter(schemaExtractor, originalQuery);
 		Schema schema = schemaConverter.getSchema();
 
 		// A path is a SQL query that only passes a certain condition set.
-		List<String> allPaths = new ArrayList<>(SQLCorgi.generateRules(sqlToBeTested, schema));
+		List<String> allPaths = new ArrayList<>(SQLCorgi.generateRules(originalQuery, schema));
 
 		log.info("Found " + allPaths.size() + " paths");
 		allPaths.stream().forEach(path -> log.info(path));
@@ -198,6 +198,8 @@ public class EvoSQL {
 
 				// Done with path
 				if (pathState.approach.hasOutput(generatedFixture)) {
+					log.info("Generated fixture: " + generatedFixture.getInsertStatements());
+
 					// Add success
 					result.addPathSuccess(pathNo, pathSql, pathState.timePassed, generatedFixture
 							, pathState.approach.fetchOutput(generatedFixture, sqlToBeTested)
@@ -208,6 +210,8 @@ public class EvoSQL {
 					coveredPaths++;
 					result.addCoveragePercentage(100 * ((double)coveredPaths) / totalPaths);
 				} else {
+					log.info("Could not find a solution for this path.");
+
 					// Check if it didn't think it was a solution (because then there is no point to keep trying
 					if (generatedFixture.getFitness() != null && generatedFixture.getFitness().getDistance() != 0) {
 						// Add this path to the attemptedPaths

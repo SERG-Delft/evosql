@@ -45,6 +45,7 @@ public class EvoSQLRunner implements QueryRunner {
                 evoSqlResult.getInputQuery(),
                 evoSqlResult.getPathResults().stream()
                         .filter(pr -> pr.getFixture() != null)
+                        .filter(pr -> pr.isSuccess())
                         .map(this::convertPathResult)
                         .collect(Collectors.toList())
         );
